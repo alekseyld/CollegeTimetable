@@ -1,16 +1,14 @@
 package com.alekseyld.collegetimetable.presenter;
 
-import android.util.Log;
-
 import com.alekseyld.collegetimetable.TableWrapper;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
 import com.alekseyld.collegetimetable.subscriber.DefaultSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetTableUseCase;
 import com.alekseyld.collegetimetable.view.TableView;
 
-import java.util.HashMap;
-
 import javax.inject.Inject;
+
+import retrofit2.adapter.rxjava.HttpException;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -31,18 +29,17 @@ public class TablePresenter extends BasePresenter<TableView>{
         mGetTableUseCase.execute(new DefaultSubscriber<TableWrapper>(){
             @Override
             public void onNext(TableWrapper tableWrapper){
-                for(TableWrapper.Day day: tableWrapper.getmTimeTable().keySet()){
-                    for (TableWrapper.Lesson lesson: tableWrapper.getmTimeTable().get(day).keySet()){
-                        Log.d("Presenter", tableWrapper.getmTimeTable().get(day).get(lesson));
-                    }
-                    Log.d("Presenter", "______");
-                }
+                mView.setTimeTable(tableWrapper);
             }
 
             @Override
             public void onError(Throwable e) {
-                mView.showError(e.getMessage());
-                e.printStackTrace();
+                if(e instanceof HttpException && e.getMessage().contains("404")){
+                    mView.showError("404, прокси сервер не доступен");
+                }else {
+                    mView.showError(e.getMessage());
+                    e.printStackTrace();
+                }
             }
 
             @Override

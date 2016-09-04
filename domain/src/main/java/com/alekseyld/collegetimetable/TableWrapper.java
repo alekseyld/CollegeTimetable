@@ -9,7 +9,23 @@ import java.util.HashMap;
 public class TableWrapper {
 
     public enum Lesson{
-        lesson0, lesson1, lesson2, lesson3, lesson4, lesson5, lesson6
+        lesson0("0"),
+        lesson1("1"),
+        lesson2("2"),
+        lesson3("3"),
+        lesson4("4"),
+        lesson5("5"),
+        lesson6("6");
+
+        private String text;
+
+        Lesson(String text) {
+            this.text = text;
+        }
+
+        public String getText() {
+            return this.text;
+        }
     }
 
     public enum Day{
@@ -18,7 +34,8 @@ public class TableWrapper {
         Wed("Среда"),
         Thu("Четверг"),
         Friday("Пятница"),
-        Saturday("Суббота");
+        Saturday("Суббота"),
+        Mon2("Понедельник C");
 
         private String text;
 

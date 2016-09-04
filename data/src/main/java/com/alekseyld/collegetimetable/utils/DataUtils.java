@@ -53,6 +53,8 @@ public class DataUtils {
         //Счетчик пар
         int lesson = 0;
 
+        int end = 0;
+
         for (Element element: table) {
 //            Log.d("all", element.text());
 
@@ -75,40 +77,53 @@ public class DataUtils {
             //
             if(toLesson && numberPattern.matcher(element.text()).matches()){
                 Log.d("toLesson", element.text());
+
                 toLesson = false;
                 spaceToLessonBlock = true;
                 lessonSpace = 0;
 
-                switch (day){
-                    case 0:
-                        time.put(TableWrapper.Day.Mon, lessons);
-                        break;
-                    case 1:
-                        time.put(TableWrapper.Day.Tue, lessons);
-                        break;
-                    case 2:
-                        time.put(TableWrapper.Day.Wed, lessons);
-                        break;
-                    case 3:
-                        time.put(TableWrapper.Day.Thu, lessons);
-                        break;
-                    case 4:
-                        time.put(TableWrapper.Day.Friday, lessons);
-                        break;
-                    case 5:
-                        time.put(TableWrapper.Day.Saturday, lessons);
-                        break;
+                lesson = Integer.parseInt(element.text());
+
+                if(lesson == 6){
+                    end++;
+                }
+                if(end == 7){
+                    lesson = 0;
                 }
 
-                lessons.clear();
-                day++;
-                lesson = Integer.parseInt(element.text());
+                if(lesson == 0){
+                    switch (day){
+                        case 0:
+                            time.put(TableWrapper.Day.Mon, lessons);
+                            break;
+                        case 1:
+                            time.put(TableWrapper.Day.Tue, lessons);
+                            break;
+                        case 2:
+                            time.put(TableWrapper.Day.Wed, lessons);
+                            break;
+                        case 3:
+                            time.put(TableWrapper.Day.Thu, lessons);
+                            break;
+                        case 4:
+                            time.put(TableWrapper.Day.Friday, lessons);
+                            break;
+                        case 5:
+                            time.put(TableWrapper.Day.Saturday, lessons);
+                            break;
+                        case 6:
+                            time.put(TableWrapper.Day.Mon2, lessons);
+                            break;
+                    }
+                    lessons = new HashMap<>();
+                    day++;
+                }
             }
             if(spaceToLessonBlock){
                 lessonSpace++;
             }
             if(lessonSpace == iSpace){
-                Log.d("toLesson", element.text());
+//                Log.d("toLesson", element.text());
 
                 switch (lesson){
                     case 0:

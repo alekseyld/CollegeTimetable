@@ -4,24 +4,18 @@ import android.util.Log;
 
 import com.alekseyld.collegetimetable.TableWrapper;
 import com.alekseyld.collegetimetable.api.ProxyApi;
-import com.alekseyld.collegetimetable.entity.ApiResponse;
 import com.alekseyld.collegetimetable.repository.base.TableRepository;
 import com.alekseyld.collegetimetable.utils.DataUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-import java.io.EOFException;
 import java.io.IOException;
-import java.util.HashMap;
 
 import javax.inject.Inject;
 
 import retrofit2.Retrofit;
 import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -47,7 +41,7 @@ public class TableServiceImpl implements TableService{
                     Document document = null;
                     try {
                         document = Jsoup.connect(url.getResult()).get();
-                    }catch (Exception e){
+                    }catch (IOException e){
                         return Observable.error(new Error(e.getMessage()));
                     }
                     //TODO Группу из настроек

@@ -1,54 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ececec">
-
-    <TextView
-        android:text="День недели"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/date" />
+        android:orientation="vertical"
+        android:background="@drawable/shadow_background"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        >
 
-    <TextView
-        android:text="0"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lesson0" />
+        <TextView
+            android:text="День недели"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:id="@+id/date" />
 
-    <TextView
-        android:text="1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lesson1" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:text="0."
+                android:layout_width="15dp"
+                android:layout_marginRight="5dp"
+                android:layout_height="wrap_content"
+                />
+            <TextView
+                android:text="Урок 0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lesson0" />
+        </LinearLayout>
 
-    <TextView
-        android:text="2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lesson2" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:text="1."
+                android:layout_width="15dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                />
+            <TextView
+                android:text="Урок 1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lesson1" />
+        </LinearLayout>
 
-    <TextView
-        android:text="3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lesson3" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:text="2."
+                android:layout_width="15dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                />
+            <TextView
+                android:text="Урок 2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lesson2" />
+        </LinearLayout>
 
-    <TextView
-        android:text="4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lesson4" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:text="3."
+                android:layout_width="15dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                />
+            <TextView
+                android:text="Урок 3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lesson3" />
+        </LinearLayout>
 
-    <TextView
-        android:text="5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lesson5" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:text="4."
+                android:layout_width="15dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                />
+            <TextView
+                android:text="Урок 4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lesson4" />
+        </LinearLayout>
 
-    <TextView
-        android:text="6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lesson6" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:text="5."
+                android:layout_width="15dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                />
+            <TextView
+                android:text="Урок 5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lesson5" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:text="6."
+                android:layout_width="15dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                />
+            <TextView
+                android:text="Урок 6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lesson6" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

@@ -1,7 +1,6 @@
 package com.alekseyld.collegetimetable.view.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +36,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
         public ViewHolder(View v) {
             super(v);
             mView = v;
-            ButterKnife.bind(v);
+            ButterKnife.bind(this, v);
         }
     }
 
@@ -65,29 +64,40 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
 
         if(mTableWrapper != null) {
             TableWrapper.Day day = TableWrapper.Day.Mon;
+            String dayText = "";
 
             switch (position) {
                 case 0:
                     day = TableWrapper.Day.Mon;
+                    dayText = "Понедельник";
                     break;
                 case 1:
                     day = TableWrapper.Day.Tue;
+                    dayText = "Вторник";
                     break;
                 case 2:
                     day = TableWrapper.Day.Wed;
+                    dayText = "Среда";
                     break;
                 case 3:
                     day = TableWrapper.Day.Thu;
+                    dayText = "Четверг";
                     break;
                 case 4:
                     day = TableWrapper.Day.Friday;
+                    dayText = "Пятница";
                     break;
                 case 5:
                     day = TableWrapper.Day.Saturday;
+                    dayText = "Суббота";
+                    break;
+                case 6:
+                    day = TableWrapper.Day.Mon2;
+                    dayText = "Понедельник";
                     break;
             }
 
-            holder.date.setText(day.getText());
+            holder.date.setText(dayText);
             holder.lesson0.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson0));
             holder.lesson1.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson1));
             holder.lesson2.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson2));
@@ -95,17 +105,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
             holder.lesson4.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson4));
             holder.lesson5.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson5));
             holder.lesson6.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson6));
-        }else {
-
-            holder.date.setText("gg");
-            holder.lesson0.setText("gg");
-            holder.lesson1.setText("gg");
-            holder.lesson2.setText("gg");
-            holder.lesson3.setText("gg");
-            holder.lesson4.setText("gg");
-            holder.lesson5.setText("gg");
-            holder.lesson6.setText("gg");
-
         }
     }
 

@@ -6,8 +6,6 @@ import com.alekseyld.collegetimetable.executor.ThreadExecutor;
 import com.alekseyld.collegetimetable.service.TableService;
 import com.alekseyld.collegetimetable.usecase.base.UseCase;
 
-import java.util.HashMap;
-
 import javax.inject.Inject;
 
 import rx.Observable;

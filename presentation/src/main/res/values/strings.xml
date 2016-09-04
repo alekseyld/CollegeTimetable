@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">CollegeTimetable</string>
+
+    <string name="Mon">Понедельник</string>
+    <string name="Tue">Вторник</string>
+    <string name="Wed">Среда</string>
+    <string name="Thu">Четверг</string>
+    <string name="Friday">Пятница</string>
+    <string name="Saturday">Суббота</string>
 </resources>
