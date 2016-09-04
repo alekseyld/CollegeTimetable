@@ -1,8 +1,10 @@
 package com.alekseyld.collegetimetable;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.alekseyld.collegetimetable.internal.di.component.ApplicationComponent;
+import com.alekseyld.collegetimetable.internal.di.component.DaggerApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.module.ApplicationModule;
 
 /**

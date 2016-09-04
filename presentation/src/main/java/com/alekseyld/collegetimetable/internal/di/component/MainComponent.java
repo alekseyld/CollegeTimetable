@@ -3,6 +3,7 @@ package com.alekseyld.collegetimetable.internal.di.component;
 import com.alekseyld.collegetimetable.internal.di.PerActivity;
 import com.alekseyld.collegetimetable.internal.di.module.ActivityModule;
 import com.alekseyld.collegetimetable.internal.di.module.MainModule;
+import com.alekseyld.collegetimetable.view.fragment.TableFragment;
 
 import dagger.Component;
 
@@ -11,6 +12,7 @@ import dagger.Component;
  */
 
 @PerActivity
-@Component(dependencies = ApplicationComponent.class, modules = {ActivityModule.class, MainModule.class})
-public class MainComponent {
+@Component(dependencies = {ApplicationComponent.class}, modules = {MainModule.class})
+public interface MainComponent {
+    void inject(TableFragment tableFragment);
 }

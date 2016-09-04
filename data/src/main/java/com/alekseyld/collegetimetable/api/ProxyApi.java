@@ -4,6 +4,7 @@ import com.alekseyld.collegetimetable.entity.ApiResponse;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -12,7 +13,7 @@ import rx.Observable;
 
 public interface ProxyApi {
 
-    @GET("/anonymize?url=url")
-    Observable<ApiResponse> contributors(@Path("url") String url);
+    @GET("anonymize?")
+    Observable<ApiResponse> getUrl(@Query("url") String urls);
 
 }

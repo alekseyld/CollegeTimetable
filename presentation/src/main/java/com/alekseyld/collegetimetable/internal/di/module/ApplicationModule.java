@@ -24,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class ApplicationModule {
     private final AndroidApplication application;
-    private static final String HOST = "http://noblockme.ru/api";
+    private static final String HOST = "http://noblockme.ru/api/";
 
     public ApplicationModule(AndroidApplication application) {
         this.application = application;

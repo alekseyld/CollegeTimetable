@@ -1,4 +1,4 @@
-package com.alekseyld.collegetimetable.presenter;
+package com.alekseyld.collegetimetable.presenter.base;
 
 /**
  * Created by Alekseyld on 02.09.2016.

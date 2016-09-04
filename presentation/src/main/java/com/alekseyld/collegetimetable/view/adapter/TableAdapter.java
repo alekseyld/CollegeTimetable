@@ -1,12 +1,14 @@
 package com.alekseyld.collegetimetable.view.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.alekseyld.collegetimetable.R;
+import com.alekseyld.collegetimetable.TableWrapper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,7 +18,8 @@ import butterknife.ButterKnife;
  */
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
-    private String[] mDataset;
+
+    private TableWrapper mTableWrapper;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
@@ -39,8 +42,8 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public TableAdapter(String[] myDataset) {
-        mDataset = myDataset;
+    public TableAdapter() {
+        mTableWrapper = null;
     }
 
     // Create new views (invoked by the layout manager)
@@ -51,9 +54,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_table, parent, false);
         // set the view's size, margins, paddings and layout parameters
-
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return  new ViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -61,20 +62,64 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.date.setText(mDataset[position]);
-        holder.lesson0.setText(mDataset[position]);
-        holder.lesson1.setText(mDataset[position]);
-        holder.lesson2.setText(mDataset[position]);
-        holder.lesson3.setText(mDataset[position]);
-        holder.lesson4.setText(mDataset[position]);
-        holder.lesson5.setText(mDataset[position]);
-        holder.lesson6.setText(mDataset[position]);
 
+        if(mTableWrapper != null) {
+            TableWrapper.Day day = TableWrapper.Day.Mon;
+
+            switch (position) {
+                case 0:
+                    day = TableWrapper.Day.Mon;
+                    break;
+                case 1:
+                    day = TableWrapper.Day.Tue;
+                    break;
+                case 2:
+                    day = TableWrapper.Day.Wed;
+                    break;
+                case 3:
+                    day = TableWrapper.Day.Thu;
+                    break;
+                case 4:
+                    day = TableWrapper.Day.Friday;
+                    break;
+                case 5:
+                    day = TableWrapper.Day.Saturday;
+                    break;
+            }
+
+            holder.date.setText(day.getText());
+            holder.lesson0.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson0));
+            holder.lesson1.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson1));
+            holder.lesson2.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson2));
+            holder.lesson3.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson3));
+            holder.lesson4.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson4));
+            holder.lesson5.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson5));
+            holder.lesson6.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson6));
+        }else {
+
+            holder.date.setText("gg");
+            holder.lesson0.setText("gg");
+            holder.lesson1.setText("gg");
+            holder.lesson2.setText("gg");
+            holder.lesson3.setText("gg");
+            holder.lesson4.setText("gg");
+            holder.lesson5.setText("gg");
+            holder.lesson6.setText("gg");
+
+        }
+    }
+
+    public void setTableWrapper(TableWrapper tableWrapper){
+        mTableWrapper = tableWrapper;
+        notifyDataSetChanged();
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        if(mTableWrapper == null) {
+            return 0;
+        }
+        return mTableWrapper.getmTimeTable().size();
     }
 }

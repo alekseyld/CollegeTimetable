@@ -66,4 +66,5 @@ dependencies {
 
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'org.jsoup:jsoup:1.9.2'
 }
