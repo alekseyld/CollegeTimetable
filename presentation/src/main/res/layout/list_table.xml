@@ -23,6 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:gravity="center"
+            android:textColor="#000"
+            android:textSize="16sp"
             android:id="@+id/date" />
 
         <LinearLayout
@@ -33,10 +35,12 @@
                 android:text="0."
                 android:layout_width="15dp"
                 android:layout_marginRight="5dp"
+                android:textColor="#000"
                 android:layout_height="wrap_content"
                 />
             <TextView
                 android:text="Урок 0"
+                android:textColor="#000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/lesson0" />
@@ -48,11 +52,13 @@
             android:layout_marginBottom="5dp">
             <TextView
                 android:text="1."
+                android:textColor="#000"
                 android:layout_width="15dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 />
             <TextView
+                android:textColor="#000"
                 android:text="Урок 1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,12 +71,14 @@
             android:layout_marginBottom="5dp">
             <TextView
                 android:text="2."
+                android:textColor="#000"
                 android:layout_width="15dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 />
             <TextView
                 android:text="Урок 2"
+                android:textColor="#000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/lesson2" />
@@ -82,12 +90,14 @@
             android:layout_marginBottom="5dp">
             <TextView
                 android:text="3."
+                android:textColor="#000"
                 android:layout_width="15dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 />
             <TextView
                 android:text="Урок 3"
+                android:textColor="#000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/lesson3" />
@@ -99,12 +109,14 @@
             android:layout_marginBottom="5dp">
             <TextView
                 android:text="4."
+                android:textColor="#000"
                 android:layout_width="15dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 />
             <TextView
                 android:text="Урок 4"
+                android:textColor="#000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/lesson4" />
@@ -116,12 +128,14 @@
             android:layout_marginBottom="5dp">
             <TextView
                 android:text="5."
+                android:textColor="#000"
                 android:layout_width="15dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 />
             <TextView
                 android:text="Урок 5"
+                android:textColor="#000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/lesson5" />
@@ -133,12 +147,14 @@
             android:layout_marginBottom="5dp">
             <TextView
                 android:text="6."
+                android:textColor="#000"
                 android:layout_width="15dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 />
             <TextView
                 android:text="Урок 6"
+                android:textColor="#000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/lesson6" />
