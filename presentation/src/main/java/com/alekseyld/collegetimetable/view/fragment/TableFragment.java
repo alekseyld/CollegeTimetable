@@ -6,10 +6,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.TableWrapper;
@@ -49,6 +51,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_table, container, false);
         ButterKnife.bind(this, v);
+        getActivity().setTitle(R.string.app_name);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -67,8 +70,6 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
         return v;
     }
-
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -103,7 +104,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
     @Override
     public void showError(String message) {
-        showToastMessage(message);
+        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }
 
     @Override

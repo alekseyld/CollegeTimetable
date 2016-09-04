@@ -16,7 +16,8 @@ import rx.Observable;
 
 public class GetTableUseCase extends UseCase {
 
-    TableService mService;
+    private TableService mService;
+    private boolean isOnline = true;
 
     @Inject
     public GetTableUseCase(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread,
@@ -28,6 +29,10 @@ public class GetTableUseCase extends UseCase {
 
     @Override
     protected Observable<TableWrapper> buildUseCaseObservable() {
-        return mService.getTimetable();
+        return mService.getTimetable(isOnline);
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
     }
 }

@@ -4,8 +4,8 @@ package com.alekseyld.collegetimetable.view.fragment.base;
  * Created by Alekseyld on 02.09.2016.
  */
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.alekseyld.collegetimetable.internal.di.HasComponent;

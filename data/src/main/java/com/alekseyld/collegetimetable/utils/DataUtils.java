@@ -17,6 +17,16 @@ import java.util.regex.Pattern;
 
 public class DataUtils {
 
+    public static String getGroupUrl(String group){
+        if(group.contains("АПП")) {
+            return "http://uecoll.ru/wp-content/uploads/time/neft/10_1_1.html";
+        }
+        if(group.contains("ТО")){
+            return "http://uecoll.ru/wp-content/uploads/time/neft/10_1_3.html";
+        }
+        return null;
+    }
+
     public static TableWrapper parseDocument(Document document, String group){
 
         if (document == null){
@@ -76,7 +86,7 @@ public class DataUtils {
 
             //
             if(toLesson && numberPattern.matcher(element.text()).matches()){
-                Log.d("toLesson", element.text());
+//                Log.d("toLesson", element.text());
 
                 toLesson = false;
                 spaceToLessonBlock = true;

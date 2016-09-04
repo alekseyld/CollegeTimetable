@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">CollegeTimetable</string>
+    <string name="app_name">УТЭК расписание</string>
+    <string name="action_settings">Настройки</string>
 
     <string name="Mon">Понедельник</string>
     <string name="Tue">Вторник</string>
@@ -7,4 +8,7 @@
     <string name="Thu">Четверг</string>
     <string name="Friday">Пятница</string>
     <string name="Saturday">Суббота</string>
+    <string name="hint_minute">Кол-во минут до обновления</string>
+    <string name="hint_group">Аббревиатура группы</string>
+    <string name="btn_save">Сохранить</string>
 </resources>

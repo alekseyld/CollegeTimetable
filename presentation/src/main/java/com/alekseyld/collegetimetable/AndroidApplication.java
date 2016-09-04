@@ -18,12 +18,17 @@ public class AndroidApplication extends Application {
     @Override public void onCreate() {
         super.onCreate();
         this.initializeInjector();
+        this.initializeDBFlow();
     }
 
     private void initializeInjector() {
         this.applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .build();
+    }
+
+    private void initializeDBFlow(){
+//        FlowManager.init(new FlowConfig.Builder(this).build());
     }
 
     public ApplicationComponent getApplicationComponent() {
