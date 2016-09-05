@@ -61,5 +61,4 @@ public class TablePresenter extends BasePresenter<TableView>{
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
-
 }

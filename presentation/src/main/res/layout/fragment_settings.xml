@@ -4,6 +4,9 @@
     android:layout_height="match_parent">
 
     <EditText
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -12,6 +15,9 @@
         android:hint="@string/hint_minute" />
 
     <EditText
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
@@ -20,7 +26,10 @@
         android:hint="@string/hint_group" />
 
     <Button
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
         android:text="@string/btn_save"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btn_save" />

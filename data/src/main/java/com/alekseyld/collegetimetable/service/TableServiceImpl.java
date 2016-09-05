@@ -55,6 +55,10 @@ public class TableServiceImpl implements TableService{
                 .flatMap(url -> {
 //                    Log.d("TimeTableUrl", mSettingsRepository.getGroup());
 //                    Log.d("ApiStatus", "Api status - "+url.getStatus());
+
+                    if(mSettingsRepository.getUrl() == null){
+                        mSettingsRepository.putUrl(url.getResult());
+                    }
                     Document document = null;
                     if(online && (url.getStatus() != 2 || url.getStatus() != 3)) {
                         try {

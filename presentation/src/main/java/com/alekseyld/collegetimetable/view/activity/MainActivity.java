@@ -1,14 +1,16 @@
 package com.alekseyld.collegetimetable.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerMainComponent;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.internal.di.module.MainModule;
+import com.alekseyld.collegetimetable.service.UpdateTimetableService;
 import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFragment;
 import com.alekseyld.collegetimetable.view.fragment.TableFragment;
@@ -19,6 +21,11 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(!UpdateTimetableService.isRunning){
+            startService(new Intent(this, UpdateTimetableService.class));
+        }
+
         addFragment(TableFragment.newInstance());
 
 //        FlowManager.init(new FlowConfig.Builder(this)

@@ -37,6 +37,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
             ed.putString("Group", group.toString());
             ed.remove("Doc");
             ed.remove("TimeTable");
+            ed.remove("Url");
             ed.apply();
         }
         mView.showError("Сохранено");

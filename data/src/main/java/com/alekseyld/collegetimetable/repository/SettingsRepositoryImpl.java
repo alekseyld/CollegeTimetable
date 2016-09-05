@@ -57,6 +57,18 @@ public class SettingsRepositoryImpl implements SettingsRepository {
     }
 
     @Override
+    public String getUrl() {
+        return mPref.getString("Url", null);
+    }
+
+    @Override
+    public void putUrl(String url) {
+        SharedPreferences.Editor ed = mPref.edit();
+        ed.putString("Url", url);
+        ed.apply();
+    }
+
+    @Override
     public void put(String group, int time) {
         putGroup(group);
         putTime(time);

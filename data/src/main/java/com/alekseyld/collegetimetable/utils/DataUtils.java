@@ -116,7 +116,7 @@ public class DataUtils {
         int i = 0;
 
         for (Element element: table) {
-            Log.d("all", element.text());
+//            Log.d("all", element.text());
 
             //Ищем начало групп
             if(element.text().equals("День/Пара") && first){
@@ -228,7 +228,7 @@ public class DataUtils {
                         break;
                 }
 
-                Log.d("timetable", "size "+time.size());
+//                Log.d("timetable", "size "+time.size());
 
                 lessonSpace = 0;
                 toLesson = true;

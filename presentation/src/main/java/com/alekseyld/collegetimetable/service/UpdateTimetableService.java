@@ -8,6 +8,9 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
@@ -16,6 +19,11 @@ import android.util.Log;
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import java.io.EOFException;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,12 +34,14 @@ public class UpdateTimetableService extends IntentService {
     private final String LOG_TAG = "ServiceLog";
     public static boolean isRunning = false;
 
+    SharedPreferences mPref;
+
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
      * UpdateTimetableService Used to name the worker thread, important only for debugging.
      */
-    public UpdateTimetableService(int time, String doc) {
+    public UpdateTimetableService() {
         super("DataService");
     }
 
@@ -56,36 +66,42 @@ public class UpdateTimetableService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.d(LOG_TAG, "onHandleIntent");
 
-        //mock data
-//        putToDataBase(
-//                getData(intent.getStringExtra("name"),
-//                        intent.getIntExtra("number", 0)));
-
-        int time = 20;
-        //TODO доделать сервис
+        mPref = getSharedPreferences("DataStorage", MODE_PRIVATE);
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
-        v.vibrate(500);
+        int time = mPref.getInt("Time", 5);
         NotificationManager n = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Notification notification = getNotif("Data is get");
+        Notification notification = getNotif("Изменение в расписании");
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        n.notify("end", 5, notification);
 
-        stopSelf();
+        while (true){
+            if(isOnline()){
+                Document document = null;
+                    try {
+                        document = Jsoup.connect(mPref.getString("Url", "")).get();
+                        if(!document.text().equals(mPref.getString("Doc", ""))){
+                            n.notify("Изменение в расписании", 5, notification);
+                            v.vibrate(300);
+                        }
+                    } catch (Exception e) {
+                        stopSelf();
+                    }
+            }
+            pause(time);
+        }
     }
 
 
     //do a pause
     private void pause(int p){
         try {
-            TimeUnit.SECONDS.sleep(p);
+            TimeUnit.MINUTES.sleep(p);
         } catch (InterruptedException e) {e.printStackTrace();}
     }
 
     private Notification getNotif(String s) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.mipmap.android_logo)
                         .setContentTitle(s)
                         .setContentText("Изменение в расписании");
 //                        .setContentText("name = "+intent.getStringExtra("name")+"; "+
@@ -105,6 +121,13 @@ public class UpdateTimetableService extends IntentService {
 //                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 //        mNotificationManager.notify(1, mBuilder.build());
         return mBuilder.build();
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
 }

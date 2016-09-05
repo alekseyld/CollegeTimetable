@@ -15,6 +15,7 @@ public interface TableRepository {
 
     void putTimeTable(TableWrapper tableWrapper);
     void putDocument(Document document);
+
     void put(TableWrapper tableWrapper, Document document);
 
 }
