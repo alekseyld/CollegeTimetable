@@ -3,6 +3,9 @@ package com.alekseyld.collegetimetable.internal.di.module;
 import android.app.Activity;
 
 import com.alekseyld.collegetimetable.internal.di.PerActivity;
+import com.alekseyld.collegetimetable.navigator.NavigatorImpl;
+import com.alekseyld.collegetimetable.navigator.base.Navigator;
+import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
 import com.alekseyld.collegetimetable.repository.SettingsRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.TableRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
@@ -45,5 +48,10 @@ public class MainModule {
     @PerActivity @Provides
     SettingsRepository provideSettingsRepository(SettingsRepositoryImpl settingsRepository){
         return settingsRepository;
+    }
+
+    @PerActivity @Provides
+    SettingsResultProcessor provideSettingsResultProcessor(NavigatorImpl navigator){
+        return navigator;
     }
 }

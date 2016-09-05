@@ -65,7 +65,6 @@ public class UpdateTimetableService extends IntentService {
         //TODO доделать сервис
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-
         v.vibrate(500);
         NotificationManager n = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Notification notification = getNotif("Data is get");

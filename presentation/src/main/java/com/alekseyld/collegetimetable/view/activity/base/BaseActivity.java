@@ -40,7 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity implements HasCompo
     fragmentTransaction.commit();
   }
 
-  protected void replaceFragment(Fragment fragment) {
+  public void replaceFragment(Fragment fragment) {
     FragmentTransaction fragmentTransaction = this.getSupportFragmentManager().beginTransaction();
     fragmentTransaction.replace(getContainerId(), fragment);
     fragmentTransaction.addToBackStack(null);

@@ -12,6 +12,7 @@ import com.alekseyld.collegetimetable.internal.di.HasComponent;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
 import com.alekseyld.collegetimetable.presenter.base.Presenter;
 import com.alekseyld.collegetimetable.view.BaseView;
+import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 
 import javax.inject.Inject;
 
@@ -67,6 +68,10 @@ public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fra
     protected void initialize(){
         initializeInjections();
         mPresenter.setView(this);
+    }
+
+    public BaseActivity getAct(){
+        return (BaseActivity)this.getActivity();
     }
 
     protected abstract void initializeInjections();

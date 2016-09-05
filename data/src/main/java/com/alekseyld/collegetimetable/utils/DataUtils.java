@@ -70,7 +70,7 @@ public class DataUtils {
         if(group.contains("Э-")){
             url = "energy/10_1_7.html";
         }
-        if(group.contains("С-")){
+        if(group.contains(" С-")){
             url = "energy/10_1_10.html";
         }
 
@@ -113,10 +113,10 @@ public class DataUtils {
         //Счетчик пар
         int lesson = 0;
 
-        int end = 0;
+        int i = 0;
 
         for (Element element: table) {
-//            Log.d("all", element.text());
+            Log.d("all", element.text());
 
             //Ищем начало групп
             if(element.text().equals("День/Пара") && first){
@@ -134,7 +134,33 @@ public class DataUtils {
                 toLesson = true;
             }
 
-            //
+            i++;
+            if(i == table.size()-1){
+                switch (day) {
+                    case 0:
+                        time.put(TableWrapper.Day.Mon, lessons);
+                        break;
+                    case 1:
+                        time.put(TableWrapper.Day.Tue, lessons);
+                        break;
+                    case 2:
+                        time.put(TableWrapper.Day.Wed, lessons);
+                        break;
+                    case 3:
+                        time.put(TableWrapper.Day.Thu, lessons);
+                        break;
+                    case 4:
+                        time.put(TableWrapper.Day.Friday, lessons);
+                        break;
+                    case 5:
+                        time.put(TableWrapper.Day.Saturday, lessons);
+                        break;
+                    case 6:
+                        time.put(TableWrapper.Day.Mon2, lessons);
+                        break;
+                }
+            }
+
             if(toLesson && numberPattern.matcher(element.text()).matches()){
 //                Log.d("toLesson", element.text());
 
@@ -143,13 +169,6 @@ public class DataUtils {
                 lessonSpace = 0;
 
                 lesson = Integer.parseInt(element.text());
-
-                if(lesson == 6){
-                    end++;
-                }
-                if(end == 7){
-                    lesson = 0;
-                }
 
                 if(lesson == 0){
                     switch (day){
@@ -208,6 +227,8 @@ public class DataUtils {
                         lessons.put(TableWrapper.Lesson.lesson6, element.text());
                         break;
                 }
+
+                Log.d("timetable", "size "+time.size());
 
                 lessonSpace = 0;
                 toLesson = true;

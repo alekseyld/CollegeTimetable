@@ -58,7 +58,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         final View v = inflater.inflate(R.layout.fragment_table, container, false);
         ButterKnife.bind(this, v);
         if(context().getSharedPreferences("DataStorage", MODE_PRIVATE).contains("Group")) {
-            getActivity().setTitle("Группа "+
+            getActivity().setTitle("Группа: "+
                     context().getSharedPreferences("DataStorage", MODE_PRIVATE).getString("Group", app_name));
         }else{
             getActivity().setTitle(R.string.app_name);

@@ -53,7 +53,8 @@ public class TableServiceImpl implements TableService{
                     return apiResponse;
                 })
                 .flatMap(url -> {
-                    Log.d("TimeTableUrl", mSettingsRepository.getGroup());
+//                    Log.d("TimeTableUrl", mSettingsRepository.getGroup());
+//                    Log.d("ApiStatus", "Api status - "+url.getStatus());
                     Document document = null;
                     if(online && (url.getStatus() != 2 || url.getStatus() != 3)) {
                         try {
@@ -78,10 +79,8 @@ public class TableServiceImpl implements TableService{
                         }
                     }else {
                         if(mTimetableRepository.getDocument() != null){
-                            Log.d("tes", "old");
                             return Observable.just(mTimetableRepository.getTimeTable());
                         }else{
-                            Log.d("tes", "new");
                             return Observable.just(new TableWrapper());
                         }
                     }
