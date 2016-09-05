@@ -18,13 +18,63 @@ import java.util.regex.Pattern;
 public class DataUtils {
 
     public static String getGroupUrl(String group){
-        if(group.contains("АПП")) {
-            return "http://uecoll.ru/wp-content/uploads/time/neft/10_1_1.html";
+
+        String url = "";
+
+
+        if(group.contains("Т")){
+            url = "energy/10_1_8.html";
         }
-        if(group.contains("ТО")){
-            return "http://uecoll.ru/wp-content/uploads/time/neft/10_1_3.html";
+        if(group.contains("Б")){
+            url = "energy/10_1_9.html";
         }
-        return null;
+        if(group.contains("АПП-")) {
+            url = "neft/10_1_1.html";
+        }
+        if(group.contains("БНГ-")){
+            url = "neft/10_1_2.html";
+        }
+        if(group.contains("ТО-")){
+            url = "neft/10_1_3.html";
+        }
+        if(group.contains("B-")){
+            url = "neft/10_1_4.html";
+        }
+        if(group.contains("ПНГ-")){
+            url = "neft/10_1_5.html";
+        }
+        if(group.contains("ЭНН-")){
+            url = "neft/10_1_6.html";
+        }
+        if(group.contains("ТОВ-")){
+            url = "neft/10_1_7.html";
+        }
+        if(group.contains("ИС")) {
+            url = "energy/10_1_1.html";
+        }
+        if(group.contains("ГС-")){
+            url = "energy/10_1_2.html";
+        }
+        if(group.contains("Л-")){
+            url = "energy/10_1_3.html";
+        }
+        if(group.contains("Р-")){
+            url = "energy/10_1_4.html";
+        }
+        if(group.contains("ПГ-")){
+            url = "energy/10_1_5.html";
+        }
+        if(group.contains("ТС-")){
+            url = "energy/10_1_6.html";
+        }
+        if(group.contains("Э-")){
+            url = "energy/10_1_7.html";
+        }
+        if(group.contains("С-")){
+            url = "energy/10_1_10.html";
+        }
+
+        return "http://uecoll.ru/wp-content/uploads/time/" + url;
     }
 
     public static TableWrapper parseDocument(Document document, String group){

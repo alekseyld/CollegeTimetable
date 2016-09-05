@@ -62,7 +62,7 @@ public class UpdateTimetableService extends IntentService {
 //                        intent.getIntExtra("number", 0)));
 
         int time = 20;
-
+        //TODO доделать сервис
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
 

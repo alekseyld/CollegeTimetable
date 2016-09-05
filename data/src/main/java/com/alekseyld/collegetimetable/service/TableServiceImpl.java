@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.alekseyld.collegetimetable.TableWrapper;
 import com.alekseyld.collegetimetable.api.ProxyApi;
+import com.alekseyld.collegetimetable.entity.ApiResponse;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 import com.alekseyld.collegetimetable.repository.base.TableRepository;
 import com.alekseyld.collegetimetable.utils.DataUtils;
@@ -13,6 +14,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 import javax.inject.Inject;
 
@@ -41,11 +43,19 @@ public class TableServiceImpl implements TableService{
     @Override
     public Observable<TableWrapper> getTimetable(boolean online) {
         return urlApi.getUrl(DataUtils.getGroupUrl(mSettingsRepository.getGroup()))
+                .onErrorReturn((error) ->{
+                    ApiResponse apiResponse = new ApiResponse();
+                    if(error instanceof UnknownHostException){
+                        apiResponse.setStatus(2);
+                    }else {
+                        apiResponse.setStatus(3);
+                    }
+                    return apiResponse;
+                })
                 .flatMap(url -> {
-                    Log.d("TimeTableUrl", url.getResult());
                     Log.d("TimeTableUrl", mSettingsRepository.getGroup());
                     Document document = null;
-                    if(online) {
+                    if(online && (url.getStatus() != 2 || url.getStatus() != 3)) {
                         try {
                             document = Jsoup.connect(url.getResult()).get();
                         } catch (IOException e) {
@@ -68,8 +78,10 @@ public class TableServiceImpl implements TableService{
                         }
                     }else {
                         if(mTimetableRepository.getDocument() != null){
+                            Log.d("tes", "old");
                             return Observable.just(mTimetableRepository.getTimeTable());
                         }else{
+                            Log.d("tes", "new");
                             return Observable.just(new TableWrapper());
                         }
                     }

@@ -21,8 +21,11 @@ import com.alekseyld.collegetimetable.view.TableView;
 import com.alekseyld.collegetimetable.view.adapter.TableAdapter;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -46,12 +49,20 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     private RecyclerView.LayoutManager mLayoutManager;
     private TableAdapter mTableAdapter;
 
+    @BindString(R.string.app_name)
+    String app_name;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_table, container, false);
         ButterKnife.bind(this, v);
-        getActivity().setTitle(R.string.app_name);
+        if(context().getSharedPreferences("DataStorage", MODE_PRIVATE).contains("Group")) {
+            getActivity().setTitle("Группа "+
+                    context().getSharedPreferences("DataStorage", MODE_PRIVATE).getString("Group", app_name));
+        }else{
+            getActivity().setTitle(R.string.app_name);
+        }
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -83,6 +94,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     }
 
     private void refreshItems() {
+        mPresenter.getTimeTable();
         onItemsLoadComplete();
     }
 

@@ -29,4 +29,8 @@ public class ApiResponse {
     public String getError() {
         return error;
     }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }
