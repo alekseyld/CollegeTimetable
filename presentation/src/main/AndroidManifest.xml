@@ -22,8 +22,7 @@
         </activity>
         <service
             android:name=".service.UpdateTimetableService"
-            android:enabled="true"
-            android:exported="true" >
+            android:enabled="true" >
         </service>
     </application>
 

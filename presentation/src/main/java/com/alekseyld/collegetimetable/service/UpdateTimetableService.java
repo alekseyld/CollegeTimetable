@@ -73,20 +73,17 @@ public class UpdateTimetableService extends IntentService {
         Notification notification = getNotif("Изменение в расписании");
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
-        while (true){
-            if(isOnline()){
-                Document document = null;
-                    try {
-                        document = Jsoup.connect(mPref.getString("Url", "")).get();
-                        if(!document.text().equals(mPref.getString("Doc", ""))){
-                            n.notify("Изменение в расписании", 5, notification);
-                            v.vibrate(300);
-                        }
-                    } catch (Exception e) {
-                        stopSelf();
-                    }
+        if(isOnline()){
+            Document document = null;
+            try {
+                document = Jsoup.connect(mPref.getString("Url", "")).get();
+                if(!document.text().equals(mPref.getString("Doc", ""))){
+                    n.notify("com.alekseyld.collegetimetable", 5, notification);
+                    v.vibrate(300);
+                }
+            } catch (Exception e) {
+                stopSelf();
             }
-            pause(time);
         }
     }
 
