@@ -25,6 +25,7 @@ public class TableRepositoryImpl implements TableRepository {
 
     private Gson mGson;
     private Type mType;
+    private Type mTypeDay;
 
     private Activity mActivity;
     private SharedPreferences mPref;
@@ -36,13 +37,16 @@ public class TableRepositoryImpl implements TableRepository {
 
         mGson = new Gson();
         mType = new TypeToken<HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>>>(){}.getType();
+        mTypeDay = new TypeToken<HashMap<TableWrapper.Day, String>>(){}.getType();
     }
 
     @Override
     public TableWrapper getTimeTable() {
-        String s = mPref.getString("TimeTable", "no");
+        String s = mPref.getString("TimeTable", "");
+        String d = mPref.getString("Days", "");
         TableWrapper tableWrapper = new TableWrapper();
         tableWrapper.setTimeTable(mGson.fromJson(s, mType));
+        tableWrapper.setDays(mGson.fromJson(d, mTypeDay));
         return tableWrapper;
     }
 
@@ -54,8 +58,10 @@ public class TableRepositoryImpl implements TableRepository {
     @Override
     public void putTimeTable(TableWrapper tableWrapper) {
         String json = mGson.toJson(tableWrapper.getmTimeTable());
+        String json2 = mGson.toJson(tableWrapper.getDays());
         SharedPreferences.Editor ed = mPref.edit();
         ed.putString("TimeTable", json);
+        ed.putString("Days", json2);
         ed.apply();
     }
 

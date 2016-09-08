@@ -48,8 +48,8 @@ public class TableWrapper {
         }
     }
 
-    HashMap<Day, HashMap<Lesson, String>> mTimeTable;
-    HashMap<Day, String> mDays;
+    private HashMap<Day, HashMap<Lesson, String>> mTimeTable;
+    private HashMap<Day, String> mDays;
 
     public HashMap<Day, HashMap<Lesson, String>> getmTimeTable() {
         if(mTimeTable != null) {
@@ -73,5 +73,22 @@ public class TableWrapper {
 
     public void setDays(HashMap<Day, String> mDays) {
         this.mDays = mDays;
+    }
+
+    public boolean equals(TableWrapper tableWrapper) {
+        boolean size = mTimeTable.size() == tableWrapper.mTimeTable.size();
+        boolean keys = mTimeTable.keySet().equals(mTimeTable.keySet());
+        if(size && keys) {
+            for (Day d: mTimeTable.keySet()) {
+                for (Lesson l: mTimeTable.get(d).keySet()){
+                    if(!mTimeTable.get(d).get(l).equals(tableWrapper.getmTimeTable().get(d).get(l))){
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }else {
+            return false;
+        }
     }
 }

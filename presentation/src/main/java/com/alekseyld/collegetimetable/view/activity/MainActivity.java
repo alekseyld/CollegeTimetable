@@ -1,10 +1,15 @@
 package com.alekseyld.collegetimetable.view.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerMainComponent;
@@ -12,11 +17,20 @@ import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.internal.di.module.MainModule;
 import com.alekseyld.collegetimetable.service.UpdateTimetableService;
 import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
+import com.alekseyld.collegetimetable.view.fragment.AboutFragment;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFragment;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFragmentPreference;
 import com.alekseyld.collegetimetable.view.fragment.TableFragment;
 
+import butterknife.BindView;
+
 public class MainActivity extends BaseActivity {
+
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+
+    @BindView(R.id.drawer)
+    DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +69,8 @@ public class MainActivity extends BaseActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()){
             case R.id.action_settings:
-//                replaceFragment(SettingsFragment.newInstance());
-                replaceFragment(SettingsFragmentPreference.newInstance());
+                replaceFragment(SettingsFragment.newInstance());
+//                replaceFragment(SettingsFragmentPreference.newInstance());
                 return true;
 
             case android.R.id.home:
