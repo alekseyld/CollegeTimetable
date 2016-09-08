@@ -49,12 +49,29 @@ public class TableWrapper {
     }
 
     HashMap<Day, HashMap<Lesson, String>> mTimeTable;
+    HashMap<Day, String> mDays;
 
     public HashMap<Day, HashMap<Lesson, String>> getmTimeTable() {
-        return mTimeTable;
+        if(mTimeTable != null) {
+            return mTimeTable;
+        }else {
+            return new HashMap<>();
+        }
     }
 
     public void setTimeTable(HashMap<Day, HashMap<Lesson, String>> mTimeTable) {
         this.mTimeTable = mTimeTable;
+    }
+
+    public HashMap<Day, String> getDays() {
+        if(mDays != null) {
+            return mDays;
+        }else {
+            return new HashMap<>();
+        }
+    }
+
+    public void setDays(HashMap<Day, String> mDays) {
+        this.mDays = mDays;
     }
 }

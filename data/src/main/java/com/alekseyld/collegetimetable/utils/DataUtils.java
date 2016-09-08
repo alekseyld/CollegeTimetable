@@ -86,11 +86,14 @@ public class DataUtils {
         Elements table =document.select("tr").select("td");
 
         Pattern numberPattern = Pattern.compile("^[0-9]");
+        Pattern dayPattern = Pattern.compile("[А-Я]\\s[А-Я]\\s\\b");
 
         TableWrapper timeTable = new TableWrapper();
 
         HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> time = new HashMap<>();
         HashMap<TableWrapper.Lesson, String> lessons = new HashMap<>();
+        HashMap<TableWrapper.Day, String> days = new HashMap<>();
+        String[] dayString = new String[]{"", ""};
 
         //Искать номер пары
         boolean space = false;
@@ -116,7 +119,11 @@ public class DataUtils {
         int i = 0;
 
         for (Element element: table) {
-//            Log.d("all", element.text());
+
+            if(dayPattern.matcher(element.text()).find()){
+                dayString[0] = dayString [1];
+                dayString[1] = element.text();
+            }
 
             //Ищем начало групп
             if(element.text().equals("День/Пара") && first){
@@ -136,27 +143,34 @@ public class DataUtils {
 
             i++;
             if(i == table.size()-1){
-                switch (day) {
+                switch (day){
                     case 0:
                         time.put(TableWrapper.Day.Mon, lessons);
+                        days.put(TableWrapper.Day.Mon, dayString[0].equals("") ? dayString[1] : dayString[0]);
                         break;
                     case 1:
                         time.put(TableWrapper.Day.Tue, lessons);
+                        days.put(TableWrapper.Day.Tue, dayString[0]);
                         break;
                     case 2:
                         time.put(TableWrapper.Day.Wed, lessons);
+                        days.put(TableWrapper.Day.Wed, dayString[0]);
                         break;
                     case 3:
                         time.put(TableWrapper.Day.Thu, lessons);
+                        days.put(TableWrapper.Day.Thu, dayString[0]);
                         break;
                     case 4:
                         time.put(TableWrapper.Day.Friday, lessons);
+                        days.put(TableWrapper.Day.Friday, dayString[0]);
                         break;
                     case 5:
                         time.put(TableWrapper.Day.Saturday, lessons);
+                        days.put(TableWrapper.Day.Saturday, dayString[0]);
                         break;
                     case 6:
                         time.put(TableWrapper.Day.Mon2, lessons);
+                        days.put(TableWrapper.Day.Mon2, dayString[1]);
                         break;
                 }
             }
@@ -174,24 +188,31 @@ public class DataUtils {
                     switch (day){
                         case 0:
                             time.put(TableWrapper.Day.Mon, lessons);
+                            days.put(TableWrapper.Day.Mon, dayString[0]);
                             break;
                         case 1:
                             time.put(TableWrapper.Day.Tue, lessons);
+                            days.put(TableWrapper.Day.Tue, dayString[0]);
                             break;
                         case 2:
                             time.put(TableWrapper.Day.Wed, lessons);
+                            days.put(TableWrapper.Day.Wed, dayString[0]);
                             break;
                         case 3:
                             time.put(TableWrapper.Day.Thu, lessons);
+                            days.put(TableWrapper.Day.Thu, dayString[0]);
                             break;
                         case 4:
                             time.put(TableWrapper.Day.Friday, lessons);
+                            days.put(TableWrapper.Day.Friday, dayString[0]);
                             break;
                         case 5:
                             time.put(TableWrapper.Day.Saturday, lessons);
+                            days.put(TableWrapper.Day.Saturday, dayString[0]);
                             break;
                         case 6:
                             time.put(TableWrapper.Day.Mon2, lessons);
+                            days.put(TableWrapper.Day.Mon2, dayString[1]);
                             break;
                     }
                     lessons = new HashMap<>();
@@ -237,6 +258,7 @@ public class DataUtils {
         }
 
         timeTable.setTimeTable(time);
+        timeTable.setDays(days);
 
         return timeTable;
     }

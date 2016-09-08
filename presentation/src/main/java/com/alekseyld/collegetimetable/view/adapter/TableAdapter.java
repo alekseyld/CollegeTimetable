@@ -70,35 +70,37 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
             switch (position) {
                 case 0:
                     day = TableWrapper.Day.Mon;
-                    dayText = "Понедельник";
+//                    dayText = "Понедельник";
                     break;
                 case 1:
                     day = TableWrapper.Day.Tue;
-                    dayText = "Вторник";
+//                    dayText = "Вторник";
                     break;
                 case 2:
                     day = TableWrapper.Day.Wed;
-                    dayText = "Среда";
+//                    dayText = "Среда";
                     break;
                 case 3:
                     day = TableWrapper.Day.Thu;
-                    dayText = "Четверг";
+//                    dayText = "Четверг";
                     break;
                 case 4:
                     day = TableWrapper.Day.Friday;
-                    dayText = "Пятница";
+//                    dayText = "Пятница";
                     break;
                 case 5:
                     day = TableWrapper.Day.Saturday;
-                    dayText = "Суббота";
+//                    dayText = "Суббота";
                     break;
                 case 6:
                     day = TableWrapper.Day.Mon2;
-                    dayText = "Понедельник";
+//                    dayText = "Понедельник";
                     break;
             }
 
-            holder.date.setText(dayText);
+//            holder.date.setText(dayText);
+
+            holder.date.setText(mTableWrapper.getDays().get(day));
             holder.lesson0.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson0));
             holder.lesson1.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson1));
             holder.lesson2.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson2));
