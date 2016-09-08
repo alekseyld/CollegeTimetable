@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginBottom="10dp"
+    >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,143 +23,194 @@
             android:text="День недели"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             android:gravity="center"
             android:textColor="#000"
-            android:textSize="16sp"
+            android:textSize="17sp"
             android:id="@+id/date" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp">
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:background="@drawable/border_back">
             <TextView
-                android:text="0."
+                android:text="@string/_0"
                 android:layout_width="15dp"
                 android:layout_marginRight="5dp"
                 android:textColor="#000"
                 android:layout_height="wrap_content"
+                android:textSize="16sp"
                 />
             <TextView
                 android:text="Урок 0"
                 android:textColor="#000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/lesson0" />
+                android:id="@+id/lesson0"
+                android:textSize="16sp"
+                />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp">
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:background="@drawable/border_background">
             <TextView
-                android:text="1."
+                android:text="@string/_1"
                 android:textColor="#000"
                 android:layout_width="15dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
+                android:textSize="16sp"
                 />
             <TextView
                 android:textColor="#000"
                 android:text="Урок 1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/lesson1" />
+                android:id="@+id/lesson1"
+                android:textSize="16sp"
+                />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp">
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:background="@drawable/border_background">
             <TextView
-                android:text="2."
+                android:text="@string/_2"
                 android:textColor="#000"
                 android:layout_width="15dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
+                android:textSize="16sp"
                 />
             <TextView
                 android:text="Урок 2"
                 android:textColor="#000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/lesson2" />
+                android:id="@+id/lesson2"
+                android:textSize="16sp"
+                />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp">
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:background="@drawable/border_background">
             <TextView
-                android:text="3."
+                android:text="@string/_3"
                 android:textColor="#000"
                 android:layout_width="15dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
+                android:textSize="16sp"
                 />
             <TextView
                 android:text="Урок 3"
                 android:textColor="#000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/lesson3" />
+                android:id="@+id/lesson3"
+                android:textSize="16sp"
+                />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp">
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:background="@drawable/border_background">
             <TextView
-                android:text="4."
+                android:text="@string/_4"
                 android:textColor="#000"
                 android:layout_width="15dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
+                android:textSize="16sp"
                 />
             <TextView
                 android:text="Урок 4"
                 android:textColor="#000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/lesson4" />
+                android:id="@+id/lesson4"
+                android:textSize="16sp"
+                />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp">
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:background="@drawable/border_background">
             <TextView
-                android:text="5."
+                android:text="@string/_5"
                 android:textColor="#000"
                 android:layout_width="15dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
+                android:textSize="16sp"
                 />
             <TextView
                 android:text="Урок 5"
                 android:textColor="#000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/lesson5" />
+                android:id="@+id/lesson5"
+                android:textSize="16sp"
+                />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp">
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/border_background">
             <TextView
-                android:text="6."
+                android:text="@string/_6"
                 android:textColor="#000"
                 android:layout_width="15dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
+                android:textSize="16sp"
                 />
             <TextView
                 android:text="Урок 6"
                 android:textColor="#000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/lesson6" />
+                android:id="@+id/lesson6"
+                android:textSize="16sp"
+                />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
