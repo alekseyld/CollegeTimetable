@@ -13,6 +13,7 @@ import com.alekseyld.collegetimetable.internal.di.module.MainModule;
 import com.alekseyld.collegetimetable.service.UpdateTimetableService;
 import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFragment;
+import com.alekseyld.collegetimetable.view.fragment.SettingsFragmentPreference;
 import com.alekseyld.collegetimetable.view.fragment.TableFragment;
 
 public class MainActivity extends BaseActivity {
@@ -52,14 +53,16 @@ public class MainActivity extends BaseActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()){
+            case R.id.action_settings:
+//                replaceFragment(SettingsFragment.newInstance());
+                replaceFragment(SettingsFragmentPreference.newInstance());
+                return true;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            replaceFragment(SettingsFragment.newInstance());
-            return true;
+            case android.R.id.home:
+                onBackPressed();
+                return(true);
         }
-
         return super.onOptionsItemSelected(item);
     }
 

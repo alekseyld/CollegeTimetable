@@ -1,9 +1,10 @@
 package com.alekseyld.collegetimetable.view.activity.base;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import com.alekseyld.collegetimetable.AndroidApplication;
@@ -65,5 +66,9 @@ public abstract class BaseActivity extends AppCompatActivity implements HasCompo
   @Override
   public MainComponent getComponent() {
     return mComponent;
+  }
+
+  public ActionBar getActionBarBase() {
+    return getSupportActionBar();
   }
 }
