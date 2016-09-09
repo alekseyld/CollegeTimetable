@@ -16,6 +16,7 @@ import java.util.HashMap;
 import javax.inject.Inject;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 /**
  * Created by Alekseyld on 04.09.2016.
@@ -29,42 +30,42 @@ public class SettingsRepositoryImpl implements SettingsRepository {
     @Inject
     SettingsRepositoryImpl(Activity activity){
         mActivity = activity;
-        mPref = mActivity.getSharedPreferences("DataStorage", MODE_PRIVATE);
+        mPref = mActivity.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
     }
 
     @Override
     public String getGroup() {
-        return mPref.getString("Group", "2 АПП-1");
+        return mPref.getString(GROUP_KEY, "2 АПП-1");
     }
 
     @Override
     public int getTime() {
-        return mPref.getInt("Time", 10);
+        return mPref.getInt(TIME_KEY, 10);
     }
 
     @Override
     public void putGroup(String group) {
         SharedPreferences.Editor ed = mPref.edit();
-        ed.putString("Group", group);
+        ed.putString(GROUP_KEY, group);
         ed.apply();
     }
 
     @Override
     public void putTime(int time) {
         SharedPreferences.Editor ed = mPref.edit();
-        ed.putInt("Time", time);
+        ed.putInt(TIME_KEY, time);
         ed.apply();
     }
 
     @Override
     public String getUrl() {
-        return mPref.getString("Url", null);
+        return mPref.getString(URL_KEY, null);
     }
 
     @Override
     public void putUrl(String url) {
         SharedPreferences.Editor ed = mPref.edit();
-        ed.putString("Url", url);
+        ed.putString(URL_KEY, url);
         ed.apply();
     }
 

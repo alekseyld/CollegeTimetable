@@ -6,6 +6,10 @@ package com.alekseyld.collegetimetable.repository.base;
 
 public interface SettingsRepository {
 
+    String URL_KEY = "Url";
+    String GROUP_KEY = "Group";
+    String TIME_KEY = "Time";
+
     String getGroup();
     int getTime();
     String getUrl();

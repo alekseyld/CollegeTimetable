@@ -26,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -57,9 +58,9 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_table, container, false);
         ButterKnife.bind(this, v);
-        if(context().getSharedPreferences("DataStorage", MODE_PRIVATE).contains("Group")) {
+        if(context().getSharedPreferences(NAME_FILE, MODE_PRIVATE).contains("Group")) {
             getActivity().setTitle("Группа: "+
-                    context().getSharedPreferences("DataStorage", MODE_PRIVATE).getString("Group", app_name));
+                    context().getSharedPreferences(NAME_FILE, MODE_PRIVATE).getString("Group", app_name));
         }else{
             getActivity().setTitle(R.string.app_name);
         }

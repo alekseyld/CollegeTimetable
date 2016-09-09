@@ -34,6 +34,12 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.GROUP_KEY;
+import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.TIME_KEY;
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.DAYS_KEY;
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.TIMETABLE_KEY;
+
 /**
  * Created by Alekseyld on 04.09.2016.
  */
@@ -81,9 +87,9 @@ public class UpdateTimetableService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.d(LOG_TAG, "onHandleIntent");
 
-        mPref = getSharedPreferences("DataStorage", MODE_PRIVATE);
+        mPref = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        int time = mPref.getInt("Time", 5);
+        int time = mPref.getInt(TIME_KEY, 5);
         NotificationManager n = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Notification notification = getNotif("Изменение в расписании");
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
@@ -92,7 +98,7 @@ public class UpdateTimetableService extends IntentService {
             Document document;
             try {
                 document = Jsoup.connect(mPref.getString("Url", "")).get();
-                TableWrapper tableWrapper = parseDocument(document, mPref.getString("Group", "2 АПП-1"));
+                TableWrapper tableWrapper = parseDocument(document, mPref.getString(GROUP_KEY, "2 АПП-1"));
                 if(!tableWrapper.equals(getTimeTable())){
                     n.notify("com.alekseyld.collegetimetable", 5, notification);
                     v.vibrate(300);
@@ -309,7 +315,7 @@ public class UpdateTimetableService extends IntentService {
                         break;
                 }
 
-//                Log.d("timetable", "size "+time.size());
+//                Log.d(TIMETABLE_KEY, "size "+time.size());
 
                 lessonSpace = 0;
                 toLesson = true;
@@ -324,8 +330,8 @@ public class UpdateTimetableService extends IntentService {
     }
 
     private TableWrapper getTimeTable() {
-        String s = mPref.getString("TimeTable", "");
-        String d = mPref.getString("Days", "");
+        String s = mPref.getString(TIMETABLE_KEY, "");
+        String d = mPref.getString(DAYS_KEY, "");
         TableWrapper tableWrapper = new TableWrapper();
         tableWrapper.setTimeTable((HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>>) mGson.fromJson(s, mType));
         tableWrapper.setDays((HashMap<TableWrapper.Day, String>) mGson.fromJson(d, mTypeDay));

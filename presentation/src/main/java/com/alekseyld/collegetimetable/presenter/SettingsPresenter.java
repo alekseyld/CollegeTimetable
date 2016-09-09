@@ -10,6 +10,8 @@ import com.alekseyld.collegetimetable.view.SettingsView;
 import javax.inject.Inject;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.TIMETABLE_KEY;
 
 /**
  * Created by Alekseyld on 04.09.2016.
@@ -26,7 +28,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
     }
 
     public void updateSettings(Editable minute, Editable group){
-        mPref = mView.context().getSharedPreferences("DataStorage", MODE_PRIVATE);
+        mPref = mView.context().getSharedPreferences(NAME_FILE, MODE_PRIVATE);
         if(minute != null && !minute.toString().equals("")){
             SharedPreferences.Editor ed = mPref.edit();
             ed.putInt("Time", Integer.parseInt(minute.toString()));
@@ -36,7 +38,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
             SharedPreferences.Editor ed = mPref.edit();
             ed.putString("Group", group.toString());
             ed.remove("Doc");
-            ed.remove("TimeTable");
+            ed.remove(TIMETABLE_KEY);
             ed.remove("Url");
             ed.apply();
         }

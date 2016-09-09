@@ -10,6 +10,11 @@ import org.jsoup.nodes.Document;
 
 public interface TableRepository {
 
+    String NAME_FILE = "DataStorage";
+    String TIMETABLE_KEY = "TimeTable";
+    String DAYS_KEY = "Days";
+    String DOC_KEY = "Doc";
+
     TableWrapper getTimeTable();
     String getDocument();
 

@@ -249,7 +249,7 @@ public class DataUtils {
                         break;
                 }
 
-//                Log.d("timetable", "size "+time.size());
+//                Log.d(TIMETABLE_KEY, "size "+time.size());
 
                 lessonSpace = 0;
                 toLesson = true;

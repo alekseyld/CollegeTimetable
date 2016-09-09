@@ -33,7 +33,7 @@ public class TableRepositoryImpl implements TableRepository {
     @Inject
     TableRepositoryImpl(Activity activity){
         mActivity = activity;
-        mPref = mActivity.getSharedPreferences("DataStorage", MODE_PRIVATE);
+        mPref = mActivity.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
 
         mGson = new Gson();
         mType = new TypeToken<HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>>>(){}.getType();
@@ -42,8 +42,8 @@ public class TableRepositoryImpl implements TableRepository {
 
     @Override
     public TableWrapper getTimeTable() {
-        String s = mPref.getString("TimeTable", "");
-        String d = mPref.getString("Days", "");
+        String s = mPref.getString(TIMETABLE_KEY, "");
+        String d = mPref.getString(DAYS_KEY, "");
         TableWrapper tableWrapper = new TableWrapper();
         tableWrapper.setTimeTable(mGson.fromJson(s, mType));
         tableWrapper.setDays(mGson.fromJson(d, mTypeDay));
@@ -52,23 +52,30 @@ public class TableRepositoryImpl implements TableRepository {
 
     @Override
     public String getDocument() {
-        return mPref.getString("Doc", null);
+        return mPref.getString(DOC_KEY, null);
     }
 
     @Override
     public void putTimeTable(TableWrapper tableWrapper) {
         String json = mGson.toJson(tableWrapper.getmTimeTable());
+        editDays(tableWrapper.getDays());
         String json2 = mGson.toJson(tableWrapper.getDays());
         SharedPreferences.Editor ed = mPref.edit();
-        ed.putString("TimeTable", json);
-        ed.putString("Days", json2);
+        ed.putString(TIMETABLE_KEY, json);
+        ed.putString(DAYS_KEY, json2);
         ed.apply();
+    }
+
+    private void editDays(HashMap<TableWrapper.Day, String> days) {
+        for(TableWrapper.Day d: days.keySet()){
+            days.put(d, firstUpperCase(days.get(d).toLowerCase()));
+        }
     }
 
     @Override
     public void putDocument(Document document) {
         SharedPreferences.Editor ed = mPref.edit();
-        ed.putString("Doc", document.text());
+        ed.putString(DOC_KEY, document.text());
         ed.apply();
     }
 
@@ -76,5 +83,10 @@ public class TableRepositoryImpl implements TableRepository {
     public void put(TableWrapper tableWrapper, Document document) {
         putTimeTable(tableWrapper);
         putDocument(document);
+    }
+
+    private String firstUpperCase(String word){
+        if(word == null || word.isEmpty()) return "";//или return word;
+        return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
 }
