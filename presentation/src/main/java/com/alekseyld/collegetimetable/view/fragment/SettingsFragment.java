@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,8 @@ import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.SettingsPresenter;
 import com.alekseyld.collegetimetable.view.SettingsView;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -95,7 +98,7 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         autoTextView.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_list_item_1, res.getStringArray(R.array.groupsList)));//simple_spinner_item
 
-        alertDialogBuilder.setCancelable(false)
+        alertDialogBuilder.setCancelable(true)
                 .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         mPresenter.saveNotification(autoTextView.getText());
@@ -120,9 +123,18 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setView(promptView);
 
-        final Set<String> chosenGroups = getActivity()
+         String json = getActivity()
                 .getSharedPreferences(NAME_FILE, Context.MODE_PRIVATE)
-                .getStringSet(FAVORITEGROUPS_KEY, new HashSet<String>());
+                .getString(FAVORITEGROUPS_KEY, "");
+
+        Set<String> json1= new Gson().fromJson(json,
+                new TypeToken<Set<String>>(){}.getType());
+        final Set<String> chosenGroups;
+        if(json1 != null) {
+            chosenGroups = json1;
+        }else {
+            chosenGroups = new HashSet<>();
+        }
 
         Resources res = getResources();
         final String[] list = res.getStringArray(R.array.groupsList);
@@ -159,7 +171,7 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
             }
         });
 
-        alertDialogBuilder.setCancelable(false)
+        alertDialogBuilder.setCancelable(true)
                 .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         mPresenter.saveFavorite(chosenGroups);

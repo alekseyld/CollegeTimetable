@@ -18,6 +18,8 @@ import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 import com.alekseyld.collegetimetable.view.fragment.AboutFragment;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFragment;
 import com.alekseyld.collegetimetable.view.fragment.TableFragment;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -109,7 +111,9 @@ public class MainActivity extends BaseActivity {
         SharedPreferences preferences = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
 
         if(preferences.contains(FAVORITEGROUPS_KEY)) {
-            Set<String> set = preferences.getStringSet(FAVORITEGROUPS_KEY, new HashSet<String>());
+            String json = preferences.getString(FAVORITEGROUPS_KEY, "");
+            Set<String> set = new Gson().fromJson(json,
+                    new TypeToken<Set<String>>(){}.getType());
             favorite = set.toArray(new String[set.size()]);
         }
 

@@ -2,6 +2,7 @@ package com.alekseyld.collegetimetable.presenter;
 
 import android.content.SharedPreferences;
 import android.text.Editable;
+import android.util.Log;
 
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
@@ -58,12 +59,13 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
     }
 
     public void saveFavorite(Set<String> groups){
+        String json = new Gson().toJson(groups);
         mPref = mView.context().getSharedPreferences(NAME_FILE, MODE_PRIVATE);
 
         if(groups != null && groups.size() > 0){
             SharedPreferences.Editor ed = mPref.edit();
             ed.remove(FAVORITEGROUPS_KEY);
-            ed.putStringSet(FAVORITEGROUPS_KEY, groups);
+            ed.putString(FAVORITEGROUPS_KEY, json);
             ed.apply();
             mView.showError("Сохранено");
             mView.getAct().rebuildMenu();
