@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+        <item
+            android:title="1 АПП-1"/>
+        <item
+            android:title="2 АПП-1"/>
+        <item
+            android:title="3 АПП"/>
+        <item
+            android:title="2 АПП-2"/>
+        <item
+            android:title="1 АПП-2"/>
+    </group>
+
+    <group>
+        <item
+            android:icon="@drawable/ic_settings"
+            android:id="@+id/settings"
+            android:title="Настройки"/>
+        <item
+            android:icon="@drawable/ic_information"
+            android:id="@+id/about"
+            android:title="О приложении"/>
+    </group>
+</menu>
