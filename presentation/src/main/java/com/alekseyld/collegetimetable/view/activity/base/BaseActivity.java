@@ -82,4 +82,10 @@ public abstract class BaseActivity extends AppCompatActivity implements HasCompo
       imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
   }
+
+  protected abstract void buildMenu();
+
+  public void rebuildMenu(){
+    buildMenu();
+  }
 }

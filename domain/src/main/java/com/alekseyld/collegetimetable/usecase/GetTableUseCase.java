@@ -18,6 +18,7 @@ public class GetTableUseCase extends UseCase {
 
     private TableService mService;
     private boolean isOnline = true;
+    private String mGroup = "";
 
     @Inject
     public GetTableUseCase(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread,
@@ -29,10 +30,14 @@ public class GetTableUseCase extends UseCase {
 
     @Override
     protected Observable<TableWrapper> buildUseCaseObservable() {
-        return mService.getTimetable(isOnline);
+        return mService.getTimetable(isOnline, mGroup);
     }
 
     public void setOnline(boolean online) {
         isOnline = online;
+    }
+
+    public void setGroup(String Group) {
+        this.mGroup = Group;
     }
 }

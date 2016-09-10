@@ -135,6 +135,8 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
             for(int i = 0; i < list.length; i++){
                 if(chosenGroups.contains(list[i])){
                     listGroup.setItemChecked(i, true);
+                }else {
+                    listGroup.setItemChecked(i, false);
                 }
             }
 

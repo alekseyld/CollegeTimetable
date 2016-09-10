@@ -18,6 +18,7 @@ import com.alekseyld.collegetimetable.TableWrapper;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.TablePresenter;
 import com.alekseyld.collegetimetable.view.TableView;
+import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 import com.alekseyld.collegetimetable.view.adapter.TableAdapter;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 
@@ -26,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.GROUP_KEY;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 /**
@@ -34,8 +36,12 @@ import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAM
 
 public class TableFragment extends BaseFragment<TablePresenter> implements TableView{
 
-    public static TableFragment newInstance(){
-        return new TableFragment();
+    public static TableFragment newInstance(String group){
+        TableFragment tableFragment = new TableFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(GROUP_KEY, group);
+        tableFragment.setArguments(bundle);
+        return tableFragment;
     }
 
     @BindView(R.id.recView)
@@ -53,14 +59,20 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     @BindString(R.string.app_name)
     String app_name;
 
+    private String mGroup = "2 АПП-1";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_table, container, false);
         ButterKnife.bind(this, v);
-        if(context().getSharedPreferences(NAME_FILE, MODE_PRIVATE).contains("Group")) {
-            getActivity().setTitle("Группа: "+
-                    context().getSharedPreferences(NAME_FILE, MODE_PRIVATE).getString("Group", app_name));
+
+        if(!getArguments().isEmpty()) {
+            mGroup = getArguments().getString(GROUP_KEY);
+            if(mGroup.equals("")){
+                mGroup = context().getSharedPreferences(NAME_FILE, MODE_PRIVATE).getString(GROUP_KEY, "2 АПП-1");
+            }
+            getActivity().setTitle("Группа: "+ mGroup);
         }else{
             getActivity().setTitle(R.string.app_name);
         }
@@ -130,4 +142,8 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         getComponent(MainComponent.class).inject(this);
     }
 
+    @Override
+    public String getGroup() {
+        return mGroup;
+    }
 }

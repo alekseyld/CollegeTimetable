@@ -62,8 +62,11 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
 
         if(groups != null && groups.size() > 0){
             SharedPreferences.Editor ed = mPref.edit();
+            ed.remove(FAVORITEGROUPS_KEY);
             ed.putStringSet(FAVORITEGROUPS_KEY, groups);
             ed.apply();
+            mView.showError("Сохранено");
+            mView.getAct().rebuildMenu();
         }
     }
 

@@ -100,7 +100,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
 
 //            holder.date.setText(dayText);
 
-            holder.date.setText(mTableWrapper.getDays().get(day));
+            holder.date.setText(firstUpperCase(mTableWrapper.getDays().get(day).toLowerCase()));
             holder.lesson0.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson0));
             holder.lesson1.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson1));
             holder.lesson2.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson2));
@@ -123,5 +123,10 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
             return 0;
         }
         return mTableWrapper.getmTimeTable().size();
+    }
+
+    private String firstUpperCase(String word){
+        if(word == null || word.isEmpty()) return "";//или return word;
+        return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
 }

@@ -41,8 +41,8 @@ public class TableServiceImpl implements TableService{
     }
 
     @Override
-    public Observable<TableWrapper> getTimetable(boolean online) {
-        return urlApi.getUrl(DataUtils.getGroupUrl(mSettingsRepository.getGroup()))
+    public Observable<TableWrapper> getTimetable(boolean online, String group) {
+        return urlApi.getUrl(DataUtils.getGroupUrl(group))
                 .onErrorReturn((error) ->{
                     ApiResponse apiResponse = new ApiResponse();
                     if(error instanceof UnknownHostException){
@@ -55,11 +55,20 @@ public class TableServiceImpl implements TableService{
                 .flatMap(url -> {
 //                    Log.d("TimeTableUrl", mSettingsRepository.getGroup());
 //                    Log.d("ApiStatus", "Api status - "+url.getStatus());
+                    Document document = null;
+                    if(!mSettingsRepository.getGroup().equals(group)){
+                        try {
+                            document = Jsoup.connect(url.getResult()).get();
+                        } catch (IOException e) {
+                            return Observable.error(new Error(e.getMessage()));
+                        }
+                        TableWrapper t = DataUtils.parseDocument(document, group);
+                        return Observable.just(t);
+                    }
 
                     if(mSettingsRepository.getUrl() == null){
                         mSettingsRepository.putUrl(url.getResult());
                     }
-                    Document document = null;
                     if(online && (url.getStatus() != 2 || url.getStatus() != 3)) {
                         try {
                             document = Jsoup.connect(url.getResult()).get();

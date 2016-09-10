@@ -20,7 +20,7 @@ import retrofit2.adapter.rxjava.HttpException;
 
 public class TablePresenter extends BasePresenter<TableView>{
 
-    GetTableUseCase mGetTableUseCase;
+    private GetTableUseCase mGetTableUseCase;
 
     @Inject
     TablePresenter(GetTableUseCase getTableUseCase){
@@ -31,6 +31,7 @@ public class TablePresenter extends BasePresenter<TableView>{
         mView.showLoading();
 
         mGetTableUseCase.setOnline(isOnline());
+        mGetTableUseCase.setGroup(mView.getGroup());
         mGetTableUseCase.execute(new DefaultSubscriber<TableWrapper>(){
             @Override
             public void onNext(TableWrapper tableWrapper){

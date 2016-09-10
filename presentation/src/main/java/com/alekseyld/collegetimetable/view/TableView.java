@@ -9,5 +9,6 @@ import com.alekseyld.collegetimetable.TableWrapper;
 public interface TableView extends BaseView {
 
     void setTimeTable(TableWrapper timeTable);
+    String getGroup();
 
 }
