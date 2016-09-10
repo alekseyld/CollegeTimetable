@@ -3,34 +3,11 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="20dp"
+    <ListView
+        android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:id="@+id/et_minute"
-        android:inputType="number"
-        android:hint="@string/hint_minute" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/et_group"
-        android:hint="@string/hint_group" />
+    </ListView>
 
-    <Button
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:text="@string/btn_save"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_save" />
 </LinearLayout>

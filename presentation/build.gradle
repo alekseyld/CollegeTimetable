@@ -62,9 +62,11 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
     compile 'com.android.support:recyclerview-v7:24.1.1'
-    compile 'com.android.support:preference-v7:24.1.1'
     compile 'com.android.support:design:24.1.1'
     testCompile 'junit:junit:4.12'
+
+//    compile 'com.android.support:preference-v7:24.1.1'
+    compile 'com.takisoft.fix:preference-v7:24.1.1.1'
 
     apt 'com.google.dagger:dagger-compiler:2.5'
     compile 'com.google.dagger:dagger:2.5'

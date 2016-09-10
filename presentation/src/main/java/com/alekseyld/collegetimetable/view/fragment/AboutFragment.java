@@ -41,7 +41,7 @@ public class AboutFragment extends BaseFragment<SettingsPresenter> implements Se
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_about, container, false);
         ButterKnife.bind(this, v);
-        getActivity().setTitle(R.id.about);
+        getActivity().setTitle(R.string.about);
 
         PackageManager manager = getActivity().getPackageManager();
         PackageInfo info = null;
@@ -53,11 +53,11 @@ public class AboutFragment extends BaseFragment<SettingsPresenter> implements Se
 
         about[0] = "Разработчик: alekseyld";
         if(info != null) {
-            about[2] = "Версия: "+info.packageName;
+            about[1] = "Версия: "+info.versionName;
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_list_item_multiple_choice, about);
+                android.R.layout.simple_list_item_1, about);
 
         listView.setAdapter(adapter);
 

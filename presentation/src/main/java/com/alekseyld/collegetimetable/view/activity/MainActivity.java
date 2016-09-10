@@ -1,15 +1,10 @@
 package com.alekseyld.collegetimetable.view.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerMainComponent;
@@ -19,23 +14,54 @@ import com.alekseyld.collegetimetable.service.UpdateTimetableService;
 import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 import com.alekseyld.collegetimetable.view.fragment.AboutFragment;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFragment;
-import com.alekseyld.collegetimetable.view.fragment.SettingsFragmentPreference;
 import com.alekseyld.collegetimetable.view.fragment.TableFragment;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
 
     @BindView(R.id.nav_view)
-    NavigationView navigationView;
+    NavigationView navigation;
 
     @BindView(R.id.drawer)
-    DrawerLayout drawerLayout;
+    DrawerLayout drawer;
+
+    private MainNavigationViewItemSelectedListener mOnNavigationItemSelectedListener;
+
+    private class MainNavigationViewItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
+        @Override
+        public boolean onNavigationItemSelected(MenuItem menuItem) {
+            if (menuItem != null) {
+                if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+                    getSupportFragmentManager().popBackStack();
+                }
+                int id = menuItem.getItemId();
+                return onItemSelected(id, false);
+            }
+            return false;
+        }
+
+        private boolean onItemSelected(int id, boolean force) {
+            hideKeyboard();
+            switch (id) {
+                case R.id.settings:
+                    replaceFragment(SettingsFragment.newInstance());
+                    break;
+                case R.id.about:
+                    replaceFragment(AboutFragment.newInstance());
+                    break;
+            }
+            drawer.closeDrawer(navigation);
+            return false;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         if(!UpdateTimetableService.isRunning){
             startService(new Intent(this, UpdateTimetableService.class));
@@ -48,36 +74,21 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mOnNavigationItemSelectedListener == null) {
+            mOnNavigationItemSelectedListener = new MainNavigationViewItemSelectedListener();
+        }
+        navigation.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    @Override
     protected MainComponent initializeInjections() {
         return DaggerMainComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .mainModule(new MainModule(this))
                 .build();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()){
-            case R.id.action_settings:
-                replaceFragment(SettingsFragment.newInstance());
-//                replaceFragment(SettingsFragmentPreference.newInstance());
-                return true;
-
-            case android.R.id.home:
-                onBackPressed();
-                return(true);
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -1,11 +1,14 @@
 package com.alekseyld.collegetimetable.view.activity.base;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.alekseyld.collegetimetable.AndroidApplication;
 import com.alekseyld.collegetimetable.R;
@@ -70,5 +73,13 @@ public abstract class BaseActivity extends AppCompatActivity implements HasCompo
 
   public ActionBar getActionBarBase() {
     return getSupportActionBar();
+  }
+
+  protected void hideKeyboard(){
+    View view = this.getCurrentFocus();
+    if (view != null) {
+      InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+      imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
   }
 }
