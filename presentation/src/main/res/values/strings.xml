@@ -31,6 +31,7 @@
     <string name="name_greenTheme">GreenTheme</string>
 
     <string-array name="groupsList">
+
         <item>1 ИС</item>
         <item>2 ИС</item>
         <item>3 ИС</item>
@@ -58,6 +59,7 @@
         <item>2 Р-1</item>
         <item>2 Р-2</item>
         <item>3 Р</item>
+        <item>4 Р-1</item>
         <item>5 Р-1</item>
 
         <item>1 ПГ-1</item>
@@ -88,6 +90,7 @@
         <item>2 Т</item>
         <item>3 Т</item>
         <item>4 Т</item>
+
         <item>1 Б</item>
         <item>2 Б</item>
         <item>3 Б</item>
