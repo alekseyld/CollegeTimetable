@@ -26,6 +26,7 @@
         <item>1 ИС</item>
         <item>2 ИС</item>
         <item>3 ИС</item>
+
         <item>1 ГС-1</item>
         <item>1 ГС-2</item>
         <item>1 ГСУ</item>
@@ -36,11 +37,13 @@
         <item>3 ГС-2</item>
         <item>4 ГС-1</item>
         <item>4 ГС-2</item>
+
         <item>1 Л-1</item>
         <item>1 Л-2</item>
         <item>2 Л-1</item>
         <item>2 Л-2</item>
         <item>3 Л</item>
+
         <item>1 Р-1</item>
         <item>1 Р-2</item>
         <item>1 РУ</item>
@@ -48,12 +51,14 @@
         <item>2 Р-2</item>
         <item>3 Р</item>
         <item>5 Р-1</item>
+
         <item>1 ПГ-1</item>
         <item>1 ПГ-2</item>
         <item>2 ПГ-1</item>
         <item>2 ПГ-2</item>
         <item>3 ПГ</item>
         <item>4 ПГ</item>
+
         <item>1 ТС-1</item>
         <item>1 ТС-2</item>
         <item>2 ТС-1</item>
@@ -61,6 +66,7 @@
         <item>3 ТС-1</item>
         <item>3 ТС-2</item>
         <item>4 ТС</item>
+
         <item>1 Э-1</item>
         <item>1 Э-2</item>
         <item>1 ЭУ</item>
@@ -68,6 +74,8 @@
         <item>3 Э-1</item>
         <item>3 Э-2</item>
         <item>4 Э-1</item>
+        <item>4 Э-2</item>
+
         <item>1 Т</item>
         <item>2 Т</item>
         <item>3 Т</item>
@@ -75,6 +83,17 @@
         <item>1 Б</item>
         <item>2 Б</item>
         <item>3 Б</item>
+
+        <item>1 С-1</item>
+        <item>1 С-2</item>
+        <item>2 С-1</item>
+        <item>2 С-2</item>
+        <item>3 С-1</item>
+        <item>3 С-2</item>
+        <item>4 С-1</item>
+        <item>4 С-2</item>
+        <item>5 С</item>
+
         <item>1 АПП-1</item>
         <item>1 АПП-2</item>
         <item>2 АПП-1</item>
@@ -84,6 +103,7 @@
         <item>3 АПП-2</item>
         <item>4 АПП-1</item>
         <item>4 АПП-2</item>
+
         <item>1 БНГ-1</item>
         <item>1 БНГ-2</item>
         <item>2 БНГ-1</item>
@@ -92,6 +112,7 @@
         <item>3 БНГ-2</item>
         <item>4 БНГ-1</item>
         <item>4 БНГ-2</item>
+
         <item>1 ТО-1</item>
         <item>1 ТО-2</item>
         <item>2 ТО-1</item>
@@ -100,11 +121,13 @@
         <item>3 ТО-2</item>
         <item>4 ТО-1</item>
         <item>4 ТО-2</item>
+
         <item>1 В-1</item>
         <item>1 В-2</item>
         <item>2 В</item>
         <item>3 В</item>
         <item>4 В</item>
+
         <item>1 ПНГ-1</item>
         <item>1 ПНГ-2</item>
         <item>1 ПНГ-3</item>
@@ -114,12 +137,12 @@
         <item>3 ПНГ-2</item>
         <item>4 ПНГ-1</item>
         <item>4 ПНГ-2</item>
+
         <item>1 ЭНН-1</item>
         <item>1 ЭНН-2</item>
         <item>1 ЭНН-3</item>
         <item>2 ЭНН-1</item>
         <item>2 ЭНН-2</item>
-        <item>2 ЭНН-3</item>
         <item>2 ЭНН-3</item>
         <item>2 ЭНН-4</item>
         <item>2 ЭННУ</item>
@@ -130,10 +153,12 @@
         <item>4 ЭНН-2</item>
         <item>4 ЭННУ-1</item>
         <item>4 ЭННУ-2</item>
+
         <item>1 ТОВ</item>
         <item>2 ТОВ-1</item>
         <item>2 ТОВ-2</item>
         <item>3 ТОВ</item>
         <item>4 ТОВ</item>
+
     </string-array>
 </resources>

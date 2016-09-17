@@ -1,7 +1,5 @@
 package com.alekseyld.collegetimetable.utils;
 
-import android.util.Log;
-
 import com.alekseyld.collegetimetable.TableWrapper;
 
 import org.jsoup.nodes.Document;
@@ -27,7 +25,7 @@ public class DataUtils {
         if(group.contains(" Э")){
             url = "energy/10_1_7.html";
         }
-        if(group.contains(" С-")){
+        if(group.contains(" С")){
             url = "energy/10_1_10.html";
         }
         if(group.contains(" Б")){

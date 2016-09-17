@@ -1,6 +1,5 @@
 package com.alekseyld.collegetimetable.service;
 
-import android.app.Activity;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -27,15 +26,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.EOFException;
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.GROUP_KEY;
 import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.TIME_KEY;
+import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.URL_KEY;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.DAYS_KEY;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.TIMETABLE_KEY;
@@ -97,9 +94,10 @@ public class UpdateTimetableService extends IntentService {
         if(isOnline()){
             Document document;
             try {
-                document = Jsoup.connect(mPref.getString("Url", "")).get();
+                document = Jsoup.connect(mPref.getString(URL_KEY, "")).get();
                 TableWrapper tableWrapper = parseDocument(document, mPref.getString(GROUP_KEY, "2 АПП-1"));
                 if(!tableWrapper.equals(getTimeTable())){
+                    putTimeTable(tableWrapper);
                     n.notify("com.alekseyld.collegetimetable", 5, notification);
                     v.vibrate(300);
                 }
@@ -141,6 +139,26 @@ public class UpdateTimetableService extends IntentService {
                 (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    private void putTimeTable(TableWrapper tableWrapper) {
+        String json = mGson.toJson(tableWrapper.getmTimeTable());
+        editDays(tableWrapper.getDays());
+        String json2 = mGson.toJson(tableWrapper.getDays());
+        SharedPreferences.Editor ed = mPref.edit();
+        ed.putString(TIMETABLE_KEY, json);
+        ed.putString(DAYS_KEY, json2);
+        ed.apply();
+    }
+    private void editDays(HashMap<TableWrapper.Day, String> days) {
+        for(TableWrapper.Day d: days.keySet()){
+            days.put(d, firstUpperCase(days.get(d).toLowerCase()));
+        }
+    }
+
+    private String firstUpperCase(String word){
+        if(word == null || word.isEmpty()) return "";//или return word;
+        return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
 
     private static TableWrapper parseDocument(Document document, String group){

@@ -13,13 +13,13 @@ apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 3
-        versionName "2.1"
+        versionCode 4
+        versionName "2.2fix"
 
     }
     buildTypes {
