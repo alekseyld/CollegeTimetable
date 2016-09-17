@@ -13,6 +13,8 @@ import com.alekseyld.collegetimetable.internal.di.component.DaggerApplicationCom
 import com.alekseyld.collegetimetable.internal.di.module.ApplicationModule;
 import com.alekseyld.collegetimetable.service.UpdateTimetableService;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import java.util.Calendar;
 
 /**
@@ -25,6 +27,7 @@ public class AndroidApplication extends Application {
 
     @Override public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         this.initializeInjector();
         this.initializeDBFlow();
         initializeService();

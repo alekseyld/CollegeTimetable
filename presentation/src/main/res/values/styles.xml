@@ -8,9 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="PreferenceFixTheme" parent="PreferenceFixTheme">
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
-
+    <style name="GreenTheme">
+        <item name="colorPrimary">@color/greenPrimary</item>
+        <item name="colorPrimaryDark">@color/greenPrimaryDark</item>
+        <item name="colorAccent">@color/greenAccent</item>
     </style>
-
 </resources>

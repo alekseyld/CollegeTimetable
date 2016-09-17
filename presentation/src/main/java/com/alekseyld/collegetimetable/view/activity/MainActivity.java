@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -21,14 +20,12 @@ import com.alekseyld.collegetimetable.view.fragment.TableFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.FAVORITEGROUPS_KEY;
-import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.GROUP_KEY;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 public class MainActivity extends BaseActivity {
@@ -88,9 +85,6 @@ public class MainActivity extends BaseActivity {
             startService(new Intent(this, UpdateTimetableService.class));
         }
         addFragment(TableFragment.newInstance(""));
-
-//        FlowManager.init(new FlowConfig.Builder(this)
-//                .openDatabasesOnInit(true).build());
     }
 
     @Override

@@ -6,16 +6,16 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
+import android.support.v7.widget.PopupMenu;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,13 +27,11 @@ import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.FAVORITEGROUPS_KEY;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
@@ -60,7 +58,8 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
 
         final String[] settings = {
                 getResources().getString(R.string.addFarvorite),
-                getResources().getString(R.string.addNotif)
+                getResources().getString(R.string.addNotif),
+                getString(R.string.settings_theme)
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
@@ -78,11 +77,29 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
                     case 1:
                         showAddNotif();
                         break;
+                    case 2:
+                        showChangeTheme();
+                        break;
                 }
             }
         });
 
         return v;
+    }
+
+    private void showChangeTheme(){
+        PopupMenu popup = new PopupMenu(getContext(), settingsList.getChildAt(2));
+        popup.getMenuInflater().inflate(R.menu.replace_theme_menu, popup.getMenu());
+        Toast.makeText(getContext(),"Функция в разработке",Toast.LENGTH_SHORT).show();
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                mPresenter.replaceTheme(item.getItemId());
+                return true;
+            }
+        });
+
+        popup.show();
     }
 
     private void showAddNotif(){

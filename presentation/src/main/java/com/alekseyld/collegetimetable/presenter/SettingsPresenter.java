@@ -2,16 +2,12 @@ package com.alekseyld.collegetimetable.presenter;
 
 import android.content.SharedPreferences;
 import android.text.Editable;
-import android.util.Log;
 
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
 import com.alekseyld.collegetimetable.view.SettingsView;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -82,6 +78,17 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
             ed.remove(URL_KEY);
             ed.apply();
             mView.showError("Сохранено");
+        }
+    }
+
+    public void replaceTheme(int index){
+        switch (index){
+            case 0: //AppTheme
+//                mView.context().setTheme(R.style.AppTheme);
+                break;
+            case 1://GreenTheme
+//                mView.context().setTheme(R.style.GreenTheme);
+                break;
         }
     }
 

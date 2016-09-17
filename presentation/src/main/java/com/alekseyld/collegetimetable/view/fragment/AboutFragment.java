@@ -3,7 +3,6 @@ package com.alekseyld.collegetimetable.view.fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
@@ -50,9 +48,9 @@ public class AboutFragment extends BaseFragment<SettingsPresenter> implements Se
         PackageManager manager = getActivity().getPackageManager();
 
         about = new String[]{
-                "Разработчик: alekseyld",
-                "Версия: 2.1b",
-                "Оценить приложение в Google play"
+                getString(R.string.info_r),
+                getString(R.string.info_ver),
+                getString(R.string.info_star)
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
@@ -64,7 +62,7 @@ public class AboutFragment extends BaseFragment<SettingsPresenter> implements Se
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
                     case 0:
-                        String url = "https://vk.com/alekseyld";
+                        String url = "";
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setData(Uri.parse(url));
                         startActivity(intent);
@@ -73,7 +71,6 @@ public class AboutFragment extends BaseFragment<SettingsPresenter> implements Se
                         Uri uri = Uri.parse("market://details?id=" + context().getPackageName());
                         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
                         goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
                                 Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                         try {
                             startActivity(goToMarket);

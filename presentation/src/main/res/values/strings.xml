@@ -21,6 +21,14 @@
     <string name="about">О приложении</string>
     <string name="addFarvorite">Изменить группы в избранном</string>
     <string name="addNotif">Изменить группу для оповещения</string>
+    <string name="info_r">Разработчик: alekseyld</string>
+    <string name="info_ver">Версия: 2.2fix</string>
+    <string name="info_star">Оценить приложение в Google play</string>
+    <string name="settings_theme">Изменить тему</string>
+    <string name="item_apptheme">Стандартная</string>
+    <string name="item_greentheme">Зеленая</string>
+    <string name="name_appTheme">AppTheme</string>
+    <string name="name_greenTheme">GreenTheme</string>
 
     <string-array name="groupsList">
         <item>1 ИС</item>
