@@ -35,6 +35,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
         mProcessor = settingsResultProcessor;
     }
 
+    @Deprecated
     public void updateSettings(Editable minute, Editable group){
         mPref = mView.context().getSharedPreferences(NAME_FILE, MODE_PRIVATE);
         if(minute != null && !minute.toString().equals("")){

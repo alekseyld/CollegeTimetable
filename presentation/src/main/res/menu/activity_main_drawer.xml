@@ -18,10 +18,10 @@
         <item
             android:icon="@drawable/ic_settings"
             android:id="@+id/settings"
-            android:title="Настройки"/>
+            android:title="@string/action_settings"/>
         <item
             android:icon="@drawable/ic_information"
             android:id="@+id/about"
-            android:title="О приложении"/>
+            android:title="@string/about"/>
     </group>
 </menu>

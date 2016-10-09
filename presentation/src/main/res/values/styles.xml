@@ -1,6 +1,6 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- Base application theme. AppTheme-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -8,7 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="GreenTheme">
+    <!--GreenTheme-->
+    <style name="GreenTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/greenPrimary</item>
         <item name="colorPrimaryDark">@color/greenPrimaryDark</item>
         <item name="colorAccent">@color/greenAccent</item>

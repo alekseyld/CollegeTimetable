@@ -9,7 +9,8 @@
     <color name="colorBackground">#F5F5F5</color>
     <color name="colorList">#FFFFFF</color>
 
-    <color name="greenAccent">#fff</color>
-    <color name="greenPrimaryDark">#fff</color>
-    <color name="greenPrimary">#fff</color>
+    <color name="greenPrimary">#4CAF50</color>
+    <color name="greenPrimaryDark">#388E3C</color>
+    <color name="greenAccent">#2196F3</color>
+
 </resources>
