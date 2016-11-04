@@ -60,15 +60,6 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         ButterKnife.bind(this, v);
         getActivity().setTitle(R.string.action_settings);
 
-        final String[] settings = {
-                getResources().getString(R.string.addFarvorite),
-                getResources().getString(R.string.addNotif),
-                getString(R.string.settings_theme)
-        };
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_list_item_1, settings);
-
         addFarvorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,21 +84,6 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         }
 
         return v;
-    }
-
-    private void showChangeTheme(){
-//        PopupMenu popup = new PopupMenu(getContext(), settingsList.getChildAt(2));
-//        popup.getMenuInflater().inflate(R.menu.replace_theme_menu, popup.getMenu());
-//        Toast.makeText(getContext(),"Функция в разработке",Toast.LENGTH_SHORT).show();
-//
-//        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//            public boolean onMenuItemClick(MenuItem item) {
-//                mPresenter.replaceTheme(item.getItemId());
-//                return true;
-//            }
-//        });
-//
-//        popup.show();
     }
 
     private void showAddNotif(){

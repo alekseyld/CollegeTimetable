@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.BellTablePresenter;
-import com.alekseyld.collegetimetable.view.BaseView;
 import com.alekseyld.collegetimetable.view.BellView;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 

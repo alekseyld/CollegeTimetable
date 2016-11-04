@@ -25,7 +25,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 5
-        versionName "3.0.0"
+        versionName "3.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {

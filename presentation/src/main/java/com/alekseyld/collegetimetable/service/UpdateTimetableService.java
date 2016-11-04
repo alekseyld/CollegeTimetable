@@ -96,7 +96,7 @@ public class UpdateTimetableService extends IntentService {
             Document document;
             try {
                 document = Jsoup.connect(mPref.getString(URL_KEY, "")).get();
-                TableWrapper tableWrapper = parseDocument(document, mPref.getString(GROUP_KEY, "2 АПП-1"));
+                TableWrapper tableWrapper = parseDocument(document, mPref.getString(GROUP_KEY, ""));
                 if(!tableWrapper.equals(getTimeTable())){
                     putTimeTable(tableWrapper);
                     n.notify("com.alekseyld.collegetimetable", 5, notification);

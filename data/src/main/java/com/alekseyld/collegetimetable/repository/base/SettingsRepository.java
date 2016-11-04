@@ -11,6 +11,7 @@ public interface SettingsRepository {
     String URL_KEY = "Url";
     String GROUP_KEY = "Group";
     String TIME_KEY = "Time";
+    String ALARMMODE_KEY = "AlarmMode";
     String FAVORITEGROUPS_KEY = "FavoriteGroups";
 
     String getGroup();
@@ -23,7 +24,7 @@ public interface SettingsRepository {
 
     void put(String group, int time);
 
-    void saveSettings(SettingsWrapper settings);
+    boolean saveSettings(SettingsWrapper settings);
     SettingsWrapper getSettings();
 
 }

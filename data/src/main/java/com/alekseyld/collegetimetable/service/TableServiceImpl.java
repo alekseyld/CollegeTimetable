@@ -38,30 +38,7 @@ public class TableServiceImpl implements TableService{
     }
 
     @Override
-    public Observable<TableWrapper> getTimetable(boolean online, String group) {
-        
-//        //// FIXME: 03.11.2016 mock data
-//        TableWrapper tableWrapper = new TableWrapper();
-//
-//        HashMap<TableWrapper.Day, String> days = new HashMap<>();
-//        days.put(TableWrapper.Day.Mon, "Понедельник");
-//        days.put(TableWrapper.Day.Tue, "Вторник");
-//
-//        HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> table = new HashMap<>();
-//
-//        HashMap<TableWrapper.Lesson, String> lessons = new HashMap<>();
-//
-//        lessons.put(TableWrapper.Lesson.lesson1, "Физика");
-//        lessons.put(TableWrapper.Lesson.lesson2, "Математика");
-//        lessons.put(TableWrapper.Lesson.lesson3, "История");
-//
-//        table.put(TableWrapper.Day.Mon, lessons);
-//        table.put(TableWrapper.Day.Tue, lessons);
-//
-//        tableWrapper.setDays(days);
-//        tableWrapper.setTimeTable(table);
-//
-//        return Observable.just(tableWrapper);
+    public Observable<TableWrapper> getTimetableFromOnline(boolean online, String group) {
 
         return urlApi.getUrl(DataUtils.getGroupUrl(group))
                 .onErrorReturn((error) ->{
@@ -74,8 +51,51 @@ public class TableServiceImpl implements TableService{
                     return apiResponse;
                 })
                 .flatMap(url -> {
-//                    Log.d("TimeTableUrl", mSettingsRepository.getGroup());
-//                    Log.d("ApiStatus", "Api status - "+url.getStatus());
+                            Document document = null;
+                            try {
+                                document = Jsoup.connect(url.getResult()).get();
+                            } catch (IOException e) {
+                                return Observable.error(new Error(e.getMessage()));
+                            }
+                            TableWrapper t = DataUtils.parseDocument(document, group);
+                            return Observable.just(t);
+
+                        });
+        
+        /*
+        TableWrapper tableWrapper = new TableWrapper();
+
+        HashMap<TableWrapper.Day, String> days = new HashMap<>();
+        days.put(TableWrapper.Day.Mon, "Понедельник");
+        days.put(TableWrapper.Day.Tue, "Вторник");
+
+        HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> table = new HashMap<>();
+
+        HashMap<TableWrapper.Lesson, String> lessons = new HashMap<>();
+
+        lessons.put(TableWrapper.Lesson.lesson1, "Физика");
+        lessons.put(TableWrapper.Lesson.lesson2, "Математика");
+        lessons.put(TableWrapper.Lesson.lesson3, "История");
+
+        table.put(TableWrapper.Day.Mon, lessons);
+        table.put(TableWrapper.Day.Tue, lessons);
+
+        tableWrapper.setDays(days);
+        tableWrapper.setTimeTable(table);
+
+        return Observable.just(tableWrapper);*/
+
+        /*return urlApi.getUrl(DataUtils.getGroupUrl(group))
+                .onErrorReturn((error) ->{
+                    ApiResponse apiResponse = new ApiResponse();
+                    if(error instanceof UnknownHostException){
+                        apiResponse.setStatus(2);
+                    }else {
+                        apiResponse.setStatus(3);
+                    }
+                    return apiResponse;
+                })
+                .flatMap(url -> {
                     Document document = null;
                     if(!mSettingsRepository.getGroup().equals(group)){
                         try {
@@ -99,31 +119,40 @@ public class TableServiceImpl implements TableService{
                         if(mTimetableRepository.getDocument() == null){
                             mTimetableRepository.putDocument(document);
                             TableWrapper t = DataUtils.parseDocument(document, mSettingsRepository.getGroup());
-                            mTimetableRepository.putTimeTable(t);
+                            mTimetableRepository.putTimeTable(t, group);
                             return Observable.just(t);
                         }else {
                             if(document.text().equals(mTimetableRepository.getDocument())){
-                                return Observable.just(mTimetableRepository.getTimeTable());
+                                return Observable.just(mTimetableRepository.getTimeTable(group));
                             }else {
                                 mTimetableRepository.putDocument(document);
                                 TableWrapper t = DataUtils.parseDocument(document, mSettingsRepository.getGroup());
-                                mTimetableRepository.putTimeTable(t);
+                                mTimetableRepository.putTimeTable(t, group);
                                 return Observable.just(t);
                             }
                         }
                     }else {
                         if(mTimetableRepository.getDocument() != null){
-                            return Observable.just(mTimetableRepository.getTimeTable());
+                            return Observable.just(mTimetableRepository.getTimeTable(group));
                         }else{
                             return Observable.just(new TableWrapper());
                         }
                     }
-                });
+                });*/
+    }
+
+    @Override
+    public Observable<TableWrapper> getTimetableFromOffline(String group) {
+        return Observable.just(
+                mTimetableRepository.getTimeTable(group)
+        );
     }
 
     @Override
     public Observable<Boolean> saveTimetable(TableWrapper tableTable, String group) {
-        return null;
+        return Observable.just(
+                mTimetableRepository.putTimeTable(tableTable, group)
+        );
     }
 
     @Override

@@ -41,9 +41,10 @@ public class TableRepositoryImpl implements TableRepository {
     }
 
     @Override
-    public TableWrapper getTimeTable() {
-        String s = mPref.getString(TIMETABLE_KEY, "");
-        String d = mPref.getString(DAYS_KEY, "");
+    public TableWrapper getTimeTable(String group) {
+        String s = mPref.getString(TIMETABLE_KEY + "_"+ group, "");
+        String d = mPref.getString(DAYS_KEY + "_" + group, "");
+
         TableWrapper tableWrapper = new TableWrapper();
         tableWrapper.setTimeTable(mGson.fromJson(s, mType));
         tableWrapper.setDays(mGson.fromJson(d, mTypeDay));
@@ -56,14 +57,17 @@ public class TableRepositoryImpl implements TableRepository {
     }
 
     @Override
-    public void putTimeTable(TableWrapper tableWrapper) {
+    public boolean putTimeTable(TableWrapper tableWrapper, String group) {
         String json = mGson.toJson(tableWrapper.getmTimeTable());
         editDays(tableWrapper.getDays());
         String json2 = mGson.toJson(tableWrapper.getDays());
         SharedPreferences.Editor ed = mPref.edit();
-        ed.putString(TIMETABLE_KEY, json);
-        ed.putString(DAYS_KEY, json2);
+
+        ed.putString(TIMETABLE_KEY + "_" + group, json);
+        ed.putString(DAYS_KEY + "_" + group, json2);
+
         ed.apply();
+        return true;
     }
 
     private void editDays(HashMap<TableWrapper.Day, String> days) {
@@ -80,8 +84,8 @@ public class TableRepositoryImpl implements TableRepository {
     }
 
     @Override
-    public void put(TableWrapper tableWrapper, Document document) {
-        putTimeTable(tableWrapper);
+    public void put(TableWrapper tableWrapper, Document document, String group) {
+        putTimeTable(tableWrapper, group);
         putDocument(document);
     }
 

@@ -3,11 +3,15 @@ package com.alekseyld.collegetimetable.presenter;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
+import com.alekseyld.collegetimetable.SettingsWrapper;
 import com.alekseyld.collegetimetable.TableWrapper;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
-import com.alekseyld.collegetimetable.subscriber.DefaultSubscriber;
-import com.alekseyld.collegetimetable.usecase.GetTableUseCase;
+import com.alekseyld.collegetimetable.subscriber.BaseSubscriber;
+import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
+import com.alekseyld.collegetimetable.usecase.GetTableFromOfflineUseCase;
+import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
 import com.alekseyld.collegetimetable.view.TableView;
 
 import javax.inject.Inject;
@@ -18,19 +22,54 @@ import javax.inject.Inject;
 
 public class TablePresenter extends BasePresenter<TableView>{
 
-    private GetTableUseCase mGetTableUseCase;
+    private GetTableFromOnlineUseCase mGetTableFromOnlineUseCase;
+    private GetTableFromOfflineUseCase mGetTableFromOfflineUseCase;
+
+    private GetSettingsUseCase mGetSettingsUseCase;
+
+    private SettingsWrapper mSettings;
 
     @Inject
-    TablePresenter(GetTableUseCase getTableUseCase){
-        mGetTableUseCase = getTableUseCase;
+    TablePresenter(GetTableFromOnlineUseCase getTableFromOnlineUseCase,
+                   GetSettingsUseCase getSettingsUseCase,
+                   GetTableFromOfflineUseCase getTableFromOfflineUseCase){
+
+        mGetTableFromOnlineUseCase = getTableFromOnlineUseCase;
+        mGetSettingsUseCase = getSettingsUseCase;
+        mGetTableFromOfflineUseCase = getTableFromOfflineUseCase;
+    }
+
+    @Override
+    public void resume() {
+//        mView.showLoading();
+        mGetSettingsUseCase.execute(new BaseSubscriber<SettingsWrapper>(){
+            @Override
+            public void onNext(SettingsWrapper settingsWrapper) {
+
+                Log.d("test", settingsWrapper.getNotificationGroup());
+                Log.d("test", settingsWrapper.getFavoriteGroups().size() +"");
+
+                mSettings = settingsWrapper;
+            }
+
+            @Override
+            public void onCompleted() {
+                mView.presenterReady();
+                mView.hideLoading();
+            }
+        });
+    }
+
+    public String getGroup(){
+        return mSettings.getNotificationGroup();
     }
 
     public void getTimeTable(){
         mView.showLoading();
 
-        mGetTableUseCase.setOnline(isOnline());
-        mGetTableUseCase.setGroup(mView.getGroup());
-        mGetTableUseCase.execute(new DefaultSubscriber<TableWrapper>(){
+        mGetTableFromOnlineUseCase.setOnline(isOnline());
+        mGetTableFromOnlineUseCase.setGroup(mView.getGroup());
+        mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TableWrapper>(){
             @Override
             public void onNext(TableWrapper tableWrapper){
                 mView.setTimeTable(tableWrapper);
@@ -49,12 +88,11 @@ public class TablePresenter extends BasePresenter<TableView>{
 
     }
 
-    private void tableFromCache(){
+    public void getTableFromOffline(){
         mView.showLoading();
 
-        mGetTableUseCase.setOnline(false);
-        mGetTableUseCase.setGroup(mView.getGroup());
-        mGetTableUseCase.execute(new DefaultSubscriber<TableWrapper>(){
+        mGetTableFromOfflineUseCase.setGroup(mView.getGroup());
+        mGetTableFromOfflineUseCase.execute(new BaseSubscriber<TableWrapper>(){
             @Override
             public void onNext(TableWrapper tableWrapper){
                 mView.setTimeTable(tableWrapper);

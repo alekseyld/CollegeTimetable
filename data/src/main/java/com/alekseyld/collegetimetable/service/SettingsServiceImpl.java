@@ -1,6 +1,7 @@
 package com.alekseyld.collegetimetable.service;
 
 import com.alekseyld.collegetimetable.SettingsWrapper;
+import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 
 import javax.inject.Inject;
 
@@ -12,17 +13,24 @@ import rx.Observable;
 
 public class SettingsServiceImpl implements SettingsService {
 
+    private SettingsRepository mSettingsRepository;
+
     @Inject
-    public SettingsServiceImpl() {
+    public SettingsServiceImpl(SettingsRepository settingsRepository) {
+        mSettingsRepository = settingsRepository;
     }
 
     @Override
     public Observable<Boolean> saveSettings(SettingsWrapper settings) {
-        return null;
+        return Observable.just(
+                mSettingsRepository.saveSettings(settings)
+        );
     }
 
     @Override
     public Observable<SettingsWrapper> getSettings() {
-        return null;
+        return Observable.just(
+                mSettingsRepository.getSettings()
+        );
     }
 }

@@ -25,9 +25,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.content.Context.MODE_PRIVATE;
 import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.GROUP_KEY;
-import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -58,7 +56,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     @BindString(R.string.app_name)
     String app_name;
 
-    private String mGroup = "2 АПП-1";
+    private String mGroup = "";
 
     @Nullable
     @Override
@@ -67,15 +65,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
         ButterKnife.bind(this, v);
 
-        if(!getArguments().isEmpty()) {
-            mGroup = getArguments().getString(GROUP_KEY);
-            if(mGroup.equals("")){
-                mGroup = context().getSharedPreferences(NAME_FILE, MODE_PRIVATE).getString(GROUP_KEY, "2 АПП-1");
-            }
-            getActivity().setTitle("Группа: "+ mGroup);
-        }else{
-            getActivity().setTitle(R.string.app_name);
-        }
+        getActivity().setTitle(R.string.app_name);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -96,9 +86,18 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mPresenter.getTimeTable();
+    public void presenterReady() {
+        if(getArguments().containsKey(GROUP_KEY)){
+            mGroup = getArguments().getString(GROUP_KEY);
+        }else {
+            mGroup = mPresenter.getGroup();
+        }
+        if(mGroup != null && !mGroup.equals("")){
+            getActivity().setTitle("Группа: " + mGroup);
+        }
+
+        Log.d("test", "Группа " + mGroup);
+        mPresenter.getTableFromOffline();
     }
 
     @Override
