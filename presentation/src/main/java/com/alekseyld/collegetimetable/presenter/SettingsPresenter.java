@@ -3,8 +3,12 @@ package com.alekseyld.collegetimetable.presenter;
 import android.content.SharedPreferences;
 import android.text.Editable;
 
+import com.alekseyld.collegetimetable.SettingsWrapper;
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
+import com.alekseyld.collegetimetable.subscriber.DefaultSubscriber;
+import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
+import com.alekseyld.collegetimetable.usecase.SaveSettingsUseCase;
 import com.alekseyld.collegetimetable.view.SettingsView;
 import com.google.gson.Gson;
 
@@ -30,9 +34,28 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
     private SharedPreferences mPref;
     private SettingsResultProcessor mProcessor;
 
+    private SettingsWrapper mSettings;
+    private SaveSettingsUseCase mSaveSettingsUseCase;
+    private GetSettingsUseCase mGetSettingsUseCase;
+
     @Inject
-    public SettingsPresenter(SettingsResultProcessor settingsResultProcessor) {
+    public SettingsPresenter(SettingsResultProcessor settingsResultProcessor,
+                             SaveSettingsUseCase saveSettingsUseCase,
+                             GetSettingsUseCase getSettingsUseCase) {
         mProcessor = settingsResultProcessor;
+        mSaveSettingsUseCase = saveSettingsUseCase;
+        mGetSettingsUseCase = getSettingsUseCase;
+
+        mGetSettingsUseCase.execute(new DefaultSubscriber<SettingsWrapper>(){
+            @Override
+            public void onNext(SettingsWrapper settings) {
+                mSettings = settings;
+            }
+        });
+    }
+
+    public SettingsWrapper getSettings() {
+        return mSettings;
     }
 
     @Deprecated
@@ -55,6 +78,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
         mProcessor.processSettingsResult(mView.getAct());
     }
 
+    //FIXME save data with usecase
     public void saveFavorite(Set<String> groups){
         String json = new Gson().toJson(groups);
         mPref = mView.context().getSharedPreferences(NAME_FILE, MODE_PRIVATE);
@@ -69,6 +93,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
         }
     }
 
+    //FIXME save data with usecase
     public void saveNotification(Editable group){
         mPref = mView.context().getSharedPreferences(NAME_FILE, MODE_PRIVATE);
         if(group != null && !group.toString().equals("")){

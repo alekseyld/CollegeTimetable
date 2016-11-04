@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -36,9 +38,13 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.drawer)
     DrawerLayout drawer;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     private String[] favorite;
 
     private MainNavigationViewItemSelectedListener mOnNavigationItemSelectedListener;
+    private ActionBarDrawerToggle drawerToggle;
 
     private class MainNavigationViewItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
         @Override
@@ -80,6 +86,14 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         buildMenu();
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string._0, R.string._1);
+        drawer.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
 
         if(!UpdateTimetableService.isRunning){
             startService(new Intent(this, UpdateTimetableService.class));

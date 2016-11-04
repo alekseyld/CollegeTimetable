@@ -6,16 +6,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import android.util.Log;
-
 import com.alekseyld.collegetimetable.internal.di.component.ApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.module.ApplicationModule;
 import com.alekseyld.collegetimetable.service.UpdateTimetableService;
-
-import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
-import java.util.Calendar;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -27,7 +21,7 @@ public class AndroidApplication extends Application {
 
     @Override public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics());
         this.initializeInjector();
         this.initializeDBFlow();
         initializeService();

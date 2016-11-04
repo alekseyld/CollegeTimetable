@@ -14,18 +14,15 @@ import rx.Observable;
  * Created by Alekseyld on 02.09.2016.
  */
 
-public class GetTableUseCase extends UseCase {
+public class GetTableUseCase extends UseCase<TableService> {
 
-    private TableService mService;
     private boolean isOnline = true;
     private String mGroup = "";
 
     @Inject
     public GetTableUseCase(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread,
                            TableService tableService) {
-        super(threadExecutor, postExecutionThread);
-
-        mService = tableService;
+        super(threadExecutor, postExecutionThread, tableService);
     }
 
     @Override

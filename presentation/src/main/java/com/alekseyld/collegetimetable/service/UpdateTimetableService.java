@@ -84,6 +84,7 @@ public class UpdateTimetableService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.d(LOG_TAG, "onHandleIntent");
 
+        //FIXME get data from usecase
         mPref = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         int time = mPref.getInt(TIME_KEY, 5);

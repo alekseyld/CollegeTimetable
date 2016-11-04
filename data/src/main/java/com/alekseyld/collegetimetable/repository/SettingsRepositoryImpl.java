@@ -1,17 +1,10 @@
 package com.alekseyld.collegetimetable.repository;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.Preference;
 
-import com.alekseyld.collegetimetable.TableWrapper;
+import com.alekseyld.collegetimetable.SettingsWrapper;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -73,5 +66,15 @@ public class SettingsRepositoryImpl implements SettingsRepository {
     public void put(String group, int time) {
         putGroup(group);
         putTime(time);
+    }
+
+    @Override
+    public void saveSettings(SettingsWrapper settings) {
+
+    }
+
+    @Override
+    public SettingsWrapper getSettings() {
+        return null;
     }
 }

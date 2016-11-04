@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,7 +129,10 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
     @Override
     public void showError(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+        if(getActivity() != null)
+            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+        else
+            Log.e("TableFragment", "Activity is null \n"+message);
     }
 
     @Override

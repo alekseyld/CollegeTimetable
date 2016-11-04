@@ -3,13 +3,13 @@ package com.alekseyld.collegetimetable.view.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.PopupMenu;
 import android.util.SparseBooleanArray;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alekseyld.collegetimetable.R;
@@ -46,8 +47,11 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         return new SettingsFragment();
     }
 
-    @BindView(R.id.listView)
-    ListView settingsList;
+    @BindView(R.id.addFarvorite)
+    TextView addFarvorite;
+
+    @BindView(R.id.addNotif)
+    TextView addNotif;
 
     @Nullable
     @Override
@@ -65,41 +69,45 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_list_item_1, settings);
 
-        settingsList.setAdapter(adapter);
-        settingsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        addFarvorite.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
-                                    long id) {
-                switch (position){
-                    case 0:
-                        showAddFavoriteDialog();
-                        break;
-                    case 1:
-                        showAddNotif();
-                        break;
-                    case 2:
-                        showChangeTheme();
-                        break;
-                }
+            public void onClick(View view) {
+                showAddFavoriteDialog();
             }
         });
+
+        addNotif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAddNotif();
+            }
+        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            // If we're running on Honeycomb or newer, then we can use the Theme's
+            // selectableItemBackground to ensure that the View has a pressed state
+            TypedValue outValue = new TypedValue();
+            getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
+            addFarvorite.setBackgroundResource(outValue.resourceId);
+            addNotif.setBackgroundResource(outValue.resourceId);
+        }
 
         return v;
     }
 
     private void showChangeTheme(){
-        PopupMenu popup = new PopupMenu(getContext(), settingsList.getChildAt(2));
-        popup.getMenuInflater().inflate(R.menu.replace_theme_menu, popup.getMenu());
-        Toast.makeText(getContext(),"Функция в разработке",Toast.LENGTH_SHORT).show();
-
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
-                mPresenter.replaceTheme(item.getItemId());
-                return true;
-            }
-        });
-
-        popup.show();
+//        PopupMenu popup = new PopupMenu(getContext(), settingsList.getChildAt(2));
+//        popup.getMenuInflater().inflate(R.menu.replace_theme_menu, popup.getMenu());
+//        Toast.makeText(getContext(),"Функция в разработке",Toast.LENGTH_SHORT).show();
+//
+//        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//            public boolean onMenuItemClick(MenuItem item) {
+//                mPresenter.replaceTheme(item.getItemId());
+//                return true;
+//            }
+//        });
+//
+//        popup.show();
     }
 
     private void showAddNotif(){

@@ -13,7 +13,9 @@ import rx.subscriptions.Subscriptions;
  * Created by Alekseyld on 02.09.2016.
  */
 
-public abstract class UseCase {
+public abstract class UseCase<Service> {
+
+    protected Service mService;
 
     private final ThreadExecutor threadExecutor;
     private final PostExecutionThread postExecutionThread;
@@ -21,9 +23,11 @@ public abstract class UseCase {
     private Subscription subscription = Subscriptions.empty();
 
     protected UseCase(ThreadExecutor threadExecutor,
-                      PostExecutionThread postExecutionThread) {
+                      PostExecutionThread postExecutionThread,
+                      Service service) {
         this.threadExecutor = threadExecutor;
         this.postExecutionThread = postExecutionThread;
+        mService = service;
     }
 
     /**

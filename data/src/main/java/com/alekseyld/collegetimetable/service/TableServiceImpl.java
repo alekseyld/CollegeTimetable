@@ -1,8 +1,5 @@
 package com.alekseyld.collegetimetable.service;
 
-import android.text.Editable;
-import android.util.Log;
-
 import com.alekseyld.collegetimetable.TableWrapper;
 import com.alekseyld.collegetimetable.api.ProxyApi;
 import com.alekseyld.collegetimetable.entity.ApiResponse;
@@ -42,6 +39,30 @@ public class TableServiceImpl implements TableService{
 
     @Override
     public Observable<TableWrapper> getTimetable(boolean online, String group) {
+        
+//        //// FIXME: 03.11.2016 mock data
+//        TableWrapper tableWrapper = new TableWrapper();
+//
+//        HashMap<TableWrapper.Day, String> days = new HashMap<>();
+//        days.put(TableWrapper.Day.Mon, "Понедельник");
+//        days.put(TableWrapper.Day.Tue, "Вторник");
+//
+//        HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> table = new HashMap<>();
+//
+//        HashMap<TableWrapper.Lesson, String> lessons = new HashMap<>();
+//
+//        lessons.put(TableWrapper.Lesson.lesson1, "Физика");
+//        lessons.put(TableWrapper.Lesson.lesson2, "Математика");
+//        lessons.put(TableWrapper.Lesson.lesson3, "История");
+//
+//        table.put(TableWrapper.Day.Mon, lessons);
+//        table.put(TableWrapper.Day.Tue, lessons);
+//
+//        tableWrapper.setDays(days);
+//        tableWrapper.setTimeTable(table);
+//
+//        return Observable.just(tableWrapper);
+
         return urlApi.getUrl(DataUtils.getGroupUrl(group))
                 .onErrorReturn((error) ->{
                     ApiResponse apiResponse = new ApiResponse();
@@ -98,6 +119,11 @@ public class TableServiceImpl implements TableService{
                         }
                     }
                 });
+    }
+
+    @Override
+    public Observable<Boolean> saveTimetable(TableWrapper tableTable, String group) {
+        return null;
     }
 
     @Override

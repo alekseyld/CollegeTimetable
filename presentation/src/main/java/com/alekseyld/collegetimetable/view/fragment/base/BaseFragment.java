@@ -6,12 +6,11 @@ package com.alekseyld.collegetimetable.view.fragment.base;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.alekseyld.collegetimetable.internal.di.HasComponent;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
-import com.alekseyld.collegetimetable.presenter.base.Presenter;
-import com.alekseyld.collegetimetable.view.BaseView;
 import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 
 import javax.inject.Inject;
@@ -33,7 +32,11 @@ public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fra
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mPresenter.destroy();
+        if(mPresenter != null) {
+            mPresenter.destroy();
+        }else {
+            Log.e("BaseFragment", "onDestroy");
+        }
     }
 
     @Override
