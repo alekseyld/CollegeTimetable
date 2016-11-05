@@ -98,11 +98,16 @@ public class TablePresenter extends BasePresenter<TableView>{
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
+                mView.showError("Он мертв, Джим");
             }
 
             @Override
             public void onCompleted() {
                 mView.hideLoading();
+                if(mView.getTimeTable() == null
+                        || mView.getTimeTable().getmTimeTable().size() == 0){
+                    mView.showMessage();
+                }
             }
         });
     }

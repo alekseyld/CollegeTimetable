@@ -48,6 +48,10 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
         mTableWrapper = null;
     }
 
+    public TableWrapper getTableWrapper() {
+        return mTableWrapper;
+    }
+
     // Create new views (invoked by the layout manager)
     @Override
     public TableAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,

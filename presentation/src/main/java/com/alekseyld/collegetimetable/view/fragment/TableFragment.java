@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alekseyld.collegetimetable.R;
@@ -49,6 +50,9 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
+
+    @BindView(R.id.message)
+    TextView message;
 
     private RecyclerView.LayoutManager mLayoutManager;
     private TableAdapter mTableAdapter;
@@ -103,7 +107,18 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         mTableAdapter.setTableWrapper(timeTable);
     }
 
+    @Override
+    public TableWrapper getTimeTable() {
+        return mTableAdapter.getTableWrapper();
+    }
+
+    @Override
+    public void showMessage() {
+        message.setVisibility(View.VISIBLE);
+    }
+
     private void refreshItems() {
+        message.setVisibility(View.GONE);
         mPresenter.getTimeTable();
         onItemsLoadComplete();
     }

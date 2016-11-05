@@ -9,6 +9,8 @@ import com.alekseyld.collegetimetable.TableWrapper;
 public interface TableView extends ViewWithSettingsPresenter {
 
     void setTimeTable(TableWrapper timeTable);
+    TableWrapper getTimeTable();
+    void showMessage();
     String getGroup();
 
 }
