@@ -5,11 +5,16 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
 import com.alekseyld.collegetimetable.internal.di.component.ApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.module.ApplicationModule;
 import com.alekseyld.collegetimetable.service.UpdateTimetableService;
+import com.alekseyld.collegetimetable.subscriber.BaseSubscriber;
+import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
+
+import javax.inject.Inject;
 
 /**
  * Created by Alekseyld on 02.09.2016.

@@ -15,6 +15,7 @@ import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.internal.di.module.MainModule;
 import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 import com.alekseyld.collegetimetable.view.fragment.AboutFragment;
+import com.alekseyld.collegetimetable.view.fragment.BellTableFragment;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFragment;
 import com.alekseyld.collegetimetable.view.fragment.TableFragment;
 import com.google.gson.Gson;
@@ -59,6 +60,13 @@ public class MainActivity extends BaseActivity {
 
         private boolean onItemSelected(int id, boolean force) {
             hideKeyboard();
+
+            if(id == R.id.action_belltable){
+                replaceFragment(BellTableFragment.newInstance());
+                drawer.closeDrawer(navigation);
+                return false;
+            }
+
             if(id == R.id.action_settings) {
                 replaceFragment(SettingsFragment.newInstance());
                 drawer.closeDrawer(navigation);
@@ -69,6 +77,7 @@ public class MainActivity extends BaseActivity {
                 drawer.closeDrawer(navigation);
                 return false;
             }
+
             if(id < favorite.length){
                 replaceFragment(TableFragment.newInstance(favorite[id]));
             }
@@ -131,9 +140,12 @@ public class MainActivity extends BaseActivity {
                 menu.add(Menu.NONE, i, Menu.NONE, favorite[i]);
             }
         }
+
+        menu.add(Menu.NONE, R.id.action_belltable, Menu.NONE, R.string.action_belltable);
         menu.add(Menu.NONE, R.id.action_settings, Menu.NONE, R.string.action_settings);
         menu.add(Menu.NONE, R.id.about, Menu.NONE, R.string.about);
 
+        menu.getItem(menu.size() - 3).setIcon(R.drawable.ic_access_time_black_24dp);
         menu.getItem(menu.size() - 2).setIcon(R.drawable.ic_settings);
         menu.getItem(menu.size() - 1).setIcon(R.drawable.ic_information);
     }

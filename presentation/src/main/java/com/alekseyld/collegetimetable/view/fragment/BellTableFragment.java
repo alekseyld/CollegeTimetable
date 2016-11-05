@@ -21,8 +21,8 @@ import butterknife.ButterKnife;
 
 public class BellTableFragment extends BaseFragment<BellTablePresenter> implements BellView {
 
-    public static AboutFragment newInstance(){
-        return new AboutFragment();
+    public static BellTableFragment newInstance(){
+        return new BellTableFragment();
     }
 
     @Nullable
@@ -30,7 +30,7 @@ public class BellTableFragment extends BaseFragment<BellTablePresenter> implemen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_belltable, container, false);
         ButterKnife.bind(this, v);
-        getActivity().setTitle(R.string.about);
+        getActivity().setTitle(R.string.belltable_title);
 
         return v;
     }
