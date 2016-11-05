@@ -45,10 +45,6 @@ public class TablePresenter extends BasePresenter<TableView>{
         mGetSettingsUseCase.execute(new BaseSubscriber<SettingsWrapper>(){
             @Override
             public void onNext(SettingsWrapper settingsWrapper) {
-
-                Log.d("test", settingsWrapper.getNotificationGroup());
-                Log.d("test", settingsWrapper.getFavoriteGroups().size() +"");
-
                 mSettings = settingsWrapper;
             }
 
@@ -72,6 +68,7 @@ public class TablePresenter extends BasePresenter<TableView>{
         mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TableWrapper>(){
             @Override
             public void onNext(TableWrapper tableWrapper){
+                Log.d("test", "TableWrapper offline onNext" + tableWrapper.getmTimeTable().size());
                 mView.setTimeTable(tableWrapper);
             }
 

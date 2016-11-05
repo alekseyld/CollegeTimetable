@@ -1,6 +1,5 @@
 package com.alekseyld.collegetimetable.view.activity;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -14,7 +13,6 @@ import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerMainComponent;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.internal.di.module.MainModule;
-import com.alekseyld.collegetimetable.service.UpdateTimetableService;
 import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 import com.alekseyld.collegetimetable.view.fragment.AboutFragment;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFragment;
@@ -95,9 +93,10 @@ public class MainActivity extends BaseActivity {
         drawer.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-        if(!UpdateTimetableService.isRunning){
-            startService(new Intent(this, UpdateTimetableService.class));
-        }
+//        if(!UpdateTimetableService.isRunning){
+//            startService(new Intent(this, UpdateTimetableService.class));
+//        }
+
         addFragment(TableFragment.newInstance(""));
     }
 

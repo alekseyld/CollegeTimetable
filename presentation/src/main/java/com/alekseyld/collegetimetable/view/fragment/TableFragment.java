@@ -87,16 +87,14 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
     @Override
     public void presenterReady() {
-        if(getArguments().containsKey(GROUP_KEY)){
-            mGroup = getArguments().getString(GROUP_KEY);
-        }else {
-            mGroup = mPresenter.getGroup();
+        if(getArguments().containsKey(GROUP_KEY)) {
+            String s = getArguments().getString(GROUP_KEY);
+            mGroup = s.equals("") ? mPresenter.getGroup() : s;
         }
+
         if(mGroup != null && !mGroup.equals("")){
             getActivity().setTitle("Группа: " + mGroup);
         }
-
-        Log.d("test", "Группа " + mGroup);
         mPresenter.getTableFromOffline();
     }
 

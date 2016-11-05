@@ -17,7 +17,7 @@ import android.widget.ListView;
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.SettingsPresenter;
-import com.alekseyld.collegetimetable.view.SettingsView;
+import com.alekseyld.collegetimetable.view.AboutView;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 
 import butterknife.BindView;
@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
  * Created by Alekseyld on 08.09.2016.
  */
 
-public class AboutFragment extends BaseFragment<SettingsPresenter> implements SettingsView {
+public class AboutFragment extends BaseFragment<SettingsPresenter> implements AboutView {
 
     public static AboutFragment newInstance(){
         return new AboutFragment();

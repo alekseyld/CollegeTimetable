@@ -44,7 +44,15 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
             public void onNext(SettingsWrapper settings) {
                 mSettings = settings;
             }
+            @Override
+            public void onCompleted() {
+                mView.presenterReady();
+            }
         });
+    }
+
+    public boolean getAlarmMode(){
+        return mSettings.getAlarmMode();
     }
 
     public SettingsWrapper getSettings() {
@@ -74,7 +82,6 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
     public void saveFavorite(Set<String> groups){
         if(groups != null && groups.size() >= 0){
             mSettings.setFavoriteGroups(groups);
-            mSaveSettingsUseCase.setSettings(mSettings);
             mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>(){
                 @Override
                 public void onCompleted() {
@@ -87,16 +94,22 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
     public void saveNotification(Editable group){
         if(group != null && !group.toString().equals("")){
             mSettings.setNotificationGroup(group.toString());
+            saveSettings();
         }
     }
 
     public void saveAlarmMode(boolean alarmMode){
         mSettings.setAlarmMode(alarmMode);
+        saveSettings();
+    }
+
+    private void saveSettings(){
+        mSaveSettingsUseCase.setSettings(mSettings);
+        mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>());
     }
 
     @Override
     public void destroy() {
-        mSaveSettingsUseCase.setSettings(mSettings);
-        mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>());
+//        saveSettings();
     }
 }

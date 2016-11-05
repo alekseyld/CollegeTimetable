@@ -2,40 +2,34 @@ package com.alekseyld.collegetimetable.service;
 
 import android.app.IntentService;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
-import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.TableWrapper;
+import com.alekseyld.collegetimetable.internal.di.component.DaggerServiceComponent;
+import com.alekseyld.collegetimetable.internal.di.module.ServiceModule;
+import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
+import com.alekseyld.collegetimetable.usecase.GetTableFromOfflineUseCase;
+import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
+import com.alekseyld.collegetimetable.usecase.SaveTableUseCase;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.GROUP_KEY;
-import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.TIME_KEY;
-import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.URL_KEY;
-import static com.alekseyld.collegetimetable.repository.base.TableRepository.DAYS_KEY;
-import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
-import static com.alekseyld.collegetimetable.repository.base.TableRepository.TIMETABLE_KEY;
+import javax.inject.Inject;
 
 /**
  * Created by Alekseyld on 04.09.2016.
@@ -45,28 +39,33 @@ public class UpdateTimetableService extends IntentService {
     private final String LOG_TAG = "ServiceLog";
     public static boolean isRunning = false;
 
-    private SharedPreferences mPref;
-    private Gson mGson;
-    private Type mType;
-    private Type mTypeDay;
-
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
      * UpdateTimetableService Used to name the worker thread, important only for debugging.
      */
+
+    @Inject GetSettingsUseCase mGetSettingsUseCase;
+    @Inject GetTableFromOnlineUseCase mGetTableFromOnlineUseCase;
+    @Inject GetTableFromOfflineUseCase mGetTableFromOfflineUseCase;
+    @Inject SaveTableUseCase mSaveTableUseCase;
+
     public UpdateTimetableService() {
         super("DataService");
-
-        mGson = new Gson();
-        mType = new TypeToken<HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>>>(){}.getType();
-        mTypeDay = new TypeToken<HashMap<TableWrapper.Day, String>>(){}.getType();
     }
 
     public void onCreate() {
         super.onCreate();
+        this.initializeInjector();
         Log.d(LOG_TAG, "onCreate");
         isRunning = true;
+    }
+
+    private void initializeInjector(){
+        DaggerServiceComponent.builder()
+                .serviceModule(new ServiceModule(this))
+                .build()
+                .inject(this);
     }
 
     public void onDestroy() {
@@ -84,8 +83,10 @@ public class UpdateTimetableService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.d(LOG_TAG, "onHandleIntent");
 
+
+
         //FIXME get data from usecase
-        mPref = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
+        /*mPref = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         int time = mPref.getInt(TIME_KEY, 5);
         NotificationManager n = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -107,7 +108,7 @@ public class UpdateTimetableService extends IntentService {
             }
         }else {
             stopSelf();
-        }
+        }*/
     }
 
     private Notification getNotif(String s) {
@@ -142,15 +143,6 @@ public class UpdateTimetableService extends IntentService {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    private void putTimeTable(TableWrapper tableWrapper) {
-        String json = mGson.toJson(tableWrapper.getmTimeTable());
-        editDays(tableWrapper.getDays());
-        String json2 = mGson.toJson(tableWrapper.getDays());
-        SharedPreferences.Editor ed = mPref.edit();
-        ed.putString(TIMETABLE_KEY, json);
-        ed.putString(DAYS_KEY, json2);
-        ed.apply();
-    }
     private void editDays(HashMap<TableWrapper.Day, String> days) {
         for(TableWrapper.Day d: days.keySet()){
             days.put(d, firstUpperCase(days.get(d).toLowerCase()));
@@ -346,14 +338,5 @@ public class UpdateTimetableService extends IntentService {
         timeTable.setDays(days);
 
         return timeTable;
-    }
-
-    private TableWrapper getTimeTable() {
-        String s = mPref.getString(TIMETABLE_KEY, "");
-        String d = mPref.getString(DAYS_KEY, "");
-        TableWrapper tableWrapper = new TableWrapper();
-        tableWrapper.setTimeTable((HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>>) mGson.fromJson(s, mType));
-        tableWrapper.setDays((HashMap<TableWrapper.Day, String>) mGson.fromJson(d, mTypeDay));
-        return tableWrapper;
     }
 }

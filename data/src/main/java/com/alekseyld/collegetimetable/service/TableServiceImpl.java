@@ -58,8 +58,10 @@ public class TableServiceImpl implements TableService{
                                 return Observable.error(new Error(e.getMessage()));
                             }
                             TableWrapper t = DataUtils.parseDocument(document, group);
+                            TableWrapper old = mTimetableRepository.getTimeTable(group);
+                            t.setChanges(t.getChanges(old));
+                            mTimetableRepository.putTimeTable(t, group);
                             return Observable.just(t);
-
                         });
         
         /*

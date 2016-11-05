@@ -19,8 +19,8 @@
     <string name="_5">5.</string>
     <string name="_6">6.</string>
     <string name="about">О приложении</string>
-    <string name="addFarvorite">Изменить группы в избранном</string>
-    <string name="addNotif">Изменить основную группу</string>
+    <string name="addFarvorite">Группы в избранном</string>
+    <string name="addNotif">Моя группа</string>
     <string name="info_r">Разработчик: alekseyld</string>
     <string name="info_ver">Версия: 3.5</string>
     <string name="info_star">Оценить приложение в Google play</string>
@@ -30,6 +30,7 @@
     <string name="name_appTheme">AppTheme</string>
     <string name="name_greenTheme">GreenTheme</string>
     <string name="bellMon">Расписание по будням</string>
+    <string name="alarmModeS">Не беспокоить</string>
 
     <string-array name="groupsList">
 

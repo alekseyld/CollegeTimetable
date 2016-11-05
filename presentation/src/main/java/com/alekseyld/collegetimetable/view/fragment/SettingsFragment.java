@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,9 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
     @BindView(R.id.addNotif)
     TextView addNotif;
 
+    @BindView(R.id.alarmMode)
+    Switch alarmMode;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,6 +78,15 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
             }
         });
 
+        alarmMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.saveAlarmMode(
+                        alarmMode.isChecked()
+                );
+            }
+        });
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             // If we're running on Honeycomb or newer, then we can use the Theme's
             // selectableItemBackground to ensure that the View has a pressed state
@@ -84,6 +97,13 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         }
 
         return v;
+    }
+
+    @Override
+    public void presenterReady() {
+        alarmMode.setChecked(
+                mPresenter.getAlarmMode()
+        );
     }
 
     private void showAddNotif(){
