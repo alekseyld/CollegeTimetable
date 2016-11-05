@@ -101,6 +101,20 @@ public class TableWrapper {
         this.mChanges = mChanges;
     }
 
+    /*
+     * true - if have changes
+     */
+    public boolean isChanges(){
+        if(mChanges != null){
+            for(Day d: mChanges.keySet())
+                for (Lesson l: mChanges.get(d).keySet())
+                    if(mChanges.get(d).get(l)){
+                        return true;
+                    }
+        }
+        return false;
+    }
+
     public HashMap<Day, HashMap<Lesson, Boolean>> getChanges(TableWrapper tableWrapper){
         if(tableWrapper != null) {
             HashMap<Day, HashMap<Lesson, Boolean>> changes = new HashMap<>();

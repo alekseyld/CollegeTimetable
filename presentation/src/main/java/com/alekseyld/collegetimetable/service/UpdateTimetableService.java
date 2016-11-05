@@ -90,8 +90,8 @@ public class UpdateTimetableService extends IntentService {
                 if(mSettings != null
                         && mSettings.getNotificationGroup() != null
                         && !mSettings.getNotificationGroup().equals("")) {
-
-                    getTimeTableOnline();
+                    if(isOnline())
+                        getTimeTableOnline();
                 }else {
                     stopSelf();
                 }
@@ -107,7 +107,9 @@ public class UpdateTimetableService extends IntentService {
             public void onNext(TableWrapper tableWrapper) {
                 if(tableWrapper != null
                         && tableWrapper.getmTimeTable() != null
-                        && tableWrapper.getmTimeTable().size() > 0) {
+                        && tableWrapper.getmTimeTable().size() > 0
+                        && tableWrapper.getChanges() != null
+                        && tableWrapper.isChanges()){
 
                     saveTimeTable(tableWrapper);
                     if(mSettings.getAlarmMode()){
@@ -120,6 +122,10 @@ public class UpdateTimetableService extends IntentService {
                     n.notify("com.alekseyld.collegetimetable", 5, notification);
 
                 }
+                stopSelf();
+            }
+            @Override
+            public void onError(Throwable e) {
                 stopSelf();
             }
         });

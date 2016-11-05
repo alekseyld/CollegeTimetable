@@ -117,25 +117,25 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
                     if(changes.get(day).get(l)){
                         switch (l){
                             case lesson0:
-                                holder.lesson0.setTextColor(Color.parseColor("#01579B"));
+                                holder.lesson0.setTextColor(Color.parseColor("#004D40"));
                                 break;
                             case lesson1:
-                                holder.lesson1.setTextColor(Color.parseColor("#01579B"));
+                                holder.lesson1.setTextColor(Color.parseColor("#004D40"));
                                 break;
                             case lesson2:
-                                holder.lesson2.setTextColor(Color.parseColor("#01579B"));
+                                holder.lesson2.setTextColor(Color.parseColor("#004D40"));
                                 break;
                             case lesson3:
-                                holder.lesson3.setTextColor(Color.parseColor("#01579B"));
+                                holder.lesson3.setTextColor(Color.parseColor("#004D40"));
                                 break;
                             case lesson4:
-                                holder.lesson4.setTextColor(Color.parseColor("#01579B"));
+                                holder.lesson4.setTextColor(Color.parseColor("#004D40"));
                                 break;
                             case lesson5:
-                                holder.lesson5.setTextColor(Color.parseColor("#01579B"));
+                                holder.lesson5.setTextColor(Color.parseColor("#004D40"));
                                 break;
                             case lesson6:
-                                holder.lesson6.setTextColor(Color.parseColor("#01579B"));
+                                holder.lesson6.setTextColor(Color.parseColor("#004D40"));
                                 break;
                         }
                     }

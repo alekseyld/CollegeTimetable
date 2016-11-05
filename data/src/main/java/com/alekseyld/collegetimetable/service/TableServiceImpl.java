@@ -58,6 +58,15 @@ public class TableServiceImpl implements TableService{
                                 return Observable.error(new Error(e.getMessage()));
                             }
                             TableWrapper t = DataUtils.parseDocument(document, group);
+
+                            //Test changes -----------
+//                            HashMap<TableWrapper.Lesson, String> test = t.getmTimeTable().get(TableWrapper.Day.Mon);
+//                            test.put(TableWrapper.Lesson.lesson0, "Истрория Сафагалеева ");
+//                            HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> tableWrapper = t.getmTimeTable();
+//                            tableWrapper.put(TableWrapper.Day.Mon, test);
+//                            t.setTimeTable(tableWrapper);
+                            //--------------
+
                             TableWrapper old = mTimetableRepository.getTimeTable(group);
                             t.setChanges(t.getChanges(old));
                             mTimetableRepository.putTimeTable(t, group);
