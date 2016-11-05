@@ -12,6 +12,7 @@ public interface SettingsRepository {
     String GROUP_KEY = "Group";
     String TIME_KEY = "Time";
     String ALARMMODE_KEY = "AlarmMode";
+    String NOTIFON_KEY = "NotifOn";
     String FAVORITEGROUPS_KEY = "FavoriteGroups";
 
     String getGroup();

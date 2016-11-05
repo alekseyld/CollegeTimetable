@@ -1,6 +1,7 @@
 package com.alekseyld.collegetimetable.presenter;
 
 import android.text.Editable;
+import android.util.Log;
 
 import com.alekseyld.collegetimetable.SettingsWrapper;
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
@@ -34,7 +35,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
         mProcessor = settingsResultProcessor;
         mSaveSettingsUseCase = saveSettingsUseCase;
         mGetSettingsUseCase = getSettingsUseCase;
-        mSettings = new SettingsWrapper(new HashSet<String>(), "", true);
+        mSettings = new SettingsWrapper(new HashSet<String>(), "", false, true);
     }
 
     @Override
@@ -53,6 +54,10 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
 
     public boolean getAlarmMode(){
         return mSettings.getAlarmMode();
+    }
+
+    public boolean getNotifOn(){
+        return mSettings.getNotifOn();
     }
 
     public SettingsWrapper getSettings() {
@@ -82,6 +87,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
     public void saveFavorite(Set<String> groups){
         if(groups != null && groups.size() >= 0){
             mSettings.setFavoriteGroups(groups);
+            mSaveSettingsUseCase.setSettings(mSettings);
             mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>(){
                 @Override
                 public void onCompleted() {

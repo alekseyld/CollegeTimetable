@@ -32,6 +32,17 @@
         <include layout="@layout/divider"/>
 
         <Switch
+            android:id="@+id/notifOn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:padding="15dp"
+            android:text="@string/notifS"
+            />
+
+        <include layout="@layout/divider"/>
+
+        <Switch
             android:id="@+id/alarmMode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

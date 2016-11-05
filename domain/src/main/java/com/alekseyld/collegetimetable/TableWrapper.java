@@ -116,7 +116,11 @@ public class TableWrapper {
     }
 
     public HashMap<Day, HashMap<Lesson, Boolean>> getChanges(TableWrapper tableWrapper){
-        if(tableWrapper != null) {
+        if(tableWrapper != null
+                && tableWrapper.getmTimeTable() != null
+                && tableWrapper.getmTimeTable().size() > 0
+                && mTimeTable != null) {
+
             HashMap<Day, HashMap<Lesson, Boolean>> changes = new HashMap<>();
             HashMap<Lesson, Boolean> dayChange;
             for (Day d : mTimeTable.keySet()) {

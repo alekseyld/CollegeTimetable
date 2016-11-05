@@ -10,14 +10,16 @@ public class SettingsWrapper {
 
     private Set<String> favoriteGroups;
     private String notificationGroup;
+    private boolean notifOn;
     private boolean alarmMode;
 
     public SettingsWrapper() {}
 
-    public SettingsWrapper(Set<String> favoriteGroups, String notificationGroup, boolean alarmMode) {
+    public SettingsWrapper(Set<String> favoriteGroups, String notificationGroup, boolean notifOn, boolean alarmMode) {
         this.favoriteGroups = favoriteGroups;
         this.notificationGroup = notificationGroup;
         this.alarmMode = alarmMode;
+        this.notifOn = notifOn;
     }
 
     public Set<String> getFavoriteGroups() {
@@ -42,5 +44,13 @@ public class SettingsWrapper {
 
     public void setAlarmMode(boolean alarmMode) {
         this.alarmMode = alarmMode;
+    }
+
+    public boolean getNotifOn() {
+        return notifOn;
+    }
+
+    public void setNotifOn(boolean notifOn) {
+        this.notifOn = notifOn;
     }
 }
