@@ -109,6 +109,11 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
         saveSettings();
     }
 
+    public void saveNotifOn(boolean notifOn){
+        mSettings.setNotifOn(notifOn);
+        saveSettings();
+    }
+
     private void saveSettings(){
         mSaveSettingsUseCase.setSettings(mSettings);
         mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>());

@@ -89,7 +89,8 @@ public class UpdateTimetableService extends IntentService {
             public void onCompleted() {
                 if(mSettings != null
                         && mSettings.getNotificationGroup() != null
-                        && !mSettings.getNotificationGroup().equals("")) {
+                        && !mSettings.getNotificationGroup().equals("")
+                        && mSettings.getNotifOn()) {
                     if(isOnline())
                         getTimeTableOnline();
                 }else {
@@ -116,6 +117,7 @@ public class UpdateTimetableService extends IntentService {
                         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                         v.vibrate(300);
                     }
+
                     NotificationManager n = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                     Notification notification = getNotif("Изменение в расписании");
                     notification.flags |= Notification.FLAG_AUTO_CANCEL;

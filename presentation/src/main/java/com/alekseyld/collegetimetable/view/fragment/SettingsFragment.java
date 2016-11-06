@@ -57,6 +57,9 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
     @BindView(R.id.alarmMode)
     Switch alarmMode;
 
+    @BindView(R.id.notifOn)
+    Switch notifOn;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,6 +90,15 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
             }
         });
 
+        notifOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.saveNotifOn(
+                        notifOn.isChecked()
+                );
+            }
+        });
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             // If we're running on Honeycomb or newer, then we can use the Theme's
             // selectableItemBackground to ensure that the View has a pressed state
@@ -103,6 +115,10 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
     public void presenterReady() {
         alarmMode.setChecked(
                 mPresenter.getAlarmMode()
+        );
+
+        notifOn.setChecked(
+                mPresenter.getNotifOn()
         );
     }
 
