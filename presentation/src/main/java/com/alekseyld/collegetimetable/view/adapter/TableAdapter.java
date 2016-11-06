@@ -121,25 +121,25 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
                     if(changes.get(day).get(l)){
                         switch (l){
                             case lesson0:
-                                holder.lesson0.setTextColor(Color.parseColor("#004D40"));
+                                holder.lesson0.setBackgroundColor(Color.parseColor("#FFF176"));
                                 break;
                             case lesson1:
-                                holder.lesson1.setTextColor(Color.parseColor("#004D40"));
+                                holder.lesson1.setBackgroundColor(Color.parseColor("#FFF176"));
                                 break;
                             case lesson2:
-                                holder.lesson2.setTextColor(Color.parseColor("#004D40"));
+                                holder.lesson2.setBackgroundColor(Color.parseColor("#FFF176"));
                                 break;
                             case lesson3:
-                                holder.lesson3.setTextColor(Color.parseColor("#004D40"));
+                                holder.lesson3.setBackgroundColor(Color.parseColor("#FFF176"));
                                 break;
                             case lesson4:
-                                holder.lesson4.setTextColor(Color.parseColor("#004D40"));
+                                holder.lesson4.setBackgroundColor(Color.parseColor("#FFF176"));
                                 break;
                             case lesson5:
-                                holder.lesson5.setTextColor(Color.parseColor("#004D40"));
+                                holder.lesson5.setBackgroundColor(Color.parseColor("#FFF176"));
                                 break;
                             case lesson6:
-                                holder.lesson6.setTextColor(Color.parseColor("#004D40"));
+                                holder.lesson6.setBackgroundColor(Color.parseColor("#FFF176"));
                                 break;
                         }
                     }

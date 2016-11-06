@@ -7,7 +7,7 @@ import com.alekseyld.collegetimetable.view.BellView;
 import javax.inject.Inject;
 
 /**
- * Created by Ольга on 05.11.2016.
+ * Created by Alekseyld on 05.11.2016.
  */
 
 public class AboutPresenter extends BasePresenter<AboutView> {

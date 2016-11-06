@@ -12,6 +12,7 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -61,7 +62,7 @@ public class TableServiceImpl implements TableService{
 
                             //Test changes -----------
 //                            HashMap<TableWrapper.Lesson, String> test = t.getmTimeTable().get(TableWrapper.Day.Mon);
-//                            test.put(TableWrapper.Lesson.lesson0, "Истрория Сафагалеева ");
+//                            test.put(TableWrapper.Lesson.lesson4, "Истрория Сафагалеева ");
 //                            HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> tableWrapper = t.getmTimeTable();
 //                            tableWrapper.put(TableWrapper.Day.Mon, test);
 //                            t.setTimeTable(tableWrapper);

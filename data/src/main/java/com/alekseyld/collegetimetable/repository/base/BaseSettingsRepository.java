@@ -16,7 +16,7 @@ import static com.alekseyld.collegetimetable.repository.base.TableRepository.DOC
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.TIMETABLE_KEY;
 
 /**
- * Created by Ольга on 05.11.2016.
+ * Created by Alekseyld on 05.11.2016.
  */
 
 public abstract class BaseSettingsRepository implements SettingsRepository {
