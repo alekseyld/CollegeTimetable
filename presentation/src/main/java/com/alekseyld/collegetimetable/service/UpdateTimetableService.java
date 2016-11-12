@@ -7,6 +7,9 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
@@ -140,9 +143,13 @@ public class UpdateTimetableService extends IntentService {
     }
 
     private Notification getNotif(String s) {
+        Drawable myDrawable = getResources().getDrawable(R.mipmap.android_logo);
+        Bitmap bitmap = ((BitmapDrawable) myDrawable).getBitmap();
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.android_logo)
+                        .setLargeIcon(bitmap)
                         .setContentTitle(s)
                         .setContentText("Изменение в расписании");
 //                        .setContentText("name = "+intent.getStringExtra("name")+"; "+

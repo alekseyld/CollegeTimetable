@@ -141,11 +141,12 @@ public class MainActivity extends BaseActivity {
             }
         }
 
+
         menu.add(Menu.NONE, R.id.action_belltable, Menu.NONE, R.string.action_belltable);
         menu.add(Menu.NONE, R.id.action_settings, Menu.NONE, R.string.action_settings);
         menu.add(Menu.NONE, R.id.about, Menu.NONE, R.string.about);
 
-        menu.getItem(menu.size() - 3).setIcon(R.drawable.ic_access_time_black_24dp);
+        menu.getItem(menu.size() - 3).setIcon(R.drawable.ic_access_time);
         menu.getItem(menu.size() - 2).setIcon(R.drawable.ic_settings);
         menu.getItem(menu.size() - 1).setIcon(R.drawable.ic_information);
     }

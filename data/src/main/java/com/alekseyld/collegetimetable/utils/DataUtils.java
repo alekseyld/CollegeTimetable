@@ -1,5 +1,7 @@
 package com.alekseyld.collegetimetable.utils;
 
+import android.util.Log;
+
 import com.alekseyld.collegetimetable.TableWrapper;
 
 import org.jsoup.nodes.Document;
@@ -76,9 +78,11 @@ public class DataUtils {
         if(group.contains(" ПГ")){
             url = "energy/10_1_5.html";
         }
-        if(group.contains("ТС-")){
+        if(group.contains(" ТС")){
             url = "energy/10_1_6.html";
         }
+
+        Log.d("UrlGroup", url);
 
         return "http://uecoll.ru/wp-content/uploads/time/" + url;
     }
