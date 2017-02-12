@@ -5,7 +5,6 @@ import android.util.Log;
 import com.alekseyld.collegetimetable.TableWrapper;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.HashMap;
@@ -188,8 +187,6 @@ public class DataUtils {
             }
 
             if(toLesson && numberPattern.matcher(table.get(iterator).text()).matches()){
-//                Log.d("toLesson", table.get(iterator).text());
-
                 toLesson = false;
                 spaceToLessonBlock = true;
                 lessonSpace = 0;
@@ -237,8 +234,6 @@ public class DataUtils {
             }
 
             if(lessonSpace == iSpace) {
-//                Log.d("toLesson", table.get(iterator).text());
-
                 String text = table.get(iterator).text();
 
                 if (table.get(iterator).attr("colspan").equals("")) {
@@ -270,8 +265,6 @@ public class DataUtils {
                         break;
                 }
 
-//                Log.d(TIMETABLE_KEY, "size "+time.size());
-
                 lessonSpace = 0;
                 toLesson = true;
                 spaceToLessonBlock = false;
@@ -295,8 +288,3 @@ public class DataUtils {
         return timeTable;
     }
 }
-    /*
-     *  Здесь был Константин(нет).
-     *  Он думал над этим классом 5 часов без перерыва(нет)
-     *  И в итоге получил груду костылей(ага)
-     */

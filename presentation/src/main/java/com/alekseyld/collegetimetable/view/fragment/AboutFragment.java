@@ -18,7 +18,6 @@ import android.widget.ListView;
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.AboutPresenter;
-import com.alekseyld.collegetimetable.presenter.SettingsPresenter;
 import com.alekseyld.collegetimetable.view.AboutView;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 
@@ -69,10 +68,6 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
                         String url = "https://vk.com/alekseyld";
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setData(Uri.parse(url));
-//                        Intent intent = new Intent(Intent.ACTION_SEND);
-//                        intent.setType("text/plain");
-//                        intent.putExtra(Intent.EXTRA_EMAIL, "al.lisow@gmail.com");
-//                        intent.putExtra(Intent.EXTRA_SUBJECT, "УТЭК Расписание Android");
                         startActivity(intent);
                         break;
                     case 2:

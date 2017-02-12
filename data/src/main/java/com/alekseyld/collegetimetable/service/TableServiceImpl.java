@@ -12,7 +12,6 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -82,98 +81,11 @@ public class TableServiceImpl implements TableService {
                 return Observable.error(new Error("Произошла ошибка при подключении"));
 
             TableWrapper t = DataUtils.parseDocument(document, group);
-
-            //Test changes -----------
-//                            HashMap<TableWrapper.Lesson, String> test = t.getmTimeTable().get(TableWrapper.Day.Mon);
-//                            test.put(TableWrapper.Lesson.lesson4, "Истрория Сафагалеева ");
-//                            HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> tableWrapper = t.getmTimeTable();
-//                            tableWrapper.put(TableWrapper.Day.Mon, test);
-//                            t.setTimeTable(tableWrapper);
-            //--------------
-
             TableWrapper old = mTimetableRepository.getTimeTable(group);
             t.setChanges(t.getChanges(old));
             mTimetableRepository.putTimeTable(t, group);
             return Observable.just(t);
         });
-        
-        /*
-        TableWrapper tableWrapper = new TableWrapper();
-
-        HashMap<TableWrapper.Day, String> days = new HashMap<>();
-        days.put(TableWrapper.Day.Mon, "Понедельник");
-        days.put(TableWrapper.Day.Tue, "Вторник");
-
-        HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> table = new HashMap<>();
-
-        HashMap<TableWrapper.Lesson, String> lessons = new HashMap<>();
-
-        lessons.put(TableWrapper.Lesson.lesson1, "Физика");
-        lessons.put(TableWrapper.Lesson.lesson2, "Математика");
-        lessons.put(TableWrapper.Lesson.lesson3, "История");
-
-        table.put(TableWrapper.Day.Mon, lessons);
-        table.put(TableWrapper.Day.Tue, lessons);
-
-        tableWrapper.setDays(days);
-        tableWrapper.setTimeTable(table);
-
-        return Observable.just(tableWrapper);*/
-
-        /*return urlApi.getUrl(DataUtils.getGroupUrl(group))
-                .onErrorReturn((error) ->{
-                    ApiResponse apiResponse = new ApiResponse();
-                    if(error instanceof UnknownHostException){
-                        apiResponse.setStatus(2);
-                    }else {
-                        apiResponse.setStatus(3);
-                    }
-                    return apiResponse;
-                })
-                .flatMap(url -> {
-                    Document document = null;
-                    if(!mSettingsRepository.getGroup().equals(group)){
-                        try {
-                            document = Jsoup.connect(url.getResult()).get();
-                        } catch (IOException e) {
-                            return Observable.error(new Error(e.getMessage()));
-                        }
-                        TableWrapper t = DataUtils.parseDocument(document, group);
-                        return Observable.just(t);
-                    }
-
-                    if(mSettingsRepository.getUrl() == null){
-                        mSettingsRepository.putUrl(url.getResult());
-                    }
-                    if(online && (url.getStatus() != 2 || url.getStatus() != 3)) {
-                        try {
-                            document = Jsoup.connect(url.getResult()).get();
-                        } catch (IOException e) {
-                            return Observable.error(new Error(e.getMessage()));
-                        }
-                        if(mTimetableRepository.getDocument() == null){
-                            mTimetableRepository.putDocument(document);
-                            TableWrapper t = DataUtils.parseDocument(document, mSettingsRepository.getGroup());
-                            mTimetableRepository.putTimeTable(t, group);
-                            return Observable.just(t);
-                        }else {
-                            if(document.text().equals(mTimetableRepository.getDocument())){
-                                return Observable.just(mTimetableRepository.getTimeTable(group));
-                            }else {
-                                mTimetableRepository.putDocument(document);
-                                TableWrapper t = DataUtils.parseDocument(document, mSettingsRepository.getGroup());
-                                mTimetableRepository.putTimeTable(t, group);
-                                return Observable.just(t);
-                            }
-                        }
-                    }else {
-                        if(mTimetableRepository.getDocument() != null){
-                            return Observable.just(mTimetableRepository.getTimeTable(group));
-                        }else{
-                            return Observable.just(new TableWrapper());
-                        }
-                    }
-                });*/
     }
 
     @Override
