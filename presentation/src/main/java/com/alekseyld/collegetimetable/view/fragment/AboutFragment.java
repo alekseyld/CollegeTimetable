@@ -3,23 +3,23 @@ package com.alekseyld.collegetimetable.view.fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
+import com.alekseyld.collegetimetable.presenter.AboutPresenter;
 import com.alekseyld.collegetimetable.presenter.SettingsPresenter;
-import com.alekseyld.collegetimetable.view.SettingsView;
+import com.alekseyld.collegetimetable.view.AboutView;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 
 import butterknife.BindView;
@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  * Created by Alekseyld on 08.09.2016.
  */
 
-public class AboutFragment extends BaseFragment<SettingsPresenter> implements SettingsView {
+public class AboutFragment extends BaseFragment<AboutPresenter> implements AboutView {
 
     public static AboutFragment newInstance(){
         return new AboutFragment();
@@ -50,9 +50,11 @@ public class AboutFragment extends BaseFragment<SettingsPresenter> implements Se
         PackageManager manager = getActivity().getPackageManager();
 
         about = new String[]{
-                "Разработчик: alekseyld",
-                "Версия: 2.1b",
-                "Оценить приложение в Google play"
+                getString(R.string.info_r),
+                getString(R.string.info_ver),
+                getString(R.string.info_star),
+                getString(R.string.disclaimer),
+                getString(R.string.github)
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
@@ -67,13 +69,16 @@ public class AboutFragment extends BaseFragment<SettingsPresenter> implements Se
                         String url = "https://vk.com/alekseyld";
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setData(Uri.parse(url));
+//                        Intent intent = new Intent(Intent.ACTION_SEND);
+//                        intent.setType("text/plain");
+//                        intent.putExtra(Intent.EXTRA_EMAIL, "al.lisow@gmail.com");
+//                        intent.putExtra(Intent.EXTRA_SUBJECT, "УТЭК Расписание Android");
                         startActivity(intent);
                         break;
                     case 2:
                         Uri uri = Uri.parse("market://details?id=" + context().getPackageName());
                         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
                         goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
                                 Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                         try {
                             startActivity(goToMarket);
@@ -81,6 +86,20 @@ public class AboutFragment extends BaseFragment<SettingsPresenter> implements Se
                             startActivity(new Intent(Intent.ACTION_VIEW,
                                     Uri.parse("http://play.google.com/store/apps/details?id=" + context().getPackageName())));
                         }
+                        break;
+                    case 3:
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle(getString(R.string.disclaimer))
+                                .setMessage("Все может баговать, не работатать и тд. Если нашли ошибку, сообщите мне о ней.")
+                                .setCancelable(true);
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                        break;
+                    case 4:
+                        String url1 = "https://github.com/alekseyld/CollegeTimetable";
+                        Intent intent1 = new Intent(Intent.ACTION_VIEW);
+                        intent1.setData(Uri.parse(url1));
+                        startActivity(intent1);
                         break;
                 }
 

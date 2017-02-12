@@ -1,13 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </ListView>
+        <TextView
+            android:id="@+id/addFarvorite"
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="@string/addFarvorite"/>
 
-</LinearLayout>
+        <include layout="@layout/divider"/>
+
+        <TextView
+            android:id="@+id/addNotif"
+            android:textSize="15sp"
+            android:textColor="@android:color/black"
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="@string/addNotif"/>
+
+        <include layout="@layout/divider"/>
+
+        <Switch
+            android:id="@+id/notifOn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:padding="15dp"
+            android:text="@string/notifS"
+            />
+
+        <include layout="@layout/divider"/>
+
+        <Switch
+            android:id="@+id/alarmMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:padding="15dp"
+            android:text="@string/alarmModeS"
+            />
+
+        <include layout="@layout/divider"/>
+
+    </LinearLayout>
+</ScrollView>

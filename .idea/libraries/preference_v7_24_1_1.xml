@@ -7,6 +7,7 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://B:/Users/alekseyld/AppData/Local/Android/sdk/extras/android/m2repository/com/android/support/preference-v7/24.1.1/preference-v7-24.1.1-sources.jar!/" />
+      <root url="jar://B:/Android/sdk/extras/android/m2repository/com/android/support/preference-v7/24.1.1/preference-v7-24.1.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

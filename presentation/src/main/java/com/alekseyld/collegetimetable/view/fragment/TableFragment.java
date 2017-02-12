@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alekseyld.collegetimetable.R;
@@ -18,7 +19,6 @@ import com.alekseyld.collegetimetable.TableWrapper;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.TablePresenter;
 import com.alekseyld.collegetimetable.view.TableView;
-import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 import com.alekseyld.collegetimetable.view.adapter.TableAdapter;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 
@@ -26,9 +26,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.content.Context.MODE_PRIVATE;
 import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.GROUP_KEY;
-import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -53,29 +51,25 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
 
+    @BindView(R.id.message)
+    TextView message;
+
     private RecyclerView.LayoutManager mLayoutManager;
     private TableAdapter mTableAdapter;
 
     @BindString(R.string.app_name)
     String app_name;
 
-    private String mGroup = "2 АПП-1";
+    private String mGroup = "";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_table, container, false);
+
         ButterKnife.bind(this, v);
 
-        if(!getArguments().isEmpty()) {
-            mGroup = getArguments().getString(GROUP_KEY);
-            if(mGroup.equals("")){
-                mGroup = context().getSharedPreferences(NAME_FILE, MODE_PRIVATE).getString(GROUP_KEY, "2 АПП-1");
-            }
-            getActivity().setTitle("Группа: "+ mGroup);
-        }else{
-            getActivity().setTitle(R.string.app_name);
-        }
+        getActivity().setTitle(R.string.app_name);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -96,9 +90,16 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mPresenter.getTimeTable();
+    public void presenterReady() {
+        if(getArguments().containsKey(GROUP_KEY)) {
+            String s = getArguments().getString(GROUP_KEY);
+            mGroup = s.equals("") ? mPresenter.getGroup() : s;
+        }
+
+        if(mGroup != null && !mGroup.equals("")){
+            getActivity().setTitle("Группа: " + mGroup);
+        }
+        mPresenter.getTableFromOffline();
     }
 
     @Override
@@ -106,7 +107,18 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         mTableAdapter.setTableWrapper(timeTable);
     }
 
+    @Override
+    public TableWrapper getTimeTable() {
+        return mTableAdapter.getTableWrapper();
+    }
+
+    @Override
+    public void showMessage() {
+        message.setVisibility(View.VISIBLE);
+    }
+
     private void refreshItems() {
+        message.setVisibility(View.GONE);
         mPresenter.getTimeTable();
         onItemsLoadComplete();
     }
@@ -129,7 +141,10 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
     @Override
     public void showError(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+        if(getActivity() != null)
+            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+        else
+            Log.e("TableFragment", "Activity is null \n"+message);
     }
 
     @Override

@@ -15,12 +15,12 @@ public interface TableRepository {
     String DAYS_KEY = "Days";
     String DOC_KEY = "Doc";
 
-    TableWrapper getTimeTable();
+    TableWrapper getTimeTable(String group);
     String getDocument();
 
-    void putTimeTable(TableWrapper tableWrapper);
+    boolean putTimeTable(TableWrapper tableWrapper, String group);
     void putDocument(Document document);
 
-    void put(TableWrapper tableWrapper, Document document);
+    void put(TableWrapper tableWrapper, Document document, String group);
 
 }

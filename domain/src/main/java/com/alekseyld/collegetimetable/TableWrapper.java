@@ -49,6 +49,7 @@ public class TableWrapper {
     }
 
     private HashMap<Day, HashMap<Lesson, String>> mTimeTable;
+    private HashMap<Day, HashMap<Lesson, Boolean>> mChanges;
     private HashMap<Day, String> mDays;
 
     public HashMap<Day, HashMap<Lesson, String>> getmTimeTable() {
@@ -91,4 +92,51 @@ public class TableWrapper {
             return false;
         }
     }
+
+    public HashMap<Day, HashMap<Lesson, Boolean>> getChanges() {
+        return mChanges;
+    }
+
+    public void setChanges(HashMap<Day, HashMap<Lesson, Boolean>> mChanges) {
+        this.mChanges = mChanges;
+    }
+
+    /*
+     * true - if have changes
+     */
+    public boolean isChanges(){
+        if(mChanges != null){
+            for(Day d: mChanges.keySet())
+                for (Lesson l: mChanges.get(d).keySet())
+                    if(mChanges.get(d).get(l)){
+                        return true;
+                    }
+        }
+        return false;
+    }
+
+    public HashMap<Day, HashMap<Lesson, Boolean>> getChanges(TableWrapper tableWrapper){
+        if(tableWrapper != null
+                && tableWrapper.getmTimeTable() != null
+                && tableWrapper.getmTimeTable().size() > 0
+                && mTimeTable != null) {
+
+            HashMap<Day, HashMap<Lesson, Boolean>> changes = new HashMap<>();
+            HashMap<Lesson, Boolean> dayChange;
+            for (Day d : mTimeTable.keySet()) {
+                dayChange = new HashMap<>();
+                for (Lesson l : mTimeTable.get(d).keySet()) {
+                    if (!mTimeTable.get(d).get(l).equals(tableWrapper.getmTimeTable().get(d).get(l))) {
+                        dayChange.put(l, true);
+                    } else {
+                        dayChange.put(l, false);
+                    }
+                }
+                changes.put(d, dayChange);
+            }
+            return changes;
+        }
+        return null;
+    }
+
 }

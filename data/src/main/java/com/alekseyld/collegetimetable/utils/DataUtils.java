@@ -27,7 +27,7 @@ public class DataUtils {
         if(group.contains(" Э")){
             url = "energy/10_1_7.html";
         }
-        if(group.contains(" С-")){
+        if(group.contains(" С")){
             url = "energy/10_1_10.html";
         }
         if(group.contains(" Б")){
@@ -78,9 +78,11 @@ public class DataUtils {
         if(group.contains(" ПГ")){
             url = "energy/10_1_5.html";
         }
-        if(group.contains("ТС-")){
+        if(group.contains(" ТС")){
             url = "energy/10_1_6.html";
         }
+
+        Log.d("UrlGroup", url);
 
         return "http://uecoll.ru/wp-content/uploads/time/" + url;
     }
@@ -115,6 +117,8 @@ public class DataUtils {
         //Переход к номеру пары
         boolean toLesson =false;
 
+        boolean firstDoubleLesson = true;
+
         //Пропуск группы
         int iSpace = 0;
         int lessonSpace = -1;
@@ -126,15 +130,15 @@ public class DataUtils {
 
         int i = 0;
 
-        for (Element element: table) {
+        for (int iterator = 0; iterator < table.size(); iterator++) {
 
-            if(dayPattern.matcher(element.text()).find()){
+            if(dayPattern.matcher(table.get(iterator).text()).find()){
                 dayString[0] = dayString [1];
-                dayString[1] = element.text();
+                dayString[1] = table.get(iterator).text();
             }
 
             //Ищем начало групп
-            if(element.text().equals("День/Пара") && first){
+            if(table.get(iterator).text().equals("День/Пара") && first){
                 space = true;
                 first = false;
             }
@@ -144,7 +148,7 @@ public class DataUtils {
             }
 
             //Если элемент совпадает с название группы, то останавливаем счетчик
-            if (element.text().equals(group)) {
+            if (table.get(iterator).text().equals(group)) {
                 space = false;
                 toLesson = true;
             }
@@ -183,14 +187,14 @@ public class DataUtils {
                 }
             }
 
-            if(toLesson && numberPattern.matcher(element.text()).matches()){
-//                Log.d("toLesson", element.text());
+            if(toLesson && numberPattern.matcher(table.get(iterator).text()).matches()){
+//                Log.d("toLesson", table.get(iterator).text());
 
                 toLesson = false;
                 spaceToLessonBlock = true;
                 lessonSpace = 0;
 
-                lesson = Integer.parseInt(element.text());
+                lesson = Integer.parseInt(table.get(iterator).text());
 
                 if(lesson == 0){
                     switch (day){
@@ -227,33 +231,42 @@ public class DataUtils {
                     day++;
                 }
             }
+
             if(spaceToLessonBlock){
                 lessonSpace++;
             }
-            if(lessonSpace == iSpace){
-//                Log.d("toLesson", element.text());
 
-                switch (lesson){
+            if(lessonSpace == iSpace) {
+//                Log.d("toLesson", table.get(iterator).text());
+
+                String text = table.get(iterator).text();
+
+                if (table.get(iterator).attr("colspan").equals("")) {
+                    text = table.get(iterator).text() + "\n/\n" +
+                            table.get(iterator + 1).text();
+                }
+
+                switch (lesson) {
                     case 0:
-                        lessons.put(TableWrapper.Lesson.lesson0, element.text());
+                        lessons.put(TableWrapper.Lesson.lesson0, text);
                         break;
                     case 1:
-                        lessons.put(TableWrapper.Lesson.lesson1, element.text());
+                        lessons.put(TableWrapper.Lesson.lesson1, text);
                         break;
                     case 2:
-                        lessons.put(TableWrapper.Lesson.lesson2, element.text());
+                        lessons.put(TableWrapper.Lesson.lesson2, text);
                         break;
                     case 3:
-                        lessons.put(TableWrapper.Lesson.lesson3, element.text());
+                        lessons.put(TableWrapper.Lesson.lesson3, text);
                         break;
                     case 4:
-                        lessons.put(TableWrapper.Lesson.lesson4, element.text());
+                        lessons.put(TableWrapper.Lesson.lesson4, text);
                         break;
                     case 5:
-                        lessons.put(TableWrapper.Lesson.lesson5, element.text());
+                        lessons.put(TableWrapper.Lesson.lesson5, text);
                         break;
                     case 6:
-                        lessons.put(TableWrapper.Lesson.lesson6, element.text());
+                        lessons.put(TableWrapper.Lesson.lesson6, text);
                         break;
                 }
 
@@ -262,6 +275,17 @@ public class DataUtils {
                 lessonSpace = 0;
                 toLesson = true;
                 spaceToLessonBlock = false;
+            }else {
+                if(table.get(iterator).tagName().equals("td")     &&
+                        table.get(iterator).attr("colspan").equals("") &&
+                        table.get(iterator).attr("rowspan").equals("") &&
+                        !numberPattern.matcher(table.get(iterator).text()).matches() &&
+                        firstDoubleLesson){
+                    lessonSpace--;
+                    firstDoubleLesson = false;
+                }else {
+                    firstDoubleLesson = true;
+                }
             }
         }
 
@@ -271,3 +295,8 @@ public class DataUtils {
         return timeTable;
     }
 }
+    /*
+     *  Здесь был Константин(нет).
+     *  Он думал над этим классом 5 часов без перерыва(нет)
+     *  И в итоге получил груду костылей(ага)
+     */

@@ -5,15 +5,19 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-
-import android.util.Log;
+import android.content.SharedPreferences;
 
 import com.alekseyld.collegetimetable.internal.di.component.ApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.module.ApplicationModule;
 import com.alekseyld.collegetimetable.service.UpdateTimetableService;
+import com.crashlytics.android.Crashlytics;
 
-import java.util.Calendar;
+import javax.inject.Inject;
+
+import io.fabric.sdk.android.Fabric;
+
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -21,27 +25,33 @@ import java.util.Calendar;
 
 public class AndroidApplication extends Application {
 
+    private final String NAME_FILE = "DataStorage";
+    private final String NOTIFON_KEY = "NotifOn";
+
     private ApplicationComponent applicationComponent;
 
     @Override public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         this.initializeInjector();
         this.initializeDBFlow();
         initializeService();
     }
 
     private void initializeService(){
-        boolean alarmUp = (PendingIntent.getBroadcast(getApplicationContext(), 0,
-                new Intent(this, UpdateTimetableService.class),
-                PendingIntent.FLAG_NO_CREATE) != null);
+        SharedPreferences mPref = this.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
+        if(mPref.getBoolean(NOTIFON_KEY, false)) {
+            boolean alarmUp = (PendingIntent.getBroadcast(getApplicationContext(), 0,
+                    new Intent(this, UpdateTimetableService.class),
+                    PendingIntent.FLAG_NO_CREATE) != null);
 
-        if (!alarmUp)
-        {
-            Intent ishintent = new Intent(this, UpdateTimetableService.class);
-            PendingIntent pintent = PendingIntent.getService(this, 0, ishintent, 0);
-            AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-            alarm.cancel(pintent);
-            alarm.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 5 * 60 * 1000, pintent);
+            if (!alarmUp) {
+                Intent ishintent = new Intent(this, UpdateTimetableService.class);
+                PendingIntent pintent = PendingIntent.getService(this, 0, ishintent, 0);
+                AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                alarm.cancel(pintent);
+                alarm.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 5 * 60 * 1000, pintent);
+            }
         }
     }
 

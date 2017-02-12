@@ -9,6 +9,12 @@ import rx.Observable;
  */
 
 public interface TableService {
-    Observable<TableWrapper> getTimetable(boolean online, String group);
+
+    Observable<TableWrapper> getTimetableFromOnline(boolean online, String group);
+    Observable<TableWrapper> getTimetableFromOffline(String group);
+
+    Observable<Boolean> saveTimetable(TableWrapper tableTable, String group);
+
     Observable<Boolean> update(String minute, String group);
+
 }

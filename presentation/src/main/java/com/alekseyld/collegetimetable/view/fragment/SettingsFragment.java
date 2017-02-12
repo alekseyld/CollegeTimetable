@@ -3,11 +3,12 @@ package com.alekseyld.collegetimetable.view.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,9 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alekseyld.collegetimetable.R;
@@ -27,13 +29,11 @@ import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.FAVORITEGROUPS_KEY;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
@@ -48,8 +48,17 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         return new SettingsFragment();
     }
 
-    @BindView(R.id.listView)
-    ListView settingsList;
+    @BindView(R.id.addFarvorite)
+    TextView addFarvorite;
+
+    @BindView(R.id.addNotif)
+    TextView addNotif;
+
+    @BindView(R.id.alarmMode)
+    Switch alarmMode;
+
+    @BindView(R.id.notifOn)
+    Switch notifOn;
 
     @Nullable
     @Override
@@ -58,31 +67,59 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         ButterKnife.bind(this, v);
         getActivity().setTitle(R.string.action_settings);
 
-        final String[] settings = {
-                getResources().getString(R.string.addFarvorite),
-                getResources().getString(R.string.addNotif)
-        };
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_list_item_1, settings);
-
-        settingsList.setAdapter(adapter);
-        settingsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        addFarvorite.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
-                                    long id) {
-                switch (position){
-                    case 0:
-                        showAddFavoriteDialog();
-                        break;
-                    case 1:
-                        showAddNotif();
-                        break;
-                }
+            public void onClick(View view) {
+                showAddFavoriteDialog();
             }
         });
 
+        addNotif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAddNotif();
+            }
+        });
+
+        alarmMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.saveAlarmMode(
+                        alarmMode.isChecked()
+                );
+            }
+        });
+
+        notifOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.saveNotifOn(
+                        notifOn.isChecked()
+                );
+            }
+        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            // If we're running on Honeycomb or newer, then we can use the Theme's
+            // selectableItemBackground to ensure that the View has a pressed state
+            TypedValue outValue = new TypedValue();
+            getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
+            addFarvorite.setBackgroundResource(outValue.resourceId);
+            addNotif.setBackgroundResource(outValue.resourceId);
+        }
+
         return v;
+    }
+
+    @Override
+    public void presenterReady() {
+        alarmMode.setChecked(
+                mPresenter.getAlarmMode()
+        );
+
+        notifOn.setChecked(
+                mPresenter.getNotifOn()
+        );
     }
 
     private void showAddNotif(){

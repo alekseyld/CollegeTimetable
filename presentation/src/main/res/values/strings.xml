@@ -19,13 +19,47 @@
     <string name="_5">5.</string>
     <string name="_6">6.</string>
     <string name="about">О приложении</string>
-    <string name="addFarvorite">Изменить группы в избранном</string>
-    <string name="addNotif">Изменить группу для оповещения</string>
+    <string name="addFarvorite">Группы в избранном</string>
+    <string name="addNotif">Моя группа</string>
+    <string name="info_r">Разработчик: alekseyld</string>
+    <string name="info_ver">Версия: 4.0</string>
+    <string name="info_star">Оценить приложение в Google play</string>
+    <string name="settings_theme">Изменить тему</string>
+    <string name="item_apptheme">Стандартная</string>
+    <string name="item_greentheme">Зеленая</string>
+    <string name="name_appTheme">AppTheme</string>
+    <string name="name_greenTheme">GreenTheme</string>
+    <string name="bellMon">Расписание по будням</string>
+    <string name="alarmModeS">Не беспокоить</string>
+    <string name="notifS">Уведомления</string>
+    <string name="action_belltable">Звонки</string>
+    <string name="belltable_title">Расписание звонков</string>
+    <string name="standartS">Стандартное</string>
+    <string name="_8_00_9_20_10">8:00 - 9:20&#160;&#160;&#160;&#160;&#160;&#160; Перерыв 10 мин</string>
+    <string name="_9_30_10_15_5_n10_20_11_05_10">9:30 - 10:15 &#160;&#160;&#160;&#160;Перерыв 5 мин\n10:20 - 11:05&#160;&#160; Перерыв 10 мин</string>
+    <string name="_11_15_12_00_5_n12_05_12_50_40">11:15 - 12:00&#160;&#160; Перерыв 5 мин\n12:05 - 12:50&#160;&#160; Перерыв 40 мин</string>
+    <string name="_13_30_14_15_5_n14_20_15_05_10">13:30 - 14:15&#160;&#160; Перерыв 5 мин\n14:20 - 15:05&#160;&#160; Перерыв 10 мин</string>
+    <string name="_15_15_16_35_10">15:15 - 16:35&#160;&#160; Перерыв 10 мин</string>
+    <string name="_16_45_18_05_10">16:45 - 18:05&#160;&#160; Перерыв 10 мин</string>
+    <string name="_18_15_19_35">18:15 - 19:35</string>
+    <string name="subbota">По субботе</string>
+    <string name="_8_00_9_20_102">8:00 - 9:20 &#160;&#160;&#160;&#160;&#160;   Перерыв 10 мин</string>
+    <string name="_9_30_10_50_10">9:30 - 10:50  &#160;&#160;&#160; Перерыв 10 мин</string>
+    <string name="_11_00_12_20_20">11:00 - 12:20 &#160;&#160;Перерыв 20 мин</string>
+    <string name="_12_40_14_00_10">12:40 - 14:00 &#160;&#160;Перерыв 10 мин</string>
+    <string name="_14_10_15_30_10">14:10 - 15:30 &#160;&#160;Перерыв 10 мин</string>
+    <string name="_15_40_17_00_10">15:40 - 17:00 &#160;&#160;Перерыв 10 мин</string>
+    <string name="_17_10_18_30">17:10 - 18:30</string>
+    <string name="message">Попробуйте обновить расписание,\nЛибо настроить приложение</string>
+    <string name="disclaimer">Дисклеймер</string>
+    <string name="github">Исходный код приложения</string>
 
     <string-array name="groupsList">
+
         <item>1 ИС</item>
         <item>2 ИС</item>
         <item>3 ИС</item>
+
         <item>1 ГС-1</item>
         <item>1 ГС-2</item>
         <item>1 ГСУ</item>
@@ -36,24 +70,29 @@
         <item>3 ГС-2</item>
         <item>4 ГС-1</item>
         <item>4 ГС-2</item>
+
         <item>1 Л-1</item>
         <item>1 Л-2</item>
         <item>2 Л-1</item>
         <item>2 Л-2</item>
         <item>3 Л</item>
+
         <item>1 Р-1</item>
         <item>1 Р-2</item>
         <item>1 РУ</item>
         <item>2 Р-1</item>
         <item>2 Р-2</item>
         <item>3 Р</item>
+        <item>4 Р-1</item>
         <item>5 Р-1</item>
+
         <item>1 ПГ-1</item>
         <item>1 ПГ-2</item>
         <item>2 ПГ-1</item>
         <item>2 ПГ-2</item>
         <item>3 ПГ</item>
         <item>4 ПГ</item>
+
         <item>1 ТС-1</item>
         <item>1 ТС-2</item>
         <item>2 ТС-1</item>
@@ -61,6 +100,7 @@
         <item>3 ТС-1</item>
         <item>3 ТС-2</item>
         <item>4 ТС</item>
+
         <item>1 Э-1</item>
         <item>1 Э-2</item>
         <item>1 ЭУ</item>
@@ -68,13 +108,27 @@
         <item>3 Э-1</item>
         <item>3 Э-2</item>
         <item>4 Э-1</item>
+        <item>4 Э-2</item>
+
         <item>1 Т</item>
         <item>2 Т</item>
         <item>3 Т</item>
         <item>4 Т</item>
+
         <item>1 Б</item>
         <item>2 Б</item>
         <item>3 Б</item>
+
+        <item>1 С-1</item>
+        <item>1 С-2</item>
+        <item>2 С-1</item>
+        <item>2 С-2</item>
+        <item>3 С-1</item>
+        <item>3 С-2</item>
+        <item>4 С-1</item>
+        <item>4 С-2</item>
+        <item>5 С</item>
+
         <item>1 АПП-1</item>
         <item>1 АПП-2</item>
         <item>2 АПП-1</item>
@@ -84,6 +138,7 @@
         <item>3 АПП-2</item>
         <item>4 АПП-1</item>
         <item>4 АПП-2</item>
+
         <item>1 БНГ-1</item>
         <item>1 БНГ-2</item>
         <item>2 БНГ-1</item>
@@ -92,6 +147,7 @@
         <item>3 БНГ-2</item>
         <item>4 БНГ-1</item>
         <item>4 БНГ-2</item>
+
         <item>1 ТО-1</item>
         <item>1 ТО-2</item>
         <item>2 ТО-1</item>
@@ -100,11 +156,13 @@
         <item>3 ТО-2</item>
         <item>4 ТО-1</item>
         <item>4 ТО-2</item>
+
         <item>1 В-1</item>
         <item>1 В-2</item>
         <item>2 В</item>
         <item>3 В</item>
         <item>4 В</item>
+
         <item>1 ПНГ-1</item>
         <item>1 ПНГ-2</item>
         <item>1 ПНГ-3</item>
@@ -114,12 +172,12 @@
         <item>3 ПНГ-2</item>
         <item>4 ПНГ-1</item>
         <item>4 ПНГ-2</item>
+
         <item>1 ЭНН-1</item>
         <item>1 ЭНН-2</item>
         <item>1 ЭНН-3</item>
         <item>2 ЭНН-1</item>
         <item>2 ЭНН-2</item>
-        <item>2 ЭНН-3</item>
         <item>2 ЭНН-3</item>
         <item>2 ЭНН-4</item>
         <item>2 ЭННУ</item>
@@ -130,10 +188,12 @@
         <item>4 ЭНН-2</item>
         <item>4 ЭННУ-1</item>
         <item>4 ЭННУ-2</item>
+
         <item>1 ТОВ</item>
         <item>2 ТОВ-1</item>
         <item>2 ТОВ-2</item>
         <item>3 ТОВ</item>
         <item>4 ТОВ</item>
+
     </string-array>
 </resources>

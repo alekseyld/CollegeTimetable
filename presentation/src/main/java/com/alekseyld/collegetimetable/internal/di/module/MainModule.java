@@ -4,12 +4,13 @@ import android.app.Activity;
 
 import com.alekseyld.collegetimetable.internal.di.PerActivity;
 import com.alekseyld.collegetimetable.navigator.NavigatorImpl;
-import com.alekseyld.collegetimetable.navigator.base.Navigator;
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
 import com.alekseyld.collegetimetable.repository.SettingsRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.TableRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 import com.alekseyld.collegetimetable.repository.base.TableRepository;
+import com.alekseyld.collegetimetable.service.SettingsService;
+import com.alekseyld.collegetimetable.service.SettingsServiceImpl;
 import com.alekseyld.collegetimetable.service.TableService;
 import com.alekseyld.collegetimetable.service.TableServiceImpl;
 
@@ -38,6 +39,11 @@ public class MainModule {
     @PerActivity @Provides
     TableService provideTableService(TableServiceImpl tableService){
         return tableService;
+    }
+
+    @PerActivity @Provides
+    SettingsService provideSettingsService(SettingsServiceImpl settingsService){
+        return settingsService;
     }
 
     @PerActivity @Provides
