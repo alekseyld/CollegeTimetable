@@ -23,7 +23,7 @@ import rx.Observable;
  * Created by Alekseyld on 02.09.2016.
  */
 
-public class TableServiceImpl implements TableService{
+public class TableServiceImpl implements TableService {
 
     private TableRepository mTimetableRepository;
     private SettingsRepository mSettingsRepository;
@@ -32,47 +32,70 @@ public class TableServiceImpl implements TableService{
 
 
     @Inject
-    TableServiceImpl(TableRepository tableRepository, SettingsRepository settingsRepository, Retrofit restAdapter){
+    TableServiceImpl(TableRepository tableRepository, SettingsRepository settingsRepository, Retrofit restAdapter) {
         mSettingsRepository = settingsRepository;
         mTimetableRepository = tableRepository;
         urlApi = restAdapter.create(ProxyApi.class);
     }
 
-    @Override
-    public Observable<TableWrapper> getTimetableFromOnline(boolean online, String group) {
-
+    private Observable<Document> connectAndGetData(String group) {
         return urlApi.getUrl(DataUtils.getGroupUrl(group))
                 .onErrorReturn((error) ->{
                     ApiResponse apiResponse = new ApiResponse();
+
                     if(error instanceof UnknownHostException){
                         apiResponse.setStatus(2);
                     }else {
                         apiResponse.setStatus(3);
                     }
-                    return apiResponse;
-                })
-                .flatMap(url -> {
-                            Document document = null;
-                            try {
-                                document = Jsoup.connect(url.getResult()).get();
-                            } catch (IOException e) {
-                                return Observable.error(new Error(e.getMessage()));
-                            }
-                            TableWrapper t = DataUtils.parseDocument(document, group);
 
-                            //Test changes -----------
+                    return apiResponse;
+                }).map(apiResponse -> {
+                    Document document;
+
+                    try {
+                        document = Jsoup.connect(apiResponse.getResult()).timeout(5000).get();
+                    } catch (IOException e) {
+                        document = null;
+                    }
+
+                    return document;
+                }).map(document -> {
+                    if (document != null)
+                        return document;
+
+                    try {
+                        document = Jsoup.connect(DataUtils.getGroupUrl(group)).timeout(5000).get();
+                    } catch (IOException e) {
+                        document = null;
+                    }
+
+                    return document;
+                });
+    }
+
+    @Override
+    public Observable<TableWrapper> getTimetableFromOnline(boolean online, String group) {
+
+        return connectAndGetData(group).flatMap(document -> {
+            if(document == null)
+                return Observable.error(new Error("Произошла ошибка при подключении"));
+
+            TableWrapper t = DataUtils.parseDocument(document, group);
+
+            //Test changes -----------
 //                            HashMap<TableWrapper.Lesson, String> test = t.getmTimeTable().get(TableWrapper.Day.Mon);
 //                            test.put(TableWrapper.Lesson.lesson4, "Истрория Сафагалеева ");
 //                            HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> tableWrapper = t.getmTimeTable();
 //                            tableWrapper.put(TableWrapper.Day.Mon, test);
 //                            t.setTimeTable(tableWrapper);
-                            //--------------
+            //--------------
 
-                            TableWrapper old = mTimetableRepository.getTimeTable(group);
-                            t.setChanges(t.getChanges(old));
-                            mTimetableRepository.putTimeTable(t, group);
-                            return Observable.just(t);
-                        });
+            TableWrapper old = mTimetableRepository.getTimeTable(group);
+            t.setChanges(t.getChanges(old));
+            mTimetableRepository.putTimeTable(t, group);
+            return Observable.just(t);
+        });
         
         /*
         TableWrapper tableWrapper = new TableWrapper();

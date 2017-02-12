@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,9 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
         about = new String[]{
                 getString(R.string.info_r),
                 getString(R.string.info_ver),
-                getString(R.string.info_star)
+                getString(R.string.info_star),
+                getString(R.string.disclaimer),
+                getString(R.string.github)
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
@@ -63,13 +66,13 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
                     case 0:
-//                        String url = "";
-//                        Intent intent = new Intent(Intent.ACTION_VIEW);
-//                        intent.setData(Uri.parse(url));
-                        Intent intent = new Intent(Intent.ACTION_SEND);
-                        intent.setType("text/plain");
-                        intent.putExtra(Intent.EXTRA_EMAIL, "al.lisow@gmail.com");
-                        intent.putExtra(Intent.EXTRA_SUBJECT, "УТЭК Расписание Android");
+                        String url = "https://vk.com/alekseyld";
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(url));
+//                        Intent intent = new Intent(Intent.ACTION_SEND);
+//                        intent.setType("text/plain");
+//                        intent.putExtra(Intent.EXTRA_EMAIL, "al.lisow@gmail.com");
+//                        intent.putExtra(Intent.EXTRA_SUBJECT, "УТЭК Расписание Android");
                         startActivity(intent);
                         break;
                     case 2:
@@ -83,6 +86,20 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
                             startActivity(new Intent(Intent.ACTION_VIEW,
                                     Uri.parse("http://play.google.com/store/apps/details?id=" + context().getPackageName())));
                         }
+                        break;
+                    case 3:
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle(getString(R.string.disclaimer))
+                                .setMessage("Все может баговать, не работатать и тд. Если нашли ошибку, сообщите мне о ней.")
+                                .setCancelable(true);
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                        break;
+                    case 4:
+                        String url1 = "https://github.com/alekseyld/CollegeTimetable";
+                        Intent intent1 = new Intent(Intent.ACTION_VIEW);
+                        intent1.setData(Uri.parse(url1));
+                        startActivity(intent1);
                         break;
                 }
 

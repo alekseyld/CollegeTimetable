@@ -22,7 +22,7 @@
     <string name="addFarvorite">Группы в избранном</string>
     <string name="addNotif">Моя группа</string>
     <string name="info_r">Разработчик: alekseyld</string>
-    <string name="info_ver">Версия: 3.5</string>
+    <string name="info_ver">Версия: 4.0</string>
     <string name="info_star">Оценить приложение в Google play</string>
     <string name="settings_theme">Изменить тему</string>
     <string name="item_apptheme">Стандартная</string>
@@ -51,6 +51,8 @@
     <string name="_15_40_17_00_10">15:40 - 17:00 &#160;&#160;Перерыв 10 мин</string>
     <string name="_17_10_18_30">17:10 - 18:30</string>
     <string name="message">Попробуйте обновить расписание,\nЛибо настроить приложение</string>
+    <string name="disclaimer">Дисклеймер</string>
+    <string name="github">Исходный код приложения</string>
 
     <string-array name="groupsList">
 
