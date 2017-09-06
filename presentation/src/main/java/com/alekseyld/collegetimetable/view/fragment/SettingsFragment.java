@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -26,6 +25,7 @@ import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.SettingsPresenter;
 import com.alekseyld.collegetimetable.view.SettingsView;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
+import com.alekseyld.collegetimetable.view.widget.GroupInputWidget;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -128,17 +128,13 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setView(promptView);
 
-        final AutoCompleteTextView autoTextView =
-                (AutoCompleteTextView) promptView.findViewById(R.id.autoTextView);
-
-        Resources res = getResources();
-        autoTextView.setAdapter(new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_list_item_1, res.getStringArray(R.array.groupsList)));//simple_spinner_item
+        final GroupInputWidget groupInputWidget =
+                (GroupInputWidget) promptView.findViewById(R.id.group_widget);
 
         alertDialogBuilder.setCancelable(true)
                 .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        mPresenter.saveNotification(autoTextView.getText());
+                        mPresenter.saveNotification(groupInputWidget.getGroup());
                     }
                 })
                 .setNegativeButton("Отмена",

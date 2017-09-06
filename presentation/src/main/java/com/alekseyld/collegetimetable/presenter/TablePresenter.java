@@ -3,7 +3,6 @@ package com.alekseyld.collegetimetable.presenter;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import com.alekseyld.collegetimetable.SettingsWrapper;
 import com.alekseyld.collegetimetable.TableWrapper;
@@ -75,6 +74,8 @@ public class TablePresenter extends BasePresenter<TableView>{
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
+                mView.showError(e.getMessage());
+                mView.hideLoading();
             }
 
             @Override
@@ -99,6 +100,7 @@ public class TablePresenter extends BasePresenter<TableView>{
             public void onError(Throwable e) {
                 e.printStackTrace();
                 mView.showError("Он мертв, Джим");
+                mView.hideLoading();
             }
 
             @Override

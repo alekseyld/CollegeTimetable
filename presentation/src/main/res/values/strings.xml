@@ -53,6 +53,12 @@
     <string name="message">Попробуйте обновить расписание,\nЛибо настроить приложение</string>
     <string name="disclaimer">Дисклеймер</string>
     <string name="github">Исходный код приложения</string>
+    <string name="tv_abriv">Аббревиатура</string>
+    <string name="tv_course">Курс</string>
+    <string name="tv_num">Номер</string>
+    <string name="hint_course">3</string>
+    <string name="hint_abbr">АПП</string>
+    <string name="hint_num">1</string>
 
     <string-array name="groupsList">
 
