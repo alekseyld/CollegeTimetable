@@ -53,8 +53,10 @@ public class TableServiceImpl implements TableService {
                     Document document;
 
                     try {
-                        document = Jsoup.connect(apiResponse.getResult()).timeout(5000).get();
+                        document = Jsoup.connect(apiResponse.getResult()).timeout(0).get();
                     } catch (IOException e) {
+                        e.printStackTrace();
+
                         document = null;
                     }
 
@@ -64,8 +66,10 @@ public class TableServiceImpl implements TableService {
                         return document;
 
                     try {
-                        document = Jsoup.connect(DataUtils.getGroupUrl(group)).timeout(5000).get();
+                        document = Jsoup.connect(DataUtils.getGroupUrl(group)).timeout(0).get();
                     } catch (IOException e) {
+                        e.printStackTrace();
+
                         document = null;
                     }
 
