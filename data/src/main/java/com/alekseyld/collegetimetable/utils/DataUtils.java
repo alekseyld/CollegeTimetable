@@ -20,65 +20,72 @@ public class DataUtils {
 
         String url = "";
 
-        if(group.contains(" Т")){
-            url = "energy/10_1_8.html";
-        }
-        if(group.contains(" Э")){
-            url = "energy/10_1_7.html";
-        }
-        if(group.contains(" С")){
-            url = "energy/10_1_10.html";
-        }
-        if(group.contains(" Б")){
-            url = "energy/10_1_9.html";
-        }
-        if(group.contains("В")){
-            url = "neft/10_1_4.html";
-        }
-        if(group.contains(" Л")){
-            url = "energy/10_1_3.html";
-        }
-        if(group.contains(" Р")){
-            url = "energy/10_1_4.html";
-        }
-        if(group.contains("АПП")) {
-            url = "neft/10_1_1.html";
-        }
-        if(group.contains("БНГ-")){
-            url = "neft/10_1_2.html";
-        }
-        if(group.contains(" ТО-")){
-            url = "neft/10_1_3.html";
-        }
-        if(group.contains("ПНГ-")){
-            url = "neft/10_1_5.html";
-        }
-        if(group.contains("ЭНН-")){
-            url = "neft/10_1_6.html";
-        }
-        if(group.contains("ЭННУ")){
-            url = "neft/10_1_6.html";
-        }
-        if(group.contains(" ТОВ")){
-            url = "neft/10_1_7.html";
-        }
-        if(group.contains("ИС")) {
-            url = "energy/10_1_1.html";
-        }
-        if(group.contains("ГС-")){
-            url = "energy/10_1_2.html";
-        }
-        if(group.contains("ГСУ")){
-            url = "energy/10_1_2.html";
-        }
-        if(group.contains(" РУ")){
-            url = "energy/10_1_4.html";
-        }
-        if(group.contains(" ПГ")){
-            url = "energy/10_1_5.html";
-        }
-        if(group.contains(" ТС")){
-            url = "energy/10_1_6.html";
+        String abbr = group.split(" ")[1].split("-")[0];
+
+        switch (abbr) {
+            case "Т":
+                url = "energy/10_1_8.html";
+                break;
+            case "Э":
+                url = "energy/10_1_7.html";
+                break;
+            case "С":
+                url = "energy/10_1_10.html";
+                break;
+            case "Б":
+                url = "energy/10_1_9.html";
+                break;
+            case "В":
+                url = "neft/10_1_4.html";
+                break;
+            case "Л":
+                url = "energy/10_1_3.html";
+                break;
+            case "Р":
+                url = "energy/10_1_4.html";
+                break;
+            case "АПП":
+                url = "neft/10_1_11.html";
+                break;
+            case "БНГ":
+                url = "neft/10_1_2.html";
+                break;
+            case "ТО":
+                url = "neft/10_1_3.html";
+                break;
+            case "ПНГ":
+                url = "neft/10_1_5.html";
+                break;
+            case "ЭНН":
+                url = "neft/10_1_6.html";
+                break;
+            case "ЭННУ":
+                url = "neft/10_1_6.html";
+                break;
+            case "ТОВ":
+                url = "neft/10_1_7.html";
+                break;
+            case "ИС":
+                url = "energy/10_1_1.html";
+                break;
+            case "ГС":
+                url = "energy/10_1_2.html";
+                break;
+            case "ГСУ":
+                url = "energy/10_1_2.html";
+                break;
+            case "РУ":
+                url = "energy/10_1_4.html";
+                break;
+            case "ПГ":
+                url = "energy/10_1_5.html";
+                break;
+            case "ТС":
+                url = "energy/10_1_6.html";
+                break;
+            case "ТАК":
+                url = "energy/10_1_8.html";
+                break;
         }
 
         Log.d("UrlGroup", url);
