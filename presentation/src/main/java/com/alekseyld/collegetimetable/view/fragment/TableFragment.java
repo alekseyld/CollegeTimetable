@@ -1,6 +1,5 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -145,11 +144,6 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
             Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
         else
             Log.e("TableFragment", "Activity is null \n"+message);
-    }
-
-    @Override
-    public Context context() {
-        return getActivity();
     }
 
     @Override

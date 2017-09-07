@@ -16,8 +16,8 @@ public interface BaseView {
 
     void showError(String message);
 
-    Context context();
+    Context getContext();
 
-    BaseActivity getAct();
+    BaseActivity getBaseActivity();
 
 }

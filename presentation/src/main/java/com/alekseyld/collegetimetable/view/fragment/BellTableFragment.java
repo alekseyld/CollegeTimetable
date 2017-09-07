@@ -1,6 +1,5 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -49,12 +48,6 @@ public class BellTableFragment extends BaseFragment<BellTablePresenter> implemen
     public void showError(String message) {
 
     }
-
-    @Override
-    public Context context() {
-        return getContext();
-    }
-
 
     @Override
     protected void initializeInjections() {

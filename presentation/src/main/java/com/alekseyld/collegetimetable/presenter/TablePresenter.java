@@ -116,7 +116,7 @@ public class TablePresenter extends BasePresenter<TableView>{
 
     private boolean isOnline() {
         ConnectivityManager cm =
-                (ConnectivityManager) mView.context().getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) mView.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }

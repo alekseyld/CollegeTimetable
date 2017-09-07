@@ -1,7 +1,6 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -71,7 +70,7 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
                         startActivity(intent);
                         break;
                     case 2:
-                        Uri uri = Uri.parse("market://details?id=" + context().getPackageName());
+                        Uri uri = Uri.parse("market://details?id=" + getContext().getPackageName());
                         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
                         goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
                                 Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
@@ -79,7 +78,7 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
                             startActivity(goToMarket);
                         } catch (ActivityNotFoundException e) {
                             startActivity(new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse("http://play.google.com/store/apps/details?id=" + context().getPackageName())));
+                                    Uri.parse("http://play.google.com/store/apps/details?id=" + getContext().getPackageName())));
                         }
                         break;
                     case 3:
@@ -117,11 +116,6 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
     @Override
     public void showError(String message) {
 
-    }
-
-    @Override
-    public Context context() {
-        return getContext();
     }
 
     @Override

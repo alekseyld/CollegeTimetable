@@ -92,7 +92,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
             mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>() {
                 @Override
                 public void onCompleted() {
-                    ((MainActivity)mView.getAct()).rebuildMenu();
+                    ((MainActivity)mView.getBaseActivity()).rebuildMenu();
                 }
             });
         }
