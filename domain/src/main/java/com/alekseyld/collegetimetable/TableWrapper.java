@@ -52,12 +52,8 @@ public class TableWrapper {
     private HashMap<Day, HashMap<Lesson, Boolean>> mChanges;
     private HashMap<Day, String> mDays;
 
-    public HashMap<Day, HashMap<Lesson, String>> getmTimeTable() {
-        if(mTimeTable != null) {
-            return mTimeTable;
-        }else {
-            return new HashMap<>();
-        }
+    public HashMap<Day, HashMap<Lesson, String>> getTimeTable() {
+        return mTimeTable;
     }
 
     public void setTimeTable(HashMap<Day, HashMap<Lesson, String>> mTimeTable) {
@@ -82,7 +78,7 @@ public class TableWrapper {
         if(size && keys) {
             for (Day d: mTimeTable.keySet()) {
                 for (Lesson l: mTimeTable.get(d).keySet()){
-                    if(!mTimeTable.get(d).get(l).equals(tableWrapper.getmTimeTable().get(d).get(l))){
+                    if(!mTimeTable.get(d).get(l).equals(tableWrapper.getTimeTable().get(d).get(l))){
                         return false;
                     }
                 }
@@ -117,8 +113,8 @@ public class TableWrapper {
 
     public HashMap<Day, HashMap<Lesson, Boolean>> getChanges(TableWrapper tableWrapper){
         if(tableWrapper != null
-                && tableWrapper.getmTimeTable() != null
-                && tableWrapper.getmTimeTable().size() > 0
+                && tableWrapper.getTimeTable() != null
+                && tableWrapper.getTimeTable().size() > 0
                 && mTimeTable != null) {
 
             HashMap<Day, HashMap<Lesson, Boolean>> changes = new HashMap<>();
@@ -126,7 +122,7 @@ public class TableWrapper {
             for (Day d : mTimeTable.keySet()) {
                 dayChange = new HashMap<>();
                 for (Lesson l : mTimeTable.get(d).keySet()) {
-                    if (!mTimeTable.get(d).get(l).equals(tableWrapper.getmTimeTable().get(d).get(l))) {
+                    if (!mTimeTable.get(d).get(l).equals(tableWrapper.getTimeTable().get(d).get(l))) {
                         dayChange.put(l, true);
                     } else {
                         dayChange.put(l, false);

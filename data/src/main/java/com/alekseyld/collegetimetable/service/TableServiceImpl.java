@@ -39,12 +39,12 @@ public class TableServiceImpl implements TableService {
 
     private Observable<Document> connectAndGetData(String group) {
         return urlApi.getUrl(DataUtils.getGroupUrl(group))
-                .onErrorReturn((error) ->{
+                .onErrorReturn((error) -> {
                     ApiResponse apiResponse = new ApiResponse();
 
-                    if(error instanceof UnknownHostException){
+                    if (error instanceof UnknownHostException) {
                         apiResponse.setStatus(2);
-                    }else {
+                    } else {
                         apiResponse.setStatus(3);
                     }
 
@@ -81,14 +81,19 @@ public class TableServiceImpl implements TableService {
     public Observable<TableWrapper> getTimetableFromOnline(boolean online, String group) {
 
         return connectAndGetData(group).flatMap(document -> {
-            if(document == null)
+            if (document == null)
                 return Observable.error(new Error("Произошла ошибка при подключении"));
-
-            TableWrapper t = DataUtils.parseDocument(document, group);
+            return Observable.just(document);
+        }).map(document -> DataUtils.parseDocument(document, group)).flatMap(tableWrapper -> {
+            if (tableWrapper.getTimeTable() == null || tableWrapper.getTimeTable().keySet().size() == 0)
+                return Observable.error(new Error("Произошла ошибка при парсинге нового расписания"));
+            return Observable.just(tableWrapper);
+        }).map(tableWrapper -> {
             TableWrapper old = mTimetableRepository.getTimeTable(group);
-            t.setChanges(t.getChanges(old));
-            mTimetableRepository.putTimeTable(t, group);
-            return Observable.just(t);
+            tableWrapper.setChanges(tableWrapper.getChanges(old));
+            mTimetableRepository.putTimeTable(tableWrapper, group);
+
+            return tableWrapper;
         });
     }
 
