@@ -121,7 +121,6 @@ public class MainActivity extends BaseActivity {
         navigation.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    @Override
     protected void buildMenu(){
 
         SharedPreferences preferences = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
@@ -149,6 +148,10 @@ public class MainActivity extends BaseActivity {
         menu.getItem(menu.size() - 3).setIcon(R.drawable.ic_access_time);
         menu.getItem(menu.size() - 2).setIcon(R.drawable.ic_settings);
         menu.getItem(menu.size() - 1).setIcon(R.drawable.ic_information);
+    }
+
+    public void rebuildMenu(){
+        buildMenu();
     }
 
     @Override

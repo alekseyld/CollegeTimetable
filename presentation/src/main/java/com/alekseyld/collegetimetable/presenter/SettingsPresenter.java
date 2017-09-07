@@ -9,6 +9,7 @@ import com.alekseyld.collegetimetable.subscriber.BaseSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.SaveSettingsUseCase;
 import com.alekseyld.collegetimetable.view.SettingsView;
+import com.alekseyld.collegetimetable.view.activity.MainActivity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -91,7 +92,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
             mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>() {
                 @Override
                 public void onCompleted() {
-                    mView.getAct().rebuildMenu();
+                    ((MainActivity)mView.getAct()).rebuildMenu();
                 }
             });
         }

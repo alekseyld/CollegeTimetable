@@ -2,7 +2,6 @@ package com.alekseyld.collegetimetable.view.activity.base;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -13,13 +12,9 @@ import android.view.inputmethod.InputMethodManager;
 import com.alekseyld.collegetimetable.AndroidApplication;
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.HasComponent;
-import com.alekseyld.collegetimetable.internal.di.component.ActivityComponent;
 import com.alekseyld.collegetimetable.internal.di.component.ApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.internal.di.module.ActivityModule;
-import com.alekseyld.collegetimetable.navigator.base.Navigator;
-
-import javax.inject.Inject;
 
 /**
  * Base {@link android.app.Activity} class for every Activity in this application.
@@ -83,9 +78,4 @@ public abstract class BaseActivity extends AppCompatActivity implements HasCompo
     }
   }
 
-  protected abstract void buildMenu();
-
-  public void rebuildMenu(){
-    buildMenu();
-  }
 }
