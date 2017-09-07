@@ -13,7 +13,7 @@ import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerMainComponent;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.internal.di.module.MainModule;
-import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
+import com.alekseyld.collegetimetable.view.activity.base.BaseInjectorActivity;
 import com.alekseyld.collegetimetable.view.fragment.AboutFragment;
 import com.alekseyld.collegetimetable.view.fragment.BellTableFragment;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFragment;
@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.FAVORITEGROUPS_KEY;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseInjectorActivity<MainComponent> {
 
     @BindView(R.id.nav_view)
     NavigationView navigation;

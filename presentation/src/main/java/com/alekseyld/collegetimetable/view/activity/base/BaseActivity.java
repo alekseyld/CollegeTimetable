@@ -12,26 +12,17 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.alekseyld.collegetimetable.AndroidApplication;
 import com.alekseyld.collegetimetable.R;
-import com.alekseyld.collegetimetable.internal.di.HasComponent;
 import com.alekseyld.collegetimetable.internal.di.component.ApplicationComponent;
-import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.internal.di.module.ActivityModule;
 
 /**
  * Base {@link android.app.Activity} class for every Activity in this application.
  */
-public abstract class BaseActivity extends AppCompatActivity implements HasComponent<MainComponent> {
-
-//  @Inject
-//  Navigator navigator;
-
-    protected MainComponent mComponent;
+public abstract class BaseActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mComponent = initializeInjections();
-//    this.getApplicationComponent().inject(this);
     }
 
     protected void addFragment(Fragment fragment) {
@@ -58,13 +49,6 @@ public abstract class BaseActivity extends AppCompatActivity implements HasCompo
 
     protected ActivityModule getActivityModule() {
         return new ActivityModule(this);
-    }
-
-    protected abstract MainComponent initializeInjections();
-
-    @Override
-    public MainComponent getComponent() {
-        return mComponent;
     }
 
     public ActionBar getActionBarBase() {

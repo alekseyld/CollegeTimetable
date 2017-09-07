@@ -59,6 +59,7 @@
     <string name="hint_course">3</string>
     <string name="hint_abbr">АПП</string>
     <string name="hint_num">1</string>
+    <string name="settings_favorite_activity_title">Избранные группы</string>
 
     <string-array name="groupsList">
 

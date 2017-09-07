@@ -110,8 +110,8 @@ public class UpdateTimetableService extends IntentService {
             @Override
             public void onNext(TableWrapper tableWrapper) {
                 if(tableWrapper != null
-                        && tableWrapper.getmTimeTable() != null
-                        && tableWrapper.getmTimeTable().size() > 0
+                        && tableWrapper.getTimeTable() != null
+                        && tableWrapper.getTimeTable().size() > 0
                         && tableWrapper.getChanges() != null
                         && tableWrapper.isChanges()){
 
