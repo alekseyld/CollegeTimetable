@@ -1,13 +1,14 @@
 package com.alekseyld.collegetimetable.view.activity;
 
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerSettingsFavoriteComponent;
 import com.alekseyld.collegetimetable.internal.di.component.SettingsFavoriteComponent;
 import com.alekseyld.collegetimetable.internal.di.module.MainModule;
 import com.alekseyld.collegetimetable.view.activity.base.BaseInjectorActivity;
+import com.alekseyld.collegetimetable.view.fragment.SettingsFavoriteFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,17 +19,21 @@ import butterknife.ButterKnife;
 
 public class SettingsFavoriteActivity extends BaseInjectorActivity<SettingsFavoriteComponent> {
 
-    @BindView(R.id.listGroup)
-    RecyclerView listGroup;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(R.string.settings_favorite_activity_title);
-        setContentView(R.layout.activity_settings_favorite);
+        setContentView(R.layout.activity_favorite);
         ButterKnife.bind(this);
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        addFragment(SettingsFavoriteFragment.newInstance());
     }
 
     private void showAddFavoriteDialog(){

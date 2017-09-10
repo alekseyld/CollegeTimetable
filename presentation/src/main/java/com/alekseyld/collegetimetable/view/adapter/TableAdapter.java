@@ -146,7 +146,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        if(mTableWrapper == null) {
+        if(mTableWrapper == null || mTableWrapper.getTimeTable() == null) {
             return 0;
         }
         return mTableWrapper.getTimeTable().size();

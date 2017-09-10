@@ -107,7 +107,8 @@ public class TablePresenter extends BasePresenter<TableView>{
             public void onCompleted() {
                 mView.hideLoading();
                 if(mView.getTimeTable() == null
-                        || mView.getTimeTable().getTimeTable().size() == 0){
+                        || mView.getTimeTable().getTimeTable() == null
+                        || mView.getTimeTable().getTimeTable().keySet().size() == 0){
                     mView.showMessage();
                 }
             }
