@@ -6,6 +6,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -23,78 +25,76 @@ public class DataUtils {
 
         String url = "";
 
+        Set<String> neftGroups = new HashSet<String>(){{
+                add("АПП");
+                add("БНГ");
+                add("В");
+                add("ПНГ");
+                add("ТАК");
+                add("ТО");
+                add("ТОВ");
+                add("ЭНН");
+                add("ЭННУ");
+        }};
+
         String abbr = group.split(" ")[1].split("-")[0];
 
-        switch (abbr) {
-            case "Т":
-                url = "energy/10_1_8.html";
-                break;
-            case "Э":
-                url = "energy/10_1_7.html";
-                break;
-            case "С":
-                url = "energy/10_1_10.html";
-                break;
-            case "Б":
-                url = "energy/10_1_9.html";
-                break;
-            case "В":
-                url = "neft/10_1_4.html";
-                break;
-            case "Л":
-                url = "energy/10_1_3.html";
-                break;
-            case "Р":
-                url = "energy/10_1_4.html";
-                break;
-            case "АПП":
-                url = "neft/10_1_11.html";
-                break;
-            case "БНГ":
-                url = "neft/10_1_2.html";
-                break;
-            case "ТО":
-                url = "neft/10_1_3.html";
-                break;
-            case "ПНГ":
-                url = "neft/10_1_5.html";
-                break;
-            case "ЭНН":
-                url = "neft/10_1_6.html";
-                break;
-            case "ЭННУ":
-                url = "neft/10_1_6.html";
-                break;
-            case "ТОВ":
-                url = "neft/10_1_7.html";
-                break;
-            case "ИС":
-                url = "energy/10_1_1.html";
-                break;
-            case "ГС":
-                url = "energy/10_1_2.html";
-                break;
-            case "ГСУ":
-                url = "energy/10_1_2.html";
-                break;
-            case "РУ":
-                url = "energy/10_1_4.html";
-                break;
-            case "ПГ":
-                url = "energy/10_1_5.html";
-                break;
-            case "ТС":
-                url = "energy/10_1_6.html";
-                break;
-            case "ТАК":
-                url = "energy/10_1_8.html";
-                break;
-            default:
-                url = "";
-                break;
+        if (group.charAt(0) == '1' && neftGroups.contains(abbr)) {
+            url = "neft/10_1_8.html";
+        } else {
+            url = switchAbbr(abbr);
         }
 
         return url.equals("") ? url : "http://uecoll.ru/wp-content/uploads/time/" + url;
+    }
+
+    private static String switchAbbr(String abbr){
+        switch (abbr) {
+            case "Т":
+                return  "energy/10_1_8.html";
+            case "Э":
+                return "energy/10_1_7.html";
+            case "С":
+                return "energy/10_1_10.html";
+            case "Б":
+                return "energy/10_1_9.html";
+            case "В":
+                return "neft/10_1_4.html";
+            case "Л":
+                return "energy/10_1_3.html";
+            case "Р":
+                return "energy/10_1_4.html";
+            case "АПП":
+                return "neft/10_1_11.html";
+            case "БНГ":
+                return "neft/10_1_2.html";
+            case "ТО":
+                return "neft/10_1_3.html";
+            case "ПНГ":
+                return "neft/10_1_5.html";
+            case "ЭНН":
+                return "neft/10_1_6.html";
+            case "ЭННУ":
+                return "neft/10_1_6.html";
+            case "ТОВ":
+                return "neft/10_1_7.html";
+            case "ИС":
+                return "energy/10_1_1.html";
+            case "ГС":
+                return "energy/10_1_2.html";
+            case "ГСУ":
+                return "energy/10_1_2.html";
+            case "РУ":
+                return "energy/10_1_4.html";
+            case "ПГ":
+                return "energy/10_1_5.html";
+            case "ТС":
+                return "energy/10_1_6.html";
+            case "ТАК":
+                return "energy/10_1_9.html";
+            default:
+                return "";
+        }
     }
 
     public static TableWrapper parseDocument(Document document, String group){
