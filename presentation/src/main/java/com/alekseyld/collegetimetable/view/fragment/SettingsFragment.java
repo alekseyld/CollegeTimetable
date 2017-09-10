@@ -109,6 +109,7 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         );
     }
 
+    //TODO: 10.09.2017 переделать в FragmentDialog
     private void showAddNotif(){
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
         View promptView = layoutInflater.inflate(R.layout.dialog_group, null);
@@ -137,6 +138,7 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         alert.show();
     }
 
+    // TODO: 10.09.2017  navigator maybe
     private void showAddFavoriteDialog(){
         getBaseActivity().startActivity(SettingsFavoriteActivity.class);
     }

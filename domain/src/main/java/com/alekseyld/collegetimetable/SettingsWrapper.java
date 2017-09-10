@@ -30,6 +30,14 @@ public class SettingsWrapper {
         this.favoriteGroups = favoriteGroups;
     }
 
+    public void addFavoriteGroup(String favoriteGroup) {
+        this.favoriteGroups.add(favoriteGroup);
+    }
+
+    public void removeFavoriteGroup(String favoriteGroup) {
+        this.favoriteGroups.remove(favoriteGroup);
+    }
+
     public String getNotificationGroup() {
         return notificationGroup;
     }
