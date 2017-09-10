@@ -99,11 +99,11 @@ public class DataUtils {
 
     public static TableWrapper parseDocument(Document document, String group){
 
-        if (document == null){
+        if (document == null || group == null || !groupPattern.matcher(group).matches()){
             return new TableWrapper();
         }
 
-        Elements table =document.select("tr").select("td");
+        Elements table = document.select("tr").select("td");
 
         Pattern numberPattern = Pattern.compile("^[0-9]");
         Pattern dayPattern = Pattern.compile("[А-Я]\\s[А-Я]\\s\\b");
