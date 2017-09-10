@@ -1,7 +1,5 @@
 package com.alekseyld.collegetimetable.utils;
 
-import android.util.Log;
-
 import com.alekseyld.collegetimetable.TableWrapper;
 
 import org.jsoup.nodes.Document;
@@ -16,7 +14,12 @@ import java.util.regex.Pattern;
 
 public class DataUtils {
 
+    public static Pattern groupPattern = Pattern.compile("[0-9]\\s[А-Я]{1,}[-][0-9]");
+
     public static String getGroupUrl(String group){
+
+        if (group == null || !groupPattern.matcher(group).matches())
+            return "";
 
         String url = "";
 
@@ -86,11 +89,12 @@ public class DataUtils {
             case "ТАК":
                 url = "energy/10_1_8.html";
                 break;
+            default:
+                url = "";
+                break;
         }
 
-        Log.d("UrlGroup", url);
-
-        return "http://uecoll.ru/wp-content/uploads/time/" + url;
+        return url.equals("") ? url : "http://uecoll.ru/wp-content/uploads/time/" + url;
     }
 
     public static TableWrapper parseDocument(Document document, String group){
