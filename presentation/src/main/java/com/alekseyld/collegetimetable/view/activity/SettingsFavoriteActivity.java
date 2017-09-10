@@ -2,6 +2,7 @@ package com.alekseyld.collegetimetable.view.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerSettingsFavoriteComponent;
@@ -25,13 +26,18 @@ public class SettingsFavoriteActivity extends BaseInjectorActivity<SettingsFavor
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.settings_favorite_activity_title);
         setContentView(R.layout.activity_favorite);
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         addFragment(SettingsFavoriteFragment.newInstance());
     }

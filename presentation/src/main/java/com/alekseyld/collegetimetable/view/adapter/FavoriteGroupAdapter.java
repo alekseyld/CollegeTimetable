@@ -1,5 +1,8 @@
 package com.alekseyld.collegetimetable.view.adapter;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +23,11 @@ import butterknife.ButterKnife;
 
 public class FavoriteGroupAdapter extends BasePresenterAdapter<String, SettingsFavoritePresenter, FavoriteGroupAdapter.FavoriteGroupViewHolder> {
 
-    public FavoriteGroupAdapter(SettingsFavoritePresenter presenter) {
+    private Context mContext;
+
+    public FavoriteGroupAdapter(SettingsFavoritePresenter presenter, Context context) {
         super(presenter);
+        mContext = context;
     }
 
     public static class FavoriteGroupViewHolder extends RecyclerView.ViewHolder {
@@ -56,7 +62,21 @@ public class FavoriteGroupAdapter extends BasePresenterAdapter<String, SettingsF
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.removeFavoriteGroup(getItems().get(holder.getAdapterPosition()));
+                new AlertDialog.Builder(mContext)
+                        .setTitle("Вы точно хотите удалить группу из избранных")
+                        .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mPresenter.removeFavoriteGroup(getItems().get(holder.getAdapterPosition()));
+                            }
+                        })
+                        .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
             }
         });
     }

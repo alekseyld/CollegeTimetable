@@ -47,15 +47,14 @@ public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePrese
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_favorite, container, false);
         ButterKnife.bind(this, v);
-        getActivity().setTitle(R.string.action_settings);
-
+        getActivity().setTitle(R.string.settings_favorite_activity_title);
         return v;
     }
 
     @Override
     public void onResume() {
         if (mAdapter == null){
-            mAdapter = new FavoriteGroupAdapter(mPresenter);
+            mAdapter = new FavoriteGroupAdapter(mPresenter, getContext());
             listGroup.setAdapter(mAdapter);
             listGroup.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
