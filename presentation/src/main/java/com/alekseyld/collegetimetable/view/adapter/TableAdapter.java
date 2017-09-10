@@ -98,13 +98,13 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
             }
 
             holder.date.setText(firstUpperCase(mTableWrapper.getDays().get(day).toLowerCase()));
-            holder.lesson0.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson0));
-            holder.lesson1.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson1));
-            holder.lesson2.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson2));
-            holder.lesson3.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson3));
-            holder.lesson4.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson4));
-            holder.lesson5.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson5));
-            holder.lesson6.setText(mTableWrapper.getmTimeTable().get(day).get(TableWrapper.Lesson.lesson6));
+            holder.lesson0.setText(mTableWrapper.getTimeTable().get(day).get(TableWrapper.Lesson.lesson0));
+            holder.lesson1.setText(mTableWrapper.getTimeTable().get(day).get(TableWrapper.Lesson.lesson1));
+            holder.lesson2.setText(mTableWrapper.getTimeTable().get(day).get(TableWrapper.Lesson.lesson2));
+            holder.lesson3.setText(mTableWrapper.getTimeTable().get(day).get(TableWrapper.Lesson.lesson3));
+            holder.lesson4.setText(mTableWrapper.getTimeTable().get(day).get(TableWrapper.Lesson.lesson4));
+            holder.lesson5.setText(mTableWrapper.getTimeTable().get(day).get(TableWrapper.Lesson.lesson5));
+            holder.lesson6.setText(mTableWrapper.getTimeTable().get(day).get(TableWrapper.Lesson.lesson6));
 
             HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, Boolean>> changes = mTableWrapper.getChanges();
             if(changes != null)
@@ -146,10 +146,10 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        if(mTableWrapper == null) {
+        if(mTableWrapper == null || mTableWrapper.getTimeTable() == null) {
             return 0;
         }
-        return mTableWrapper.getmTimeTable().size();
+        return mTableWrapper.getTimeTable().size();
     }
 
     private String firstUpperCase(String word){

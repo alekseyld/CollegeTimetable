@@ -4,6 +4,7 @@ package com.alekseyld.collegetimetable.view.fragment.base;
  * Created by Alekseyld on 02.09.2016.
  */
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.alekseyld.collegetimetable.internal.di.HasComponent;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
+import com.alekseyld.collegetimetable.view.BaseView;
 import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 
 import javax.inject.Inject;
@@ -18,7 +20,7 @@ import javax.inject.Inject;
 /**
  * Base {@link android.app.Fragment} class for every fragment in this application.
  */
-public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fragment {
+public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fragment implements BaseView{
 
     @Inject
     protected TPresenter mPresenter;
@@ -73,8 +75,14 @@ public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fra
         mPresenter.setView(this);
     }
 
-    public BaseActivity getAct(){
+    @Override
+    public BaseActivity getBaseActivity(){
         return (BaseActivity)this.getActivity();
+    }
+
+    @Override
+    public Context getContext() {
+        return getActivity();
     }
 
     protected abstract void initializeInjections();

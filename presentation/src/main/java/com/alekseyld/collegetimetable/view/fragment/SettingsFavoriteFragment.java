@@ -1,0 +1,125 @@
+package com.alekseyld.collegetimetable.view.fragment;
+
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.TextView;
+
+import com.alekseyld.collegetimetable.R;
+import com.alekseyld.collegetimetable.internal.di.component.SettingsFavoriteComponent;
+import com.alekseyld.collegetimetable.presenter.SettingsFavoritePresenter;
+import com.alekseyld.collegetimetable.view.SettingsFavoriteView;
+import com.alekseyld.collegetimetable.view.adapter.FavoriteGroupAdapter;
+import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
+import com.alekseyld.collegetimetable.view.widget.GroupInputWidget;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+/**
+ * Created by Alekseyld on 07.09.2017.
+ */
+
+public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePresenter> implements SettingsFavoriteView {
+
+    public static SettingsFavoriteFragment newInstance(){
+        return new SettingsFavoriteFragment();
+    }
+
+    @BindView(R.id.listGroup)
+    RecyclerView listGroup;
+
+    @BindView(R.id.error_message)
+    TextView message;
+
+    private FavoriteGroupAdapter mAdapter;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final View v = inflater.inflate(R.layout.fragment_favorite, container, false);
+        ButterKnife.bind(this, v);
+        getActivity().setTitle(R.string.settings_favorite_activity_title);
+        return v;
+    }
+
+    @Override
+    public void onResume() {
+        if (mAdapter == null){
+            mAdapter = new FavoriteGroupAdapter(mPresenter, getContext());
+            listGroup.setAdapter(mAdapter);
+            listGroup.setLayoutManager(new LinearLayoutManager(getActivity()));
+        }
+
+        super.onResume();
+    }
+
+    @Override
+    public FavoriteGroupAdapter getAdapter() {
+        return mAdapter;
+    }
+
+    @Override
+    public void setMessage(String mes) {
+        message.setVisibility(View.VISIBLE);
+        message.setText(mes);
+    }
+
+    //// TODO: 10.09.2017 передалть в FragmentDialog
+    @OnClick(R.id.fab)
+    void onFabClick(){
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View promptView = layoutInflater.inflate(R.layout.dialog_group, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        alertDialogBuilder.setView(promptView);
+
+        final GroupInputWidget groupInputWidget =
+                (GroupInputWidget) promptView.findViewById(R.id.group_widget);
+
+        alertDialogBuilder.setCancelable(true)
+                .setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mPresenter.addFavoriteGroup(groupInputWidget.getGroup());
+                    }
+                })
+                .setNegativeButton("Отмена",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        alert.show();
+    }
+
+    @Override
+    public void showLoading() {
+        message.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+        message.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showError(String message) {
+
+    }
+
+    @Override
+    protected void initializeInjections() {
+        getComponent(SettingsFavoriteComponent.class).inject(this);
+    }
+}

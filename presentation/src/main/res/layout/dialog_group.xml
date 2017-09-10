@@ -8,11 +8,9 @@
     android:paddingTop="8dp"
     >
 
-    <AutoCompleteTextView
-        android:id="@+id/autoTextView"
-        android:textSize="17sp"
+    <com.alekseyld.collegetimetable.view.widget.GroupInputWidget
+        android:id="@+id/group_widget"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_group"/>
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

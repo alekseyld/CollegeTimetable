@@ -3,7 +3,6 @@ package com.alekseyld.collegetimetable.presenter;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import com.alekseyld.collegetimetable.SettingsWrapper;
 import com.alekseyld.collegetimetable.TableWrapper;
@@ -68,13 +67,15 @@ public class TablePresenter extends BasePresenter<TableView>{
         mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TableWrapper>(){
             @Override
             public void onNext(TableWrapper tableWrapper){
-//                Log.d("test", "TableWrapper offline onNext" + tableWrapper.getmTimeTable().size());
+//                Log.d("test", "TableWrapper offline onNext" + tableWrapper.getTimeTable().size());
                 mView.setTimeTable(tableWrapper);
             }
 
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
+                mView.showError(e.getMessage());
+                mView.hideLoading();
             }
 
             @Override
@@ -99,13 +100,15 @@ public class TablePresenter extends BasePresenter<TableView>{
             public void onError(Throwable e) {
                 e.printStackTrace();
                 mView.showError("Он мертв, Джим");
+                mView.hideLoading();
             }
 
             @Override
             public void onCompleted() {
                 mView.hideLoading();
                 if(mView.getTimeTable() == null
-                        || mView.getTimeTable().getmTimeTable().size() == 0){
+                        || mView.getTimeTable().getTimeTable() == null
+                        || mView.getTimeTable().getTimeTable().keySet().size() == 0){
                     mView.showMessage();
                 }
             }
@@ -114,7 +117,7 @@ public class TablePresenter extends BasePresenter<TableView>{
 
     private boolean isOnline() {
         ConnectivityManager cm =
-                (ConnectivityManager) mView.context().getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) mView.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }

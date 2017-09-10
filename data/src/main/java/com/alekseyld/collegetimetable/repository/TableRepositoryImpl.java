@@ -58,7 +58,7 @@ public class TableRepositoryImpl implements TableRepository {
 
     @Override
     public boolean putTimeTable(TableWrapper tableWrapper, String group) {
-        String json = mGson.toJson(tableWrapper.getmTimeTable());
+        String json = mGson.toJson(tableWrapper.getTimeTable());
         editDays(tableWrapper.getDays());
         String json2 = mGson.toJson(tableWrapper.getDays());
         SharedPreferences.Editor ed = mPref.edit();

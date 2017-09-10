@@ -22,7 +22,6 @@
     <string name="addFarvorite">Группы в избранном</string>
     <string name="addNotif">Моя группа</string>
     <string name="info_r">Разработчик: alekseyld</string>
-    <string name="info_ver">Версия: 4.0</string>
     <string name="info_star">Оценить приложение в Google play</string>
     <string name="settings_theme">Изменить тему</string>
     <string name="item_apptheme">Стандартная</string>
@@ -52,7 +51,14 @@
     <string name="_17_10_18_30">17:10 - 18:30</string>
     <string name="message">Попробуйте обновить расписание,\nЛибо настроить приложение</string>
     <string name="disclaimer">Дисклеймер</string>
-    <string name="github">Исходный код приложения</string>
+    <string name="github">Участвовать в процессе разработки</string>
+    <string name="tv_abriv">Аббревиатура</string>
+    <string name="tv_course">Курс</string>
+    <string name="tv_num">Номер</string>
+    <string name="hint_course">3</string>
+    <string name="hint_abbr">АПП</string>
+    <string name="hint_num">1</string>
+    <string name="settings_favorite_activity_title">Избранные группы</string>
 
     <string-array name="groupsList">
 

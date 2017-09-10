@@ -1,13 +1,13 @@
 package com.alekseyld.collegetimetable.utils;
 
-import android.util.Log;
-
 import com.alekseyld.collegetimetable.TableWrapper;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -16,83 +16,94 @@ import java.util.regex.Pattern;
 
 public class DataUtils {
 
+    public static Pattern groupPattern = Pattern.compile("[0-9]\\s[А-Я]{1,}[-][0-9]");
+
     public static String getGroupUrl(String group){
+
+        if (group == null || !groupPattern.matcher(group).matches())
+            return "";
 
         String url = "";
 
-        if(group.contains(" Т")){
-            url = "energy/10_1_8.html";
-        }
-        if(group.contains(" Э")){
-            url = "energy/10_1_7.html";
-        }
-        if(group.contains(" С")){
-            url = "energy/10_1_10.html";
-        }
-        if(group.contains(" Б")){
-            url = "energy/10_1_9.html";
-        }
-        if(group.contains("В")){
-            url = "neft/10_1_4.html";
-        }
-        if(group.contains(" Л")){
-            url = "energy/10_1_3.html";
-        }
-        if(group.contains(" Р")){
-            url = "energy/10_1_4.html";
-        }
-        if(group.contains("АПП")) {
-            url = "neft/10_1_1.html";
-        }
-        if(group.contains("БНГ-")){
-            url = "neft/10_1_2.html";
-        }
-        if(group.contains(" ТО-")){
-            url = "neft/10_1_3.html";
-        }
-        if(group.contains("ПНГ-")){
-            url = "neft/10_1_5.html";
-        }
-        if(group.contains("ЭНН-")){
-            url = "neft/10_1_6.html";
-        }
-        if(group.contains("ЭННУ")){
-            url = "neft/10_1_6.html";
-        }
-        if(group.contains(" ТОВ")){
-            url = "neft/10_1_7.html";
-        }
-        if(group.contains("ИС")) {
-            url = "energy/10_1_1.html";
-        }
-        if(group.contains("ГС-")){
-            url = "energy/10_1_2.html";
-        }
-        if(group.contains("ГСУ")){
-            url = "energy/10_1_2.html";
-        }
-        if(group.contains(" РУ")){
-            url = "energy/10_1_4.html";
-        }
-        if(group.contains(" ПГ")){
-            url = "energy/10_1_5.html";
-        }
-        if(group.contains(" ТС")){
-            url = "energy/10_1_6.html";
+        Set<String> neftGroups = new HashSet<String>(){{
+                add("АПП");
+                add("БНГ");
+                add("В");
+                add("ПНГ");
+                add("ТАК");
+                add("ТО");
+                add("ТОВ");
+                add("ЭНН");
+                add("ЭННУ");
+        }};
+
+        String abbr = group.split(" ")[1].split("-")[0];
+
+        if (group.charAt(0) == '1' && neftGroups.contains(abbr)) {
+            url = "neft/10_1_8.html";
+        } else {
+            url = switchAbbr(abbr);
         }
 
-        Log.d("UrlGroup", url);
+        return url.equals("") ? url : "http://uecoll.ru/wp-content/uploads/time/" + url;
+    }
 
-        return "http://uecoll.ru/wp-content/uploads/time/" + url;
+    private static String switchAbbr(String abbr){
+        switch (abbr) {
+            case "Т":
+                return  "energy/10_1_8.html";
+            case "Э":
+                return "energy/10_1_7.html";
+            case "С":
+                return "energy/10_1_10.html";
+            case "Б":
+                return "energy/10_1_9.html";
+            case "В":
+                return "neft/10_1_4.html";
+            case "Л":
+                return "energy/10_1_3.html";
+            case "Р":
+                return "energy/10_1_4.html";
+            case "АПП":
+                return "neft/10_1_11.html";
+            case "БНГ":
+                return "neft/10_1_2.html";
+            case "ТО":
+                return "neft/10_1_3.html";
+            case "ПНГ":
+                return "neft/10_1_5.html";
+            case "ЭНН":
+                return "neft/10_1_6.html";
+            case "ЭННУ":
+                return "neft/10_1_6.html";
+            case "ТОВ":
+                return "neft/10_1_7.html";
+            case "ИС":
+                return "energy/10_1_1.html";
+            case "ГС":
+                return "energy/10_1_2.html";
+            case "ГСУ":
+                return "energy/10_1_2.html";
+            case "РУ":
+                return "energy/10_1_4.html";
+            case "ПГ":
+                return "energy/10_1_5.html";
+            case "ТС":
+                return "energy/10_1_6.html";
+            case "ТАК":
+                return "energy/10_1_9.html";
+            default:
+                return "";
+        }
     }
 
     public static TableWrapper parseDocument(Document document, String group){
 
-        if (document == null){
+        if (document == null || group == null || !groupPattern.matcher(group).matches()){
             return new TableWrapper();
         }
 
-        Elements table =document.select("tr").select("td");
+        Elements table = document.select("tr").select("td");
 
         Pattern numberPattern = Pattern.compile("^[0-9]");
         Pattern dayPattern = Pattern.compile("[А-Я]\\s[А-Я]\\s\\b");
