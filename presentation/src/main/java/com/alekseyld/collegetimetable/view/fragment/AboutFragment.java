@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.alekseyld.collegetimetable.BuildConfig;
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.AboutPresenter;
@@ -49,7 +50,7 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
 
         about = new String[]{
                 getString(R.string.info_r),
-                getString(R.string.info_ver),
+                "Версия: " + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ") " + " " + BuildConfig.BUILD_TYPE,
                 getString(R.string.info_star),
                 getString(R.string.disclaimer),
                 getString(R.string.github)
