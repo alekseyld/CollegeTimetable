@@ -92,7 +92,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     public void presenterReady() {
         if(getArguments().containsKey(GROUP_KEY)) {
             String s = getArguments().getString(GROUP_KEY);
-            mGroup = s.equals("") ? mPresenter.getGroup() : s;
+            mGroup = s == null || s.equals("") ? mPresenter.getGroup() : s;
         }
 
         if(mGroup != null && !mGroup.equals("")){

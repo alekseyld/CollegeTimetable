@@ -55,12 +55,15 @@ public class GroupInputWidget extends LinearLayout {
     public String getGroup() {
 
         if (course.getText().toString().equals("") ||
-                abbreviation.getText().toString().equals("") ||
-                index_number.getText().toString().equals("")) {
+                abbreviation.getText().toString().equals("")) {
             return null;
         }
 
-        return course.getText().toString() + " " + abbreviation.getText().toString().trim() + "-" + index_number.getText().toString();
+        if (!index_number.getText().toString().equals("")){
+            return course.getText().toString() + " " + abbreviation.getText().toString().trim() + "-" + index_number.getText().toString();
+        } else {
+            return course.getText().toString() + " " + abbreviation.getText().toString().trim();
+        }
     }
 
 }

@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import static com.alekseyld.collegetimetable.TableWrapper.Day.Mon;
+
 /**
  * Created by Alekseyld on 04.09.2016.
  */
@@ -17,10 +19,11 @@ import java.util.regex.Pattern;
 public class DataUtils {
 
     public static Pattern groupPattern = Pattern.compile("[0-9]\\s[А-Я]{1,}[-][0-9]");
+    public static Pattern groupPatternWithoutNum = Pattern.compile("[0-9]\\s[А-Я]{1,}([-][0-9]){0,}");
 
     public static String getGroupUrl(String group){
 
-        if (group == null || !groupPattern.matcher(group).matches())
+        if (group == null || !groupPatternWithoutNum.matcher(group).matches())
             return "";
 
         String url = "";
@@ -37,7 +40,13 @@ public class DataUtils {
                 add("ЭННУ");
         }};
 
-        String abbr = group.split(" ")[1].split("-")[0];
+        String abbr = "";
+
+        if (groupPatternWithoutNum.matcher(group).matches()) {
+            abbr = group.split(" ")[1].split("-")[0];
+        } else {
+            abbr = group.split(" ")[1];
+        }
 
         if (group.charAt(0) == '1' && neftGroups.contains(abbr)) {
             url = "neft/10_1_8.html";
@@ -99,7 +108,7 @@ public class DataUtils {
 
     public static TableWrapper parseDocument(Document document, String group){
 
-        if (document == null || group == null || !groupPattern.matcher(group).matches()){
+        if (document == null || group == null || !groupPatternWithoutNum.matcher(group).matches()){
             return new TableWrapper();
         }
 
@@ -167,12 +176,12 @@ public class DataUtils {
             if(i == table.size()-1){
                 switch (day){
                     case 0:
-                        time.put(TableWrapper.Day.Mon, lessons);
-                        days.put(TableWrapper.Day.Mon, dayString[0].equals("") ? dayString[1] : dayString[0]);
+                        time.put(Mon, lessons);
+                        days.put(Mon, dayString[0].equals("") ? dayString[1] : dayString[0]);
                         break;
                     case 1:
                         time.put(TableWrapper.Day.Tue, lessons);
-                        days.put(TableWrapper.Day.Tue, dayString[0]);
+                        days.put(TableWrapper.Day.Tue, dayString[0].equals(days.get(Mon)) ? dayString[1] : dayString[0]);
                         break;
                     case 2:
                         time.put(TableWrapper.Day.Wed, lessons);
@@ -207,8 +216,8 @@ public class DataUtils {
                 if(lesson == 0){
                     switch (day){
                         case 0:
-                            time.put(TableWrapper.Day.Mon, lessons);
-                            days.put(TableWrapper.Day.Mon, dayString[0]);
+                            time.put(Mon, lessons);
+                            days.put(Mon, dayString[0]);
                             break;
                         case 1:
                             time.put(TableWrapper.Day.Tue, lessons);

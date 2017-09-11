@@ -17,6 +17,7 @@ import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 
 import javax.inject.Inject;
 
+
 /**
  * Base {@link android.app.Fragment} class for every fragment in this application.
  */

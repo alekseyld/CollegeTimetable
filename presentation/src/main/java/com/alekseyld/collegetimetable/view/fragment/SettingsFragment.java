@@ -1,15 +1,12 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
-import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,7 +17,7 @@ import com.alekseyld.collegetimetable.presenter.SettingsPresenter;
 import com.alekseyld.collegetimetable.view.SettingsView;
 import com.alekseyld.collegetimetable.view.activity.SettingsFavoriteActivity;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
-import com.alekseyld.collegetimetable.view.widget.GroupInputWidget;
+import com.alekseyld.collegetimetable.view.fragment.dialog.GroupInputDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -109,33 +106,14 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         );
     }
 
-    //TODO: 10.09.2017 переделать в FragmentDialog
+    public void saveNotification(String group){
+        mPresenter.saveNotification(group);
+    }
+
     private void showAddNotif(){
-        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-        View promptView = layoutInflater.inflate(R.layout.dialog_group, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setView(promptView);
-
-        final GroupInputWidget groupInputWidget =
-                (GroupInputWidget) promptView.findViewById(R.id.group_widget);
-
-        alertDialogBuilder.setCancelable(true)
-                .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mPresenter.saveNotification(groupInputWidget.getGroup());
-                    }
-                })
-                .setNegativeButton("Отмена",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
-        alert.show();
+        GroupInputDialogFragment groupInputDialogFragment = GroupInputDialogFragment.newInstance(false);
+        groupInputDialogFragment.setTargetFragment(this, 1);
+        groupInputDialogFragment.show(getFragmentManager(), GroupInputDialogFragment.class.getSimpleName());
     }
 
     // TODO: 10.09.2017  navigator maybe

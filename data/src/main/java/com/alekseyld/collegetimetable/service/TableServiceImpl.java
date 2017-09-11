@@ -53,7 +53,7 @@ public class TableServiceImpl implements TableService {
                     Document document;
 
                     try {
-                        document = Jsoup.connect(apiResponse.getResult()).timeout(0).get();
+                        document = Jsoup.connect(apiResponse.getResult()).timeout(5000).get();
                     } catch (IOException e) {
                         e.printStackTrace();
 
@@ -62,11 +62,15 @@ public class TableServiceImpl implements TableService {
 
                     return document;
                 }).map(document -> {
-                    if (document != null)
+                    if (document != null && !document.title().equals("NoBlockMe.ru - бесплатный анонимайзер для ВКонтакте и Одноклассники"))
                         return document;
 
                     try {
-                        document = Jsoup.connect(DataUtils.getGroupUrl(group)).timeout(0).get();
+                        for (int i = 0; i < 5; i++) {
+                            document = Jsoup.connect(DataUtils.getGroupUrl(group)).timeout(6000).get();
+                            if (document != null)
+                                break;
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
 
@@ -82,11 +86,11 @@ public class TableServiceImpl implements TableService {
 
         return connectAndGetData(group).flatMap(document -> {
             if (document == null)
-                return Observable.error(new Error("Произошла ошибка при подключении"));
+                return Observable.error(new Error("Не удалось подключиться к сайту (1)"));
             return Observable.just(document);
         }).map(document -> DataUtils.parseDocument(document, group)).flatMap(tableWrapper -> {
             if (tableWrapper.getTimeTable() == null || tableWrapper.getTimeTable().keySet().size() == 0)
-                return Observable.error(new Error("Произошла ошибка при парсинге нового расписания"));
+                return Observable.error(new Error("Timetable null or empty (2)"));
             return Observable.just(tableWrapper);
         }).map(tableWrapper -> {
             TableWrapper old = mTimetableRepository.getTimeTable(group);

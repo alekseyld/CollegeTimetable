@@ -22,7 +22,7 @@ import com.alekseyld.collegetimetable.SettingsWrapper;
 import com.alekseyld.collegetimetable.TableWrapper;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerServiceComponent;
 import com.alekseyld.collegetimetable.internal.di.module.ServiceModule;
-import com.alekseyld.collegetimetable.subscriber.BaseSubscriber;
+import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
 import com.alekseyld.collegetimetable.usecase.SaveTableUseCase;
@@ -131,6 +131,7 @@ public class UpdateTimetableService extends IntentService {
             }
             @Override
             public void onError(Throwable e) {
+                super.onError(e);
                 stopSelf();
             }
         });

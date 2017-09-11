@@ -7,7 +7,7 @@ import android.net.NetworkInfo;
 import com.alekseyld.collegetimetable.SettingsWrapper;
 import com.alekseyld.collegetimetable.TableWrapper;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
-import com.alekseyld.collegetimetable.subscriber.BaseSubscriber;
+import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOfflineUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
@@ -56,7 +56,7 @@ public class TablePresenter extends BasePresenter<TableView>{
     }
 
     public String getGroup(){
-        return mSettings.getNotificationGroup();
+        return mSettings != null ? mSettings.getNotificationGroup() : "";
     }
 
     public void getTimeTable(){
@@ -73,6 +73,7 @@ public class TablePresenter extends BasePresenter<TableView>{
 
             @Override
             public void onError(Throwable e) {
+                super.onError(e);
                 e.printStackTrace();
                 mView.showError(e.getMessage());
                 mView.hideLoading();
@@ -98,6 +99,7 @@ public class TablePresenter extends BasePresenter<TableView>{
 
             @Override
             public void onError(Throwable e) {
+                super.onError(e);
                 e.printStackTrace();
                 mView.showError("Он мертв, Джим");
                 mView.hideLoading();
