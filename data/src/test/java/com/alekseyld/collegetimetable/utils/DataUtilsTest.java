@@ -38,13 +38,16 @@ public class DataUtilsTest{
         assertTrue(DataUtils.getGroupUrl("1 Л-1").equals("http://uecoll.ru/wp-content/uploads/time/energy/10_1_3.html"));
         assertTrue(DataUtils.getGroupUrl("1 Р-1").equals("http://uecoll.ru/wp-content/uploads/time/energy/10_1_4.html"));
         assertTrue(DataUtils.getGroupUrl("1 ИС-1").equals("http://uecoll.ru/wp-content/uploads/time/energy/10_1_1.html"));
+        assertTrue(DataUtils.getGroupUrl("1 ИС").equals("http://uecoll.ru/wp-content/uploads/time/energy/10_1_1.html"));
         assertTrue(DataUtils.getGroupUrl("1 ГС-1").equals("http://uecoll.ru/wp-content/uploads/time/energy/10_1_2.html"));
         assertTrue(DataUtils.getGroupUrl("1 ГСУ-1").equals("http://uecoll.ru/wp-content/uploads/time/energy/10_1_2.html"));
+        assertTrue(DataUtils.getGroupUrl("1 ГСУ").equals("http://uecoll.ru/wp-content/uploads/time/energy/10_1_2.html"));
         assertTrue(DataUtils.getGroupUrl("1 РУ-1").equals("http://uecoll.ru/wp-content/uploads/time/energy/10_1_4.html"));
         assertTrue(DataUtils.getGroupUrl("1 ПГ-1").equals("http://uecoll.ru/wp-content/uploads/time/energy/10_1_5.html"));
         assertTrue(DataUtils.getGroupUrl("1 ТС-1").equals("http://uecoll.ru/wp-content/uploads/time/energy/10_1_6.html"));
 
         assertTrue(DataUtils.getGroupUrl("2 ТО-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_3.html"));
+        assertTrue(DataUtils.getGroupUrl("2 ЭННУ").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_6.html"));
         assertTrue(DataUtils.getGroupUrl("2 ЭННУ-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_6.html"));
         assertTrue(DataUtils.getGroupUrl("2 ЭНН-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_6.html"));
         assertTrue(DataUtils.getGroupUrl("2 АПП-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_11.html"));
@@ -56,6 +59,7 @@ public class DataUtilsTest{
 
         assertTrue(DataUtils.getGroupUrl("1 ТО-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
         assertTrue(DataUtils.getGroupUrl("1 ЭННУ-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
+        assertTrue(DataUtils.getGroupUrl("1 ЭННУ").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
         assertTrue(DataUtils.getGroupUrl("1 ЭНН-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
         assertTrue(DataUtils.getGroupUrl("1 АПП-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
         assertTrue(DataUtils.getGroupUrl("1 БНГ-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));

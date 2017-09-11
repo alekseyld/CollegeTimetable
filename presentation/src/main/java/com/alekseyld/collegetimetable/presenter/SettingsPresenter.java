@@ -5,7 +5,7 @@ import android.text.Editable;
 import com.alekseyld.collegetimetable.SettingsWrapper;
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
-import com.alekseyld.collegetimetable.subscriber.BaseSubscriber;
+import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.SaveSettingsUseCase;
 import com.alekseyld.collegetimetable.view.SettingsView;
