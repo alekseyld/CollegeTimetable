@@ -83,65 +83,6 @@ public class DataUtilsTest{
     }
 
     @Test
-    public void testParseTimetableAPPOneDay() throws Exception {
-
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_1").timeout(0).get();
-
-        TableWrapper tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
-
-        assertTrue(tableWrapper.getTimeTable() != null);
-
-        HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> timeTable = tableWrapper.getTimeTable();
-
-        assertTrue(timeTable.keySet().size() == 1);
-        assertTrue(timeTable.keySet().contains(Mon));
-        assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
-
-        HashMap<TableWrapper.Lesson, String> lessons = timeTable.get(Mon);
-
-        assertTrue(lessons.get(lesson0).equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
-        assertTrue(lessons.get(lesson1).equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
-        assertTrue(lessons.get(lesson2).equals("Основные процессы и технологии ТЭК Корепанова И.А."));
-        assertTrue(lessons.get(lesson3).equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
-
-        // another group
-
-        tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
-
-        assertTrue(tableWrapper.getTimeTable() != null);
-
-        timeTable = tableWrapper.getTimeTable();
-
-        assertTrue(timeTable.keySet().size() == 1);
-        assertTrue(timeTable.keySet().contains(Mon));
-        assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
-
-        lessons = timeTable.get(Mon);
-
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
-
-        // empty group
-
-        tableWrapper = DataUtils.parseDocument(document, "4 ЭНН-2");
-        assertTrue(tableWrapper.getTimeTable().keySet().size() == 0);
-
-        tableWrapper = DataUtils.parseDocument(null, "4 АПП-2");
-        assertTrue(tableWrapper.getTimeTable() == null);
-
-        tableWrapper = DataUtils.parseDocument(document, "111441");
-        assertTrue(tableWrapper.getTimeTable() == null);
-    }
-
-    @Test
     public void testParseTimetableAPPallWeek() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_all_week").timeout(0).get();
@@ -330,7 +271,66 @@ public class DataUtilsTest{
     }
 
     @Test
-    public void testParseTimetableAPPallWeekWithDoubleLessons2() throws Exception {
+    public void testParseTimetableAPPallWeekWithDoubleLessons_1() throws Exception {
+
+        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_1").timeout(0).get();
+
+        TableWrapper tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+
+        assertTrue(tableWrapper.getTimeTable() != null);
+
+        HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+
+        assertTrue(timeTable.keySet().size() == 1);
+        assertTrue(timeTable.keySet().contains(Mon));
+        assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+
+        HashMap<TableWrapper.Lesson, String> lessons = timeTable.get(Mon);
+
+        assertTrue(lessons.get(lesson0).equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(lesson1).equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(lesson2).equals("Основные процессы и технологии ТЭК Корепанова И.А."));
+        assertTrue(lessons.get(lesson3).equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(lesson4).equals("\u00A0"));
+        assertTrue(lessons.get(lesson5).equals("\u00A0"));
+        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+
+        // another group
+
+        tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+
+        assertTrue(tableWrapper.getTimeTable() != null);
+
+        timeTable = tableWrapper.getTimeTable();
+
+        assertTrue(timeTable.keySet().size() == 1);
+        assertTrue(timeTable.keySet().contains(Mon));
+        assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+
+        lessons = timeTable.get(Mon);
+
+        assertTrue(lessons.get(lesson0).equals("\u00A0"));
+        assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(lesson4).equals("\u00A0"));
+        assertTrue(lessons.get(lesson5).equals("\u00A0"));
+        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+
+        // empty group
+
+        tableWrapper = DataUtils.parseDocument(document, "4 ЭНН-2");
+        assertTrue(tableWrapper.getTimeTable().keySet().size() == 0);
+
+        tableWrapper = DataUtils.parseDocument(null, "4 АПП-2");
+        assertTrue(tableWrapper.getTimeTable() == null);
+
+        tableWrapper = DataUtils.parseDocument(document, "111441");
+        assertTrue(tableWrapper.getTimeTable() == null);
+    }
+
+    @Test
+    public void testParseTimetableAPPallWeekWithDoubleLessons_2() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_2").timeout(0).get();
 
@@ -368,7 +368,7 @@ public class DataUtilsTest{
     }
 
     @Test
-    public void testParseTimetableAPPallWeekWithDoubleLessons3() throws Exception {
+    public void testParseTimetableAPPallWeekWithDoubleLessons_3() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_3").timeout(0).get();
 
@@ -418,7 +418,7 @@ public class DataUtilsTest{
     }
 
     @Test
-    public void testParseTimetableAPPallWeekWithDoubleLessons4() throws Exception {
+    public void testParseTimetableAPPallWeekWithDoubleLessons_4() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_4").timeout(0).get();
 
@@ -479,7 +479,7 @@ public class DataUtilsTest{
     }
 
     @Test
-    public void testParseTimetableAPPallWeekWithDoubleLessons5() throws Exception {
+    public void testParseTimetableAPPallWeekWithDoubleLessons_5() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_5").timeout(0).get();
 
@@ -550,7 +550,7 @@ public class DataUtilsTest{
     }
 
     @Test
-    public void testParseTimetableAPPallWeekWithDoubleLessons6() throws Exception {
+    public void testParseTimetableAPPallWeekWithDoubleLessons_6() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_5").timeout(0).get();
 
