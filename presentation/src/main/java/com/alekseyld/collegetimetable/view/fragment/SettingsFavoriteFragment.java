@@ -1,15 +1,12 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.alekseyld.collegetimetable.R;
@@ -18,7 +15,7 @@ import com.alekseyld.collegetimetable.presenter.SettingsFavoritePresenter;
 import com.alekseyld.collegetimetable.view.SettingsFavoriteView;
 import com.alekseyld.collegetimetable.view.adapter.FavoriteGroupAdapter;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
-import com.alekseyld.collegetimetable.view.widget.GroupInputWidget;
+import com.alekseyld.collegetimetable.view.fragment.dialog.GroupInputDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,34 +70,15 @@ public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePrese
         message.setText(mes);
     }
 
-    //// TODO: 10.09.2017 передалть в FragmentDialog
     @OnClick(R.id.fab)
     void onFabClick(){
-        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-        View promptView = layoutInflater.inflate(R.layout.dialog_group, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setView(promptView);
+        GroupInputDialogFragment groupInputDialogFragment = GroupInputDialogFragment.newInstance(false);
+        groupInputDialogFragment.setTargetFragment(this, 2);
+        groupInputDialogFragment.show(getFragmentManager(), GroupInputDialogFragment.class.getSimpleName());
+    }
 
-        final GroupInputWidget groupInputWidget =
-                (GroupInputWidget) promptView.findViewById(R.id.group_widget);
-
-        alertDialogBuilder.setCancelable(true)
-                .setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mPresenter.addFavoriteGroup(groupInputWidget.getGroup());
-                    }
-                })
-                .setNegativeButton("Отмена",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
-        alert.show();
+    public void addFavoriteGroup(String group){
+        mPresenter.addFavoriteGroup(group);
     }
 
     @Override
