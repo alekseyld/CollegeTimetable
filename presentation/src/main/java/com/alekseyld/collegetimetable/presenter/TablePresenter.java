@@ -56,7 +56,7 @@ public class TablePresenter extends BasePresenter<TableView>{
     }
 
     public String getGroup(){
-        return mSettings.getNotificationGroup();
+        return mSettings != null ? mSettings.getNotificationGroup() : "";
     }
 
     public void getTimeTable(){
