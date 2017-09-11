@@ -10,7 +10,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import static com.alekseyld.collegetimetable.TableWrapper.Day.Friday;
 import static com.alekseyld.collegetimetable.TableWrapper.Day.Mon;
+import static com.alekseyld.collegetimetable.TableWrapper.Day.Saturday;
+import static com.alekseyld.collegetimetable.TableWrapper.Day.Thu;
+import static com.alekseyld.collegetimetable.TableWrapper.Day.Tue;
+import static com.alekseyld.collegetimetable.TableWrapper.Day.Wed;
 
 /**
  * Created by Alekseyld on 04.09.2016.
@@ -180,24 +185,24 @@ public class DataUtils {
                         days.put(Mon, dayString[0].equals("") ? dayString[1] : dayString[0]);
                         break;
                     case 1:
-                        time.put(TableWrapper.Day.Tue, lessons);
-                        days.put(TableWrapper.Day.Tue, dayString[0].equals(days.get(Mon)) ? dayString[1] : dayString[0]);
+                        time.put(Tue, lessons);
+                        days.put(Tue, dayString[0].equals(days.get(Mon)) ? dayString[1] : dayString[0]);
                         break;
                     case 2:
-                        time.put(TableWrapper.Day.Wed, lessons);
-                        days.put(TableWrapper.Day.Wed, dayString[0]);
+                        time.put(Wed, lessons);
+                        days.put(Wed, dayString[0].equals(days.get(Tue)) ? dayString[1] : dayString[0]);
                         break;
                     case 3:
-                        time.put(TableWrapper.Day.Thu, lessons);
-                        days.put(TableWrapper.Day.Thu, dayString[0]);
+                        time.put(Thu, lessons);
+                        days.put(Thu, dayString[0].equals(days.get(Wed)) ? dayString[1] : dayString[0]);
                         break;
                     case 4:
-                        time.put(TableWrapper.Day.Friday, lessons);
-                        days.put(TableWrapper.Day.Friday, dayString[0]);
+                        time.put(Friday, lessons);
+                        days.put(Friday, dayString[0].equals(days.get(Thu)) ? dayString[1] : dayString[0]);
                         break;
                     case 5:
                         time.put(TableWrapper.Day.Saturday, lessons);
-                        days.put(TableWrapper.Day.Saturday, dayString[0]);
+                        days.put(TableWrapper.Day.Saturday, dayString[0].equals(days.get(Friday)) ? dayString[1] : dayString[0]);
                         break;
                     case 6:
                         time.put(TableWrapper.Day.Mon2, lessons);
@@ -220,24 +225,24 @@ public class DataUtils {
                             days.put(Mon, dayString[0]);
                             break;
                         case 1:
-                            time.put(TableWrapper.Day.Tue, lessons);
-                            days.put(TableWrapper.Day.Tue, dayString[0]);
+                            time.put(Tue, lessons);
+                            days.put(Tue, dayString[0]);
                             break;
                         case 2:
-                            time.put(TableWrapper.Day.Wed, lessons);
-                            days.put(TableWrapper.Day.Wed, dayString[0]);
+                            time.put(Wed, lessons);
+                            days.put(Wed, dayString[0]);
                             break;
                         case 3:
-                            time.put(TableWrapper.Day.Thu, lessons);
-                            days.put(TableWrapper.Day.Thu, dayString[0]);
+                            time.put(Thu, lessons);
+                            days.put(Thu, dayString[0]);
                             break;
                         case 4:
-                            time.put(TableWrapper.Day.Friday, lessons);
-                            days.put(TableWrapper.Day.Friday, dayString[0]);
+                            time.put(Friday, lessons);
+                            days.put(Friday, dayString[0]);
                             break;
                         case 5:
-                            time.put(TableWrapper.Day.Saturday, lessons);
-                            days.put(TableWrapper.Day.Saturday, dayString[0]);
+                            time.put(Saturday, lessons);
+                            days.put(Saturday, dayString[0]);
                             break;
                         case 6:
                             time.put(TableWrapper.Day.Mon2, lessons);

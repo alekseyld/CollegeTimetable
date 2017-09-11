@@ -552,7 +552,7 @@ public class DataUtilsTest{
     @Test
     public void testParseTimetableAPPallWeekWithDoubleLessons_6() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_5").timeout(0).get();
+        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_6").timeout(0).get();
 
         TableWrapper tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
 
