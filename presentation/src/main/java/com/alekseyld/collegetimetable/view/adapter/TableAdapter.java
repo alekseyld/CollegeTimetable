@@ -48,6 +48,10 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder>{
         mTableWrapper = null;
     }
 
+    public TableAdapter(TableWrapper tableWrapper) {
+        mTableWrapper = tableWrapper;
+    }
+
     public TableWrapper getTableWrapper() {
         return mTableWrapper;
     }
