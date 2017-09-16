@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.service;
 
-import com.alekseyld.collegetimetable.TableWrapper;
+import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.api.ProxyApi;
 import com.alekseyld.collegetimetable.entity.ApiResponse;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
@@ -82,7 +82,7 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public Observable<TableWrapper> getTimetableFromOnline(boolean online, String group) {
+    public Observable<TimeTable> getTimetableFromOnline(boolean online, String group) {
 
         return connectAndGetData(group).flatMap(document -> {
             if (document == null)
@@ -93,7 +93,7 @@ public class TableServiceImpl implements TableService {
                 return Observable.error(new Error("Timetable null or empty (2)"));
             return Observable.just(tableWrapper);
         }).map(tableWrapper -> {
-            TableWrapper old = mTimetableRepository.getTimeTable(group);
+            TimeTable old = mTimetableRepository.getTimeTable(group);
             tableWrapper.setChanges(tableWrapper.getChanges(old));
             mTimetableRepository.putTimeTable(tableWrapper, group);
 
@@ -102,14 +102,14 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public Observable<TableWrapper> getTimetableFromOffline(String group) {
+    public Observable<TimeTable> getTimetableFromOffline(String group) {
         return Observable.just(
                 mTimetableRepository.getTimeTable(group)
         );
     }
 
     @Override
-    public Observable<Boolean> saveTimetable(TableWrapper tableTable, String group) {
+    public Observable<Boolean> saveTimetable(TimeTable tableTable, String group) {
         return Observable.just(
                 mTimetableRepository.putTimeTable(tableTable, group)
         );

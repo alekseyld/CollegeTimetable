@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.utils;
 
-import com.alekseyld.collegetimetable.TableWrapper;
+import com.alekseyld.collegetimetable.entity.TimeTable;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -8,20 +8,20 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static com.alekseyld.collegetimetable.TableWrapper.Day.Friday;
-import static com.alekseyld.collegetimetable.TableWrapper.Day.Mon;
-import static com.alekseyld.collegetimetable.TableWrapper.Day.Mon2;
-import static com.alekseyld.collegetimetable.TableWrapper.Day.Saturday;
-import static com.alekseyld.collegetimetable.TableWrapper.Day.Thu;
-import static com.alekseyld.collegetimetable.TableWrapper.Day.Tue;
-import static com.alekseyld.collegetimetable.TableWrapper.Day.Wed;
-import static com.alekseyld.collegetimetable.TableWrapper.Lesson.lesson0;
-import static com.alekseyld.collegetimetable.TableWrapper.Lesson.lesson1;
-import static com.alekseyld.collegetimetable.TableWrapper.Lesson.lesson2;
-import static com.alekseyld.collegetimetable.TableWrapper.Lesson.lesson3;
-import static com.alekseyld.collegetimetable.TableWrapper.Lesson.lesson4;
-import static com.alekseyld.collegetimetable.TableWrapper.Lesson.lesson5;
-import static com.alekseyld.collegetimetable.TableWrapper.Lesson.lesson6;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Friday;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Mon;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Mon2;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Saturday;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Thu;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Tue;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Wed;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Lesson.lesson0;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Lesson.lesson1;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Lesson.lesson2;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Lesson.lesson3;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Lesson.lesson4;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Lesson.lesson5;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Lesson.lesson6;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -87,17 +87,17 @@ public class DataUtilsTest{
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_all_week").timeout(0).get();
 
-        TableWrapper tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
 
         assertTrue(tableWrapper.getTimeTable() != null);
 
-        HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
 
         assertTrue(timeTable.keySet().size() > 0);
         assertTrue(timeTable.keySet().contains(Mon));
         assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        HashMap<TableWrapper.Lesson, String> lessons = timeTable.get(Mon);
+        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
 
         assertTrue(lessons.get(lesson0).equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
         assertTrue(lessons.get(lesson1).equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
@@ -180,17 +180,17 @@ public class DataUtilsTest{
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_1").timeout(0).get();
 
-        TableWrapper tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
 
         assertTrue(tableWrapper.getTimeTable() != null);
 
-        HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
 
         assertTrue(timeTable.keySet().size() == 1);
         assertTrue(timeTable.keySet().contains(Mon));
         assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        HashMap<TableWrapper.Lesson, String> lessons = timeTable.get(Mon);
+        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
 
         assertTrue(lessons.get(lesson0).equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
         assertTrue(lessons.get(lesson1).equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
@@ -239,17 +239,17 @@ public class DataUtilsTest{
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_2").timeout(0).get();
 
-        TableWrapper tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
 
         assertTrue(tableWrapper.getTimeTable() != null);
 
-        HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
 
         assertTrue(timeTable.keySet().size() > 0);
         assertTrue(timeTable.keySet().contains(Mon));
         assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        HashMap<TableWrapper.Lesson, String> lessons = timeTable.get(Mon);
+        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
 
         assertTrue(lessons.get(lesson0).equals("\u00A0"));
         assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
@@ -277,17 +277,17 @@ public class DataUtilsTest{
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_3").timeout(0).get();
 
-        TableWrapper tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
 
         assertTrue(tableWrapper.getTimeTable() != null);
 
-        HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
 
         assertTrue(timeTable.keySet().size() > 0);
         assertTrue(timeTable.keySet().contains(Mon));
         assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        HashMap<TableWrapper.Lesson, String> lessons = timeTable.get(Mon);
+        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
 
         assertTrue(lessons.get(lesson0).equals("\u00A0"));
         assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
@@ -327,17 +327,17 @@ public class DataUtilsTest{
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_4").timeout(0).get();
 
-        TableWrapper tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
 
         assertTrue(tableWrapper.getTimeTable() != null);
 
-        HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
 
         assertTrue(timeTable.keySet().size() > 0);
         assertTrue(timeTable.keySet().contains(Mon));
         assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        HashMap<TableWrapper.Lesson, String> lessons = timeTable.get(Mon);
+        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
 
         assertTrue(lessons.get(lesson0).equals("\u00A0"));
         assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
@@ -388,17 +388,17 @@ public class DataUtilsTest{
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_5").timeout(0).get();
 
-        TableWrapper tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
 
         assertTrue(tableWrapper.getTimeTable() != null);
 
-        HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
 
         assertTrue(timeTable.keySet().size() > 0);
         assertTrue(timeTable.keySet().contains(Mon));
         assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        HashMap<TableWrapper.Lesson, String> lessons = timeTable.get(Mon);
+        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
 
         assertTrue(lessons.get(lesson0).equals("\u00A0"));
         assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
@@ -459,17 +459,17 @@ public class DataUtilsTest{
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_6").timeout(0).get();
 
-        TableWrapper tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
 
         assertTrue(tableWrapper.getTimeTable() != null);
 
-        HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
 
         assertTrue(timeTable.keySet().size() > 0);
         assertTrue(timeTable.keySet().contains(Mon));
         assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        HashMap<TableWrapper.Lesson, String> lessons = timeTable.get(Mon);
+        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
 
         assertTrue(lessons.get(lesson0).equals("\u00A0"));
         assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
@@ -542,17 +542,17 @@ public class DataUtilsTest{
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_all_week").timeout(0).get();
 
-        TableWrapper tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
 
         assertTrue(tableWrapper.getTimeTable() != null);
 
-        HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
 
         assertTrue(timeTable.keySet().size() > 0);
         assertTrue(timeTable.keySet().contains(Mon));
         assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        HashMap<TableWrapper.Lesson, String> lessons = timeTable.get(Mon);
+        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
 
         assertTrue(lessons.get(lesson0).equals("\u00A0"));
         assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));

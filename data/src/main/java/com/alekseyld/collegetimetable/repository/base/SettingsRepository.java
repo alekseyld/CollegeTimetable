@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.repository.base;
 
-import com.alekseyld.collegetimetable.SettingsWrapper;
+import com.alekseyld.collegetimetable.entity.Settings;
 
 /**
  * Created by Alekseyld on 04.09.2016.
@@ -25,7 +25,7 @@ public interface SettingsRepository {
 
     void put(String group, int time);
 
-    boolean saveSettings(SettingsWrapper settings);
-    SettingsWrapper getSettings();
+    boolean saveSettings(Settings settings);
+    Settings getSettings();
 
 }

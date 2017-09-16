@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.service;
 
-import com.alekseyld.collegetimetable.SettingsWrapper;
+import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 
 import javax.inject.Inject;
@@ -21,14 +21,14 @@ public class SettingsServiceImpl implements SettingsService {
     }
 
     @Override
-    public Observable<Boolean> saveSettings(SettingsWrapper settings) {
+    public Observable<Boolean> saveSettings(Settings settings) {
         return Observable.just(
                 mSettingsRepository.saveSettings(settings)
         );
     }
 
     @Override
-    public Observable<SettingsWrapper> getSettings() {
+    public Observable<Settings> getSettings() {
         return Observable.just(
                 mSettingsRepository.getSettings()
         );

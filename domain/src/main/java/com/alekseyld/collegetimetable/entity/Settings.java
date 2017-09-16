@@ -1,4 +1,4 @@
-package com.alekseyld.collegetimetable;
+package com.alekseyld.collegetimetable.entity;
 
 import java.util.Set;
 
@@ -6,16 +6,16 @@ import java.util.Set;
  * Created by Alekseyld on 04.11.2016.
  */
 
-public class SettingsWrapper {
+public class Settings {
 
     private Set<String> favoriteGroups;
     private String notificationGroup;
     private boolean notifOn;
     private boolean alarmMode;
 
-    public SettingsWrapper() {}
+    public Settings() {}
 
-    public SettingsWrapper(Set<String> favoriteGroups, String notificationGroup, boolean notifOn, boolean alarmMode) {
+    public Settings(Set<String> favoriteGroups, String notificationGroup, boolean notifOn, boolean alarmMode) {
         this.favoriteGroups = favoriteGroups;
         this.notificationGroup = notificationGroup;
         this.alarmMode = alarmMode;

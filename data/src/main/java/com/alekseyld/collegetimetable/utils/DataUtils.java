@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.utils;
 
-import com.alekseyld.collegetimetable.TableWrapper;
+import com.alekseyld.collegetimetable.entity.TimeTable;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -10,12 +10,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static com.alekseyld.collegetimetable.TableWrapper.Day.Friday;
-import static com.alekseyld.collegetimetable.TableWrapper.Day.Mon;
-import static com.alekseyld.collegetimetable.TableWrapper.Day.Saturday;
-import static com.alekseyld.collegetimetable.TableWrapper.Day.Thu;
-import static com.alekseyld.collegetimetable.TableWrapper.Day.Tue;
-import static com.alekseyld.collegetimetable.TableWrapper.Day.Wed;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Friday;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Mon;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Saturday;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Thu;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Tue;
+import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Wed;
 
 /**
  * Created by Alekseyld on 04.09.2016.
@@ -111,10 +111,10 @@ public class DataUtils {
         }
     }
 
-    public static TableWrapper parseDocument(Document document, String group){
+    public static TimeTable parseDocument(Document document, String group){
 
         if (document == null || group == null || !groupPatternWithoutNum.matcher(group).matches()){
-            return new TableWrapper();
+            return new TimeTable();
         }
 
         Elements table = document.select("tr").select("td");
@@ -122,11 +122,11 @@ public class DataUtils {
         Pattern numberPattern = Pattern.compile("^[0-9]");
         Pattern dayPattern = Pattern.compile("[А-Я]\\s[А-Я]\\s\\b");
 
-        TableWrapper timeTable = new TableWrapper();
+        TimeTable timeTable = new TimeTable();
 
-        HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>> time = new HashMap<>();
-        HashMap<TableWrapper.Lesson, String> lessons = new HashMap<>();
-        HashMap<TableWrapper.Day, String> days = new HashMap<>();
+        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> time = new HashMap<>();
+        HashMap<TimeTable.Lesson, String> lessons = new HashMap<>();
+        HashMap<TimeTable.Day, String> days = new HashMap<>();
         String[] dayString = new String[]{"", ""};
 
         //Искать номер пары
@@ -201,12 +201,12 @@ public class DataUtils {
                         days.put(Friday, dayString[0].equals(days.get(Thu)) ? dayString[1] : dayString[0]);
                         break;
                     case 5:
-                        time.put(TableWrapper.Day.Saturday, lessons);
-                        days.put(TableWrapper.Day.Saturday, dayString[0].equals(days.get(Friday)) ? dayString[1] : dayString[0]);
+                        time.put(TimeTable.Day.Saturday, lessons);
+                        days.put(TimeTable.Day.Saturday, dayString[0].equals(days.get(Friday)) ? dayString[1] : dayString[0]);
                         break;
                     case 6:
-                        time.put(TableWrapper.Day.Mon2, lessons);
-                        days.put(TableWrapper.Day.Mon2, dayString[1]);
+                        time.put(TimeTable.Day.Mon2, lessons);
+                        days.put(TimeTable.Day.Mon2, dayString[1]);
                         break;
                 }
             }
@@ -245,8 +245,8 @@ public class DataUtils {
                             days.put(Saturday, dayString[0]);
                             break;
                         case 6:
-                            time.put(TableWrapper.Day.Mon2, lessons);
-                            days.put(TableWrapper.Day.Mon2, dayString[1]);
+                            time.put(TimeTable.Day.Mon2, lessons);
+                            days.put(TimeTable.Day.Mon2, dayString[1]);
                             break;
                     }
                     lessons = new HashMap<>();
@@ -268,25 +268,25 @@ public class DataUtils {
 
                 switch (lesson) {
                     case 0:
-                        lessons.put(TableWrapper.Lesson.lesson0, text);
+                        lessons.put(TimeTable.Lesson.lesson0, text);
                         break;
                     case 1:
-                        lessons.put(TableWrapper.Lesson.lesson1, text);
+                        lessons.put(TimeTable.Lesson.lesson1, text);
                         break;
                     case 2:
-                        lessons.put(TableWrapper.Lesson.lesson2, text);
+                        lessons.put(TimeTable.Lesson.lesson2, text);
                         break;
                     case 3:
-                        lessons.put(TableWrapper.Lesson.lesson3, text);
+                        lessons.put(TimeTable.Lesson.lesson3, text);
                         break;
                     case 4:
-                        lessons.put(TableWrapper.Lesson.lesson4, text);
+                        lessons.put(TimeTable.Lesson.lesson4, text);
                         break;
                     case 5:
-                        lessons.put(TableWrapper.Lesson.lesson5, text);
+                        lessons.put(TimeTable.Lesson.lesson5, text);
                         break;
                     case 6:
-                        lessons.put(TableWrapper.Lesson.lesson6, text);
+                        lessons.put(TimeTable.Lesson.lesson6, text);
                         break;
                 }
 

@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alekseyld.collegetimetable.R;
-import com.alekseyld.collegetimetable.TableWrapper;
+import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.TablePresenter;
 import com.alekseyld.collegetimetable.view.TableView;
@@ -102,13 +102,13 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     }
 
     @Override
-    public void setTimeTable(TableWrapper timeTable) {
-        mTableAdapter.setTableWrapper(timeTable);
+    public void setTimeTable(TimeTable timeTable) {
+        mTableAdapter.setTimeTable(timeTable);
     }
 
     @Override
-    public TableWrapper getTimeTable() {
-        return mTableAdapter.getTableWrapper();
+    public TimeTable getTimeTable() {
+        return mTableAdapter.getTimeTable();
     }
 
     @Override

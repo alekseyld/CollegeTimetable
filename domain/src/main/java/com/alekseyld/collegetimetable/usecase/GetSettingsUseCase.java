@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.usecase;
 
-import com.alekseyld.collegetimetable.SettingsWrapper;
+import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.executor.PostExecutionThread;
 import com.alekseyld.collegetimetable.executor.ThreadExecutor;
 import com.alekseyld.collegetimetable.service.SettingsService;
@@ -22,7 +22,7 @@ public class GetSettingsUseCase extends UseCase<SettingsService> {
     }
 
     @Override
-    protected Observable<SettingsWrapper> buildUseCaseObservable() {
+    protected Observable<Settings> buildUseCaseObservable() {
         return mService.getSettings();
     }
 

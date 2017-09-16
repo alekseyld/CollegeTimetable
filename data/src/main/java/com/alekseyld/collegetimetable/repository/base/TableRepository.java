@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.repository.base;
 
-import com.alekseyld.collegetimetable.TableWrapper;
+import com.alekseyld.collegetimetable.entity.TimeTable;
 
 import org.jsoup.nodes.Document;
 
@@ -15,12 +15,12 @@ public interface TableRepository {
     String DAYS_KEY = "Days";
     String DOC_KEY = "Doc";
 
-    TableWrapper getTimeTable(String group);
+    TimeTable getTimeTable(String group);
     String getDocument();
 
-    boolean putTimeTable(TableWrapper tableWrapper, String group);
+    boolean putTimeTable(TimeTable timeTable, String group);
     void putDocument(Document document);
 
-    void put(TableWrapper tableWrapper, Document document, String group);
+    void put(TimeTable timeTable, Document document, String group);
 
 }

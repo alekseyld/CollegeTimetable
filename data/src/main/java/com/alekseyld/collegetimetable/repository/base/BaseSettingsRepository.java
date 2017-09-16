@@ -2,15 +2,13 @@ package com.alekseyld.collegetimetable.repository.base;
 
 import android.content.SharedPreferences;
 
-import com.alekseyld.collegetimetable.SettingsWrapper;
+import com.alekseyld.collegetimetable.entity.Settings;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.inject.Inject;
 
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.DOC_KEY;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.TIMETABLE_KEY;
@@ -131,7 +129,7 @@ public abstract class BaseSettingsRepository implements SettingsRepository {
     }
 
     @Override
-    public boolean saveSettings(SettingsWrapper settings) {
+    public boolean saveSettings(Settings settings) {
         saveFavorite(settings.getFavoriteGroups());
         saveNotification(settings.getNotificationGroup());
         saveAlarmMode(settings.getAlarmMode());
@@ -140,8 +138,8 @@ public abstract class BaseSettingsRepository implements SettingsRepository {
     }
 
     @Override
-    public SettingsWrapper getSettings() {
-        return new SettingsWrapper(
+    public Settings getSettings() {
+        return new Settings(
                 getFavorite(),
                 getNotification(),
                 getNotifOn(),

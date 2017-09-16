@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.service;
 
-import com.alekseyld.collegetimetable.TableWrapper;
+import com.alekseyld.collegetimetable.entity.TimeTable;
 
 import rx.Observable;
 
@@ -10,10 +10,10 @@ import rx.Observable;
 
 public interface TableService {
 
-    Observable<TableWrapper> getTimetableFromOnline(boolean online, String group);
-    Observable<TableWrapper> getTimetableFromOffline(String group);
+    Observable<TimeTable> getTimetableFromOnline(boolean online, String group);
+    Observable<TimeTable> getTimetableFromOffline(String group);
 
-    Observable<Boolean> saveTimetable(TableWrapper tableTable, String group);
+    Observable<Boolean> saveTimetable(TimeTable tableTable, String group);
 
     Observable<Boolean> update(String minute, String group);
 

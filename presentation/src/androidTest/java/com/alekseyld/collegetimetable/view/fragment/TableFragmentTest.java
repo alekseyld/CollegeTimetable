@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alekseyld.collegetimetable.R;
-import com.alekseyld.collegetimetable.TableWrapper;
+import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.utils.DataUtils;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
@@ -36,15 +36,15 @@ public class TableFragmentTest {
     public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(
             MainActivity.class);
 
-    private static TableWrapper timeTableAppAllWeek;
+    private static TimeTable timeTableAppAllWeek;
 
-    private static TableWrapper timeTableAppWithDoubleLesson7;
-    private static TableWrapper timeTableAppWithDoubleLesson6;
-    private static TableWrapper timeTableAppWithDoubleLesson5;
-    private static TableWrapper timeTableAppWithDoubleLesson4;
-    private static TableWrapper timeTableAppWithDoubleLesson3;
-    private static TableWrapper timeTableAppWithDoubleLesson2;
-    private static TableWrapper timeTableAppWithDoubleLesson1;
+    private static TimeTable timeTableAppWithDoubleLesson7;
+    private static TimeTable timeTableAppWithDoubleLesson6;
+    private static TimeTable timeTableAppWithDoubleLesson5;
+    private static TimeTable timeTableAppWithDoubleLesson4;
+    private static TimeTable timeTableAppWithDoubleLesson3;
+    private static TimeTable timeTableAppWithDoubleLesson2;
+    private static TimeTable timeTableAppWithDoubleLesson1;
 
     @BeforeClass
     public static void initClass() throws IOException {
@@ -71,7 +71,7 @@ public class TableFragmentTest {
         timeTableAppWithDoubleLesson6 = DataUtils.parseDocument(document, "4 АПП-2");
     }
 
-    private void setTestTimeTable(final TableWrapper testTimeTable){
+    private void setTestTimeTable(final TimeTable testTimeTable){
         activityTestRule.launchActivity(new Intent());
 
         final RecyclerView recyclerView = (RecyclerView) activityTestRule.getActivity().findViewById(R.id.recView);
@@ -85,13 +85,14 @@ public class TableFragmentTest {
             }
         });
 
-        Utils.sleepEspresso(100, TimeUnit.MILLISECONDS);
+//        Utils.sleepEspresso(100, TimeUnit.MILLISECONDS);
+        Utils.sleepEspresso(500, TimeUnit.MILLISECONDS);
     }
 
     @Test
     public void testTimeTableAppWithDoubleLesson1() throws Exception{
 
-        setTestTimeTable(timeTableAppWithDoubleLesson1);
+        setTestTimeTable(timeTableAppWithDoubleLesson7);
 
         onView(withRecyclerView(R.id.recView)
                 .atPositionOnView(0, R.id.lesson0))

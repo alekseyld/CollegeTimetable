@@ -2,7 +2,7 @@ package com.alekseyld.collegetimetable.presenter;
 
 import android.text.Editable;
 
-import com.alekseyld.collegetimetable.SettingsWrapper;
+import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
 import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
@@ -24,7 +24,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
 
     private SettingsResultProcessor mProcessor;
 
-    private SettingsWrapper mSettings;
+    private Settings mSettings;
     private SaveSettingsUseCase mSaveSettingsUseCase;
     private GetSettingsUseCase mGetSettingsUseCase;
 
@@ -35,14 +35,14 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
         mProcessor = settingsResultProcessor;
         mSaveSettingsUseCase = saveSettingsUseCase;
         mGetSettingsUseCase = getSettingsUseCase;
-        mSettings = new SettingsWrapper(new HashSet<String>(), "", false, true);
+        mSettings = new Settings(new HashSet<String>(), "", false, true);
     }
 
     @Override
     public void resume() {
-        mGetSettingsUseCase.execute(new BaseSubscriber<SettingsWrapper>() {
+        mGetSettingsUseCase.execute(new BaseSubscriber<Settings>() {
             @Override
-            public void onNext(SettingsWrapper settings) {
+            public void onNext(Settings settings) {
                 mSettings = settings;
             }
 
@@ -61,7 +61,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
         return mSettings.getNotifOn();
     }
 
-    public SettingsWrapper getSettings() {
+    public Settings getSettings() {
         return mSettings;
     }
 
