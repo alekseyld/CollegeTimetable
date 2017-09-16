@@ -1,4 +1,4 @@
-package com.alekseyld.collegetimetable;
+package com.alekseyld.collegetimetable.utils;
 
 import android.support.test.espresso.IdlingResource;
 

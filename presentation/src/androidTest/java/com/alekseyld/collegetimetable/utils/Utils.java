@@ -1,4 +1,4 @@
-package com.alekseyld.collegetimetable;
+package com.alekseyld.collegetimetable.utils;
 
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingPolicies;
@@ -32,6 +32,10 @@ public class Utils {
         IdlingResource idlingResource = getIdlingResource(5000, TimeUnit.MILLISECONDS);
         while (!idlingResource.isIdleNow());
         unsleepEspresso(idlingResource);
+    }
+
+    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
+        return new RecyclerViewMatcher(recyclerViewId);
     }
 
 }
