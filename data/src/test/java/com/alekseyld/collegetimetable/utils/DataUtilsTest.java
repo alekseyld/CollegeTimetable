@@ -83,7 +83,7 @@ public class DataUtilsTest{
     }
 
     @Test
-    public void testParseTimetableAPPallWeek() throws Exception {
+    public void parseTestTimetableAPPallWeek() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_all_week").timeout(0).get();
 
@@ -176,7 +176,7 @@ public class DataUtilsTest{
     }
 
     @Test
-    public void testParseTimetableAPPallWeekWithDoubleLessons_1() throws Exception {
+    public void parseTestTimetableAPPallWeekWithDoubleLessons_1() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_1").timeout(0).get();
 
@@ -235,7 +235,7 @@ public class DataUtilsTest{
     }
 
     @Test
-    public void testParseTimetableAPPallWeekWithDoubleLessons_2() throws Exception {
+    public void parseTestTimetableAPPallWeekWithDoubleLessons_2() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_2").timeout(0).get();
 
@@ -273,7 +273,7 @@ public class DataUtilsTest{
     }
 
     @Test
-    public void testParseTimetableAPPallWeekWithDoubleLessons_3() throws Exception {
+    public void parseTestTimetableAPPallWeekWithDoubleLessons_3() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_3").timeout(0).get();
 
@@ -323,7 +323,7 @@ public class DataUtilsTest{
     }
 
     @Test
-    public void testParseTimetableAPPallWeekWithDoubleLessons_4() throws Exception {
+    public void parseTestTimetableAPPallWeekWithDoubleLessons_4() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_4").timeout(0).get();
 
@@ -384,7 +384,7 @@ public class DataUtilsTest{
     }
 
     @Test
-    public void testParseTimetableAPPallWeekWithDoubleLessons_5() throws Exception {
+    public void parseTestTimetableAPPallWeekWithDoubleLessons_5() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_5").timeout(0).get();
 
@@ -455,7 +455,7 @@ public class DataUtilsTest{
     }
 
     @Test
-    public void testParseTimetableAPPallWeekWithDoubleLessons_6() throws Exception {
+    public void parseTestTimetableAPPallWeekWithDoubleLessons_6() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_6").timeout(0).get();
 
@@ -538,7 +538,7 @@ public class DataUtilsTest{
     }
 
     @Test
-    public void testParseTimetableAPPallWeekWithDoubleLessons_7() throws Exception {
+    public void parseTestTimetableAPPallWeekWithDoubleLessons_7() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_all_week").timeout(0).get();
 

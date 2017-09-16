@@ -34,8 +34,8 @@ public class Utils {
         unsleepEspresso(idlingResource);
     }
 
-    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
-        return new RecyclerViewMatcher(recyclerViewId);
+    public static LessonViewMatcher withDayLesson(int dayPos){
+        return new LessonViewMatcher(dayPos);
     }
 
 }
