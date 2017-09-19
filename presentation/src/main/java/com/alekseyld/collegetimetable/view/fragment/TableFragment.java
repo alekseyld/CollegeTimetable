@@ -1,5 +1,7 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -7,6 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -70,6 +75,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         ButterKnife.bind(this, v);
 
         getActivity().setTitle(R.string.app_name);
+        setHasOptionsMenu(true);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -101,6 +107,31 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
             Crashlytics.setString("Group", mGroup);
         }
         mPresenter.getTableFromOffline();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_table, menu);
+
+        Drawable drawable = menu.findItem(R.id.action_info).getIcon();
+        if(drawable != null) {
+            drawable.mutate();
+            drawable.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
+        }
+        menu.findItem(R.id.action_info).setVisible(false);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.action_info:
+                //// TODO: 19.09.2017
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
