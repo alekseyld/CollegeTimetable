@@ -18,8 +18,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.alekseyld.collegetimetable.R;
-import com.alekseyld.collegetimetable.SettingsWrapper;
-import com.alekseyld.collegetimetable.TableWrapper;
+import com.alekseyld.collegetimetable.entity.Settings;
+import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerServiceComponent;
 import com.alekseyld.collegetimetable.internal.di.module.ServiceModule;
 import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
@@ -48,7 +48,7 @@ public class UpdateTimetableService extends IntentService {
     @Inject GetTableFromOnlineUseCase mGetTableFromOnlineUseCase;
     @Inject SaveTableUseCase mSaveTableUseCase;
 
-    private SettingsWrapper mSettings;
+    private Settings mSettings;
 
     public UpdateTimetableService() {
         super("DataService");
@@ -83,10 +83,10 @@ public class UpdateTimetableService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.d(LOG_TAG, "onHandleIntent");
 
-        mGetSettingsUseCase.execute(new BaseSubscriber<SettingsWrapper>(){
+        mGetSettingsUseCase.execute(new BaseSubscriber<Settings>(){
             @Override
-            public void onNext(SettingsWrapper settingsWrapper) {
-                mSettings = settingsWrapper;
+            public void onNext(Settings settings) {
+                mSettings = settings;
             }
             @Override
             public void onCompleted() {
@@ -106,16 +106,16 @@ public class UpdateTimetableService extends IntentService {
     private void getTimeTableOnline(){
         mGetTableFromOnlineUseCase.setGroup(mSettings.getNotificationGroup());
         mGetTableFromOnlineUseCase.setOnline(isOnline());
-        mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TableWrapper>(){
+        mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>(){
             @Override
-            public void onNext(TableWrapper tableWrapper) {
-                if(tableWrapper != null
-                        && tableWrapper.getTimeTable() != null
-                        && tableWrapper.getTimeTable().size() > 0
-                        && tableWrapper.getChanges() != null
-                        && tableWrapper.isChanges()){
+            public void onNext(TimeTable timeTable) {
+                if(timeTable != null
+                        && timeTable.getTimeTable() != null
+                        && timeTable.getTimeTable().size() > 0
+                        && timeTable.getChanges() != null
+                        && timeTable.isChanges()){
 
-                    saveTimeTable(tableWrapper);
+                    saveTimeTable(timeTable);
                     if(!mSettings.getAlarmMode()){
                         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                         v.vibrate(300);
@@ -137,8 +137,8 @@ public class UpdateTimetableService extends IntentService {
         });
     }
 
-    private void saveTimeTable(TableWrapper tableWrapper){
-        mSaveTableUseCase.setTimeTable(tableWrapper);
+    private void saveTimeTable(TimeTable timeTable){
+        mSaveTableUseCase.setTimeTable(timeTable);
         mSaveTableUseCase.setGroup(mSettings.getNotificationGroup());
         mSaveTableUseCase.execute(new BaseSubscriber());
     }

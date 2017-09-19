@@ -3,7 +3,7 @@ package com.alekseyld.collegetimetable.repository;
 import android.app.IntentService;
 import android.content.SharedPreferences;
 
-import com.alekseyld.collegetimetable.TableWrapper;
+import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.repository.base.TableRepository;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -36,19 +36,19 @@ public class ServiceTableRepository implements TableRepository {
         mPref = mService.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
 
         mGson = new Gson();
-        mType = new TypeToken<HashMap<TableWrapper.Day, HashMap<TableWrapper.Lesson, String>>>(){}.getType();
-        mTypeDay = new TypeToken<HashMap<TableWrapper.Day, String>>(){}.getType();
+        mType = new TypeToken<HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>>>(){}.getType();
+        mTypeDay = new TypeToken<HashMap<TimeTable.Day, String>>(){}.getType();
     }
 
     @Override
-    public TableWrapper getTimeTable(String group) {
+    public TimeTable getTimeTable(String group) {
         String s = mPref.getString(TIMETABLE_KEY + "_"+ group, "");
         String d = mPref.getString(DAYS_KEY + "_" + group, "");
 
-        TableWrapper tableWrapper = new TableWrapper();
-        tableWrapper.setTimeTable(mGson.fromJson(s, mType));
-        tableWrapper.setDays(mGson.fromJson(d, mTypeDay));
-        return tableWrapper;
+        TimeTable timeTable = new TimeTable();
+        timeTable.setTimeTable(mGson.fromJson(s, mType));
+        timeTable.setDays(mGson.fromJson(d, mTypeDay));
+        return timeTable;
     }
 
     @Override
@@ -57,10 +57,10 @@ public class ServiceTableRepository implements TableRepository {
     }
 
     @Override
-    public boolean putTimeTable(TableWrapper tableWrapper, String group) {
-        String json = mGson.toJson(tableWrapper.getTimeTable());
-        editDays(tableWrapper.getDays());
-        String json2 = mGson.toJson(tableWrapper.getDays());
+    public boolean putTimeTable(TimeTable timeTable, String group) {
+        String json = mGson.toJson(timeTable.getTimeTable());
+        editDays(timeTable.getDays());
+        String json2 = mGson.toJson(timeTable.getDays());
         SharedPreferences.Editor ed = mPref.edit();
 
         ed.putString(TIMETABLE_KEY + "_" + group, json);
@@ -70,8 +70,8 @@ public class ServiceTableRepository implements TableRepository {
         return true;
     }
 
-    private void editDays(HashMap<TableWrapper.Day, String> days) {
-        for(TableWrapper.Day d: days.keySet()){
+    private void editDays(HashMap<TimeTable.Day, String> days) {
+        for(TimeTable.Day d: days.keySet()){
             days.put(d, firstUpperCase(days.get(d).toLowerCase()));
         }
     }
@@ -84,8 +84,8 @@ public class ServiceTableRepository implements TableRepository {
     }
 
     @Override
-    public void put(TableWrapper tableWrapper, Document document, String group) {
-        putTimeTable(tableWrapper, group);
+    public void put(TimeTable timeTable, Document document, String group) {
+        putTimeTable(timeTable, group);
         putDocument(document);
     }
 

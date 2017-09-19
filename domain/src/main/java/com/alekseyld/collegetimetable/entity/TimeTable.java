@@ -1,4 +1,4 @@
-package com.alekseyld.collegetimetable;
+package com.alekseyld.collegetimetable.entity;
 
 import java.util.HashMap;
 
@@ -6,7 +6,7 @@ import java.util.HashMap;
  * Created by Alekseyld on 02.09.2016.
  */
 
-public class TableWrapper {
+public class TimeTable {
 
     public enum Lesson{
         lesson0("0"),
@@ -72,13 +72,13 @@ public class TableWrapper {
         this.mDays = mDays;
     }
 
-    public boolean equals(TableWrapper tableWrapper) {
-        boolean size = mTimeTable.size() == tableWrapper.mTimeTable.size();
+    public boolean equals(TimeTable timeTable) {
+        boolean size = mTimeTable.size() == timeTable.mTimeTable.size();
         boolean keys = mTimeTable.keySet().equals(mTimeTable.keySet());
         if(size && keys) {
             for (Day d: mTimeTable.keySet()) {
                 for (Lesson l: mTimeTable.get(d).keySet()){
-                    if(!mTimeTable.get(d).get(l).equals(tableWrapper.getTimeTable().get(d).get(l))){
+                    if(!mTimeTable.get(d).get(l).equals(timeTable.getTimeTable().get(d).get(l))){
                         return false;
                     }
                 }
@@ -111,10 +111,10 @@ public class TableWrapper {
         return false;
     }
 
-    public HashMap<Day, HashMap<Lesson, Boolean>> getChanges(TableWrapper tableWrapper){
-        if(tableWrapper != null
-                && tableWrapper.getTimeTable() != null
-                && tableWrapper.getTimeTable().size() > 0
+    public HashMap<Day, HashMap<Lesson, Boolean>> getChanges(TimeTable timeTable){
+        if(timeTable != null
+                && timeTable.getTimeTable() != null
+                && timeTable.getTimeTable().size() > 0
                 && mTimeTable != null) {
 
             HashMap<Day, HashMap<Lesson, Boolean>> changes = new HashMap<>();
@@ -122,7 +122,7 @@ public class TableWrapper {
             for (Day d : mTimeTable.keySet()) {
                 dayChange = new HashMap<>();
                 for (Lesson l : mTimeTable.get(d).keySet()) {
-                    if (!mTimeTable.get(d).get(l).equals(tableWrapper.getTimeTable().get(d).get(l))) {
+                    if (!mTimeTable.get(d).get(l).equals(timeTable.getTimeTable().get(d).get(l))) {
                         dayChange.put(l, true);
                     } else {
                         dayChange.put(l, false);

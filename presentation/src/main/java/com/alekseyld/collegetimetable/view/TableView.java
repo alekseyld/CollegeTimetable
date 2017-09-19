@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.view;
 
-import com.alekseyld.collegetimetable.TableWrapper;
+import com.alekseyld.collegetimetable.entity.TimeTable;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -8,8 +8,8 @@ import com.alekseyld.collegetimetable.TableWrapper;
 
 public interface TableView extends ViewWithSettingsPresenter {
 
-    void setTimeTable(TableWrapper timeTable);
-    TableWrapper getTimeTable();
+    void setTimeTable(TimeTable timeTable);
+    TimeTable getTimeTable();
     void showMessage();
     String getGroup();
 

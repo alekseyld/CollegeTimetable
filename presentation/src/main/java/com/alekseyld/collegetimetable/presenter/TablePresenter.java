@@ -4,8 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.alekseyld.collegetimetable.SettingsWrapper;
-import com.alekseyld.collegetimetable.TableWrapper;
+import com.alekseyld.collegetimetable.entity.Settings;
+import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
 import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
@@ -26,7 +26,7 @@ public class TablePresenter extends BasePresenter<TableView>{
 
     private GetSettingsUseCase mGetSettingsUseCase;
 
-    private SettingsWrapper mSettings;
+    private Settings mSettings;
 
     @Inject
     TablePresenter(GetTableFromOnlineUseCase getTableFromOnlineUseCase,
@@ -41,10 +41,10 @@ public class TablePresenter extends BasePresenter<TableView>{
     @Override
     public void resume() {
 //        mView.showLoading();
-        mGetSettingsUseCase.execute(new BaseSubscriber<SettingsWrapper>(){
+        mGetSettingsUseCase.execute(new BaseSubscriber<Settings>(){
             @Override
-            public void onNext(SettingsWrapper settingsWrapper) {
-                mSettings = settingsWrapper;
+            public void onNext(Settings settings) {
+                mSettings = settings;
             }
 
             @Override
@@ -64,11 +64,11 @@ public class TablePresenter extends BasePresenter<TableView>{
 
         mGetTableFromOnlineUseCase.setOnline(isOnline());
         mGetTableFromOnlineUseCase.setGroup(mView.getGroup());
-        mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TableWrapper>(){
+        mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>(){
             @Override
-            public void onNext(TableWrapper tableWrapper){
-//                Log.d("test", "TableWrapper offline onNext" + tableWrapper.getTimeTable().size());
-                mView.setTimeTable(tableWrapper);
+            public void onNext(TimeTable timeTable){
+//                Log.d("test", "TimeTable offline onNext" + timeTable.getTimeTable().size());
+                mView.setTimeTable(timeTable);
             }
 
             @Override
@@ -91,10 +91,10 @@ public class TablePresenter extends BasePresenter<TableView>{
         mView.showLoading();
 
         mGetTableFromOfflineUseCase.setGroup(mView.getGroup());
-        mGetTableFromOfflineUseCase.execute(new BaseSubscriber<TableWrapper>(){
+        mGetTableFromOfflineUseCase.execute(new BaseSubscriber<TimeTable>(){
             @Override
-            public void onNext(TableWrapper tableWrapper){
-                mView.setTimeTable(tableWrapper);
+            public void onNext(TimeTable timeTable){
+                mView.setTimeTable(timeTable);
             }
 
             @Override

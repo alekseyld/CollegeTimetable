@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.usecase;
 
-import com.alekseyld.collegetimetable.TableWrapper;
+import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.executor.PostExecutionThread;
 import com.alekseyld.collegetimetable.executor.ThreadExecutor;
 import com.alekseyld.collegetimetable.service.TableService;
@@ -16,7 +16,7 @@ import rx.Observable;
 
 public class SaveTableUseCase extends UseCase<TableService> {
 
-    private TableWrapper mTable;
+    private TimeTable mTable;
     private String mGroup;
 
     @Inject
@@ -30,7 +30,7 @@ public class SaveTableUseCase extends UseCase<TableService> {
         return mService.saveTimetable(mTable, mGroup);
     }
 
-    public void setTimeTable(TableWrapper table) {
+    public void setTimeTable(TimeTable table) {
         mTable = table;
     }
 

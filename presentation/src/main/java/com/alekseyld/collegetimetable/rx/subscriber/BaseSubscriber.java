@@ -1,5 +1,6 @@
 package com.alekseyld.collegetimetable.rx.subscriber;
 
+import com.alekseyld.collegetimetable.exception.UncriticalException;
 import com.crashlytics.android.Crashlytics;
 
 /**
@@ -12,7 +13,9 @@ public class BaseSubscriber<T> extends rx.Subscriber<T> {
     }
 
     @Override public void onError(Throwable e) {
-        Crashlytics.logException(e);
+        if (!(e instanceof UncriticalException)) {
+            Crashlytics.logException(e);
+        }
     }
 
     @Override public void onNext(T t) {

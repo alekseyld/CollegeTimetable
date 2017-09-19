@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.service;
 
-import com.alekseyld.collegetimetable.SettingsWrapper;
+import com.alekseyld.collegetimetable.entity.Settings;
 
 import rx.Observable;
 
@@ -10,7 +10,7 @@ import rx.Observable;
 
 public interface SettingsService {
 
-    Observable<Boolean> saveSettings(SettingsWrapper settings);
-    Observable<SettingsWrapper> getSettings();
+    Observable<Boolean> saveSettings(Settings settings);
+    Observable<Settings> getSettings();
 
 }

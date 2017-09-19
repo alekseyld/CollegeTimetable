@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.presenter;
 
-import com.alekseyld.collegetimetable.SettingsWrapper;
+import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
 import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 public class SettingsFavoritePresenter extends BasePresenter<SettingsFavoriteView> {
 
-    private SettingsWrapper mSettings;
+    private Settings mSettings;
     private SaveSettingsUseCase mSaveSettingsUseCase;
     private GetSettingsUseCase mGetSettingsUseCase;
 
@@ -31,9 +31,9 @@ public class SettingsFavoritePresenter extends BasePresenter<SettingsFavoriteVie
 
     @Override
     public void resume() {
-        mGetSettingsUseCase.execute(new BaseSubscriber<SettingsWrapper>() {
+        mGetSettingsUseCase.execute(new BaseSubscriber<Settings>() {
             @Override
-            public void onNext(SettingsWrapper settings) {
+            public void onNext(Settings settings) {
                 mSettings = settings;
             }
 

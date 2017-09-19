@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.usecase;
 
-import com.alekseyld.collegetimetable.TableWrapper;
+import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.executor.PostExecutionThread;
 import com.alekseyld.collegetimetable.executor.ThreadExecutor;
 import com.alekseyld.collegetimetable.service.TableService;
@@ -25,7 +25,7 @@ public class GetTableFromOfflineUseCase extends UseCase<TableService> {
     }
 
     @Override
-    protected Observable<TableWrapper> buildUseCaseObservable() {
+    protected Observable<TimeTable> buildUseCaseObservable() {
         return mService.getTimetableFromOffline(mGroup);
     }
 
