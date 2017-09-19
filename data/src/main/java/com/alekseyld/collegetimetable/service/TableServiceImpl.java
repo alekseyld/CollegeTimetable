@@ -3,6 +3,7 @@ package com.alekseyld.collegetimetable.service;
 import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.api.ProxyApi;
 import com.alekseyld.collegetimetable.entity.ApiResponse;
+import com.alekseyld.collegetimetable.exception.UncriticalException;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 import com.alekseyld.collegetimetable.repository.base.TableRepository;
 import com.alekseyld.collegetimetable.utils.DataUtils;
@@ -49,6 +50,10 @@ public class TableServiceImpl implements TableService {
                     }
 
                     return apiResponse;
+                }).flatMap(apiResponse -> {
+                    if (apiResponse.getStatus() == 1)
+                        return Observable.error(new UncriticalException("Введите корректную аббревиатуру группы"));
+                    return Observable.just(apiResponse);
                 }).map(apiResponse -> {
                     Document document;
 
@@ -86,11 +91,11 @@ public class TableServiceImpl implements TableService {
 
         return connectAndGetData(group).flatMap(document -> {
             if (document == null)
-                return Observable.error(new Error("Не удалось подключиться к сайту (1)"));
+                return Observable.error(new UncriticalException("Не удалось подключиться к сайту (1)"));
             return Observable.just(document);
         }).map(document -> DataUtils.parseDocument(document, group)).flatMap(tableWrapper -> {
             if (tableWrapper.getTimeTable() == null || tableWrapper.getTimeTable().keySet().size() == 0)
-                return Observable.error(new Error("Timetable null or empty (2)"));
+                return Observable.error(new UncriticalException("Timetable null or empty (2)"));
             return Observable.just(tableWrapper);
         }).map(tableWrapper -> {
             TimeTable old = mTimetableRepository.getTimeTable(group);

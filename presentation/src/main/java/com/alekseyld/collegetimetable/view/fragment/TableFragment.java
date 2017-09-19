@@ -20,6 +20,7 @@ import com.alekseyld.collegetimetable.presenter.TablePresenter;
 import com.alekseyld.collegetimetable.view.TableView;
 import com.alekseyld.collegetimetable.view.adapter.TableAdapter;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
+import com.crashlytics.android.Crashlytics;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -97,6 +98,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
         if(mGroup != null && !mGroup.equals("")){
             getActivity().setTitle("Группа: " + mGroup);
+            Crashlytics.setString("Group", mGroup);
         }
         mPresenter.getTableFromOffline();
     }
