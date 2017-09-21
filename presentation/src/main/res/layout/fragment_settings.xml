@@ -9,25 +9,21 @@
 
         <TextView
             android:id="@+id/addFarvorite"
-            android:textColor="@android:color/black"
-            android:textSize="15sp"
-            android:padding="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:text="@string/addFarvorite"/>
+            android:text="@string/addFarvorite"
+            style="@style/SettingTextView"
+            />
 
         <include layout="@layout/divider"/>
 
         <TextView
             android:id="@+id/addNotif"
-            android:textSize="15sp"
-            android:textColor="@android:color/black"
-            android:padding="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:text="@string/addNotif"/>
+            android:text="@string/addNotif"
+            style="@style/SettingTextView"
+            />
 
         <include layout="@layout/divider"/>
 
