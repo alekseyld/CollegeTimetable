@@ -8,6 +8,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -118,7 +119,8 @@ public class DataUtils {
         Pattern numberPattern = Pattern.compile("^[0-9]");
         Pattern dayPattern = Pattern.compile("[А-Я]\\s[А-Я]\\s\\b");
 
-        TimeTable timeTable = new TimeTable();
+        TimeTable timeTable = new TimeTable()
+                .setLastRefresh(new Date());
 
         List<Lesson> lessons = new ArrayList<>();
 //        HashMap<TimeTable.Day, String> days = new HashMap<>();

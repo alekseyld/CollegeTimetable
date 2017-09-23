@@ -27,6 +27,8 @@ import com.alekseyld.collegetimetable.view.adapter.TableAdapter;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 import com.crashlytics.android.Crashlytics;
 
+import java.text.SimpleDateFormat;
+
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,6 +63,8 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
     private RecyclerView.LayoutManager mLayoutManager;
     private TableAdapter mTableAdapter;
+
+    private Menu mMenu;
 
     @BindString(R.string.app_name)
     String app_name;
@@ -111,6 +115,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        mMenu = menu;
         inflater.inflate(R.menu.menu_table, menu);
 
         Drawable drawable = menu.findItem(R.id.action_info).getIcon();
@@ -118,7 +123,6 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
             drawable.mutate();
             drawable.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
         }
-        menu.findItem(R.id.action_info).setVisible(false);
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -128,7 +132,8 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
         switch (item.getItemId()){
             case R.id.action_info:
-                //// TODO: 19.09.2017
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+                showToastMessage("Последнее обновление: " + dateFormat.format(getTimeTable().getLastRefresh()));
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -136,6 +141,10 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
     @Override
     public void setTimeTable(TimeTable timeTable) {
+        if (timeTable != null && timeTable.getLastRefresh() == null && mMenu.findItem(R.id.action_info) != null)
+            mMenu.findItem(R.id.action_info).setVisible(false);
+
+
         mTableAdapter.setTimeTable(timeTable);
     }
 
