@@ -43,37 +43,8 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-        if (mTimeTable != null) {
-            TimeTable.Day day = TimeTable.Day.Mon;
-            String dayText = "";
-
-            switch (position) {
-                case 0:
-                    day = TimeTable.Day.Mon;
-                    break;
-                case 1:
-                    day = TimeTable.Day.Tue;
-                    break;
-                case 2:
-                    day = TimeTable.Day.Wed;
-                    break;
-                case 3:
-                    day = TimeTable.Day.Thu;
-                    break;
-                case 4:
-                    day = TimeTable.Day.Friday;
-                    break;
-                case 5:
-                    day = TimeTable.Day.Saturday;
-                    break;
-                case 6:
-                    day = TimeTable.Day.Mon2;
-                    break;
-            }
-
-            holder.date.setText(firstUpperCase(mTimeTable.getDays().get(day).toLowerCase()));
-            holder.lessons.setAdapter(new LessonAdapter(mTimeTable.getTimeTable(), day));
-        }
+        holder.date.setText(firstUpperCase(mTimeTable.getDayList().get(position).getDate().toLowerCase()));
+        holder.lessons.setAdapter(new LessonAdapter(mTimeTable.getDayList().get(position)));
     }
 
     public TimeTable getTimeTable() {
@@ -88,10 +59,10 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        if (mTimeTable == null || mTimeTable.getTimeTable() == null) {
+        if (mTimeTable == null || mTimeTable.getDayList() == null) {
             return 0;
         }
-        return mTimeTable.getTimeTable().size();
+        return mTimeTable.getDayList().size();
     }
 
     private String firstUpperCase(String word) {

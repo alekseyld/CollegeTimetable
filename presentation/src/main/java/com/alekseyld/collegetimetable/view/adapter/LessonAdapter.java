@@ -7,10 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alekseyld.collegetimetable.R;
-import com.alekseyld.collegetimetable.entity.TimeTable;
+import com.alekseyld.collegetimetable.entity.Day;
+import com.alekseyld.collegetimetable.entity.Lesson;
 import com.alekseyld.collegetimetable.view.adapter.holder.LessonViewHolder;
-
-import java.util.HashMap;
 
 /**
  * Created by Alekseyld on 16.09.2017.
@@ -19,12 +18,10 @@ import java.util.HashMap;
 public class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
 
     //// FIXME: 16.09.2017 to lesson array list
-    private HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> mLessons;
-    private TimeTable.Day mDay;
+    private Day lessonDay;
 
-    public LessonAdapter(@NonNull HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> lessons, TimeTable.Day day){
-        mLessons = lessons;
-        mDay = day;
+    public LessonAdapter(@NonNull Day day){
+        lessonDay = day;
     }
 
     @Override
@@ -40,43 +37,11 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
     @Override
     public void onBindViewHolder(LessonViewHolder holder, int position) {
 
-        switch (position){
-            case 0:
-                holder.lessonNumber.setText("0.");
-                holder.lessonName.setText(mLessons.get(mDay).get(TimeTable.Lesson.lesson0));
-                holder.lessonTeacher.setVisibility(View.GONE);
-                break;
-            case 1:
-                holder.lessonNumber.setText("1.");
-                holder.lessonName.setText(mLessons.get(mDay).get(TimeTable.Lesson.lesson1));
-                holder.lessonTeacher.setVisibility(View.GONE);
-                break;
-            case 2:
-                holder.lessonNumber.setText("2.");
-                holder.lessonName.setText(mLessons.get(mDay).get(TimeTable.Lesson.lesson2));
-                holder.lessonTeacher.setVisibility(View.GONE);
-                break;
-            case 3:
-                holder.lessonNumber.setText("3.");
-                holder.lessonName.setText(mLessons.get(mDay).get(TimeTable.Lesson.lesson3));
-                holder.lessonTeacher.setVisibility(View.GONE);
-                break;
-            case 4:
-                holder.lessonNumber.setText("4.");
-                holder.lessonName.setText(mLessons.get(mDay).get(TimeTable.Lesson.lesson4));
-                holder.lessonTeacher.setVisibility(View.GONE);
-                break;
-            case 5:
-                holder.lessonNumber.setText("5.");
-                holder.lessonName.setText(mLessons.get(mDay).get(TimeTable.Lesson.lesson5));
-                holder.lessonTeacher.setVisibility(View.GONE);
-                break;
-            case 6:
-                holder.lessonNumber.setText("6.");
-                holder.lessonName.setText(mLessons.get(mDay).get(TimeTable.Lesson.lesson6));
-                holder.lessonTeacher.setVisibility(View.GONE);
-                break;
-        }
+        Lesson lesson = lessonDay.getDayLessons().get(position);
+
+        holder.lessonNumber.setText(lesson.getNumber() + ".");
+        holder.lessonName.setText(lesson.getName());
+        holder.lessonTeacher.setVisibility(View.GONE);
 
         //changes set background
 //        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, Boolean>> changes = mTimeTable.getChanges();
@@ -114,7 +79,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
     @Override
     public int getItemCount() {
         //// FIXME: 16.09.2017 lenght
-        return 7;
+        return lessonDay.getDayLessons().size();
     }
 
 }
