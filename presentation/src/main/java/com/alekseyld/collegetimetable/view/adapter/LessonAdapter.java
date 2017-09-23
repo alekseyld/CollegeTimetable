@@ -40,7 +40,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
         Lesson lesson = lessonDay.getDayLessons().get(position);
 
         holder.lessonNumber.setText(lesson.getNumber() + ".");
-        holder.lessonName.setText(lesson.getName());
+        holder.lessonName.setText(lesson.getDoubleName());
         holder.lessonTeacher.setVisibility(View.GONE);
 
         //changes set background

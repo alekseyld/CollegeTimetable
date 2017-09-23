@@ -10,6 +10,8 @@ public class Lesson {
 
     private String name;
 
+    private String secondName;
+
     private String teacher;
 
     private boolean change;
@@ -23,7 +25,16 @@ public class Lesson {
         return this;
     }
 
-    public String getName() {
+    public String getDoubleName() {
+        if (secondName != null) {
+            return name + "\n/\n" +
+                    secondName;
+        } else {
+            return name;
+        }
+    }
+
+    public String getName(){
         return name;
     }
 
@@ -47,6 +58,15 @@ public class Lesson {
 
     public Lesson setChange(boolean change) {
         this.change = change;
+        return this;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public Lesson setSecondName(String secondName) {
+        this.secondName = secondName;
         return this;
     }
 }

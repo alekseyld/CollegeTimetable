@@ -174,37 +174,6 @@ public class DataUtils {
 
             i++;
             if (i == table.size() - 1 && day != -1) {
-//                switch (day){
-//                    case 0:
-//                        dayList.put(Mon, lessons);
-//                        days.put(Mon, dayString[0].equals("") ? dayString[1] : dayString[0]);
-//                        break;
-//                    case 1:
-//                        dayList.put(Tue, lessons);
-//                        days.put(Tue, dayString[0].equals(days.get(Mon)) ? dayString[1] : dayString[0]);
-//                        break;
-//                    case 2:
-//                        dayList.put(Wed, lessons);
-//                        days.put(Wed, dayString[0].equals(days.get(Tue)) ? dayString[1] : dayString[0]);
-//                        break;
-//                    case 3:
-//                        dayList.put(Thu, lessons);
-//                        days.put(Thu, dayString[0].equals(days.get(Wed)) ? dayString[1] : dayString[0]);
-//                        break;
-//                    case 4:
-//                        dayList.put(Friday, lessons);
-//                        days.put(Friday, dayString[0].equals(days.get(Thu)) ? dayString[1] : dayString[0]);
-//                        break;
-//                    case 5:
-//                        dayList.put(TimeTable.Day.Saturday, lessons);
-//                        days.put(TimeTable.Day.Saturday, dayString[0].equals(days.get(Friday)) ? dayString[1] : dayString[0]);
-//                        break;
-//                    case 6:
-//                        dayList.put(TimeTable.Day.Mon2, lessons);
-//                        days.put(TimeTable.Day.Mon2, dayString[1]);
-//                        break;
-//                }
-
                 timeTable.addDay(
                         new Day()
                                 .setId(day)
@@ -222,37 +191,6 @@ public class DataUtils {
                 lesson = Integer.parseInt(table.get(iterator).text());
 
                 if (lesson == 0 && day != -1) {
-//                    switch (day){
-//                        case 0:
-//                            dayList.put(Mon, lessons);
-//                            days.put(Mon, dayString[0]);
-//                            break;
-//                        case 1:
-//                            dayList.put(Tue, lessons);
-//                            days.put(Tue, dayString[0]);
-//                            break;
-//                        case 2:
-//                            dayList.put(Wed, lessons);
-//                            days.put(Wed, dayString[0]);
-//                            break;
-//                        case 3:
-//                            dayList.put(Thu, lessons);
-//                            days.put(Thu, dayString[0]);
-//                            break;
-//                        case 4:
-//                            dayList.put(Friday, lessons);
-//                            days.put(Friday, dayString[0]);
-//                            break;
-//                        case 5:
-//                            dayList.put(Saturday, lessons);
-//                            days.put(Saturday, dayString[0]);
-//                            break;
-//                        case 6:
-//                            dayList.put(TimeTable.Day.Mon2, lessons);
-//                            days.put(TimeTable.Day.Mon2, dayString[1]);
-//                            break;
-//                    }
-
                     timeTable.addDay(
                             new Day()
                                     .setId(day)
@@ -274,39 +212,14 @@ public class DataUtils {
             if (lessonSpace == iSpace) {
                 String text = table.get(iterator).text();
 
-                if (table.get(iterator).attr("colspan").equals("")) {
-                    text = table.get(iterator).text() + "\n/\n" +
-                            table.get(iterator + 1).text();
-                }
-
-//                switch (lesson) {
-//                    case 0:
-//                        lessons.put(TimeTable.Lesson.lesson0, text);
-//                        break;
-//                    case 1:
-//                        lessons.put(TimeTable.Lesson.lesson1, text);
-//                        break;
-//                    case 2:
-//                        lessons.put(TimeTable.Lesson.lesson2, text);
-//                        break;
-//                    case 3:
-//                        lessons.put(TimeTable.Lesson.lesson3, text);
-//                        break;
-//                    case 4:
-//                        lessons.put(TimeTable.Lesson.lesson4, text);
-//                        break;
-//                    case 5:
-//                        lessons.put(TimeTable.Lesson.lesson5, text);
-//                        break;
-//                    case 6:
-//                        lessons.put(TimeTable.Lesson.lesson6, text);
-//                        break;
-//                }
+                boolean second = table.get(iterator).attr("colspan").equals("");
 
                 lessons.add(
                         new Lesson()
                                 .setNumber(lesson)
                                 .setName(text)
+                                .setSecondName(second ? table.get(iterator + 1).text() : null)
+                                .setChange(table.get(iterator).children().attr("color").equals("blue"))
                 );
 
                 lessonSpace = 0;
