@@ -17,7 +17,6 @@ import com.alekseyld.collegetimetable.view.adapter.holder.LessonViewHolder;
 
 public class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
 
-    //// FIXME: 16.09.2017 to lesson array list
     private Day lessonDay;
 
     public LessonAdapter(@NonNull Day day){
@@ -78,7 +77,6 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
 
     @Override
     public int getItemCount() {
-        //// FIXME: 16.09.2017 lenght
         return lessonDay.getDayLessons().size();
     }
 
