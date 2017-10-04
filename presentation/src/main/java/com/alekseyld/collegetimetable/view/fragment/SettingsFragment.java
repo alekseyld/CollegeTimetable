@@ -1,6 +1,5 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.TypedValue;
@@ -83,14 +82,10 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
             }
         });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // If we're running on Honeycomb or newer, then we can use the Theme's
-            // selectableItemBackground to ensure that the View has a pressed state
-            TypedValue outValue = new TypedValue();
-            getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
-            addFarvorite.setBackgroundResource(outValue.resourceId);
-            addNotif.setBackgroundResource(outValue.resourceId);
-        }
+        TypedValue outValue = new TypedValue();
+        getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
+        addFarvorite.setBackgroundResource(outValue.resourceId);
+        addNotif.setBackgroundResource(outValue.resourceId);
 
         return v;
     }

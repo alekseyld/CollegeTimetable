@@ -45,11 +45,8 @@ public class TableRepositoryImpl implements TableRepository {
     @Override
     public boolean putTimeTable(TimeTable timeTable, String group) {
         String json = mGson.toJson(timeTable);
-
         SharedPreferences.Editor ed = mPref.edit();
-
         ed.putString(TIMETABLE_NEW_KEY + "_" + group, json);
-
         ed.apply();
         return true;
     }
@@ -65,11 +62,5 @@ public class TableRepositoryImpl implements TableRepository {
     public void put(TimeTable timeTable, Document document, String group) {
         putTimeTable(timeTable, group);
         putDocument(document);
-    }
-
-    //// TODO: 21.09.2017 перенести в day entity
-    private String firstUpperCase(String word){
-        if(word == null || word.isEmpty()) return "";//или return word;
-        return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
 }

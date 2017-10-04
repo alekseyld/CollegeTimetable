@@ -17,7 +17,6 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
 
     private TimeTable mTimeTable;
 
-    // Provide a suitable constructor (depends on the kind of dataset)
     public TableAdapter() {
         mTimeTable = null;
     }
@@ -26,24 +25,17 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
         mTimeTable = timeTable;
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public TimeTableHolder onCreateViewHolder(ViewGroup parent,
                                               int viewType) {
-        // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_table, parent, false);
-        // set the view's size, margins, paddings and layout parameters
         return new TimeTableHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(TimeTableHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-
-        holder.date.setText(firstUpperCase(mTimeTable.getDayList().get(position).getDate().toLowerCase()));
+        holder.date.setText(mTimeTable.getDayList().get(position).getDateFirstUpperCase());
         holder.lessons.setAdapter(new LessonAdapter(mTimeTable.getDayList().get(position)));
     }
 
@@ -56,17 +48,11 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
         notifyDataSetChanged();
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         if (mTimeTable == null || mTimeTable.getDayList() == null) {
             return 0;
         }
         return mTimeTable.getDayList().size();
-    }
-
-    private String firstUpperCase(String word) {
-        if (word == null || word.isEmpty()) return "";//или return word;
-        return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
 }

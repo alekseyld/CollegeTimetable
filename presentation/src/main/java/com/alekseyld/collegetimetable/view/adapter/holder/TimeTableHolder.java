@@ -19,14 +19,6 @@ public class TimeTableHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.date)
     public TextView date;
 
-//    @BindView(R.id.lesson0) public TextView lesson0;
-//    @BindView(R.id.lesson1) public TextView lesson1;
-//    @BindView(R.id.lesson2) public TextView lesson2;
-//    @BindView(R.id.lesson3) public TextView lesson3;
-//    @BindView(R.id.lesson4) public TextView lesson4;
-//    @BindView(R.id.lesson5) public TextView lesson5;
-//    @BindView(R.id.lesson6) public TextView lesson6;
-
     @BindView(R.id.lesson_list)
     public RecyclerView lessons;
 

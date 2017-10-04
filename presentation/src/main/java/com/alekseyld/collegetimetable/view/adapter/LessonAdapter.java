@@ -15,11 +15,11 @@ import com.alekseyld.collegetimetable.view.adapter.holder.LessonViewHolder;
  * Created by Alekseyld on 16.09.2017.
  */
 
-public class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
+class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
 
     private Day lessonDay;
 
-    public LessonAdapter(@NonNull Day day){
+    LessonAdapter(@NonNull Day day){
         lessonDay = day;
     }
 
