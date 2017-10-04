@@ -116,6 +116,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         mMenu = menu;
+        mMenu.clear();
         inflater.inflate(R.menu.menu_table, menu);
 
         Drawable drawable = menu.findItem(R.id.action_info).getIcon();
