@@ -125,6 +125,8 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
             drawable.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
         }
 
+        onTimeTableUpdate();
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -140,13 +142,21 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         return super.onOptionsItemSelected(item);
     }
 
+    public void onTimeTableUpdate(){
+        if (getTimeTable() != null
+                && getTimeTable().getLastRefresh() != null
+                && mMenu != null
+                && mMenu.findItem(R.id.action_info) != null){
+            mMenu.findItem(R.id.action_info).setVisible(true);
+        }
+
+    }
+
     @Override
     public void setTimeTable(TimeTable timeTable) {
-        if (timeTable != null && timeTable.getLastRefresh() == null && mMenu.findItem(R.id.action_info) != null)
-            mMenu.findItem(R.id.action_info).setVisible(false);
-
-
         mTableAdapter.setTimeTable(timeTable);
+
+        onTimeTableUpdate();
     }
 
     @Override
