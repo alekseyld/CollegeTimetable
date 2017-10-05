@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.alekseyld.collegetimetable.R;
+import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerMainComponent;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.internal.di.module.MainModule;
@@ -19,14 +20,11 @@ import com.alekseyld.collegetimetable.view.fragment.BellTableFragment;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFragment;
 import com.alekseyld.collegetimetable.view.fragment.TableFragment;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.FAVORITEGROUPS_KEY;
+import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.SETTINGS_KEY;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 public class MainActivity extends BaseInjectorActivity<MainComponent> {
@@ -125,11 +123,11 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
 
         SharedPreferences preferences = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
 
-        if(preferences.contains(FAVORITEGROUPS_KEY)) {
-            String json = preferences.getString(FAVORITEGROUPS_KEY, "");
-            Set<String> set = new Gson().fromJson(json,
-                    new TypeToken<Set<String>>(){}.getType());
-            favorite = set.toArray(new String[set.size()]);
+        if(preferences.contains(SETTINGS_KEY)) {
+            String json = preferences.getString(SETTINGS_KEY, "");
+            Settings settings = new Gson().fromJson(json, Settings.class);
+            if (settings.getFavoriteGroups() != null)
+                favorite = settings.getFavoriteGroups().toArray(new String[0]);
         }
 
         Menu menu = navigation.getMenu();

@@ -114,7 +114,7 @@ class BackwardCompatibility {
                 }
 
                 preferences.edit()
-                        .putString(TIMETABLE_NEW_KEY, gson.toJson(newTimetable))
+                        .putString(TIMETABLE_NEW_KEY + group, gson.toJson(newTimetable))
                         .remove(TIMETABLE_KEY + group)
                         .remove(DAYS_KEY + group)
                         .apply();
