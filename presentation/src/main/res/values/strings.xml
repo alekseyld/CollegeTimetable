@@ -60,6 +60,7 @@
     <string name="hint_num">1</string>
     <string name="settings_favorite_activity_title">Избранные группы</string>
     <string name="action_info">Информация</string>
+    <string name="utec_helper_lable">Утэк Helper</string>
 
     <string-array name="groupsList">
 
