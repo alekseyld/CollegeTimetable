@@ -21,7 +21,7 @@
             android:id="@+id/addNotif"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/addNotif"
+            android:text="@string/mygroup"
             style="@style/SettingTextView"
             />
 

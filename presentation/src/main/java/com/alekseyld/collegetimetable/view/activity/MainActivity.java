@@ -51,6 +51,8 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
                     getSupportFragmentManager().popBackStack();
                 }
                 int id = menuItem.getItemId();
+                menuItem.setChecked(true);
+
                 return onItemSelected(id, false);
             }
             return false;
@@ -132,6 +134,11 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
 
         Menu menu = navigation.getMenu();
         menu.clear();
+
+        menu.add(Menu.NONE, R.id.action_home, Menu.NONE, R.string.mygroup);
+        menu.getItem(0).setChecked(true);
+        menu.getItem(0).setIcon(R.drawable.ic_home_black_24dp);
+
         if(favorite != null) {
             for (int i = 0; i < favorite.length; i++) {
                 menu.add(Menu.NONE, i, Menu.NONE, favorite[i]);
