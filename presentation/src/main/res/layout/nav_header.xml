@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="288dp"
+    android:background="@drawable/ic_header_collegetimetable">
+
+    <TextView
+        android:id="@+id/header_my_group"
+        android:text="Моя группа - 3 АПП - 1"
+        android:paddingLeft="10dp"
+        android:textSize="8pt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:textColor="@android:color/white"
+        />
+
+</RelativeLayout>
