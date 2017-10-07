@@ -3,7 +3,7 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryNew"
+    android:background="@color/colorPrimary"
     android:fitsSystemWindows="true"
     android:maxHeight="50dp"
     android:theme="@style/ToolBarStyle">

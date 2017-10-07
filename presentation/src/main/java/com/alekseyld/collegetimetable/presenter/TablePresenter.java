@@ -67,7 +67,7 @@ public class TablePresenter extends BasePresenter<TableView>{
         mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>(){
             @Override
             public void onNext(TimeTable timeTable){
-//                Log.d("test", "TimeTable offline onNext" + timeTable.getTimeTable().size());
+//                Log.d("test", "TimeTable offline onNext" + timeTable.getDayList().size());
                 mView.setTimeTable(timeTable);
             }
 
@@ -109,8 +109,8 @@ public class TablePresenter extends BasePresenter<TableView>{
             public void onCompleted() {
                 mView.hideLoading();
                 if(mView.getTimeTable() == null
-                        || mView.getTimeTable().getTimeTable() == null
-                        || mView.getTimeTable().getTimeTable().keySet().size() == 0){
+                        || mView.getTimeTable().getDayList() == null
+                        || mView.getTimeTable().getDayList().size() == 0){
                     mView.showMessage();
                 }
             }

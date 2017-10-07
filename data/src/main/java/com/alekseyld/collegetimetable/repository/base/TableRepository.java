@@ -12,6 +12,7 @@ public interface TableRepository {
 
     String NAME_FILE = "DataStorage";
     String TIMETABLE_KEY = "TimeTable";
+    String TIMETABLE_NEW_KEY = "TIMETABLE_NEW_KEY";
     String DAYS_KEY = "Days";
     String DOC_KEY = "Doc";
 

@@ -1,12 +1,12 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +36,10 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
     TextView addFarvorite;
 
     @BindView(R.id.addNotif)
-    TextView addNotif;
+    LinearLayout addNotif;
+
+    @BindView(R.id.my_group_value)
+    TextView addNotifValue;
 
     @BindView(R.id.alarmMode)
     Switch alarmMode;
@@ -83,27 +86,26 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
             }
         });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // If we're running on Honeycomb or newer, then we can use the Theme's
-            // selectableItemBackground to ensure that the View has a pressed state
-            TypedValue outValue = new TypedValue();
-            getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
-            addFarvorite.setBackgroundResource(outValue.resourceId);
-            addNotif.setBackgroundResource(outValue.resourceId);
-        }
+        TypedValue outValue = new TypedValue();
+        getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
+        addFarvorite.setBackgroundResource(outValue.resourceId);
+        addNotif.setBackgroundResource(outValue.resourceId);
 
         return v;
     }
 
     @Override
     public void presenterReady() {
-        alarmMode.setChecked(
-                mPresenter.getAlarmMode()
-        );
 
-        notifOn.setChecked(
-                mPresenter.getNotifOn()
-        );
+        alarmMode.setChecked(mPresenter.getAlarmMode());
+        notifOn.setChecked(mPresenter.getNotifOn());
+
+        if (mPresenter.getNotificationGroup() != null && !mPresenter.getNotificationGroup().equals("")) {
+            addNotifValue.setVisibility(View.VISIBLE);
+            addNotifValue.setText(mPresenter.getNotificationGroup());
+        } else {
+            addNotifValue.setVisibility(View.GONE);
+        }
     }
 
     public void saveNotification(String group){

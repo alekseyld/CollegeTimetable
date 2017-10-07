@@ -1,27 +1,15 @@
 package com.alekseyld.collegetimetable.utils;
 
+import com.alekseyld.collegetimetable.entity.Day;
+import com.alekseyld.collegetimetable.entity.Lesson;
 import com.alekseyld.collegetimetable.entity.TimeTable;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
 
-import java.util.HashMap;
+import java.util.List;
 
-import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Friday;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Mon;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Mon2;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Saturday;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Thu;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Tue;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Wed;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Lesson.lesson0;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Lesson.lesson1;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Lesson.lesson2;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Lesson.lesson3;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Lesson.lesson4;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Lesson.lesson5;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Lesson.lesson6;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -82,553 +70,993 @@ public class DataUtilsTest{
         assertTrue(DataUtils.getGroupUrl("1 ТОВ-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
     }
 
+    // 3 АПП-1
     @Test
-    public void parseTestTimetableAPPallWeek() throws Exception {
-
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_all_week").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
-
-        assertTrue(tableWrapper.getTimeTable() != null);
-
-        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
-
-        assertTrue(timeTable.keySet().size() > 0);
-        assertTrue(timeTable.keySet().contains(Mon));
-        assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
-
-        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
-
-        assertTrue(lessons.get(lesson0).equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
-        assertTrue(lessons.get(lesson1).equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
-        assertTrue(lessons.get(lesson2).equals("Основные процессы и технологии ТЭК Корепанова И.А."));
-        assertTrue(lessons.get(lesson3).equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
-
-        assertTrue(tableWrapper.getDays().get(Tue).equals("В Т О Р Н И К   12.09.2017"));
-        lessons = timeTable.get(Tue);
-
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("Иностранный язык Захарова И.В. /Кусякова Л.Ф."));
-        assertTrue(lessons.get(lesson2).equals("Компьютерное моделирование Гадельбаева Р.А."));
-        assertTrue(lessons.get(lesson3).equals("МДК.04.01. Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Милованова М.И."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
-
-        assertTrue(tableWrapper.getDays().get(Wed).equals("С Р Е Д А   13.09.2017"));
-        lessons = timeTable.get(Wed);
-
-        assertTrue(lessons.get(lesson0).equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
-        assertTrue(lessons.get(lesson1).equals("Физическая культура Федяева Ю.В."));
-        assertTrue(lessons.get(lesson2).equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
-        assertTrue(lessons.get(lesson3).equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
-
-        assertTrue(tableWrapper.getDays().get(Thu).equals("Ч Е Т В Е Р Г   14.09.2017"));
-        lessons = timeTable.get(Thu);
-
-        assertTrue(lessons.get(lesson0).equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
-        assertTrue(lessons.get(lesson1).equals("МДК.05.01. Теоретические основы обеспечения надежности систем автоматизации и модулей мехатронных систем Милованов А.С."));
-        assertTrue(lessons.get(lesson2).equals("Основные процессы и технологии ТЭК Корепанова И.А."));
-        assertTrue(lessons.get(lesson3).equals("МДК.05.01. Теоретические основы обеспечения надежности систем автоматизации и модулей мехатронных систем Милованов А.С."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
-
-        assertTrue(tableWrapper.getDays().get(Friday).equals("П Я Т Н И Ц А   15.09.2017"));
-        lessons = timeTable.get(Friday);
-
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("Компьютерное моделирование Гадельбаева Р.А."));
-        assertTrue(lessons.get(lesson2).equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
-        assertTrue(lessons.get(lesson3).equals("\u00A0"));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
-
-        assertTrue(tableWrapper.getDays().get(Saturday).equals("С У Б Б О Т А   16.09.2017"));
-        lessons = timeTable.get(Saturday);
-
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("Основы философии Вершинина Н.П."));
-        assertTrue(lessons.get(lesson2).equals("МДК.04.01. Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
-
-        assertTrue(tableWrapper.getDays().get(Mon2).equals("П О Н Е Д Е Л Ь Н И К   18.09.2017"));
-        lessons = timeTable.get(Mon2);
-
-        assertTrue(lessons.get(lesson0).equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
-        assertTrue(lessons.get(lesson1).equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
-        assertTrue(lessons.get(lesson2).equals("Основные процессы и технологии ТЭК Корепанова И.А."));
-        assertTrue(lessons.get(lesson3).equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
-
-    }
-
-    @Test
-    public void parseTestTimetableAPPallWeekWithDoubleLessons_1() throws Exception {
+    public void parseTestTimetable3APP1_1() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_1").timeout(0).get();
 
         TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
 
-        assertTrue(tableWrapper.getTimeTable() != null);
+        assertTrue(tableWrapper.getDayList() != null);
 
-        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+        List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.keySet().size() == 1);
-        assertTrue(timeTable.keySet().contains(Mon));
-        assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+        assertTrue(timeTable.size() == 1);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
-        assertTrue(lessons.get(lesson1).equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
-        assertTrue(lessons.get(lesson2).equals("Основные процессы и технологии ТЭК Корепанова И.А."));
-        assertTrue(lessons.get(lesson3).equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Основные процессы и технологии ТЭК Корепанова И.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
         // another group
 
         tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
 
-        assertTrue(tableWrapper.getTimeTable() != null);
+        assertTrue(tableWrapper.getDayList() != null);
 
-        timeTable = tableWrapper.getTimeTable();
+        timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.keySet().size() == 1);
-        assertTrue(timeTable.keySet().contains(Mon));
-        assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+        assertTrue(timeTable.size() == 1);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        lessons = timeTable.get(Mon);
+        lessons = timeTable.get(0).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
         // empty group
 
         tableWrapper = DataUtils.parseDocument(document, "4 ЭНН-2");
-        assertTrue(tableWrapper.getTimeTable().keySet().size() == 0);
+        assertTrue(tableWrapper.getDayList() == null);
 
         tableWrapper = DataUtils.parseDocument(null, "4 АПП-2");
-        assertTrue(tableWrapper.getTimeTable() == null);
+        assertTrue(tableWrapper.getDayList() == null);
 
         tableWrapper = DataUtils.parseDocument(document, "111441");
-        assertTrue(tableWrapper.getTimeTable() == null);
+        assertTrue(tableWrapper.getDayList() == null);
     }
 
     @Test
-    public void parseTestTimetableAPPallWeekWithDoubleLessons_2() throws Exception {
+    public void parseTestTimetable3APP1_2() throws Exception {
+
+        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_2").timeout(0).get();
+
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+
+        assertTrue(tableWrapper.getDayList() != null);
+
+        List<Day> timeTable = tableWrapper.getDayList();
+
+        assertTrue(timeTable.size() > 0);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Основные процессы и технологии ТЭК Корепанова И.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(1).getDate().equals("В Т О Р Н И К   12.09.2017"));
+        lessons = timeTable.get(1).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("Иностранный язык Захарова И.В. /Кусякова Л.Ф."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Компьютерное моделирование Гадельбаева Р.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.01. Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Милованова М.И."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+    }
+
+    @Test
+    public void parseTestTimetable3APP1_3() throws Exception {
+
+        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_3").timeout(0).get();
+
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+
+        assertTrue(tableWrapper.getDayList() != null);
+
+        List<Day> timeTable = tableWrapper.getDayList();
+
+        assertTrue(timeTable.size() > 0);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Основные процессы и технологии ТЭК Корепанова И.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(1).getDate().equals("В Т О Р Н И К   12.09.2017"));
+        lessons = timeTable.get(1).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("Иностранный язык Захарова И.В. /Кусякова Л.Ф."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Компьютерное моделирование Гадельбаева Р.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.01. Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Милованова М.И."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(2).getDate().equals("С Р Е Д А   13.09.2017"));
+        lessons = timeTable.get(2).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(1).getDoubleName().equals("Физическая культура Федяева Ю.В."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+    }
+
+    @Test
+    public void parseTestTimetable3APP1_4() throws Exception {
+
+        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_4").timeout(0).get();
+
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+
+        assertTrue(tableWrapper.getDayList() != null);
+
+        List<Day> timeTable = tableWrapper.getDayList();
+
+        assertTrue(timeTable.size() > 0);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Основные процессы и технологии ТЭК Корепанова И.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(1).getDate().equals("В Т О Р Н И К   12.09.2017"));
+        lessons = timeTable.get(1).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("Иностранный язык Захарова И.В. /Кусякова Л.Ф."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Компьютерное моделирование Гадельбаева Р.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.01. Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Милованова М.И."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(2).getDate().equals("С Р Е Д А   13.09.2017"));
+        lessons = timeTable.get(2).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(1).getDoubleName().equals("Физическая культура Федяева Ю.В."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(3).getDate().equals("Ч Е Т В Е Р Г   14.09.2017"));
+        lessons = timeTable.get(3).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.05.01. Теоретические основы обеспечения надежности систем автоматизации и модулей мехатронных систем Милованов А.С."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Основные процессы и технологии ТЭК Корепанова И.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.05.01. Теоретические основы обеспечения надежности систем автоматизации и модулей мехатронных систем Милованов А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+    }
+
+    @Test
+    public void parseTestTimetable3APP1_5() throws Exception {
+
+        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_5").timeout(0).get();
+
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+
+        assertTrue(tableWrapper.getDayList() != null);
+
+        List<Day> timeTable = tableWrapper.getDayList();
+
+        assertTrue(timeTable.size() > 0);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Основные процессы и технологии ТЭК Корепанова И.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(1).getDate().equals("В Т О Р Н И К   12.09.2017"));
+        lessons = timeTable.get(1).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("Иностранный язык Захарова И.В. /Кусякова Л.Ф."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Компьютерное моделирование Гадельбаева Р.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.01. Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Милованова М.И."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(2).getDate().equals("С Р Е Д А   13.09.2017"));
+        lessons = timeTable.get(2).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(1).getDoubleName().equals("Физическая культура Федяева Ю.В."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(3).getDate().equals("Ч Е Т В Е Р Г   14.09.2017"));
+        lessons = timeTable.get(3).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.05.01. Теоретические основы обеспечения надежности систем автоматизации и модулей мехатронных систем Милованов А.С."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Основные процессы и технологии ТЭК Корепанова И.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.05.01. Теоретические основы обеспечения надежности систем автоматизации и модулей мехатронных систем Милованов А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(4).getDate().equals("П Я Т Н И Ц А   15.09.2017"));
+        lessons = timeTable.get(4).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("Компьютерное моделирование Гадельбаева Р.А."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+    }
+
+    @Test
+    public void parseTestTimetable3APP1_6() throws Exception {
+
+        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_6").timeout(0).get();
+
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+
+        assertTrue(tableWrapper.getDayList() != null);
+
+        List<Day> timeTable = tableWrapper.getDayList();
+
+        assertTrue(timeTable.size() > 0);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Основные процессы и технологии ТЭК Корепанова И.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(1).getDate().equals("В Т О Р Н И К   12.09.2017"));
+        lessons = timeTable.get(1).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("Иностранный язык Захарова И.В. /Кусякова Л.Ф."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Компьютерное моделирование Гадельбаева Р.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.01. Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Милованова М.И."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(2).getDate().equals("С Р Е Д А   13.09.2017"));
+        lessons = timeTable.get(2).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(1).getDoubleName().equals("Физическая культура Федяева Ю.В."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(3).getDate().equals("Ч Е Т В Е Р Г   14.09.2017"));
+        lessons = timeTable.get(3).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.05.01. Теоретические основы обеспечения надежности систем автоматизации и модулей мехатронных систем Милованов А.С."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Основные процессы и технологии ТЭК Корепанова И.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.05.01. Теоретические основы обеспечения надежности систем автоматизации и модулей мехатронных систем Милованов А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(4).getDate().equals("П Я Т Н И Ц А   15.09.2017"));
+        lessons = timeTable.get(4).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("Компьютерное моделирование Гадельбаева Р.А."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(5).getDate().equals("С У Б Б О Т А   16.09.2017"));
+        lessons = timeTable.get(5).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("Основы философии Вершинина Н.П."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.04.01. Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+    }
+
+    @Test
+    public void parseTestTimetable3APP1_7() throws Exception {
+
+        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_all_week").timeout(0).get();
+
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+
+        assertTrue(tableWrapper.getDayList() != null);
+
+        List<Day> timeTable = tableWrapper.getDayList();
+
+        assertTrue(timeTable.size() > 0);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Основные процессы и технологии ТЭК Корепанова И.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(1).getDate().equals("В Т О Р Н И К   12.09.2017"));
+        lessons = timeTable.get(1).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("Иностранный язык Захарова И.В. /Кусякова Л.Ф."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Компьютерное моделирование Гадельбаева Р.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.01. Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Милованова М.И."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(2).getDate().equals("С Р Е Д А   13.09.2017"));
+        lessons = timeTable.get(2).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(1).getDoubleName().equals("Физическая культура Федяева Ю.В."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(3).getDate().equals("Ч Е Т В Е Р Г   14.09.2017"));
+        lessons = timeTable.get(3).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.05.01. Теоретические основы обеспечения надежности систем автоматизации и модулей мехатронных систем Милованов А.С."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Основные процессы и технологии ТЭК Корепанова И.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.05.01. Теоретические основы обеспечения надежности систем автоматизации и модулей мехатронных систем Милованов А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(4).getDate().equals("П Я Т Н И Ц А   15.09.2017"));
+        lessons = timeTable.get(4).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("Компьютерное моделирование Гадельбаева Р.А."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(5).getDate().equals("С У Б Б О Т А   16.09.2017"));
+        lessons = timeTable.get(5).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("Основы философии Вершинина Н.П."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.04.01. Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(6).getDate().equals("П О Н Е Д Е Л Ь Н И К   18.09.2017"));
+        lessons = timeTable.get(6).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Основные процессы и технологии ТЭК Корепанова И.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+    }
+
+    // 4 АПП-2
+    @Test
+    public void parseTestTimetable4APP2_1() throws Exception {
+
+        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_1").timeout(0).get();
+
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+
+        assertTrue(tableWrapper.getDayList() != null);
+
+        List<Day> timeTable = tableWrapper.getDayList();
+
+        assertTrue(timeTable.size() > 0);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(lessons.get(1).isChange());
+        assertTrue(lessons.get(2).isChange());
+        assertTrue(lessons.get(3).isChange());
+
+    }
+
+    @Test
+    public void parseTestTimetable4APP2_2() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_2").timeout(0).get();
 
         TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
 
-        assertTrue(tableWrapper.getTimeTable() != null);
+        assertTrue(tableWrapper.getDayList() != null);
 
-        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+        List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.keySet().size() > 0);
-        assertTrue(timeTable.keySet().contains(Mon));
-        assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+        assertTrue(timeTable.size() > 0);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Tue).equals("В Т О Р Н И К   12.09.2017"));
-        lessons = timeTable.get(Tue);
+        assertTrue(lessons.get(1).isChange());
+        assertTrue(lessons.get(2).isChange());
+        assertTrue(lessons.get(3).isChange());
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("\u00A0"));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("Иностранный язык Коршунова Н.Е. /Галиева И.В."));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(tableWrapper.getDayList().get(1).getDate().equals("В Т О Р Н И К   12.09.2017"));
+        lessons = timeTable.get(1).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("Иностранный язык Коршунова Н.Е. /Галиева И.В."));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
     }
 
     @Test
-    public void parseTestTimetableAPPallWeekWithDoubleLessons_3() throws Exception {
+    public void parseTestTimetable4APP2_3() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_3").timeout(0).get();
 
         TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
 
-        assertTrue(tableWrapper.getTimeTable() != null);
+        assertTrue(tableWrapper.getDayList() != null);
 
-        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+        List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.keySet().size() > 0);
-        assertTrue(timeTable.keySet().contains(Mon));
-        assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+        assertTrue(timeTable.size() > 0);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Tue).equals("В Т О Р Н И К   12.09.2017"));
-        lessons = timeTable.get(Tue);
+        assertTrue(lessons.get(1).isChange());
+        assertTrue(lessons.get(2).isChange());
+        assertTrue(lessons.get(3).isChange());
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("\u00A0"));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("Иностранный язык Коршунова Н.Е. /Галиева И.В."));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(tableWrapper.getDayList().get(1).getDate().equals("В Т О Р Н И К   12.09.2017"));
+        lessons = timeTable.get(1).getDayLessons();
 
-        assertTrue(tableWrapper.getDays().get(Wed).equals("С Р Е Д А   13.09.2017"));
-        lessons = timeTable.get(Wed);
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("Иностранный язык Коршунова Н.Е. /Галиева И.В."));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("\u00A0"));
-        assertTrue(lessons.get(lesson2).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
-        assertTrue(lessons.get(lesson3).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."
+        assertTrue(tableWrapper.getDayList().get(2).getDate().equals("С Р Е Д А   13.09.2017"));
+        lessons = timeTable.get(2).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."
                 + "\n/\n" + "Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("Физическая культура Кайниев А.А."));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(4).getDoubleName().equals("Физическая культура Кайниев А.А."));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
     }
 
     @Test
-    public void parseTestTimetableAPPallWeekWithDoubleLessons_4() throws Exception {
+    public void parseTestTimetable4APP2_4() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_4").timeout(0).get();
 
         TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
 
-        assertTrue(tableWrapper.getTimeTable() != null);
+        assertTrue(tableWrapper.getDayList() != null);
 
-        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+        List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.keySet().size() > 0);
-        assertTrue(timeTable.keySet().contains(Mon));
-        assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+        assertTrue(timeTable.size() > 0);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Tue).equals("В Т О Р Н И К   12.09.2017"));
-        lessons = timeTable.get(Tue);
+        assertTrue(lessons.get(1).isChange());
+        assertTrue(lessons.get(2).isChange());
+        assertTrue(lessons.get(3).isChange());
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("\u00A0"));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("Иностранный язык Коршунова Н.Е. /Галиева И.В."));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(tableWrapper.getDayList().get(1).getDate().equals("В Т О Р Н И К   12.09.2017"));
+        lessons = timeTable.get(1).getDayLessons();
 
-        assertTrue(tableWrapper.getDays().get(Wed).equals("С Р Е Д А   13.09.2017"));
-        lessons = timeTable.get(Wed);
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("Иностранный язык Коршунова Н.Е. /Галиева И.В."));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("\u00A0"));
-        assertTrue(lessons.get(lesson2).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
-        assertTrue(lessons.get(lesson3).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."
+        assertTrue(tableWrapper.getDayList().get(2).getDate().equals("С Р Е Д А   13.09.2017"));
+        lessons = timeTable.get(2).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."
                 + "\n/\n" + "Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("Физическая культура Кайниев А.А."));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(4).getDoubleName().equals("Физическая культура Кайниев А.А."));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Thu).equals("Ч Е Т В Е Р Г   14.09.2017"));
-        lessons = timeTable.get(Thu);
+        assertTrue(tableWrapper.getDayList().get(3).getDate().equals("Ч Е Т В Е Р Г   14.09.2017"));
+        lessons = timeTable.get(3).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
-        assertTrue(lessons.get(lesson3).equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
     }
 
     @Test
-    public void parseTestTimetableAPPallWeekWithDoubleLessons_5() throws Exception {
+    public void parseTestTimetable4APP2_5() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_5").timeout(0).get();
 
         TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
 
-        assertTrue(tableWrapper.getTimeTable() != null);
+        assertTrue(tableWrapper.getDayList() != null);
 
-        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+        List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.keySet().size() > 0);
-        assertTrue(timeTable.keySet().contains(Mon));
-        assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+        assertTrue(timeTable.size() > 0);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Tue).equals("В Т О Р Н И К   12.09.2017"));
-        lessons = timeTable.get(Tue);
+        assertTrue(lessons.get(1).isChange());
+        assertTrue(lessons.get(2).isChange());
+        assertTrue(lessons.get(3).isChange());
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("\u00A0"));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("Иностранный язык Коршунова Н.Е. /Галиева И.В."));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(tableWrapper.getDayList().get(1).getDate().equals("В Т О Р Н И К   12.09.2017"));
+        lessons = timeTable.get(1).getDayLessons();
 
-        assertTrue(tableWrapper.getDays().get(Wed).equals("С Р Е Д А   13.09.2017"));
-        lessons = timeTable.get(Wed);
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("Иностранный язык Коршунова Н.Е. /Галиева И.В."));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("\u00A0"));
-        assertTrue(lessons.get(lesson2).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
-        assertTrue(lessons.get(lesson3).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."
+        assertTrue(tableWrapper.getDayList().get(2).getDate().equals("С Р Е Д А   13.09.2017"));
+        lessons = timeTable.get(2).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."
                 + "\n/\n" + "Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("Физическая культура Кайниев А.А."));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(4).getDoubleName().equals("Физическая культура Кайниев А.А."));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Thu).equals("Ч Е Т В Е Р Г   14.09.2017"));
-        lessons = timeTable.get(Thu);
+        assertTrue(tableWrapper.getDayList().get(3).getDate().equals("Ч Е Т В Е Р Г   14.09.2017"));
+        lessons = timeTable.get(3).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
-        assertTrue(lessons.get(lesson3).equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Friday).equals("П Я Т Н И Ц А   15.09.2017"));
-        lessons = timeTable.get(Friday);
+        assertTrue(tableWrapper.getDayList().get(4).getDate().equals("П Я Т Н И Ц А   15.09.2017"));
+        lessons = timeTable.get(4).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
     }
 
     @Test
-    public void parseTestTimetableAPPallWeekWithDoubleLessons_6() throws Exception {
+    public void parseTestTimetable4APP2_6() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_6").timeout(0).get();
 
         TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
 
-        assertTrue(tableWrapper.getTimeTable() != null);
+        assertTrue(tableWrapper.getDayList() != null);
 
-        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+        List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.keySet().size() > 0);
-        assertTrue(timeTable.keySet().contains(Mon));
-        assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+        assertTrue(timeTable.size() > 0);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Tue).equals("В Т О Р Н И К   12.09.2017"));
-        lessons = timeTable.get(Tue);
+        assertTrue(lessons.get(1).isChange());
+        assertTrue(lessons.get(2).isChange());
+        assertTrue(lessons.get(3).isChange());
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("\u00A0"));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("Иностранный язык Коршунова Н.Е. /Галиева И.В."));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(tableWrapper.getDayList().get(1).getDate().equals("В Т О Р Н И К   12.09.2017"));
+        lessons = timeTable.get(1).getDayLessons();
 
-        assertTrue(tableWrapper.getDays().get(Wed).equals("С Р Е Д А   13.09.2017"));
-        lessons = timeTable.get(Wed);
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("Иностранный язык Коршунова Н.Е. /Галиева И.В."));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("\u00A0"));
-        assertTrue(lessons.get(lesson2).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
-        assertTrue(lessons.get(lesson3).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."
+        assertTrue(tableWrapper.getDayList().get(2).getDate().equals("С Р Е Д А   13.09.2017"));
+        lessons = timeTable.get(2).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."
                 + "\n/\n" + "Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("Физическая культура Кайниев А.А."));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(4).getDoubleName().equals("Физическая культура Кайниев А.А."));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Thu).equals("Ч Е Т В Е Р Г   14.09.2017"));
-        lessons = timeTable.get(Thu);
+        assertTrue(tableWrapper.getDayList().get(3).getDate().equals("Ч Е Т В Е Р Г   14.09.2017"));
+        lessons = timeTable.get(3).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
-        assertTrue(lessons.get(lesson3).equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Friday).equals("П Я Т Н И Ц А   15.09.2017"));
-        lessons = timeTable.get(Friday);
+        assertTrue(tableWrapper.getDayList().get(4).getDate().equals("П Я Т Н И Ц А   15.09.2017"));
+        lessons = timeTable.get(4).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Saturday).equals("С У Б Б О Т А   16.09.2017"));
-        lessons = timeTable.get(Saturday);
+        assertTrue(tableWrapper.getDayList().get(5).getDate().equals("С У Б Б О Т А   16.09.2017"));
+        lessons = timeTable.get(5).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("МДК.04.01.Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Давлетшина Э.Р."));
-        assertTrue(lessons.get(lesson1).equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson3).equals("МДК.04.01.Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Давлетшина Э.Р."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.04.01.Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Давлетшина Э.Р."));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.01.Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Давлетшина Э.Р."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
     }
 
     @Test
-    public void parseTestTimetableAPPallWeekWithDoubleLessons_7() throws Exception {
+    public void parseTestTimetable4APP2_7() throws Exception {
 
         Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_all_week").timeout(0).get();
 
         TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
 
-        assertTrue(tableWrapper.getTimeTable() != null);
+        assertTrue(tableWrapper.getDayList() != null);
 
-        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> timeTable = tableWrapper.getTimeTable();
+        List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.keySet().size() > 0);
-        assertTrue(timeTable.keySet().contains(Mon));
-        assertTrue(tableWrapper.getDays().get(Mon).equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+        assertTrue(timeTable.size() > 0);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
 
-        HashMap<TimeTable.Lesson, String> lessons = timeTable.get(Mon);
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Tue).equals("В Т О Р Н И К   12.09.2017"));
-        lessons = timeTable.get(Tue);
+        assertTrue(lessons.get(1).isChange());
+        assertTrue(lessons.get(2).isChange());
+        assertTrue(lessons.get(3).isChange());
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("\u00A0"));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("Иностранный язык Коршунова Н.Е. /Галиева И.В."));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(tableWrapper.getDayList().get(1).getDate().equals("В Т О Р Н И К   12.09.2017"));
+        lessons = timeTable.get(1).getDayLessons();
 
-        assertTrue(tableWrapper.getDays().get(Wed).equals("С Р Е Д А   13.09.2017"));
-        lessons = timeTable.get(Wed);
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(4).getDoubleName().equals("Иностранный язык Коршунова Н.Е. /Галиева И.В."));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("\u00A0"));
-        assertTrue(lessons.get(lesson2).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
-        assertTrue(lessons.get(lesson3).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."
+        assertTrue(tableWrapper.getDayList().get(2).getDate().equals("С Р Е Д А   13.09.2017"));
+        lessons = timeTable.get(2).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."
                 + "\n/\n" + "Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson4).equals("Физическая культура Кайниев А.А."));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(4).getDoubleName().equals("Физическая культура Кайниев А.А."));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Thu).equals("Ч Е Т В Е Р Г   14.09.2017"));
-        lessons = timeTable.get(Thu);
+        assertTrue(tableWrapper.getDayList().get(3).getDate().equals("Ч Е Т В Е Р Г   14.09.2017"));
+        lessons = timeTable.get(3).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
-        assertTrue(lessons.get(lesson3).equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Friday).equals("П Я Т Н И Ц А   15.09.2017"));
-        lessons = timeTable.get(Friday);
+        assertTrue(tableWrapper.getDayList().get(4).getDate().equals("П Я Т Н И Ц А   15.09.2017"));
+        lessons = timeTable.get(4).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson3).equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Saturday).equals("С У Б Б О Т А   16.09.2017"));
-        lessons = timeTable.get(Saturday);
+        assertTrue(tableWrapper.getDayList().get(5).getDate().equals("С У Б Б О Т А   16.09.2017"));
+        lessons = timeTable.get(5).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("МДК.04.01.Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Давлетшина Э.Р."));
-        assertTrue(lessons.get(lesson1).equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
-        assertTrue(lessons.get(lesson2).equals("Экономика организации Давыдова А.С."));
-        assertTrue(lessons.get(lesson3).equals("МДК.04.01.Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Давлетшина Э.Р."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("МДК.04.01.Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Давлетшина Э.Р."));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.04.02. Теоретические основы разработки и моделирования отдельных несложных модулей и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.01.Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Давлетшина Э.Р."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
-        assertTrue(tableWrapper.getDays().get(Mon2).equals("П О Н Е Д Е Л Ь Н И К   18.09.2017"));
-        lessons = timeTable.get(Mon2);
+        assertTrue(tableWrapper.getDayList().get(6).getDate().equals("П О Н Е Д Е Л Ь Н И К   18.09.2017"));
+        lessons = timeTable.get(6).getDayLessons();
 
-        assertTrue(lessons.get(lesson0).equals("\u00A0"));
-        assertTrue(lessons.get(lesson1).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
-        assertTrue(lessons.get(lesson2).equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
-        assertTrue(lessons.get(lesson3).equals("Экономика организации Давыдова А.С."
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
+        assertTrue(lessons.get(2).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."
                 + "\n/\n" + "МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
-        assertTrue(lessons.get(lesson4).equals("\u00A0"));
-        assertTrue(lessons.get(lesson5).equals("\u00A0"));
-        assertTrue(lessons.get(lesson6).equals("\u00A0"));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
     }
+
+    // 1 ПНГ-1
+    @Test
+    public void parseTestTimetable1PNG1_7() throws Exception {
+
+        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_1.html").timeout(0).get();
+
+        TimeTable tableWrapper = DataUtils.parseDocument(document, "1 ПНГ-1");
+
+        assertTrue(tableWrapper.getDayList() != null);
+
+        List<Day> timeTable = tableWrapper.getDayList();
+
+        assertTrue(timeTable.size() > 0);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   18.09.2017"));
+
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(2).getDoubleName().equals("Информатика Шайбакова Л.М."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Химия Журавлева А.А."));
+        assertTrue(lessons.get(4).getDoubleName().equals("Классный час Алаторцева Н.Е."));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(1).getDate().equals("В Т О Р Н И К   19.09.2017"));
+        lessons = timeTable.get(1).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("Физическая культура Мусин Т.Р."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Физика Хакимова А.Ш."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Биология Шаймарданова А.Р."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(lessons.get(3).isChange());
+
+        assertTrue(tableWrapper.getDayList().get(2).getDate().equals("С Р Е Д А   20.09.2017"));
+        lessons = timeTable.get(2).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("Биология Шаймарданова А.Р."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Русский язык Хажиева Г.Ф."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Математика: алгебра, начала математического анализа, геометрия Алаторцева Н.Е."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(3).getDate().equals("Ч Е Т В Е Р Г   21.09.2017"));
+        lessons = timeTable.get(3).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("Литература Хажиева Г.Ф."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Обществознание (включая экономику и право) Ризаева А.З."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Математика: алгебра, начала математического анализа, геометрия Алаторцева Н.Е."));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(4).getDate().equals("П Я Т Н И Ц А   22.09.2017"));
+        lessons = timeTable.get(4).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("Башкирский язык Ахмадеева Л.И. /Ульябаева М.Р."));
+        assertTrue(lessons.get(2).getDoubleName().equals("Химия Журавлева А.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Физика Хакимова А.Ш."));
+        assertTrue(lessons.get(4).getDoubleName().equals("Иностранный язык Захарова И.В. /Галиева И.В."));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(5).getDate().equals("С У Б Б О Т А   23.09.2017"));
+        lessons = timeTable.get(5).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("Иностранный язык Галиева И.В."));
+        assertTrue(lessons.get(1).getDoubleName().equals("Обществознание (включая экономику и право) Ризаева А.З."));
+        assertTrue(lessons.get(2).getDoubleName().equals("История Сафаргалеева М.А."));
+        assertTrue(lessons.get(3).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(tableWrapper.getDayList().get(6).getDate().equals("П О Н Е Д Е Л Ь Н И К   25.09.2017"));
+        lessons = timeTable.get(6).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(2).getDoubleName().equals("Математика: алгебра, начала математического анализа, геометрия Алаторцева Н.Е."));
+        assertTrue(lessons.get(3).getDoubleName().equals("Химия Журавлева А.А."));
+        assertTrue(lessons.get(4).getDoubleName().equals("История Сафаргалеева М.А."));
+        assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+        assertTrue(lessons.get(2).isChange());
+
+    }
+
 }

@@ -53,6 +53,10 @@ public class TableServiceImpl implements TableService {
                 }).flatMap(apiResponse -> {
                     if (apiResponse.getStatus() == 1)
                         return Observable.error(new UncriticalException("Введите корректную аббревиатуру группы"));
+                    else if (apiResponse.getStatus() == 2)
+                        return Observable.error(new UncriticalException("Не удалось подключиться к сайту (0)"));
+                    else if (apiResponse.getStatus() == 3)
+                        return Observable.error(new UncriticalException("Ошибка подключения"));
                     return Observable.just(apiResponse);
                 }).map(apiResponse -> {
                     Document document;
@@ -94,14 +98,11 @@ public class TableServiceImpl implements TableService {
                 return Observable.error(new UncriticalException("Не удалось подключиться к сайту (1)"));
             return Observable.just(document);
         }).map(document -> DataUtils.parseDocument(document, group)).flatMap(tableWrapper -> {
-            if (tableWrapper.getTimeTable() == null || tableWrapper.getTimeTable().keySet().size() == 0)
+            if (tableWrapper.getDayList() == null || tableWrapper.getDayList().size() == 0)
                 return Observable.error(new UncriticalException("Timetable null or empty (2)"));
             return Observable.just(tableWrapper);
         }).map(tableWrapper -> {
-            TimeTable old = mTimetableRepository.getTimeTable(group);
-            tableWrapper.setChanges(tableWrapper.getChanges(old));
             mTimetableRepository.putTimeTable(tableWrapper, group);
-
             return tableWrapper;
         });
     }

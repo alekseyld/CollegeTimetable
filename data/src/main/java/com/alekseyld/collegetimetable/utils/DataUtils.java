@@ -1,21 +1,18 @@
 package com.alekseyld.collegetimetable.utils;
 
+import com.alekseyld.collegetimetable.entity.Day;
+import com.alekseyld.collegetimetable.entity.Lesson;
 import com.alekseyld.collegetimetable.entity.TimeTable;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
-
-import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Friday;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Mon;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Saturday;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Thu;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Tue;
-import static com.alekseyld.collegetimetable.entity.TimeTable.Day.Wed;
 
 /**
  * Created by Alekseyld on 04.09.2016.
@@ -26,23 +23,23 @@ public class DataUtils {
     public static Pattern groupPattern = Pattern.compile("[0-9]\\s[А-Я]{1,}[-][0-9]");
     public static Pattern groupPatternWithoutNum = Pattern.compile("[0-9]\\s[А-Я]{1,}([-][0-9]){0,}");
 
-    public static String getGroupUrl(String group){
+    public static String getGroupUrl(String group) {
 
         if (group == null || !groupPatternWithoutNum.matcher(group).matches())
             return "";
 
         String url = "";
 
-        Set<String> neftGroups = new HashSet<String>(){{
-                add("АПП");
-                add("БНГ");
-                add("В");
-                add("ПНГ");
-                add("ТАК");
-                add("ТО");
-                add("ТОВ");
-                add("ЭНН");
-                add("ЭННУ");
+        Set<String> neftGroups = new HashSet<String>() {{
+            add("АПП");
+            add("БНГ");
+            add("В");
+            add("ПНГ");
+            add("ТАК");
+            add("ТО");
+            add("ТОВ");
+            add("ЭНН");
+            add("ЭННУ");
         }};
 
         String abbr = "";
@@ -62,10 +59,10 @@ public class DataUtils {
         return url.equals("") ? url : "http://uecoll.ru/wp-content/uploads/time/" + url;
     }
 
-    private static String switchAbbr(String abbr){
+    private static String switchAbbr(String abbr) {
         switch (abbr) {
             case "Т":
-                return  "energy/10_1_8.html";
+                return "energy/10_1_8.html";
             case "Э":
                 return "energy/10_1_7.html";
             case "С":
@@ -111,9 +108,9 @@ public class DataUtils {
         }
     }
 
-    public static TimeTable parseDocument(Document document, String group){
+    public static TimeTable parseDocument(Document document, String group) {
 
-        if (document == null || group == null || !groupPatternWithoutNum.matcher(group).matches()){
+        if (document == null || group == null || !groupPatternWithoutNum.matcher(group).matches()) {
             return new TimeTable();
         }
 
@@ -122,11 +119,11 @@ public class DataUtils {
         Pattern numberPattern = Pattern.compile("^[0-9]");
         Pattern dayPattern = Pattern.compile("[А-Я]\\s[А-Я]\\s\\b");
 
-        TimeTable timeTable = new TimeTable();
+        TimeTable timeTable = new TimeTable()
+                .setLastRefresh(new Date());
 
-        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, String>> time = new HashMap<>();
-        HashMap<TimeTable.Lesson, String> lessons = new HashMap<>();
-        HashMap<TimeTable.Day, String> days = new HashMap<>();
+        List<Lesson> lessons = new ArrayList<>();
+//        HashMap<TimeTable.Day, String> days = new HashMap<>();
         String[] dayString = new String[]{"", ""};
 
         //Искать номер пары
@@ -139,7 +136,7 @@ public class DataUtils {
         boolean spaceToLessonBlock = false;
 
         //Переход к номеру пары
-        boolean toLesson =false;
+        boolean toLesson = false;
 
         boolean firstDoubleLesson = true;
 
@@ -156,13 +153,13 @@ public class DataUtils {
 
         for (int iterator = 0; iterator < table.size(); iterator++) {
 
-            if(dayPattern.matcher(table.get(iterator).text()).find()){
-                dayString[0] = dayString [1];
+            if (dayPattern.matcher(table.get(iterator).text()).find()) {
+                dayString[0] = dayString[1];
                 dayString[1] = table.get(iterator).text();
             }
 
             //Ищем начало групп
-            if(table.get(iterator).text().equals("День/Пара") && first){
+            if (table.get(iterator).text().equals("День/Пара") && first) {
                 space = true;
                 first = false;
             }
@@ -178,137 +175,71 @@ public class DataUtils {
             }
 
             i++;
-            if(i == table.size()-1){
-                switch (day){
-                    case 0:
-                        time.put(Mon, lessons);
-                        days.put(Mon, dayString[0].equals("") ? dayString[1] : dayString[0]);
-                        break;
-                    case 1:
-                        time.put(Tue, lessons);
-                        days.put(Tue, dayString[0].equals(days.get(Mon)) ? dayString[1] : dayString[0]);
-                        break;
-                    case 2:
-                        time.put(Wed, lessons);
-                        days.put(Wed, dayString[0].equals(days.get(Tue)) ? dayString[1] : dayString[0]);
-                        break;
-                    case 3:
-                        time.put(Thu, lessons);
-                        days.put(Thu, dayString[0].equals(days.get(Wed)) ? dayString[1] : dayString[0]);
-                        break;
-                    case 4:
-                        time.put(Friday, lessons);
-                        days.put(Friday, dayString[0].equals(days.get(Thu)) ? dayString[1] : dayString[0]);
-                        break;
-                    case 5:
-                        time.put(TimeTable.Day.Saturday, lessons);
-                        days.put(TimeTable.Day.Saturday, dayString[0].equals(days.get(Friday)) ? dayString[1] : dayString[0]);
-                        break;
-                    case 6:
-                        time.put(TimeTable.Day.Mon2, lessons);
-                        days.put(TimeTable.Day.Mon2, dayString[1]);
-                        break;
-                }
+            if (i == table.size() - 1 && day != -1) {
+                timeTable.addDay(
+                        new Day()
+                                .setId(day)
+                                .setDate(day == 0 && !dayString[0].equals("") || (day != 0 && !dayString[0].equals(timeTable.getDayList().get(day - 1).getDate()))  ? dayString[0] : dayString[1])
+                                .setDayLessons(lessons)
+                );
+
             }
 
-            if(toLesson && numberPattern.matcher(table.get(iterator).text()).matches()){
+            if (toLesson && numberPattern.matcher(table.get(iterator).text()).matches()) {
                 toLesson = false;
                 spaceToLessonBlock = true;
                 lessonSpace = 0;
 
                 lesson = Integer.parseInt(table.get(iterator).text());
 
-                if(lesson == 0){
-                    switch (day){
-                        case 0:
-                            time.put(Mon, lessons);
-                            days.put(Mon, dayString[0]);
-                            break;
-                        case 1:
-                            time.put(Tue, lessons);
-                            days.put(Tue, dayString[0]);
-                            break;
-                        case 2:
-                            time.put(Wed, lessons);
-                            days.put(Wed, dayString[0]);
-                            break;
-                        case 3:
-                            time.put(Thu, lessons);
-                            days.put(Thu, dayString[0]);
-                            break;
-                        case 4:
-                            time.put(Friday, lessons);
-                            days.put(Friday, dayString[0]);
-                            break;
-                        case 5:
-                            time.put(Saturday, lessons);
-                            days.put(Saturday, dayString[0]);
-                            break;
-                        case 6:
-                            time.put(TimeTable.Day.Mon2, lessons);
-                            days.put(TimeTable.Day.Mon2, dayString[1]);
-                            break;
-                    }
-                    lessons = new HashMap<>();
+                if (lesson == 0 && day != -1) {
+                    timeTable.addDay(
+                            new Day()
+                                    .setId(day)
+                                    .setDate(day == 0 && !dayString[0].equals("") || !dayString[0].equals(timeTable.getDayList().get(day - 1).getDate())  ? dayString[0] : dayString[1])
+                                    .setDayLessons(lessons)
+                    );
+
+                    lessons = new ArrayList<>();
                     day++;
                 }
+                if (day == -1)
+                    day++;
             }
 
-            if(spaceToLessonBlock){
+            if (spaceToLessonBlock) {
                 lessonSpace++;
             }
 
-            if(lessonSpace == iSpace) {
+            if (lessonSpace == iSpace) {
                 String text = table.get(iterator).text();
 
-                if (table.get(iterator).attr("colspan").equals("")) {
-                    text = table.get(iterator).text() + "\n/\n" +
-                            table.get(iterator + 1).text();
-                }
+                boolean second = table.get(iterator).attr("colspan").equals("");
 
-                switch (lesson) {
-                    case 0:
-                        lessons.put(TimeTable.Lesson.lesson0, text);
-                        break;
-                    case 1:
-                        lessons.put(TimeTable.Lesson.lesson1, text);
-                        break;
-                    case 2:
-                        lessons.put(TimeTable.Lesson.lesson2, text);
-                        break;
-                    case 3:
-                        lessons.put(TimeTable.Lesson.lesson3, text);
-                        break;
-                    case 4:
-                        lessons.put(TimeTable.Lesson.lesson4, text);
-                        break;
-                    case 5:
-                        lessons.put(TimeTable.Lesson.lesson5, text);
-                        break;
-                    case 6:
-                        lessons.put(TimeTable.Lesson.lesson6, text);
-                        break;
-                }
+                lessons.add(
+                        new Lesson()
+                                .setNumber(lesson)
+                                .setName(text)
+                                .setSecondName(second ? table.get(iterator + 1).text() : null)
+                                .setChange(table.get(iterator).children().attr("color").equals("blue"))
+                );
 
                 lessonSpace = 0;
                 toLesson = true;
                 spaceToLessonBlock = false;
-            }else {
-                if(table.get(iterator).tagName().equals("td")     &&
+            } else {
+                if (table.get(iterator).tagName().equals("td") &&
                         table.get(iterator).attr("colspan").equals("") &&
                         table.get(iterator).attr("rowspan").equals("") &&
                         !numberPattern.matcher(table.get(iterator).text()).matches() &&
-                        firstDoubleLesson){
+                        firstDoubleLesson) {
                     lessonSpace--;
                     firstDoubleLesson = false;
-                }else {
+                } else {
                     firstDoubleLesson = true;
                 }
             }
         }
-
-        timeTable.setTimeTable(time);
-        timeTable.setDays(days);
 
         return timeTable;
     }

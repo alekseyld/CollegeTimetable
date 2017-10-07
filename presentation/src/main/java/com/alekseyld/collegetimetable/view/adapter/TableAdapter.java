@@ -1,5 +1,6 @@
 package com.alekseyld.collegetimetable.view.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,64 +17,30 @@ import com.alekseyld.collegetimetable.view.adapter.holder.TimeTableHolder;
 public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
 
     private TimeTable mTimeTable;
+    private Context context;
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public TableAdapter() {
+    public TableAdapter(Context context) {
+        this.context = context;
         mTimeTable = null;
     }
 
-    public TableAdapter(TimeTable timeTable) {
+    public TableAdapter(Context context, TimeTable timeTable) {
+        this.context = context;
         mTimeTable = timeTable;
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public TimeTableHolder onCreateViewHolder(ViewGroup parent,
                                               int viewType) {
-        // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_table, parent, false);
-        // set the view's size, margins, paddings and layout parameters
         return new TimeTableHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(TimeTableHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-
-        if (mTimeTable != null) {
-            TimeTable.Day day = TimeTable.Day.Mon;
-            String dayText = "";
-
-            switch (position) {
-                case 0:
-                    day = TimeTable.Day.Mon;
-                    break;
-                case 1:
-                    day = TimeTable.Day.Tue;
-                    break;
-                case 2:
-                    day = TimeTable.Day.Wed;
-                    break;
-                case 3:
-                    day = TimeTable.Day.Thu;
-                    break;
-                case 4:
-                    day = TimeTable.Day.Friday;
-                    break;
-                case 5:
-                    day = TimeTable.Day.Saturday;
-                    break;
-                case 6:
-                    day = TimeTable.Day.Mon2;
-                    break;
-            }
-
-            holder.date.setText(firstUpperCase(mTimeTable.getDays().get(day).toLowerCase()));
-            holder.lessons.setAdapter(new LessonAdapter(mTimeTable.getTimeTable(), day));
-        }
+        holder.date.setText(mTimeTable.getDayList().get(position).getDateFirstUpperCase());
+        holder.lessons.setAdapter(new LessonAdapter(mTimeTable.getDayList().get(position), context));
     }
 
     public TimeTable getTimeTable() {
@@ -85,17 +52,11 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
         notifyDataSetChanged();
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        if (mTimeTable == null || mTimeTable.getTimeTable() == null) {
+        if (mTimeTable == null || mTimeTable.getDayList() == null) {
             return 0;
         }
-        return mTimeTable.getTimeTable().size();
-    }
-
-    private String firstUpperCase(String word) {
-        if (word == null || word.isEmpty()) return "";//или return word;
-        return word.substring(0, 1).toUpperCase() + word.substring(1);
+        return mTimeTable.getDayList().size();
     }
 }

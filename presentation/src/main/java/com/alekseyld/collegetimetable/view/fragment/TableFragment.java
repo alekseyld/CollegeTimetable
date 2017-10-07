@@ -1,5 +1,7 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -7,6 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -21,6 +26,8 @@ import com.alekseyld.collegetimetable.view.TableView;
 import com.alekseyld.collegetimetable.view.adapter.TableAdapter;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 import com.crashlytics.android.Crashlytics;
+
+import java.text.SimpleDateFormat;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -57,6 +64,8 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     private RecyclerView.LayoutManager mLayoutManager;
     private TableAdapter mTableAdapter;
 
+    private Menu mMenu;
+
     @BindString(R.string.app_name)
     String app_name;
 
@@ -70,6 +79,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         ButterKnife.bind(this, v);
 
         getActivity().setTitle(R.string.app_name);
+        setHasOptionsMenu(true);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -83,7 +93,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         mLayoutManager = new LinearLayoutManager(getActivity());
         mTableList.setLayoutManager(mLayoutManager);
 
-        mTableAdapter = new TableAdapter();
+        mTableAdapter = new TableAdapter(getContext());
         mTableList.setAdapter(mTableAdapter);
 
         return v;
@@ -104,8 +114,49 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        mMenu = menu;
+        mMenu.clear();
+        inflater.inflate(R.menu.menu_table, menu);
+
+        Drawable drawable = menu.findItem(R.id.action_info).getIcon();
+        if(drawable != null) {
+            drawable.mutate();
+            drawable.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
+        }
+
+        onTimeTableUpdate();
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.action_info:
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+                showToastMessage("Последнее обновление: " + dateFormat.format(getTimeTable().getLastRefresh()));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void onTimeTableUpdate(){
+        if (getTimeTable() != null
+                && getTimeTable().getLastRefresh() != null
+                && mMenu != null
+                && mMenu.findItem(R.id.action_info) != null){
+            mMenu.findItem(R.id.action_info).setVisible(true);
+        }
+
+    }
+
+    @Override
     public void setTimeTable(TimeTable timeTable) {
         mTableAdapter.setTimeTable(timeTable);
+
+        onTimeTableUpdate();
     }
 
     @Override

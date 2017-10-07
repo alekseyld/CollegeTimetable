@@ -2,14 +2,17 @@ package com.alekseyld.collegetimetable.view.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.alekseyld.collegetimetable.R;
+import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerMainComponent;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.internal.di.module.MainModule;
@@ -19,14 +22,11 @@ import com.alekseyld.collegetimetable.view.fragment.BellTableFragment;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFragment;
 import com.alekseyld.collegetimetable.view.fragment.TableFragment;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.FAVORITEGROUPS_KEY;
+import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.SETTINGS_KEY;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 public class MainActivity extends BaseInjectorActivity<MainComponent> {
@@ -47,38 +47,43 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
 
     private class MainNavigationViewItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
         @Override
-        public boolean onNavigationItemSelected(MenuItem menuItem) {
-            if (menuItem != null) {
-                if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-                    getSupportFragmentManager().popBackStack();
-                }
-                int id = menuItem.getItemId();
-                return onItemSelected(id, false);
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+                getSupportFragmentManager().popBackStack();
             }
-            return false;
+            int id = menuItem.getItemId();
+
+            int size = navigation.getMenu().size();
+            for (int i = 0; i < size; i++) {
+                navigation.getMenu().getItem(i).setChecked(false);
+            }
+
+            menuItem.setChecked(true);
+
+            return onItemSelected(id, false);
         }
 
         private boolean onItemSelected(int id, boolean force) {
             hideKeyboard();
 
-            if(id == R.id.action_belltable){
+            if (id == R.id.action_belltable) {
                 replaceFragment(BellTableFragment.newInstance());
                 drawer.closeDrawer(navigation);
                 return false;
             }
 
-            if(id == R.id.action_settings) {
+            if (id == R.id.action_settings) {
                 replaceFragment(SettingsFragment.newInstance());
                 drawer.closeDrawer(navigation);
                 return false;
             }
-            if(id == R.id.about) {
+            if (id == R.id.about) {
                 replaceFragment(AboutFragment.newInstance());
                 drawer.closeDrawer(navigation);
                 return false;
             }
 
-            if(id < favorite.length){
+            if (id < favorite.length) {
                 replaceFragment(TableFragment.newInstance(favorite[id]));
             }
             drawer.closeDrawer(navigation);
@@ -121,25 +126,34 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
         navigation.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    protected void buildMenu(){
+    protected void buildMenu() {
 
         SharedPreferences preferences = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
 
-        if(preferences.contains(FAVORITEGROUPS_KEY)) {
-            String json = preferences.getString(FAVORITEGROUPS_KEY, "");
-            Set<String> set = new Gson().fromJson(json,
-                    new TypeToken<Set<String>>(){}.getType());
-            favorite = set.toArray(new String[set.size()]);
+        if (preferences.contains(SETTINGS_KEY)) {
+            String json = preferences.getString(SETTINGS_KEY, "");
+            Settings settings = new Gson().fromJson(json, Settings.class);
+            if (settings.getFavoriteGroups() != null) {
+                favorite = settings.getFavoriteGroups().toArray(new String[0]);
+
+                if (settings.getNotificationGroup() != null) {
+                    TextView group = (TextView) navigation.getHeaderView(0).findViewById(R.id.header_my_group);
+                    group.setText(settings.getNotificationGroup());
+                }
+            }
         }
 
         Menu menu = navigation.getMenu();
         menu.clear();
-        if(favorite != null) {
+
+        menu.add(Menu.NONE, R.id.action_home, Menu.NONE, R.string.mygroup);
+        menu.getItem(0).setIcon(R.drawable.ic_home_black_24dp);
+
+        if (favorite != null) {
             for (int i = 0; i < favorite.length; i++) {
                 menu.add(Menu.NONE, i, Menu.NONE, favorite[i]);
             }
         }
-
 
         menu.add(Menu.NONE, R.id.action_belltable, Menu.NONE, R.string.action_belltable);
         menu.add(Menu.NONE, R.id.action_settings, Menu.NONE, R.string.action_settings);
@@ -148,9 +162,16 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
         menu.getItem(menu.size() - 3).setIcon(R.drawable.ic_access_time);
         menu.getItem(menu.size() - 2).setIcon(R.drawable.ic_settings);
         menu.getItem(menu.size() - 1).setIcon(R.drawable.ic_information);
+
+        if (getSupportFragmentManager().findFragmentByTag(SettingsFragment.class.getName()) != null){
+            menu.getItem(menu.size() - 2).setChecked(true);
+        } else {
+            menu.getItem(0).setChecked(true);
+        }
+
     }
 
-    public void rebuildMenu(){
+    public void rebuildMenu() {
         buildMenu();
     }
 
@@ -164,9 +185,9 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
 
     @Override
     public void onBackPressed() {
-        if(this.getSupportFragmentManager().getBackStackEntryCount() > 0){
+        if (this.getSupportFragmentManager().getBackStackEntryCount() > 0) {
             this.getSupportFragmentManager().popBackStack();
-        }else {
+        } else {
             super.onBackPressed();
         }
     }

@@ -1,6 +1,8 @@
 package com.alekseyld.collegetimetable.entity;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -8,131 +10,42 @@ import java.util.HashMap;
 
 public class TimeTable {
 
-    public enum Lesson{
-        lesson0("0"),
-        lesson1("1"),
-        lesson2("2"),
-        lesson3("3"),
-        lesson4("4"),
-        lesson5("5"),
-        lesson6("6");
+    private Date lastRefresh;
 
-        private String text;
-
-        Lesson(String text) {
-            this.text = text;
-        }
-
-        public String getText() {
-            return this.text;
-        }
-    }
-
-    public enum Day{
-        Mon("Понедельник"),
-        Tue("Вторник"),
-        Wed("Среда"),
-        Thu("Четверг"),
-        Friday("Пятница"),
-        Saturday("Суббота"),
-        Mon2("Понедельник C");
-
-        private String text;
-
-        Day(String text) {
-            this.text = text;
-        }
-
-        public String getText() {
-            return this.text;
-        }
-    }
-
-    private HashMap<Day, HashMap<Lesson, String>> mTimeTable;
-    private HashMap<Day, HashMap<Lesson, Boolean>> mChanges;
-    private HashMap<Day, String> mDays;
-
-    public HashMap<Day, HashMap<Lesson, String>> getTimeTable() {
-        return mTimeTable;
-    }
-
-    public void setTimeTable(HashMap<Day, HashMap<Lesson, String>> mTimeTable) {
-        this.mTimeTable = mTimeTable;
-    }
-
-    public HashMap<Day, String> getDays() {
-        if(mDays != null) {
-            return mDays;
-        }else {
-            return new HashMap<>();
-        }
-    }
-
-    public void setDays(HashMap<Day, String> mDays) {
-        this.mDays = mDays;
-    }
-
-    public boolean equals(TimeTable timeTable) {
-        boolean size = mTimeTable.size() == timeTable.mTimeTable.size();
-        boolean keys = mTimeTable.keySet().equals(mTimeTable.keySet());
-        if(size && keys) {
-            for (Day d: mTimeTable.keySet()) {
-                for (Lesson l: mTimeTable.get(d).keySet()){
-                    if(!mTimeTable.get(d).get(l).equals(timeTable.getTimeTable().get(d).get(l))){
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }else {
-            return false;
-        }
-    }
-
-    public HashMap<Day, HashMap<Lesson, Boolean>> getChanges() {
-        return mChanges;
-    }
-
-    public void setChanges(HashMap<Day, HashMap<Lesson, Boolean>> mChanges) {
-        this.mChanges = mChanges;
-    }
-
-    /*
-     * true - if have changes
+    /* Index default
+     * 0 - Понедельник
+     * 1 - Вторник
+     * 2 - Среда
+     * 3 - Четверг
+     * 4 - Пятница
+     * 5 - Суббота
+     * 6 - Понедельник следующей недели
      */
-    public boolean isChanges(){
-        if(mChanges != null){
-            for(Day d: mChanges.keySet())
-                for (Lesson l: mChanges.get(d).keySet())
-                    if(mChanges.get(d).get(l)){
-                        return true;
-                    }
-        }
-        return false;
+    private List<Day> dayList;
+
+    public Date getLastRefresh() {
+        return lastRefresh;
     }
 
-    public HashMap<Day, HashMap<Lesson, Boolean>> getChanges(TimeTable timeTable){
-        if(timeTable != null
-                && timeTable.getTimeTable() != null
-                && timeTable.getTimeTable().size() > 0
-                && mTimeTable != null) {
-
-            HashMap<Day, HashMap<Lesson, Boolean>> changes = new HashMap<>();
-            HashMap<Lesson, Boolean> dayChange;
-            for (Day d : mTimeTable.keySet()) {
-                dayChange = new HashMap<>();
-                for (Lesson l : mTimeTable.get(d).keySet()) {
-                    if (!mTimeTable.get(d).get(l).equals(timeTable.getTimeTable().get(d).get(l))) {
-                        dayChange.put(l, true);
-                    } else {
-                        dayChange.put(l, false);
-                    }
-                }
-                changes.put(d, dayChange);
-            }
-            return changes;
-        }
-        return null;
+    public TimeTable setLastRefresh(Date lastRefresh) {
+        this.lastRefresh = lastRefresh;
+        return this;
     }
 
+    public List<Day> getDayList() {
+        return dayList;
+    }
+
+    public TimeTable setDayList(List<Day> dayList) {
+        this.dayList = dayList;
+        return this;
+    }
+
+    public TimeTable addDay(Day day){
+        if (dayList == null)
+            dayList = new ArrayList<>();
+
+        dayList.add(day);
+        return this;
+    }
 }
