@@ -147,7 +147,6 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
         menu.clear();
 
         menu.add(Menu.NONE, R.id.action_home, Menu.NONE, R.string.mygroup);
-        menu.getItem(0).setChecked(true);
         menu.getItem(0).setIcon(R.drawable.ic_home_black_24dp);
 
         if (favorite != null) {
@@ -163,6 +162,13 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
         menu.getItem(menu.size() - 3).setIcon(R.drawable.ic_access_time);
         menu.getItem(menu.size() - 2).setIcon(R.drawable.ic_settings);
         menu.getItem(menu.size() - 1).setIcon(R.drawable.ic_information);
+
+        if (getSupportFragmentManager().findFragmentByTag(SettingsFragment.class.getName()) != null){
+            menu.getItem(menu.size() - 2).setChecked(true);
+        } else {
+            menu.getItem(0).setChecked(true);
+        }
+
     }
 
     public void rebuildMenu() {
