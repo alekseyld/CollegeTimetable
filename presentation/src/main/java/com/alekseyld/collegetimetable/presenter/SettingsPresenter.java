@@ -74,6 +74,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
 
         mSettings.setNotificationGroup(group);
         saveSettings();
+        mView.presenterReady();
     }
 
     public void saveAlarmMode(boolean alarmMode) {

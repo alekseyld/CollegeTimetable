@@ -100,7 +100,7 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         alarmMode.setChecked(mPresenter.getAlarmMode());
         notifOn.setChecked(mPresenter.getNotifOn());
 
-        if (mPresenter.getNotificationGroup() != null) {
+        if (mPresenter.getNotificationGroup() != null && !mPresenter.getNotificationGroup().equals("")) {
             addNotifValue.setVisibility(View.VISIBLE);
             addNotifValue.setText(mPresenter.getNotificationGroup());
         } else {
