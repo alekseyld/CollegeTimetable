@@ -1,6 +1,8 @@
 package com.alekseyld.collegetimetable.view.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +20,10 @@ import com.alekseyld.collegetimetable.view.adapter.holder.LessonViewHolder;
 class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
 
     private Day lessonDay;
+    private Context context;
 
-    LessonAdapter(@NonNull Day day){
+    LessonAdapter(@NonNull Day day, Context context){
+        this.context = context;
         lessonDay = day;
     }
 
@@ -42,36 +46,9 @@ class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
         holder.lessonName.setText(lesson.getDoubleName());
         holder.lessonTeacher.setVisibility(View.GONE);
 
-        //changes set background
-//        HashMap<TimeTable.Day, HashMap<TimeTable.Lesson, Boolean>> changes = mTimeTable.getChanges();
-//        if (changes != null)
-//            for (TimeTable.Lesson l : changes.get(day).keySet()) {
-//                if (changes.get(day).get(l)) {
-//                    switch (l) {
-//                        case lesson0:
-//                            holder.lesson0.setBackgroundColor(Color.parseColor("#FFF176"));
-//                            break;
-//                        case lesson1:
-//                            holder.lesson1.setBackgroundColor(Color.parseColor("#FFF176"));
-//                            break;
-//                        case lesson2:
-//                            holder.lesson2.setBackgroundColor(Color.parseColor("#FFF176"));
-//                            break;
-//                        case lesson3:
-//                            holder.lesson3.setBackgroundColor(Color.parseColor("#FFF176"));
-//                            break;
-//                        case lesson4:
-//                            holder.lesson4.setBackgroundColor(Color.parseColor("#FFF176"));
-//                            break;
-//                        case lesson5:
-//                            holder.lesson5.setBackgroundColor(Color.parseColor("#FFF176"));
-//                            break;
-//                        case lesson6:
-//                            holder.lesson6.setBackgroundColor(Color.parseColor("#FFF176"));
-//                            break;
-//                    }
-//                }
-//            }
+        if (lesson.isChange()) {
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorChanges));
+        }
 
     }
 

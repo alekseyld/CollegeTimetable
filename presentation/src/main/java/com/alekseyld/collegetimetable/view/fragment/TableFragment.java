@@ -93,7 +93,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         mLayoutManager = new LinearLayoutManager(getActivity());
         mTableList.setLayoutManager(mLayoutManager);
 
-        mTableAdapter = new TableAdapter();
+        mTableAdapter = new TableAdapter(getContext());
         mTableList.setAdapter(mTableAdapter);
 
         return v;

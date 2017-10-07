@@ -1,5 +1,6 @@
 package com.alekseyld.collegetimetable.view.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,15 @@ import com.alekseyld.collegetimetable.view.adapter.holder.TimeTableHolder;
 public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
 
     private TimeTable mTimeTable;
+    private Context context;
 
-    public TableAdapter() {
+    public TableAdapter(Context context) {
+        this.context = context;
         mTimeTable = null;
     }
 
-    public TableAdapter(TimeTable timeTable) {
+    public TableAdapter(Context context, TimeTable timeTable) {
+        this.context = context;
         mTimeTable = timeTable;
     }
 
@@ -36,7 +40,7 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
     @Override
     public void onBindViewHolder(TimeTableHolder holder, int position) {
         holder.date.setText(mTimeTable.getDayList().get(position).getDateFirstUpperCase());
-        holder.lessons.setAdapter(new LessonAdapter(mTimeTable.getDayList().get(position)));
+        holder.lessons.setAdapter(new LessonAdapter(mTimeTable.getDayList().get(position), context));
     }
 
     public TimeTable getTimeTable() {
