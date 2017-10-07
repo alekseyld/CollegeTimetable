@@ -58,6 +58,10 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
         return mSettings.getNotifOn();
     }
 
+    public String getNotificationGroup() {
+        return mSettings.getNotificationGroup();
+    }
+
     public Settings getSettings() {
         return mSettings;
     }

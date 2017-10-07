@@ -6,6 +6,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +36,10 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
     TextView addFarvorite;
 
     @BindView(R.id.addNotif)
-    TextView addNotif;
+    LinearLayout addNotif;
+
+    @BindView(R.id.my_group_value)
+    TextView addNotifValue;
 
     @BindView(R.id.alarmMode)
     Switch alarmMode;
@@ -92,13 +96,16 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
 
     @Override
     public void presenterReady() {
-        alarmMode.setChecked(
-                mPresenter.getAlarmMode()
-        );
 
-        notifOn.setChecked(
-                mPresenter.getNotifOn()
-        );
+        alarmMode.setChecked(mPresenter.getAlarmMode());
+        notifOn.setChecked(mPresenter.getNotifOn());
+
+        if (mPresenter.getNotificationGroup() != null) {
+            addNotifValue.setVisibility(View.VISIBLE);
+            addNotifValue.setText(mPresenter.getNotificationGroup());
+        } else {
+            addNotifValue.setVisibility(View.GONE);
+        }
     }
 
     public void saveNotification(String group){
