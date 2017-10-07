@@ -19,7 +19,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 11
-        versionName "7.0"
+        versionName "7.0 (beta) "
 
     }
     buildTypes {

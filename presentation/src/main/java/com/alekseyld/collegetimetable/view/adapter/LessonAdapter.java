@@ -47,7 +47,7 @@ class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
         holder.lessonTeacher.setVisibility(View.GONE);
 
         if (lesson.isChange()) {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorChanges));
+            holder.lessonName.setTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_dark));
         }
 
     }
