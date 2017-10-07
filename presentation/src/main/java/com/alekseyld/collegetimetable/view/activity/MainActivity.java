@@ -2,12 +2,14 @@ package com.alekseyld.collegetimetable.view.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.Settings;
@@ -45,40 +47,43 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
 
     private class MainNavigationViewItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
         @Override
-        public boolean onNavigationItemSelected(MenuItem menuItem) {
-            if (menuItem != null) {
-                if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-                    getSupportFragmentManager().popBackStack();
-                }
-                int id = menuItem.getItemId();
-                menuItem.setChecked(true);
-
-                return onItemSelected(id, false);
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+                getSupportFragmentManager().popBackStack();
             }
-            return false;
+            int id = menuItem.getItemId();
+
+            int size = navigation.getMenu().size();
+            for (int i = 0; i < size; i++) {
+                navigation.getMenu().getItem(i).setChecked(false);
+            }
+
+            menuItem.setChecked(true);
+
+            return onItemSelected(id, false);
         }
 
         private boolean onItemSelected(int id, boolean force) {
             hideKeyboard();
 
-            if(id == R.id.action_belltable){
+            if (id == R.id.action_belltable) {
                 replaceFragment(BellTableFragment.newInstance());
                 drawer.closeDrawer(navigation);
                 return false;
             }
 
-            if(id == R.id.action_settings) {
+            if (id == R.id.action_settings) {
                 replaceFragment(SettingsFragment.newInstance());
                 drawer.closeDrawer(navigation);
                 return false;
             }
-            if(id == R.id.about) {
+            if (id == R.id.about) {
                 replaceFragment(AboutFragment.newInstance());
                 drawer.closeDrawer(navigation);
                 return false;
             }
 
-            if(id < favorite.length){
+            if (id < favorite.length) {
                 replaceFragment(TableFragment.newInstance(favorite[id]));
             }
             drawer.closeDrawer(navigation);
@@ -121,15 +126,21 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
         navigation.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    protected void buildMenu(){
+    protected void buildMenu() {
 
         SharedPreferences preferences = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
 
-        if(preferences.contains(SETTINGS_KEY)) {
+        if (preferences.contains(SETTINGS_KEY)) {
             String json = preferences.getString(SETTINGS_KEY, "");
             Settings settings = new Gson().fromJson(json, Settings.class);
-            if (settings.getFavoriteGroups() != null)
+            if (settings.getFavoriteGroups() != null) {
                 favorite = settings.getFavoriteGroups().toArray(new String[0]);
+
+                if (settings.getNotificationGroup() != null) {
+                    TextView group = (TextView) navigation.getHeaderView(0).findViewById(R.id.header_my_group);
+                    group.setText(settings.getNotificationGroup());
+                }
+            }
         }
 
         Menu menu = navigation.getMenu();
@@ -139,12 +150,11 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
         menu.getItem(0).setChecked(true);
         menu.getItem(0).setIcon(R.drawable.ic_home_black_24dp);
 
-        if(favorite != null) {
+        if (favorite != null) {
             for (int i = 0; i < favorite.length; i++) {
                 menu.add(Menu.NONE, i, Menu.NONE, favorite[i]);
             }
         }
-
 
         menu.add(Menu.NONE, R.id.action_belltable, Menu.NONE, R.string.action_belltable);
         menu.add(Menu.NONE, R.id.action_settings, Menu.NONE, R.string.action_settings);
@@ -155,7 +165,7 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
         menu.getItem(menu.size() - 1).setIcon(R.drawable.ic_information);
     }
 
-    public void rebuildMenu(){
+    public void rebuildMenu() {
         buildMenu();
     }
 
@@ -169,9 +179,9 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
 
     @Override
     public void onBackPressed() {
-        if(this.getSupportFragmentManager().getBackStackEntryCount() > 0){
+        if (this.getSupportFragmentManager().getBackStackEntryCount() > 0) {
             this.getSupportFragmentManager().popBackStack();
-        }else {
+        } else {
             super.onBackPressed();
         }
     }
