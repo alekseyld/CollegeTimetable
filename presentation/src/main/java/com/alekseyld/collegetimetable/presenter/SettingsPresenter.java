@@ -102,4 +102,13 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
             }
         });
     }
+
+    public void saveChangeMode(boolean changeMode) {
+        mSettings.setChangeMode(changeMode);
+        saveSettings();
+    }
+
+    public boolean getChangeMode() {
+        return mSettings.getChangeMode();
+    }
 }

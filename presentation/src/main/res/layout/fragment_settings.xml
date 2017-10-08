@@ -60,5 +60,15 @@
 
         <include layout="@layout/divider" />
 
+        <Switch
+            android:id="@+id/changeMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="@string/changeMode"
+            android:textSize="15sp" />
+
+        <include layout="@layout/divider" />
+
     </LinearLayout>
 </ScrollView>

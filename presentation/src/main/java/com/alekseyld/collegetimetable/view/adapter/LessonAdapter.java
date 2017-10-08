@@ -22,19 +22,22 @@ class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
     private Day lessonDay;
     private Context context;
 
-    LessonAdapter(@NonNull Day day, Context context){
+    private boolean isChangeMode;
+
+    LessonAdapter(@NonNull Day day, boolean isChangeMode, Context context) {
         this.context = context;
         lessonDay = day;
+        this.isChangeMode = isChangeMode;
     }
 
     @Override
     public LessonViewHolder onCreateViewHolder(ViewGroup parent,
-                                              int viewType) {
+                                               int viewType) {
 
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_table_lesson, parent, false);
 
-        return  new LessonViewHolder(v);
+        return new LessonViewHolder(v);
     }
 
     @Override
@@ -47,7 +50,11 @@ class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
         holder.lessonTeacher.setVisibility(View.GONE);
 
         if (lesson.isChange()) {
-            holder.lessonName.setTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_dark));
+            if (isChangeMode) {
+                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorChanges));
+            } else {
+                holder.lessonName.setTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_dark));
+            }
         }
 
     }

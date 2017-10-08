@@ -51,7 +51,7 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
     @Override
     public void onBindViewHolder(final TimeTableHolder holder, int position) {
         holder.date.setText(mTimeTable.getDayList().get(position).getDateFirstUpperCase());
-        holder.lessons.setAdapter(new LessonAdapter(mTimeTable.getDayList().get(position), context));
+        holder.lessons.setAdapter(new LessonAdapter(mTimeTable.getDayList().get(position), mPresenter.getChangeMode(), context));
 
         if (layoutManager != null) {
             holder.shareButton.setVisibility(View.VISIBLE);

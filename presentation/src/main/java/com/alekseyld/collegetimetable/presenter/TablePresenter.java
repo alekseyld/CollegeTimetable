@@ -61,6 +61,10 @@ public class TablePresenter extends BasePresenter<TableView> {
         });
     }
 
+    public boolean getChangeMode(){
+        return mSettings.getChangeMode();
+    }
+
     public String getGroup() {
         return mSettings != null ? mSettings.getNotificationGroup() : "";
     }
