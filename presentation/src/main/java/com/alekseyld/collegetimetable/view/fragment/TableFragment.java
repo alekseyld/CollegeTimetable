@@ -93,7 +93,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         mLayoutManager = new LinearLayoutManager(getActivity());
         mTableList.setLayoutManager(mLayoutManager);
 
-        mTableAdapter = new TableAdapter(getContext());
+        mTableAdapter = new TableAdapter(getContext(), mLayoutManager);
         mTableList.setAdapter(mTableAdapter);
 
         return v;
@@ -110,6 +110,8 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
             getActivity().setTitle("Группа: " + mGroup);
             Crashlytics.setString("Group", mGroup);
         }
+
+        mTableAdapter.setPresenter(mPresenter);
         mPresenter.getTableFromOffline();
     }
 
@@ -208,4 +210,5 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     public String getGroup() {
         return mGroup;
     }
+
 }
