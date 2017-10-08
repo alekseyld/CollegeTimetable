@@ -1,10 +1,16 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
+import android.Manifest;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -101,6 +107,9 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
     @Override
     public void presenterReady() {
+
+        showPhoneStatePermission();
+
         if(getArguments().containsKey(GROUP_KEY)) {
             String s = getArguments().getString(GROUP_KEY);
             mGroup = s == null || s.equals("") ? mPresenter.getGroup() : s;
@@ -113,6 +122,43 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
         mTableAdapter.setPresenter(mPresenter);
         mPresenter.getTableFromOffline();
+    }
+
+    private void showPhoneStatePermission() {
+        int permission = ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i("12", "Permission to record denied");
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Permission to access the SD-CARD is required for this app to Download PDF.")
+                        .setTitle("Permission required");
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+                        Log.i("12", "Clicked");
+                        makeRequest();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            } else {
+                makeRequest();
+            }
+        }
+
+    }
+
+    protected void makeRequest() {
+        ActivityCompat.requestPermissions(getActivity(),
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                255);
     }
 
     @Override

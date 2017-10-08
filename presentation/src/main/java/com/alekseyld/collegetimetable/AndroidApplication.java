@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.StrictMode;
 
 import com.alekseyld.collegetimetable.internal.di.component.ApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerApplicationComponent;
@@ -30,6 +31,9 @@ public class AndroidApplication extends Application {
     public void onCreate() {
         super.onCreate();
         BackwardCompatibility.checkAppVersion(this.getSharedPreferences(NAME_FILE, MODE_PRIVATE));
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
 
         Fabric.with(this, new Crashlytics());
         initializeInjector();

@@ -19,8 +19,15 @@ public class Utils {
     public static File getPathToCacheDir(){
         String path = Environment.getExternalStorageDirectory() + File.separator + "CollegeTimetable";
         File pathFile = new File(path);
-        if (!pathFile.exists())
+        if (!pathFile.exists()) {
             pathFile.mkdirs();
+
+            try {
+                new File(pathFile, ".nomedia").createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         return pathFile;
     }
 
