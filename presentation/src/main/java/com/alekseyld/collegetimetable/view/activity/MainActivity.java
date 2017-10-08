@@ -187,6 +187,7 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
     public void onBackPressed() {
         if (this.getSupportFragmentManager().getBackStackEntryCount() > 0) {
             this.getSupportFragmentManager().popBackStack();
+            rebuildMenu();
         } else {
             super.onBackPressed();
         }

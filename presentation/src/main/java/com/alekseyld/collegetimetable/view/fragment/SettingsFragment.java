@@ -47,6 +47,9 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
     @BindView(R.id.notifOn)
     Switch notifOn;
 
+    @BindView(R.id.changeMode)
+    Switch changeMode;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,6 +89,15 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
             }
         });
 
+        changeMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.saveChangeMode(
+                        changeMode.isChecked()
+                );
+            }
+        });
+
         TypedValue outValue = new TypedValue();
         getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
         addFarvorite.setBackgroundResource(outValue.resourceId);
@@ -99,6 +111,7 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
 
         alarmMode.setChecked(mPresenter.getAlarmMode());
         notifOn.setChecked(mPresenter.getNotifOn());
+        changeMode.setChecked(mPresenter.getChangeMode());
 
         if (mPresenter.getNotificationGroup() != null && !mPresenter.getNotificationGroup().equals("")) {
             addNotifValue.setVisibility(View.VISIBLE);

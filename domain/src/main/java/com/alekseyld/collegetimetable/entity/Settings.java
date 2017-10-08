@@ -12,6 +12,7 @@ public class Settings {
     private String notificationGroup;
     private boolean notifOn;
     private boolean alarmMode;
+    private boolean changeMode;
 
     public Settings() {}
 
@@ -44,6 +45,15 @@ public class Settings {
 
     public void setNotificationGroup(String notificationGroup) {
         this.notificationGroup = notificationGroup;
+    }
+
+    public Settings setChangeMode(boolean changeMode) {
+        this.changeMode = changeMode;
+        return this;
+    }
+
+    public boolean getChangeMode() {
+        return changeMode;
     }
 
     public boolean getAlarmMode() {
