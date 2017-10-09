@@ -34,7 +34,9 @@
                     android:text="День недели"
                     android:textColor="#fff"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_toLeftOf="@+id/share_button"
+                    android:layout_toStartOf="@+id/share_button" />
 
                 <ImageView
                     android:id="@+id/share_button"

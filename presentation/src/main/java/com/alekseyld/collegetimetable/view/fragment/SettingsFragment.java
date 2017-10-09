@@ -131,7 +131,6 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         groupInputDialogFragment.show(getFragmentManager(), GroupInputDialogFragment.class.getSimpleName());
     }
 
-    // TODO: 10.09.2017  navigator maybe
     private void showAddFavoriteDialog(){
         getBaseActivity().startActivity(SettingsFavoriteActivity.class);
     }

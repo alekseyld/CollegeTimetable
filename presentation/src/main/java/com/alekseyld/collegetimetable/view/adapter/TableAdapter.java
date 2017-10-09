@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,13 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
                     mPresenter.shareDay(getDayByBitmap(holder.getAdapterPosition()));
                 }
             });
+
+            holder.date.setPadding(
+                    (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 34, context.getResources().getDisplayMetrics()),
+                    holder.date.getPaddingTop(),
+                    holder.date.getPaddingRight(),
+                    holder.date.getPaddingBottom()
+            );
         }
     }
 

@@ -39,7 +39,6 @@ class BackwardCompatibility {
 
         if (!preferences.contains(VERSION_KEY)) {
         Gson gson = new Gson();
-        //Todo обратная совместимость. Конвертировать старые форматы данных в новые
 
         if (!preferences.contains(SETTINGS_KEY)){
             settingToNewFormat(preferences, gson);
