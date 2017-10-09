@@ -31,7 +31,7 @@ public class Utils {
         return pathFile;
     }
 
-    public static File getImageFile(Bitmap pictureBitmap) throws IOException {
+    public static File getImageFile(Bitmap pictureBitmap) throws IOException, NullPointerException {
         File file = null;
 
         OutputStream fOut;

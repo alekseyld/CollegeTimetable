@@ -2,6 +2,7 @@ package com.alekseyld.collegetimetable.view.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,12 +66,23 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
         }
     }
 
-    private Bitmap getDayByBitmap(int pos){
-        View view = layoutManager.findViewByPosition(pos);
-        view.setDrawingCacheEnabled(true);
-        view.buildDrawingCache();
+    private Bitmap getDayByBitmap(int pos) {
+//        View view = layoutManager.findViewByPosition(pos);
+//        view.setDrawingCacheEnabled(true);
+//        view.buildDrawingCache();
+//
+//        return view.getDrawingCache();
 
-        return view.getDrawingCache();
+
+        View view = layoutManager.findViewByPosition(pos);
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
+                view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas bitmapHolder = new Canvas(bitmap);
+        bitmapHolder.drawRGB(245, 245, 245);
+
+        view.draw(bitmapHolder);
+
+        return bitmap;
     }
 
     public TimeTable getTimeTable() {

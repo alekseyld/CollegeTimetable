@@ -29,8 +29,8 @@ android {
         applicationId "com.alekseyld.collegetimetable"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 12
-        versionName "7.1 (beta)"
+        versionCode 13
+        versionName "7.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {

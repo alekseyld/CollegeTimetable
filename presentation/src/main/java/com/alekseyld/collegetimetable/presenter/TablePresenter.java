@@ -142,7 +142,7 @@ public class TablePresenter extends BasePresenter<TableView> {
             i.putExtra(Intent.EXTRA_STREAM, imageUri);
 
             mView.getContext().startActivity(Intent.createChooser(i, "Поделиться расписанием"));
-        } catch (android.content.ActivityNotFoundException | IOException ex) {
+        } catch (android.content.ActivityNotFoundException | IOException | NullPointerException ex) {
             mView.showError(ex.getMessage());
             ex.printStackTrace();
         }
