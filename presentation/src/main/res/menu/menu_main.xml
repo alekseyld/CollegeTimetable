@@ -5,6 +5,9 @@
     <item android:id="@+id/action_home" android:title="@string/mygroup"
         android:orderInCategory="100" app:showAsAction="never" />
 
+    <item android:id="@+id/action_webview" android:title="@string/webview_title"
+          android:orderInCategory="100" app:showAsAction="never" />
+
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
 

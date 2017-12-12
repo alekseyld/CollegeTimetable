@@ -21,6 +21,7 @@ import com.alekseyld.collegetimetable.view.fragment.AboutFragment;
 import com.alekseyld.collegetimetable.view.fragment.BellTableFragment;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFragment;
 import com.alekseyld.collegetimetable.view.fragment.TableFragment;
+import com.alekseyld.collegetimetable.view.fragment.WebViewFragment;
 import com.google.gson.Gson;
 
 import butterknife.BindView;
@@ -65,6 +66,12 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
 
         private boolean onItemSelected(int id, boolean force) {
             hideKeyboard();
+
+            if (id == R.id.action_webview){
+                replaceFragment(WebViewFragment.newInstance());
+                drawer.closeDrawer(navigation);
+                return false;
+            }
 
             if (id == R.id.action_belltable) {
                 replaceFragment(BellTableFragment.newInstance());
@@ -155,6 +162,7 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
             }
         }
 
+        menu.add(Menu.NONE, R.id.action_webview, Menu.NONE, R.string.webview_title);
         menu.add(Menu.NONE, R.id.action_belltable, Menu.NONE, R.string.action_belltable);
         menu.add(Menu.NONE, R.id.action_settings, Menu.NONE, R.string.action_settings);
         menu.add(Menu.NONE, R.id.about, Menu.NONE, R.string.about);
