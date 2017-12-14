@@ -57,7 +57,7 @@ public class Utils {
     }
 
     @SuppressLint("StaticFieldLeak")
-    public static void downloadAudioByUrl(final String urlString, final String audioTitle, final String audioArtist) {
+    public static void downloadAudioByUrl(final String urlString, final String audioId, final String audioTitle, final String audioArtist) {
         new AsyncTask<String, Integer, String>() {
             @Override
             protected String doInBackground(String... urls) {
@@ -76,7 +76,7 @@ public class Utils {
                     if (!dir.exists())
                         dir.mkdirs();
 
-                    File file = new File(dir, audioArtist + " - " + audioTitle + ".mp3");
+                    File file = new File(dir, audioArtist + " - " + audioTitle + "_" + audioId + ".mp3");
                     file.createNewFile();
 
                     OutputStream output = new FileOutputStream(file);

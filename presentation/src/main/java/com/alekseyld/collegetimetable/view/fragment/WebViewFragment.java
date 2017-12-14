@@ -49,6 +49,9 @@ public class WebViewFragment extends BaseFragment<WebViewPresenter> implements W
     private final String WEBVIEW_COOKIE_KEY = "WEBVIEW_COOKIE_KEY";
     private final String javaScriptKey = "javascript:";
 
+    private final String fixAudio_js = javaScriptKey + "document.getElementsByClassName('audio_row_content _audio_row_content')[0].click();" +
+            "setTimeout(function(){ document.getElementsByClassName('audio_row_content _audio_row_content')[0].click(); ap._impl._currentAudioEl.currentTime = 5; ap._impl._currentAudioEl.currentTime = 10; ap._impl._currentAudioEl.currentTime = 15; getAudioPlayer().pause();}, 2000);";
+
     private final String onclick_js = javaScriptKey + "var arr = document.getElementsByClassName('audio_item ai_has_btn');"
             + "for (var i = 0; i < arr.length; i++){"
             + "if (arr[i].getAttribute('onclick').toString().includes('audioplayer.playPause(event,')){"
@@ -57,12 +60,7 @@ public class WebViewFragment extends BaseFragment<WebViewPresenter> implements W
             "}";
 
     private final String getAudioUrl_js = javaScriptKey + "getAudioPlayer().play('%s', getAudioPlayer().getPlaylists()[0], '');" +
-            "setTimeout(function(){ JAVA.downloadAudio(ap._impl._currentAudioEl.currentSrc, '%s', '%s'); getAudioPlayer().pause();}, 2000);";
-
-    private final String fixAudio_js = javaScriptKey + "document.getElementsByClassName('audio_row_content _audio_row_content')[0].click();" +
-            "setTimeout(function(){ document.getElementsByClassName('audio_row_content _audio_row_content')[0].click(); ap._impl._currentAudioEl.currentTime = 5; ap._impl._currentAudioEl.currentTime = 10; ap._impl._currentAudioEl.currentTime = 15; getAudioPlayer().pause();}, 2000);";
-
-
+            "setTimeout(function(){ JAVA.downloadAudio(ap._impl._currentAudioEl.currentSrc, '%s', '%s', '%s'); getAudioPlayer().pause();}, 2000);";
 
     public static WebViewFragment newInstance(){
         return new WebViewFragment();
@@ -83,15 +81,15 @@ public class WebViewFragment extends BaseFragment<WebViewPresenter> implements W
                 @Override
                 public void run() {
                     pcWebView.loadUrl(
-                            String.format(getAudioUrl_js, audioId, audioTitle, audioArtist)
+                            String.format(getAudioUrl_js, audioId, audioId, audioTitle, audioArtist)
                     );
                 }
             });
         }
 
         @JavascriptInterface
-        public void downloadAudio(String url, String audioTitle, String audioArtist) {
-            Utils.downloadAudioByUrl(url, audioTitle, audioArtist);
+        public void downloadAudio(String url, String audioId, String audioTitle, String audioArtist) {
+            Utils.downloadAudioByUrl(url, audioId, audioTitle, audioArtist);
         }
     }
 

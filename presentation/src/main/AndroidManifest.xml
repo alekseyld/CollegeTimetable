@@ -33,6 +33,10 @@
             android:name=".service.UpdateTimetableService"
             android:enabled="true" >
         </service>
+        <service
+            android:name=".service.MusicService"
+            android:enabled="true" >
+        </service>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="ad1fdc6770082a011031dc220e8f65b968faa092" />

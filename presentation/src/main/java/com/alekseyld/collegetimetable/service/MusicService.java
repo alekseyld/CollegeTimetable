@@ -18,7 +18,6 @@ import com.alekseyld.collegetimetable.view.activity.MainActivity;
 
 public class MusicService extends IntentService {
 
-    private static final String TAG = null;
     MediaPlayer mediaPlayer;
 
     public MusicService(String name) {
@@ -28,7 +27,7 @@ public class MusicService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
-        startForeground(1, getNotification("Getting data..."));
+        startForeground(25565, getNotification("Music Player"));
     }
 
     @Override
