@@ -2,6 +2,7 @@ package com.alekseyld.collegetimetable.view.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,10 +40,12 @@ public class WebViewFragment extends BaseFragment<WebViewPresenter> implements W
     //Название - arr[0].getElementsByClassName('ai_title')[0].innerText
     //Группа -   arr[0].getElementsByClassName('ai_artist')[0].innerText
 
-    //два webview. Один с мобильной версией сайта, другой скрытый с полной
+    //+ "arr[i].setAttribute('onclick', 'alert(\\'' + arr[i].getAttribute('data-id') + '\\');');"
 
     @Inject
     SharedPreferences sharedPreferences;
+
+    private final String url = "";
     private final String WEBVIEW_COOKIE_KEY = "WEBVIEW_COOKIE_KEY";
     private final String javaScriptKey = "javascript:";
 
@@ -54,9 +57,12 @@ public class WebViewFragment extends BaseFragment<WebViewPresenter> implements W
             "}";
 
     private final String getAudioUrl_js = javaScriptKey + "getAudioPlayer().play('%s', getAudioPlayer().getPlaylists()[0], '');" +
-            "setTimeout(function(){ JAVA.downloadAudio(ap._impl._currentAudioEl.currentSrc, '%s', '%s'); getAudioPlayer().pause();}, 1000);";
+            "setTimeout(function(){ JAVA.downloadAudio(ap._impl._currentAudioEl.currentSrc, '%s', '%s'); getAudioPlayer().pause();}, 2000);";
 
-    //+ "arr[i].setAttribute('onclick', 'alert(\\'' + arr[i].getAttribute('data-id') + '\\');');"
+    private final String fixAudio_js = javaScriptKey + "document.getElementsByClassName('audio_row_content _audio_row_content')[0].click();" +
+            "setTimeout(function(){ document.getElementsByClassName('audio_row_content _audio_row_content')[0].click(); ap._impl._currentAudioEl.currentTime = 5; ap._impl._currentAudioEl.currentTime = 10; ap._impl._currentAudioEl.currentTime = 15; getAudioPlayer().pause();}, 2000);";
+
+
 
     public static WebViewFragment newInstance(){
         return new WebViewFragment();
@@ -70,22 +76,17 @@ public class WebViewFragment extends BaseFragment<WebViewPresenter> implements W
             String[] idConcat = id.split("_");
             final String audioId = idConcat[0] + "_" + idConcat[1];
 
+            Toast.makeText(getContext(), "Скачивание аудио " + audioArtist + " - " + audioTitle, Toast.LENGTH_SHORT).show();
+
             //called by javascript
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    //String.format(getAudioUrl_js, audioId)
-//                    pcWebView.loadUrl(
-//                            javaScriptKey+"getAudioPlayer().play('84773688_456239371', getAudioPlayer().getPlaylists()[0], '');"
-//                    );
-
                     pcWebView.loadUrl(
                             String.format(getAudioUrl_js, audioId, audioTitle, audioArtist)
                     );
                 }
             });
-
-            Toast.makeText(getContext(), "Скачивание аудио", Toast.LENGTH_SHORT).show();
         }
 
         @JavascriptInterface
@@ -114,9 +115,23 @@ public class WebViewFragment extends BaseFragment<WebViewPresenter> implements W
         pcWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         pcWebView.setWebChromeClient(new WebChromeClient());
         pcWebView.addJavascriptInterface(new JavaScriptInterface(), "JAVA");
+        pcWebView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
 
-        //Todo исправить баг с первым включением аудиозаписей
-        pcWebView.loadUrl("https://vk.com/audio");
+                pcWebView.loadUrl(javaScriptKey + "window.scrollTo(0,300);");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        pcWebView.loadUrl(fixAudio_js);
+
+                    }
+                }, 200);
+            }
+        });
+
+        pcWebView.loadUrl(url + "audio");
 
         //webview
         webView.getSettings().setJavaScriptEnabled(true);
@@ -147,10 +162,10 @@ public class WebViewFragment extends BaseFragment<WebViewPresenter> implements W
     public void onResume() {
         super.onResume();
 
-        CookieManager.getInstance().setCookie("", sharedPreferences.getString(WEBVIEW_COOKIE_KEY, ""));//627410
+        CookieManager.getInstance().setCookie(url, sharedPreferences.getString(WEBVIEW_COOKIE_KEY, ""));//627410
 
         if (i == 0) {
-            webView.loadUrl("");
+            webView.loadUrl(url + "audio");
             i++;
         }
 

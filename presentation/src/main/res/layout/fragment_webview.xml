@@ -8,14 +8,14 @@
     <WebView
         android:id="@+id/webview"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="match_parent">
     </WebView>
 
     <WebView
         android:id="@+id/webview_pc"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:visibility="visible">
+        android:visibility="invisible">
     </WebView>
 
 </LinearLayout>
