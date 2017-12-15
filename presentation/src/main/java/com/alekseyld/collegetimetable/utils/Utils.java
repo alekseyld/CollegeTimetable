@@ -1,7 +1,10 @@
 package com.alekseyld.collegetimetable.utils;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
@@ -14,6 +17,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Alekseyld on 08.10.2017.
@@ -54,6 +59,24 @@ public class Utils {
         fOut.close();
 
         return file;
+    }
+
+    public static boolean isNetworkAvailable(Context mContext) {
+        Context context = mContext.getApplicationContext();
+        ConnectivityManager connectivity = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity == null) {
+            return false;
+        } else {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null) {
+                for (NetworkInfo anInfo : info) {
+                    if (anInfo.getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -102,5 +125,21 @@ public class Utils {
                 return null;
             }
         }.doInBackground(urlString);
+    }
+
+    public static Map<String, String> getCacheMusicList(){
+        File dir = new File(getPathToCacheDir()+"/music_cache/");
+        HashMap<String, String> cache = new HashMap<>();
+        if (!dir.exists())
+            return cache;
+
+        String[] audios = dir.list();
+
+        for (String audio: audios){
+            String[] splits = audio.split("#");
+            cache.put(splits[0], splits[1]);
+        }
+
+        return cache;
     }
 }

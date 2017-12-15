@@ -4,13 +4,20 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Binder;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.app.Notification;
 import android.app.TaskStackBuilder;
 import android.support.v4.app.NotificationCompat;
 
 import com.alekseyld.collegetimetable.R;
+import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
+import com.alekseyld.collegetimetable.view.fragment.WebViewFragment;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Alekseyld on 13.12.2017.
@@ -18,7 +25,18 @@ import com.alekseyld.collegetimetable.view.activity.MainActivity;
 
 public class MusicService extends IntentService {
 
-    MediaPlayer mediaPlayer;
+    private final IBinder mBinder = new MusicBinder();
+
+    private WebViewFragment fragment;
+    private MediaPlayer mediaPlayer;
+
+    private Map<String, String> cacheAudio;
+
+    public class MusicBinder extends Binder {
+        public MusicService getService(WebViewFragment fragment){
+            return MusicService.this.setFragment(fragment);
+        }
+    }
 
     public MusicService(String name) {
         super(name);
@@ -30,13 +48,41 @@ public class MusicService extends IntentService {
         startForeground(25565, getNotification("Music Player"));
     }
 
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return super.onBind(intent);
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        fragment = null;
+        return super.onUnbind(intent);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setVolume(100,100);
 
+        // get cache music  list
+        cacheAudio = Utils.getCacheMusicList();
+        mediaPlayer = new MediaPlayer();
     }
+
+    //process finish audio playlists offline or online
+    // if device offline or offline playlist -> start next audio from directory
+    // if device online and ! offline playlist -> fragment.playNext -> "javascript: getAudioPlayer().playNext(); JAVA.processAudio(..."
+
+    public void processAudio(String urlString, String audioId, String audioTitle, String audioArtist){
+        //todo process audio offline and online
+
+        boolean isOnline = Utils.isNetworkAvailable(getApplicationContext());
+
+        //if audio.isDownload -> mediaPlayer.startAudio
+
+        //if !audio.isDownload and device.online -> fragment.downloadAudio(
+    }
+
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY_COMPATIBILITY;
     }
@@ -66,4 +112,8 @@ public class MusicService extends IntentService {
         return mBuilder.build();
     }
 
+    public MusicService setFragment(WebViewFragment fragment) {
+        this.fragment = fragment;
+        return this;
+    }
 }

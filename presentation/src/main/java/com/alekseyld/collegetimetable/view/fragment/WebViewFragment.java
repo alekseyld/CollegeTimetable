@@ -1,8 +1,13 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +22,7 @@ import android.widget.Toast;
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.WebViewPresenter;
+import com.alekseyld.collegetimetable.service.MusicService;
 import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.WebViewView;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
@@ -44,6 +50,22 @@ public class WebViewFragment extends BaseFragment<WebViewPresenter> implements W
 
     @Inject
     SharedPreferences sharedPreferences;
+
+    private MusicService mMusicService;
+    private boolean serviceBinded = false;
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            MusicService.MusicBinder binder = (MusicService.MusicBinder) iBinder;
+            mMusicService = binder.getService(WebViewFragment.this);
+            serviceBinded = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            serviceBinded = false;
+        }
+    };
 
     private final String url = "";
     private final String WEBVIEW_COOKIE_KEY = "WEBVIEW_COOKIE_KEY";
@@ -74,7 +96,7 @@ public class WebViewFragment extends BaseFragment<WebViewPresenter> implements W
             String[] idConcat = id.split("_");
             final String audioId = idConcat[0] + "_" + idConcat[1];
 
-            Toast.makeText(getContext(), "Скачивание аудио " + audioArtist + " - " + audioTitle, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), audioArtist + " - " + audioTitle, Toast.LENGTH_SHORT).show();
 
             //called by javascript
             getActivity().runOnUiThread(new Runnable() {
@@ -89,7 +111,10 @@ public class WebViewFragment extends BaseFragment<WebViewPresenter> implements W
 
         @JavascriptInterface
         public void downloadAudio(String url, String audioId, String audioTitle, String audioArtist) {
-            Utils.downloadAudioByUrl(url, audioId, audioTitle, audioArtist);
+
+            if (mMusicService != null)
+                mMusicService.processAudio(url, audioId, audioTitle, audioArtist);
+//            Utils.downloadAudioByUrl(url, audioId, audioTitle, audioArtist);
         }
     }
 
@@ -167,6 +192,24 @@ public class WebViewFragment extends BaseFragment<WebViewPresenter> implements W
             i++;
         }
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Intent intent = new Intent(getActivity(), MusicService.class);
+        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (serviceBinded) {
+            getActivity().unbindService(mConnection);
+            serviceBinded = false;
+        }
     }
 
     @Override
