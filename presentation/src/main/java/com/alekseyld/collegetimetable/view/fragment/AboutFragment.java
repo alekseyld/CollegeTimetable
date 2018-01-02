@@ -118,11 +118,6 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
     }
 
     @Override
-    public void showError(String message) {
-
-    }
-
-    @Override
     protected void initializeInjections() {
         getComponent(MainComponent.class).inject(this);
     }

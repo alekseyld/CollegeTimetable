@@ -45,11 +45,6 @@ public class BellTableFragment extends BaseFragment<BellTablePresenter> implemen
     }
 
     @Override
-    public void showError(String message) {
-
-    }
-
-    @Override
     protected void initializeInjections() {
         getComponent(MainComponent.class).inject(this);
     }

@@ -92,11 +92,6 @@ public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePrese
     }
 
     @Override
-    public void showError(String message) {
-
-    }
-
-    @Override
     protected void initializeInjections() {
         getComponent(SettingsFavoriteComponent.class).inject(this);
     }

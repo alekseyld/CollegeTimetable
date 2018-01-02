@@ -64,4 +64,5 @@
     <string name="my_group_string">Моя группа:</string>
     <string name="share_button_descript">Поделиться расписанием</string>
     <string name="changeMode">Выделять изменения фоном</string>
+    <string name="login_title">Авторизация</string>
 </resources>

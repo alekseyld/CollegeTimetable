@@ -63,6 +63,11 @@ public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fra
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void showError(String message) {
+        showToastMessage(message);
+    }
+
     /**
      * Gets a component for dependency injection by its type.
      */

@@ -10,6 +10,8 @@ import com.alekseyld.collegetimetable.repository.SettingsRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.TableRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 import com.alekseyld.collegetimetable.repository.base.TableRepository;
+import com.alekseyld.collegetimetable.service.ServerService;
+import com.alekseyld.collegetimetable.service.ServerServiceImpl;
 import com.alekseyld.collegetimetable.service.SettingsService;
 import com.alekseyld.collegetimetable.service.SettingsServiceImpl;
 import com.alekseyld.collegetimetable.service.TableService;
@@ -54,6 +56,11 @@ public class MainModule {
     @PerActivity @Provides
     SettingsService provideSettingsService(SettingsServiceImpl settingsService){
         return settingsService;
+    }
+
+    @PerActivity @Provides
+    ServerService provideServerService(ServerServiceImpl serverService){
+        return serverService;
     }
 
     @PerActivity @Provides

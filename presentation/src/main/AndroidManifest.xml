@@ -21,18 +21,24 @@
         android:name=".AndroidApplication"
         android:largeHeap="true"
         android:theme="@style/AppTheme" >
-        <activity android:name=".view.activity.MainActivity" >
+
+        <activity android:name=".view.activity.MainActivity" />
+
+        <activity android:name=".view.activity.SettingsFavoriteActivity"/>
+
+        <activity android:name=".view.activity.LoginActivity" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.SettingsFavoriteActivity"/>
+
         <service
             android:name=".service.UpdateTimetableService"
             android:enabled="true" >
         </service>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="ad1fdc6770082a011031dc220e8f65b968faa092" />

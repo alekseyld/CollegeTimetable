@@ -7,8 +7,8 @@ import com.alekseyld.collegetimetable.UIThread;
 import com.alekseyld.collegetimetable.executor.JobExecutor;
 import com.alekseyld.collegetimetable.executor.PostExecutionThread;
 import com.alekseyld.collegetimetable.executor.ThreadExecutor;
-import com.google.gson.Gson;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -16,6 +16,7 @@ import dagger.Provides;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -46,9 +47,19 @@ public class ApplicationModule {
         return jobExecutor;
     }
 
-    @Provides @Singleton Retrofit provideRestAdapter(){
+    @Provides @Singleton @Named("proxy") Retrofit provideRestAdapter(){
         return new Retrofit.Builder()
                 .baseUrl(HOST)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+    }
+
+    @Provides @Singleton @Named("server") Retrofit provideServerRestAdapter(){
+        return new Retrofit.Builder()
+                //todo host from shared pref
+                .baseUrl("http://192.168.0.100/collegetimetable/api/")
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();

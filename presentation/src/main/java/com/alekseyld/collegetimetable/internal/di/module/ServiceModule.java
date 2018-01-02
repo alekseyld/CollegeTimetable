@@ -16,6 +16,7 @@ import com.alekseyld.collegetimetable.service.SettingsServiceImpl;
 import com.alekseyld.collegetimetable.service.TableService;
 import com.alekseyld.collegetimetable.service.TableServiceImpl;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -90,7 +91,7 @@ public class ServiceModule {
         return tableRepository;
     }
 
-    @Provides @Singleton
+    @Provides @Singleton @Named("proxy")
     Retrofit provideRestAdapter(){
         return new Retrofit.Builder()
                 .baseUrl(HOST)

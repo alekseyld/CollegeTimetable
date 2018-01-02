@@ -1,8 +1,8 @@
 package com.alekseyld.collegetimetable.service;
 
-import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.api.ProxyApi;
 import com.alekseyld.collegetimetable.entity.ApiResponse;
+import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.exception.UncriticalException;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 import com.alekseyld.collegetimetable.repository.base.TableRepository;
@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import retrofit2.Retrofit;
 import rx.Observable;
@@ -30,9 +31,10 @@ public class TableServiceImpl implements TableService {
 
     private ProxyApi urlApi;
 
-
     @Inject
-    TableServiceImpl(TableRepository tableRepository, SettingsRepository settingsRepository, Retrofit restAdapter) {
+    TableServiceImpl(TableRepository tableRepository,
+                     SettingsRepository settingsRepository,
+                     @Named("proxy") Retrofit restAdapter) {
         mSettingsRepository = settingsRepository;
         mTimetableRepository = tableRepository;
         urlApi = restAdapter.create(ProxyApi.class);
