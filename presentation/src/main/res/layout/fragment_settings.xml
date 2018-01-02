@@ -1,57 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <LinearLayout
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/addFarvorite"
-            android:textColor="@android:color/black"
-            android:textSize="15sp"
-            android:padding="15dp"
+            style="@style/SettingTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:text="@string/addFarvorite"/>
+            android:text="@string/addFarvorite" />
 
-        <include layout="@layout/divider"/>
+        <include layout="@layout/divider" />
 
-        <TextView
+        <LinearLayout
             android:id="@+id/addNotif"
-            android:textSize="15sp"
-            android:textColor="@android:color/black"
-            android:padding="15dp"
+            style="@style/SettingTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:text="@string/addNotif"/>
+            android:orientation="vertical">
 
-        <include layout="@layout/divider"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/mygroup"
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/my_group_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <include layout="@layout/divider" />
 
         <Switch
             android:id="@+id/notifOn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
             android:padding="15dp"
             android:text="@string/notifS"
-            />
+            android:textSize="15sp" />
 
-        <include layout="@layout/divider"/>
+        <include layout="@layout/divider" />
 
         <Switch
             android:id="@+id/alarmMode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
             android:padding="15dp"
             android:text="@string/alarmModeS"
-            />
+            android:textSize="15sp" />
 
-        <include layout="@layout/divider"/>
+        <include layout="@layout/divider" />
+
+        <Switch
+            android:id="@+id/changeMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="@string/changeMode"
+            android:textSize="15sp" />
+
+        <include layout="@layout/divider" />
 
     </LinearLayout>
 </ScrollView>

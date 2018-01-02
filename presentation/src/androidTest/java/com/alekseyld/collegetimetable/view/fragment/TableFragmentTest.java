@@ -90,7 +90,7 @@ public class TableFragmentTest {
             @Override
             public void run() {
                 message.setVisibility(View.GONE);
-                recyclerView.setAdapter(new TableAdapter(testTimeTable));
+                recyclerView.setAdapter(new TableAdapter(activityTestRule.getActivity(), testTimeTable));
             }
         });
 

@@ -1,7 +1,5 @@
 package com.alekseyld.collegetimetable.presenter;
 
-import android.text.Editable;
-
 import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
@@ -12,7 +10,6 @@ import com.alekseyld.collegetimetable.view.SettingsView;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -61,41 +58,12 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
         return mSettings.getNotifOn();
     }
 
+    public String getNotificationGroup() {
+        return mSettings.getNotificationGroup();
+    }
+
     public Settings getSettings() {
         return mSettings;
-    }
-
-    @Deprecated
-    public void updateSettings(Editable minute, Editable group) {
-        /*mPref = mView.context().getSharedPreferences(NAME_FILE, MODE_PRIVATE);
-        if(minute != null && !minute.toString().equals("")){
-            SharedPreferences.Editor ed = mPref.edit();
-            ed.putInt(TIME_KEY, Integer.parseInt(minute.toString()));
-            ed.apply();
-        }
-        if(group != null && !group.toString().equals("")){
-            SharedPreferences.Editor ed = mPref.edit();
-            ed.putString(GROUP_KEY, group.toString());
-            ed.remove(DOC_KEY);
-            ed.remove(TIMETABLE_KEY);
-            ed.remove(URL_KEY);
-            ed.apply();
-        }
-        mView.showError("Сохранено");
-        mProcessor.processSettingsResult(mView.getAct());*/
-    }
-
-    public void saveFavorite(Set<String> groups) {
-        if (groups != null && groups.size() >= 0) {
-            mSettings.setFavoriteGroups(groups);
-            mSaveSettingsUseCase.setSettings(mSettings);
-            mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>() {
-                @Override
-                public void onCompleted() {
-                    ((MainActivity)mView.getBaseActivity()).rebuildMenu();
-                }
-            });
-        }
     }
 
     public void saveNotification(String group) {
@@ -106,6 +74,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
 
         mSettings.setNotificationGroup(group);
         saveSettings();
+        mView.presenterReady();
     }
 
     public void saveAlarmMode(boolean alarmMode) {
@@ -120,11 +89,26 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
 
     private void saveSettings() {
         mSaveSettingsUseCase.setSettings(mSettings);
-        mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>());
+        mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>(){
+            @Override
+            public void onCompleted() {
+                ((MainActivity)mView.getBaseActivity()).rebuildMenu();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                e.printStackTrace();
+            }
+        });
     }
 
-    @Override
-    public void destroy() {
-//        saveSettings();
+    public void saveChangeMode(boolean changeMode) {
+        mSettings.setChangeMode(changeMode);
+        saveSettings();
+    }
+
+    public boolean getChangeMode() {
+        return mSettings.getChangeMode();
     }
 }

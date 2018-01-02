@@ -1,13 +1,14 @@
 package com.alekseyld.collegetimetable.internal.di.module;
 
 import android.app.IntentService;
+import android.content.SharedPreferences;
 
 import com.alekseyld.collegetimetable.UIThread;
 import com.alekseyld.collegetimetable.executor.JobExecutor;
 import com.alekseyld.collegetimetable.executor.PostExecutionThread;
 import com.alekseyld.collegetimetable.executor.ThreadExecutor;
-import com.alekseyld.collegetimetable.repository.ServiceSettingsRepository;
-import com.alekseyld.collegetimetable.repository.ServiceTableRepository;
+import com.alekseyld.collegetimetable.repository.SettingsRepositoryImpl;
+import com.alekseyld.collegetimetable.repository.TableRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 import com.alekseyld.collegetimetable.repository.base.TableRepository;
 import com.alekseyld.collegetimetable.service.SettingsService;
@@ -23,6 +24,9 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
+
 /**
  * Created by Alekseyld on 05.11.2016.
  */
@@ -36,6 +40,12 @@ public class ServiceModule {
 
     public ServiceModule(IntentService service){
         mService = service;
+    }
+
+    @Singleton
+    @Provides
+    SharedPreferences getSharedPreferences(){
+        return mService.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
     }
 
     @Singleton
@@ -64,7 +74,7 @@ public class ServiceModule {
 
     @Singleton
     @Provides
-    SettingsRepository provideSettingsRepository(ServiceSettingsRepository settingsRepository){
+    SettingsRepository provideSettingsRepository(SettingsRepositoryImpl settingsRepository){
         return settingsRepository;
     }
 
@@ -76,7 +86,7 @@ public class ServiceModule {
 
     @Singleton
     @Provides
-    TableRepository provideTableRepository(ServiceTableRepository tableRepository){
+    TableRepository provideTableRepository(TableRepositoryImpl tableRepository){
         return tableRepository;
     }
 

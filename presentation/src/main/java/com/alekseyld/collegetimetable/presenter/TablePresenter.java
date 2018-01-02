@@ -1,8 +1,11 @@
 package com.alekseyld.collegetimetable.presenter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 
 import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.entity.TimeTable;
@@ -11,7 +14,10 @@ import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOfflineUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
+import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.TableView;
+
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -19,7 +25,7 @@ import javax.inject.Inject;
  * Created by Alekseyld on 02.09.2016.
  */
 
-public class TablePresenter extends BasePresenter<TableView>{
+public class TablePresenter extends BasePresenter<TableView> {
 
     private GetTableFromOnlineUseCase mGetTableFromOnlineUseCase;
     private GetTableFromOfflineUseCase mGetTableFromOfflineUseCase;
@@ -31,7 +37,7 @@ public class TablePresenter extends BasePresenter<TableView>{
     @Inject
     TablePresenter(GetTableFromOnlineUseCase getTableFromOnlineUseCase,
                    GetSettingsUseCase getSettingsUseCase,
-                   GetTableFromOfflineUseCase getTableFromOfflineUseCase){
+                   GetTableFromOfflineUseCase getTableFromOfflineUseCase) {
 
         mGetTableFromOnlineUseCase = getTableFromOnlineUseCase;
         mGetSettingsUseCase = getSettingsUseCase;
@@ -41,7 +47,7 @@ public class TablePresenter extends BasePresenter<TableView>{
     @Override
     public void resume() {
 //        mView.showLoading();
-        mGetSettingsUseCase.execute(new BaseSubscriber<Settings>(){
+        mGetSettingsUseCase.execute(new BaseSubscriber<Settings>() {
             @Override
             public void onNext(Settings settings) {
                 mSettings = settings;
@@ -55,19 +61,23 @@ public class TablePresenter extends BasePresenter<TableView>{
         });
     }
 
-    public String getGroup(){
+    public boolean getChangeMode(){
+        return mSettings.getChangeMode();
+    }
+
+    public String getGroup() {
         return mSettings != null ? mSettings.getNotificationGroup() : "";
     }
 
-    public void getTimeTable(){
+    public void getTimeTable() {
         mView.showLoading();
 
         mGetTableFromOnlineUseCase.setOnline(isOnline());
         mGetTableFromOnlineUseCase.setGroup(mView.getGroup());
-        mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>(){
+        mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>() {
             @Override
-            public void onNext(TimeTable timeTable){
-//                Log.d("test", "TimeTable offline onNext" + timeTable.getTimeTable().size());
+            public void onNext(TimeTable timeTable) {
+//                Log.d("test", "TimeTable offline onNext" + timeTable.getDayList().size());
                 mView.setTimeTable(timeTable);
             }
 
@@ -87,13 +97,13 @@ public class TablePresenter extends BasePresenter<TableView>{
 
     }
 
-    public void getTableFromOffline(){
+    public void getTableFromOffline() {
         mView.showLoading();
 
         mGetTableFromOfflineUseCase.setGroup(mView.getGroup());
-        mGetTableFromOfflineUseCase.execute(new BaseSubscriber<TimeTable>(){
+        mGetTableFromOfflineUseCase.execute(new BaseSubscriber<TimeTable>() {
             @Override
-            public void onNext(TimeTable timeTable){
+            public void onNext(TimeTable timeTable) {
                 mView.setTimeTable(timeTable);
             }
 
@@ -108,9 +118,9 @@ public class TablePresenter extends BasePresenter<TableView>{
             @Override
             public void onCompleted() {
                 mView.hideLoading();
-                if(mView.getTimeTable() == null
-                        || mView.getTimeTable().getTimeTable() == null
-                        || mView.getTimeTable().getTimeTable().keySet().size() == 0){
+                if (mView.getTimeTable() == null
+                        || mView.getTimeTable().getDayList() == null
+                        || mView.getTimeTable().getDayList().size() == 0) {
                     mView.showMessage();
                 }
             }
@@ -123,4 +133,19 @@ public class TablePresenter extends BasePresenter<TableView>{
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
+
+    public void shareDay(Bitmap dayByBitmap) {
+        try {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("image/*");
+            final Uri imageUri = Uri.fromFile(Utils.getImageFile(dayByBitmap));
+            i.putExtra(Intent.EXTRA_STREAM, imageUri);
+
+            mView.getContext().startActivity(Intent.createChooser(i, "Поделиться расписанием"));
+        } catch (android.content.ActivityNotFoundException | IOException | NullPointerException ex) {
+            mView.showError(ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
 }

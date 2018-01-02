@@ -3,6 +3,7 @@ package com.alekseyld.collegetimetable.view.adapter.holder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alekseyld.collegetimetable.R;
@@ -19,16 +20,11 @@ public class TimeTableHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.date)
     public TextView date;
 
-//    @BindView(R.id.lesson0) public TextView lesson0;
-//    @BindView(R.id.lesson1) public TextView lesson1;
-//    @BindView(R.id.lesson2) public TextView lesson2;
-//    @BindView(R.id.lesson3) public TextView lesson3;
-//    @BindView(R.id.lesson4) public TextView lesson4;
-//    @BindView(R.id.lesson5) public TextView lesson5;
-//    @BindView(R.id.lesson6) public TextView lesson6;
-
     @BindView(R.id.lesson_list)
     public RecyclerView lessons;
+
+    @BindView(R.id.share_button)
+    public ImageView shareButton;
 
     public TimeTableHolder(View v) {
         super(v);

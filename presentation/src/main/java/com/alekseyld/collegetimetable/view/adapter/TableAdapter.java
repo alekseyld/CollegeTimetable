@@ -1,12 +1,17 @@
 package com.alekseyld.collegetimetable.view.adapter;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.TimeTable;
+import com.alekseyld.collegetimetable.presenter.TablePresenter;
 import com.alekseyld.collegetimetable.view.adapter.holder.TimeTableHolder;
 
 /**
@@ -16,64 +21,76 @@ import com.alekseyld.collegetimetable.view.adapter.holder.TimeTableHolder;
 public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
 
     private TimeTable mTimeTable;
+    private Context context;
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public TableAdapter() {
+    private TablePresenter mPresenter;
+    private RecyclerView.LayoutManager layoutManager;
+
+    public TableAdapter(Context context, RecyclerView.LayoutManager layoutManager) {
+        this.context = context;
         mTimeTable = null;
+        this.layoutManager = layoutManager;
     }
 
-    public TableAdapter(TimeTable timeTable) {
+    public TableAdapter(Context context, TimeTable timeTable) {
+        this.context = context;
         mTimeTable = timeTable;
     }
 
-    // Create new views (invoked by the layout manager)
+    public TableAdapter setPresenter(TablePresenter presenter) {
+        this.mPresenter = presenter;
+        return this;
+    }
+
     @Override
     public TimeTableHolder onCreateViewHolder(ViewGroup parent,
                                               int viewType) {
-        // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_table, parent, false);
-        // set the view's size, margins, paddings and layout parameters
         return new TimeTableHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(TimeTableHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
+    public void onBindViewHolder(final TimeTableHolder holder, int position) {
+        holder.date.setText(mTimeTable.getDayList().get(position).getDateFirstUpperCase());
+        holder.lessons.setAdapter(new LessonAdapter(mTimeTable.getDayList().get(position), mPresenter.getChangeMode(), context));
 
-        if (mTimeTable != null) {
-            TimeTable.Day day = TimeTable.Day.Mon;
-            String dayText = "";
+        if (layoutManager != null) {
+            holder.shareButton.setVisibility(View.VISIBLE);
 
-            switch (position) {
-                case 0:
-                    day = TimeTable.Day.Mon;
-                    break;
-                case 1:
-                    day = TimeTable.Day.Tue;
-                    break;
-                case 2:
-                    day = TimeTable.Day.Wed;
-                    break;
-                case 3:
-                    day = TimeTable.Day.Thu;
-                    break;
-                case 4:
-                    day = TimeTable.Day.Friday;
-                    break;
-                case 5:
-                    day = TimeTable.Day.Saturday;
-                    break;
-                case 6:
-                    day = TimeTable.Day.Mon2;
-                    break;
-            }
+            holder.shareButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPresenter.shareDay(getDayByBitmap(holder.getAdapterPosition()));
+                }
+            });
 
-            holder.date.setText(firstUpperCase(mTimeTable.getDays().get(day).toLowerCase()));
-            holder.lessons.setAdapter(new LessonAdapter(mTimeTable.getTimeTable(), day));
+            holder.date.setPadding(
+                    (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 34, context.getResources().getDisplayMetrics()),
+                    holder.date.getPaddingTop(),
+                    holder.date.getPaddingRight(),
+                    holder.date.getPaddingBottom()
+            );
         }
+    }
+
+    private Bitmap getDayByBitmap(int pos) {
+//        View view = layoutManager.findViewByPosition(pos);
+//        view.setDrawingCacheEnabled(true);
+//        view.buildDrawingCache();
+//
+//        return view.getDrawingCache();
+
+
+        View view = layoutManager.findViewByPosition(pos);
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
+                view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas bitmapHolder = new Canvas(bitmap);
+        bitmapHolder.drawRGB(245, 245, 245);
+
+        view.draw(bitmapHolder);
+
+        return bitmap;
     }
 
     public TimeTable getTimeTable() {
@@ -85,17 +102,11 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
         notifyDataSetChanged();
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        if (mTimeTable == null || mTimeTable.getTimeTable() == null) {
+        if (mTimeTable == null || mTimeTable.getDayList() == null) {
             return 0;
         }
-        return mTimeTable.getTimeTable().size();
-    }
-
-    private String firstUpperCase(String word) {
-        if (word == null || word.isEmpty()) return "";//или return word;
-        return word.substring(0, 1).toUpperCase() + word.substring(1);
+        return mTimeTable.getDayList().size();
     }
 }

@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.StrictMode;
 
 import com.alekseyld.collegetimetable.internal.di.component.ApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerApplicationComponent;
@@ -13,11 +14,7 @@ import com.alekseyld.collegetimetable.internal.di.module.ApplicationModule;
 import com.alekseyld.collegetimetable.service.UpdateTimetableService;
 import com.crashlytics.android.Crashlytics;
 
-import javax.inject.Inject;
-
 import io.fabric.sdk.android.Fabric;
-
-import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -30,17 +27,23 @@ public class AndroidApplication extends Application {
 
     private ApplicationComponent applicationComponent;
 
-    @Override public void onCreate() {
+    @Override
+    public void onCreate() {
         super.onCreate();
+        BackwardCompatibility.checkAppVersion(this.getSharedPreferences(NAME_FILE, MODE_PRIVATE));
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
         Fabric.with(this, new Crashlytics());
-        this.initializeInjector();
-        this.initializeDBFlow();
+        initializeInjector();
+        initializeDBFlow();
         initializeService();
     }
 
-    private void initializeService(){
-        SharedPreferences mPref = this.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
-        if(mPref.getBoolean(NOTIFON_KEY, false)) {
+    private void initializeService() {
+        SharedPreferences preferences = this.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
+        if (preferences.getBoolean(NOTIFON_KEY, false)) {
             boolean alarmUp = (PendingIntent.getBroadcast(getApplicationContext(), 0,
                     new Intent(this, UpdateTimetableService.class),
                     PendingIntent.FLAG_NO_CREATE) != null);
@@ -50,7 +53,7 @@ public class AndroidApplication extends Application {
                 PendingIntent pintent = PendingIntent.getService(this, 0, ishintent, 0);
                 AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 alarm.cancel(pintent);
-                alarm.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 5 * 60 * 1000, pintent);
+                alarm.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 30 * 60 * 1000, pintent);
             }
         }
     }
@@ -61,7 +64,7 @@ public class AndroidApplication extends Application {
                 .build();
     }
 
-    private void initializeDBFlow(){
+    private void initializeDBFlow() {
 //        FlowManager.init(new FlowConfig.Builder(this).build());
     }
 

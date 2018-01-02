@@ -1,6 +1,7 @@
 package com.alekseyld.collegetimetable.internal.di.module;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 
 import com.alekseyld.collegetimetable.internal.di.PerActivity;
 import com.alekseyld.collegetimetable.navigator.NavigatorImpl;
@@ -17,6 +18,9 @@ import com.alekseyld.collegetimetable.service.TableServiceImpl;
 import dagger.Module;
 import dagger.Provides;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
+
 /**
  * Created by Alekseyld on 02.09.2016.
  */
@@ -28,6 +32,12 @@ public class MainModule {
 
     public MainModule(Activity activity) {
         this.activity = activity;
+    }
+
+    @Provides
+    @PerActivity
+    SharedPreferences getSharedPreferences(){
+        return activity.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
     }
 
     @Provides

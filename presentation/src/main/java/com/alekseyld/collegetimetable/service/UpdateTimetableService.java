@@ -110,10 +110,8 @@ public class UpdateTimetableService extends IntentService {
             @Override
             public void onNext(TimeTable timeTable) {
                 if(timeTable != null
-                        && timeTable.getTimeTable() != null
-                        && timeTable.getTimeTable().size() > 0
-                        && timeTable.getChanges() != null
-                        && timeTable.isChanges()){
+                        && timeTable.getDayList() != null
+                        && timeTable.getDayList().size() > 0){
 
                     saveTimeTable(timeTable);
                     if(!mSettings.getAlarmMode()){

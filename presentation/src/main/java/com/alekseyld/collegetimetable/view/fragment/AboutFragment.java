@@ -2,7 +2,6 @@ package com.alekseyld.collegetimetable.view.fragment;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -37,8 +36,6 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
     @BindView(R.id.listView)
     ListView listView;
 
-    private String[] about;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,13 +43,12 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
         ButterKnife.bind(this, v);
         getActivity().setTitle(R.string.about);
 
-        PackageManager manager = getActivity().getPackageManager();
-
-        about = new String[]{
+        String[] about = new String[]{
                 getString(R.string.info_r),
                 "Версия: " + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ") " + " " + BuildConfig.BUILD_TYPE,
                 getString(R.string.info_star),
                 getString(R.string.disclaimer),
+                getString(R.string.utec_helper_lable),
                 getString(R.string.github)
         };
 
@@ -91,11 +87,18 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
                         alert.show();
                         break;
                     case 4:
+                        String url2 = "http://utechelper.ru";
+                        Intent intent2 = new Intent(Intent.ACTION_VIEW);
+                        intent2.setData(Uri.parse(url2));
+                        startActivity(intent2);
+                        break;
+                    case 5:
                         String url1 = "https://github.com/alekseyld/CollegeTimetable";
                         Intent intent1 = new Intent(Intent.ACTION_VIEW);
                         intent1.setData(Uri.parse(url1));
                         startActivity(intent1);
                         break;
+
                 }
 
             }
