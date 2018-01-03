@@ -9,6 +9,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="@string/user_title"
+            android:textColor="@android:color/white"
+            android:textSize="8pt" />
+
+        <TextView
+            android:id="@+id/name_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="8pt"
+            android:paddingLeft="10dp"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="30dp">
 
         <TextView
@@ -27,4 +50,5 @@
             android:paddingLeft="10dp"
             android:textColor="@android:color/white" />
     </LinearLayout>
+
 </RelativeLayout>

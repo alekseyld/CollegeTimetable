@@ -36,8 +36,8 @@ public class AndroidApplication extends Application {
         StrictMode.setVmPolicy(builder.build());
 
         Fabric.with(this, new Crashlytics());
+
         initializeInjector();
-        initializeDBFlow();
         initializeService();
     }
 
@@ -62,10 +62,6 @@ public class AndroidApplication extends Application {
         this.applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .build();
-    }
-
-    private void initializeDBFlow() {
-//        FlowManager.init(new FlowConfig.Builder(this).build());
     }
 
     public ApplicationComponent getApplicationComponent() {

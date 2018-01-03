@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.Settings;
+import com.alekseyld.collegetimetable.entity.User;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerMainComponent;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.internal.di.module.MainModule;
@@ -28,6 +29,7 @@ import butterknife.ButterKnife;
 
 import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.SETTINGS_KEY;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
+import static com.alekseyld.collegetimetable.repository.base.UserRepository.USER_KEY;
 
 public class MainActivity extends BaseInjectorActivity<MainComponent> {
 
@@ -128,6 +130,7 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
 
     protected void buildMenu() {
 
+        //fixme переделать под usecase
         SharedPreferences preferences = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
 
         if (preferences.contains(SETTINGS_KEY)) {
@@ -135,11 +138,21 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
             Settings settings = new Gson().fromJson(json, Settings.class);
             if (settings.getFavoriteGroups() != null) {
                 favorite = settings.getFavoriteGroups().toArray(new String[0]);
+            }
+        }
 
-                if (settings.getNotificationGroup() != null) {
-                    TextView group = (TextView) navigation.getHeaderView(0).findViewById(R.id.header_my_group);
-                    group.setText(settings.getNotificationGroup());
-                }
+        if (preferences.contains(USER_KEY)) {
+            String json = preferences.getString(USER_KEY, "");
+            User user = new Gson().fromJson(json, User.class);
+
+            if (user.getGroup() != null) {
+                TextView group = (TextView) navigation.getHeaderView(0).findViewById(R.id.header_my_group);
+                group.setText(user.getGroup());
+            }
+
+            if (user.getName() != null) {
+                TextView name = (TextView) navigation.getHeaderView(0).findViewById(R.id.name_user);
+                name.setText(user.getNameWithSurname());
             }
         }
 

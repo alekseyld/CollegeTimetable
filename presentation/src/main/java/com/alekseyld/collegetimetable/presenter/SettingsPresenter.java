@@ -26,7 +26,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
     private GetSettingsUseCase mGetSettingsUseCase;
 
     @Inject
-    public SettingsPresenter(SettingsResultProcessor settingsResultProcessor,
+    SettingsPresenter(SettingsResultProcessor settingsResultProcessor,
                              SaveSettingsUseCase saveSettingsUseCase,
                              GetSettingsUseCase getSettingsUseCase) {
         mProcessor = settingsResultProcessor;

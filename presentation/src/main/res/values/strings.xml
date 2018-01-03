@@ -61,8 +61,9 @@
     <string name="settings_favorite_activity_title">Избранные группы</string>
     <string name="action_info">Информация</string>
     <string name="utec_helper_lable">Дружественный проект - Утэк Helper</string>
-    <string name="my_group_string">Моя группа:</string>
+    <string name="my_group_string">Группа:</string>
     <string name="share_button_descript">Поделиться расписанием</string>
     <string name="changeMode">Выделять изменения фоном</string>
     <string name="login_title">Авторизация</string>
+    <string name="user_title">Пользователь:</string>
 </resources>

@@ -17,13 +17,13 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     private AuthUseCase mAuthUseCase;
 
     @Inject
-    public LoginPresenter(AuthUseCase authUseCase) {
+    LoginPresenter(AuthUseCase authUseCase) {
         mAuthUseCase = authUseCase;
     }
 
     public void login(String login, String password) {
 
-        if (login.equals("")){
+        if (login.equals("")) {
             mView.showError("Логин не может быть пустым");
             return;
         } else if (password.equals("")) {
@@ -31,17 +31,10 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             return;
         }
 
+        mView.showLoading();
         mAuthUseCase.setLogin(login)
                 .setPassword(password)
                 .execute(new BaseSubscriber<Boolean>() {
-                    @Override
-                    public void onNext(Boolean isLoginSuccess) {
-                        super.onNext(isLoginSuccess);
-
-                        if (isLoginSuccess)
-                            mView.loginSuccessfully();
-                    }
-
                     @Override
                     public void onCompleted() {
                         super.onCompleted();
@@ -56,6 +49,15 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                         super.onError(e);
 
                         mView.showError(e.getMessage());
+                        mView.hideLoading();
+                    }
+
+                    @Override
+                    public void onNext(Boolean isLoginSuccess) {
+                        super.onNext(isLoginSuccess);
+
+                        if (isLoginSuccess)
+                            mView.loginSuccessfully();
                     }
 
                 });

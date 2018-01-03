@@ -12,6 +12,6 @@ import javax.inject.Inject;
 public class BellTablePresenter extends BasePresenter<BellView> {
 
     @Inject
-    public BellTablePresenter() {
+    BellTablePresenter() {
     }
 }

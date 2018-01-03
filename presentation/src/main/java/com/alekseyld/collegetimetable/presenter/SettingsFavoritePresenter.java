@@ -23,7 +23,7 @@ public class SettingsFavoritePresenter extends BasePresenter<SettingsFavoriteVie
     private GetSettingsUseCase mGetSettingsUseCase;
 
     @Inject
-    public SettingsFavoritePresenter(SaveSettingsUseCase saveSettingsUseCase,
+    SettingsFavoritePresenter(SaveSettingsUseCase saveSettingsUseCase,
                              GetSettingsUseCase getSettingsUseCase) {
         mSaveSettingsUseCase = saveSettingsUseCase;
         mGetSettingsUseCase = getSettingsUseCase;

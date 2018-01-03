@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.LoginComponent;
@@ -34,6 +36,12 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
     public static LoginFragment newInstance(){
         return new LoginFragment();
     }
+
+    @BindView(R.id.linearlayout)
+    LinearLayout linearLayout;
+
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
 
     @BindView(R.id.login)
     MaterialEditText loginEditText;
@@ -101,12 +109,14 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
 
     @Override
     public void showLoading() {
-
+        linearLayout.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-
+        progressBar.setVisibility(View.GONE);
+        linearLayout.setVisibility(View.VISIBLE);
     }
 
     @Override

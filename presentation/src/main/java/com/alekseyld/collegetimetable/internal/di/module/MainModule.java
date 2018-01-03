@@ -8,8 +8,10 @@ import com.alekseyld.collegetimetable.navigator.NavigatorImpl;
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
 import com.alekseyld.collegetimetable.repository.SettingsRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.TableRepositoryImpl;
+import com.alekseyld.collegetimetable.repository.UserRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 import com.alekseyld.collegetimetable.repository.base.TableRepository;
+import com.alekseyld.collegetimetable.repository.base.UserRepository;
 import com.alekseyld.collegetimetable.service.ServerService;
 import com.alekseyld.collegetimetable.service.ServerServiceImpl;
 import com.alekseyld.collegetimetable.service.SettingsService;
@@ -71,6 +73,11 @@ public class MainModule {
     @PerActivity @Provides
     SettingsRepository provideSettingsRepository(SettingsRepositoryImpl settingsRepository){
         return settingsRepository;
+    }
+
+    @PerActivity @Provides
+    UserRepository provideUserRepository(UserRepositoryImpl userRepository){
+        return userRepository;
     }
 
     @PerActivity @Provides

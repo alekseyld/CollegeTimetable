@@ -2,7 +2,9 @@ package com.alekseyld.collegetimetable.service;
 
 import com.alekseyld.collegetimetable.api.ServerApi;
 import com.alekseyld.collegetimetable.entity.TimeTable;
+import com.alekseyld.collegetimetable.entity.User;
 import com.alekseyld.collegetimetable.exception.UncriticalException;
+import com.alekseyld.collegetimetable.repository.base.UserRepository;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,11 +18,15 @@ import rx.Observable;
 
 public class ServerServiceImpl implements ServerService{
 
-    private ServerApi serverApi;
+    private ServerApi mServerApi;
+    private UserRepository mUserRepository;
 
     @Inject
-    ServerServiceImpl(@Named("server") Retrofit restAdapter) {
-        serverApi = restAdapter.create(ServerApi.class);
+    ServerServiceImpl(@Named("server") Retrofit restAdapter,
+                      UserRepository userRepository) {
+
+        mServerApi = restAdapter.create(ServerApi.class);
+        mUserRepository = userRepository;
     }
 
     @Override
@@ -35,19 +41,34 @@ public class ServerServiceImpl implements ServerService{
 
     @Override
     public Observable<Boolean> auth(String login, String password) {
-        return serverApi.auth(login, password)
+        return mServerApi.auth(login, password)
                 .flatMap(response -> {
 
                     if (!response.contains("error")){
 
-                        //todo сохранять authkey
                         String authKey = response;
-
-                        return Observable.just(true);
+                        return Observable.just(authKey);
                     } else {
                         String errorText = response.replace("error", "");
                         return Observable.error(new UncriticalException(errorText));
                     }
+                })
+                .flatMap(this::getUser)
+                .map(user -> {
+                    mUserRepository.putUser(user);
+                    return true;
+                });
+    }
+
+    private Observable<User> getUser(String authKey){
+        return mServerApi.getUser(authKey)
+                .onErrorReturn((error) -> null)
+                .flatMap(user -> {
+                    if (user == null)
+                        return Observable.error(new UncriticalException("Ошибка при получении пользователя"));
+
+                    user.setAuthKey(authKey);
+                    return Observable.just(user);
                 });
     }
 

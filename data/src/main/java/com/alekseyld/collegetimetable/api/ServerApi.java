@@ -1,5 +1,7 @@
 package com.alekseyld.collegetimetable.api;
 
+import com.alekseyld.collegetimetable.entity.User;
+
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
@@ -14,5 +16,9 @@ public interface ServerApi {
     @FormUrlEncoded
     @POST("auth")
     Observable<String> auth(@Field("login") String login, @Field("password") String password);
+
+    @FormUrlEncoded
+    @POST("getuser")
+    Observable<User> getUser(@Field("authkey") String authkey);
 
 }
