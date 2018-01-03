@@ -47,6 +47,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                             e = new UncriticalException("Не удалось подключиться к серверу " + e.getMessage().replace("Failed to connect to", ""));
                         }
                         super.onError(e);
+                        e.printStackTrace();
 
                         mView.showError(e.getMessage());
                         mView.hideLoading();

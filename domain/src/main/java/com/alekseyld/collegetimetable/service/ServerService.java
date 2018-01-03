@@ -10,7 +10,7 @@ import rx.Observable;
 
 public interface ServerService {
 
-    Observable<TimeTable> getTimetableFromServer();
+    Observable<TimeTable> getTimetableFromServer(String group);
 
     //todo объект оповещения
     Observable<Boolean> notification(String login, String password);

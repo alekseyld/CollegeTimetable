@@ -1,10 +1,13 @@
 package com.alekseyld.collegetimetable.api;
 
+import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.entity.User;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -20,5 +23,8 @@ public interface ServerApi {
     @FormUrlEncoded
     @POST("getuser")
     Observable<User> getUser(@Field("authkey") String authkey);
+
+    @GET("timetable?")
+    Observable<TimeTable> getTimeTable(@Query("group") String group);
 
 }

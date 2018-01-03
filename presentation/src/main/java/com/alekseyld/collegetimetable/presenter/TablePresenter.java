@@ -14,6 +14,7 @@ import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOfflineUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
+import com.alekseyld.collegetimetable.usecase.GetTableFromServerUseCase;
 import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.TableView;
 
@@ -30,6 +31,8 @@ public class TablePresenter extends BasePresenter<TableView> {
     private GetTableFromOnlineUseCase mGetTableFromOnlineUseCase;
     private GetTableFromOfflineUseCase mGetTableFromOfflineUseCase;
 
+    private GetTableFromServerUseCase mGetTableFromServerUseCase;
+
     private GetSettingsUseCase mGetSettingsUseCase;
 
     private Settings mSettings;
@@ -37,11 +40,13 @@ public class TablePresenter extends BasePresenter<TableView> {
     @Inject
     TablePresenter(GetTableFromOnlineUseCase getTableFromOnlineUseCase,
                    GetSettingsUseCase getSettingsUseCase,
-                   GetTableFromOfflineUseCase getTableFromOfflineUseCase) {
+                   GetTableFromOfflineUseCase getTableFromOfflineUseCase,
+                   GetTableFromServerUseCase getTableFromServerUseCase) {
 
         mGetTableFromOnlineUseCase = getTableFromOnlineUseCase;
         mGetSettingsUseCase = getSettingsUseCase;
         mGetTableFromOfflineUseCase = getTableFromOfflineUseCase;
+        mGetTableFromServerUseCase = getTableFromServerUseCase;
     }
 
     @Override
@@ -72,12 +77,33 @@ public class TablePresenter extends BasePresenter<TableView> {
     public void getTimeTable() {
         mView.showLoading();
 
-        mGetTableFromOnlineUseCase.setOnline(isOnline());
-        mGetTableFromOnlineUseCase.setGroup(mView.getGroup());
-        mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>() {
+//        mGetTableFromOnlineUseCase.setOnline(isOnline());
+//        mGetTableFromOnlineUseCase.setGroup(mView.getGroup());
+//        mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>() {
+//            @Override
+//            public void onNext(TimeTable timeTable) {
+////                Log.d("test", "TimeTable offline onNext" + timeTable.getDayList().size());
+//                mView.setTimeTable(timeTable);
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                super.onError(e);
+//                e.printStackTrace();
+//                mView.showError(e.getMessage());
+//                mView.hideLoading();
+//            }
+//
+//            @Override
+//            public void onCompleted() {
+//                mView.hideLoading();
+//            }
+//        });
+
+        mGetTableFromServerUseCase.setGroup(mView.getGroup());
+        mGetTableFromServerUseCase.execute(new BaseSubscriber<TimeTable>() {
             @Override
             public void onNext(TimeTable timeTable) {
-//                Log.d("test", "TimeTable offline onNext" + timeTable.getDayList().size());
                 mView.setTimeTable(timeTable);
             }
 
