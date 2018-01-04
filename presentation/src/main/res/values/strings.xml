@@ -66,4 +66,6 @@
     <string name="changeMode">Выделять изменения фоном</string>
     <string name="login_title">Авторизация</string>
     <string name="user_title">Пользователь:</string>
+    <string name="setUrlServer_title">Адрес сервера</string>
+    <string name="action_exit">Выйти</string>
 </resources>

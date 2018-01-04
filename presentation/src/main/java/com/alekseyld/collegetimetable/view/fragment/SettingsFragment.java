@@ -1,16 +1,20 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.alekseyld.collegetimetable.R;
+import com.alekseyld.collegetimetable.internal.di.component.LoginComponent;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.SettingsPresenter;
 import com.alekseyld.collegetimetable.view.SettingsView;
@@ -27,9 +31,17 @@ import butterknife.ButterKnife;
 
 public class SettingsFragment extends BaseFragment<SettingsPresenter> implements SettingsView {
 
-    public static SettingsFragment newInstance(){
-        return new SettingsFragment();
+    public static SettingsFragment newInstance(boolean isLogin){
+        SettingsFragment fragment = new SettingsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isLogin", isLogin);
+        fragment.setArguments(bundle);
+        return fragment;
     }
+
+
+    @BindView(R.id.setUrlServer)
+    TextView setUrlServer;
 
     @BindView(R.id.addFarvorite)
     TextView addFarvorite;
@@ -49,12 +61,21 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
     @BindView(R.id.changeMode)
     Switch changeMode;
 
+    boolean isLogin;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_settings, container, false);
         ButterKnife.bind(this, v);
         getActivity().setTitle(R.string.action_settings);
+
+        setUrlServer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showUrlDialog();
+            }
+        });
 
         addFarvorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +123,9 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         addFarvorite.setBackgroundResource(outValue.resourceId);
         addNotif.setBackgroundResource(outValue.resourceId);
 
+        if (getArguments() != null)
+            isLogin = getArguments().getBoolean("isLogin");
+
         return v;
     }
 
@@ -134,6 +158,28 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         getBaseActivity().startActivity(SettingsFavoriteActivity.class);
     }
 
+    private void showUrlDialog() {
+        //todo переделать на material edit text
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        final EditText input = new EditText(getContext());
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        input.setHint("Адрес сервера");
+        if (mPresenter.getSettings().getUrlServer() != null)
+            input.setText(mPresenter.getSettings().getUrlServer());
+        alertDialog.setView(input)
+                .setTitle("")
+                .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mPresenter.saveUrlServer(input.getText().toString());
+                    }
+                })
+                .show();
+    }
+
     @Override
     public void showLoading() {
     }
@@ -144,7 +190,11 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
 
     @Override
     protected void initializeInjections() {
-        getComponent(MainComponent.class).inject(this);
+        if (isLogin) {
+            getComponent(LoginComponent.class).inject(this);
+        } else {
+            getComponent(MainComponent.class).inject(this);
+        }
     }
 
 }

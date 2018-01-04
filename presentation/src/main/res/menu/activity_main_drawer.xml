@@ -19,6 +19,12 @@
             android:icon="@drawable/ic_settings"
             android:id="@+id/settings"
             android:title="@string/action_settings"/>
+
+        <item
+            android:icon="@drawable/ic_exit_to_app_black"
+            android:id="@+id/action_exit"
+            android:title="@string/action_exit"/>
+
         <item
             android:icon="@drawable/ic_information"
             android:id="@+id/about"

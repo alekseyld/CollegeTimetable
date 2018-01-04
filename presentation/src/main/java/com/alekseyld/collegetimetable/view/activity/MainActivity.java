@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.view.activity;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -12,26 +12,24 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.alekseyld.collegetimetable.R;
-import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.entity.User;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerMainComponent;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.internal.di.module.MainModule;
+import com.alekseyld.collegetimetable.presenter.MainActivityPresenter;
+import com.alekseyld.collegetimetable.view.MainActivityView;
 import com.alekseyld.collegetimetable.view.activity.base.BaseInjectorActivity;
 import com.alekseyld.collegetimetable.view.fragment.AboutFragment;
 import com.alekseyld.collegetimetable.view.fragment.BellTableFragment;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFragment;
 import com.alekseyld.collegetimetable.view.fragment.TableFragment;
-import com.google.gson.Gson;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.SETTINGS_KEY;
-import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
-import static com.alekseyld.collegetimetable.repository.base.UserRepository.USER_KEY;
-
-public class MainActivity extends BaseInjectorActivity<MainComponent> {
+public class MainActivity extends BaseInjectorActivity<MainComponent> implements MainActivityView {
 
     @BindView(R.id.nav_view)
     NavigationView navigation;
@@ -42,10 +40,13 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    private String[] favorite;
-
     private MainNavigationViewItemSelectedListener mOnNavigationItemSelectedListener;
     private ActionBarDrawerToggle drawerToggle;
+
+    @Inject
+    MainActivityPresenter mPresenter;
+
+    private String[] favorite;
 
     private class MainNavigationViewItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
         @Override
@@ -75,13 +76,18 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
             }
 
             if (id == R.id.action_settings) {
-                replaceFragment(SettingsFragment.newInstance());
+                replaceFragment(SettingsFragment.newInstance(false));
                 drawer.closeDrawer(navigation);
                 return false;
             }
             if (id == R.id.about) {
                 replaceFragment(AboutFragment.newInstance());
                 drawer.closeDrawer(navigation);
+                return false;
+            }
+
+            if (id == R.id.action_exit) {
+                mPresenter.prepareExit();
                 return false;
             }
 
@@ -99,7 +105,9 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        buildMenu();
+        //buildMenu();
+        initializeInjection();
+        mPresenter.setView(this);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -120,7 +128,7 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
     protected void onResume() {
         super.onResume();
 
-        buildMenu();
+        processMenu();
 
         if (mOnNavigationItemSelectedListener == null) {
             mOnNavigationItemSelectedListener = new MainNavigationViewItemSelectedListener();
@@ -128,33 +136,25 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
         navigation.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    protected void buildMenu() {
+    protected void processMenu() {
+        mPresenter.getAndSetFavorites();
+        mPresenter.getAndSetUserInfo();
+    }
 
-        //fixme переделать под usecase
-        SharedPreferences preferences = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
-
-        if (preferences.contains(SETTINGS_KEY)) {
-            String json = preferences.getString(SETTINGS_KEY, "");
-            Settings settings = new Gson().fromJson(json, Settings.class);
-            if (settings.getFavoriteGroups() != null) {
-                favorite = settings.getFavoriteGroups().toArray(new String[0]);
-            }
+    public void setUserInfo(User user) {
+        if (user.getGroup() != null) {
+            TextView group = (TextView) navigation.getHeaderView(0).findViewById(R.id.header_my_group);
+            group.setText(user.getGroup());
         }
 
-        if (preferences.contains(USER_KEY)) {
-            String json = preferences.getString(USER_KEY, "");
-            User user = new Gson().fromJson(json, User.class);
-
-            if (user.getGroup() != null) {
-                TextView group = (TextView) navigation.getHeaderView(0).findViewById(R.id.header_my_group);
-                group.setText(user.getGroup());
-            }
-
-            if (user.getName() != null) {
-                TextView name = (TextView) navigation.getHeaderView(0).findViewById(R.id.name_user);
-                name.setText(user.getNameWithSurname());
-            }
+        if (user.getName() != null) {
+            TextView name = (TextView) navigation.getHeaderView(0).findViewById(R.id.name_user);
+            name.setText(user.getNameWithSurname());
         }
+    }
+
+    public void buildMenu(String[] favorite) {
+        this.favorite = favorite;
 
         Menu menu = navigation.getMenu();
         menu.clear();
@@ -170,10 +170,12 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
 
         menu.add(Menu.NONE, R.id.action_belltable, Menu.NONE, R.string.action_belltable);
         menu.add(Menu.NONE, R.id.action_settings, Menu.NONE, R.string.action_settings);
+        menu.add(Menu.NONE, R.id.action_exit, Menu.NONE, R.string.action_exit);
         menu.add(Menu.NONE, R.id.about, Menu.NONE, R.string.about);
 
-        menu.getItem(menu.size() - 3).setIcon(R.drawable.ic_access_time);
-        menu.getItem(menu.size() - 2).setIcon(R.drawable.ic_settings);
+        menu.getItem(menu.size() - 4).setIcon(R.drawable.ic_access_time);
+        menu.getItem(menu.size() - 3).setIcon(R.drawable.ic_settings);
+        menu.getItem(menu.size() - 2).setIcon(R.drawable.ic_exit_to_app_black);
         menu.getItem(menu.size() - 1).setIcon(R.drawable.ic_information);
 
         if (getSupportFragmentManager().findFragmentByTag(SettingsFragment.class.getName()) != null){
@@ -181,11 +183,18 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
         } else {
             menu.getItem(0).setChecked(true);
         }
+    }
 
+    @Override
+    public void startLoginActivity() {
+        Intent i = new Intent(this, LoginActivity.class);
+        i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(i);
+        finish();
     }
 
     public void rebuildMenu() {
-        buildMenu();
+        processMenu();
     }
 
     @Override
@@ -194,6 +203,10 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
                 .applicationComponent(getApplicationComponent())
                 .mainModule(new MainModule(this))
                 .build();
+    }
+
+    protected void initializeInjection() {
+        getComponent().inject(this);
     }
 
     @Override

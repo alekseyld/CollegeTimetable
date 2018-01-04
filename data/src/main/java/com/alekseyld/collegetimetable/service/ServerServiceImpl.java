@@ -41,25 +41,6 @@ public class ServerServiceImpl implements ServerService{
     }
 
     @Override
-    public Observable<TimeTable> getTimetableFromServer(String group) {
-        return mServerApi.getTimeTable(group)
-                .onErrorReturn(throwable -> null)
-                .flatMap(timeTable -> {
-                    if (timeTable == null)
-                        return Observable.error(new UncriticalException("Пользователь не авторизирован"));
-
-                    mTableRepository.putTimeTable(timeTable, group);
-                    return Observable.just(timeTable);
-                });
-    }
-
-    @Override
-    public Observable<Boolean> notification(String login, String password) {
-        //todo получение обновлений
-        return null;
-    }
-
-    @Override
     public Observable<Boolean> auth(String login, String password) {
         return mServerApi.auth(login, password)
                 .flatMap(response -> {
@@ -103,8 +84,41 @@ public class ServerServiceImpl implements ServerService{
     }
 
     @Override
+    public Observable<TimeTable> getTimetableFromServer(String group) {
+        return mServerApi.getTimeTable(group)
+                .onErrorReturn(throwable -> null)
+                .flatMap(timeTable -> {
+                    if (timeTable == null)
+                        return Observable.error(new UncriticalException("Пользователь не авторизирован"));
+
+                    mTableRepository.putTimeTable(timeTable, group);
+                    return Observable.just(timeTable);
+                });
+    }
+
+    @Override
+    public Observable<Boolean> notification(String login, String password) {
+        //todo получение обновлений
+        return null;
+    }
+
+    @Override
     public Observable<Boolean> changes() {
         //todo есть ли обновления
         return null;
+    }
+
+    @Override
+    public Observable<Boolean> deleteUser() {
+        return Observable.just(
+                mUserRepository.deleteUser()
+        );
+    }
+
+    @Override
+    public Observable<User> getUser() {
+        return Observable.just(
+                mUserRepository.getUser()
+        );
     }
 }

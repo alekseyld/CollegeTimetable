@@ -111,4 +111,9 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
     public boolean getChangeMode() {
         return mSettings.getChangeMode();
     }
+
+    public void saveUrlServer(String urlServer) {
+        mSettings.setUrlServer(urlServer);
+        saveSettings();
+    }
 }

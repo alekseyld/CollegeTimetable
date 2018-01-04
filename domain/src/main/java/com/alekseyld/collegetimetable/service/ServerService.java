@@ -1,6 +1,7 @@
 package com.alekseyld.collegetimetable.service;
 
 import com.alekseyld.collegetimetable.entity.TimeTable;
+import com.alekseyld.collegetimetable.entity.User;
 
 import rx.Observable;
 
@@ -19,4 +20,7 @@ public interface ServerService {
 
     Observable<Boolean> changes();
 
+    //todo вынести в UserService
+    Observable<Boolean> deleteUser();
+    Observable<User> getUser();
 }

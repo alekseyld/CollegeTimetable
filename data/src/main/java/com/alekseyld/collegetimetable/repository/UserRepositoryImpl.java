@@ -58,4 +58,13 @@ public class UserRepositoryImpl implements UserRepository {
         putUser(oldUser);
     }
 
+    @Override
+    public boolean deleteUser() {
+        if (!mPref.contains(USER_KEY)){
+            return false;
+        }
+
+        mPref.edit().remove(USER_KEY).apply();
+        return true;
+    }
 }

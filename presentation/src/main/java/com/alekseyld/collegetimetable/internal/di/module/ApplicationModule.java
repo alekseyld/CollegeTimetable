@@ -4,9 +4,11 @@ import android.content.Context;
 
 import com.alekseyld.collegetimetable.AndroidApplication;
 import com.alekseyld.collegetimetable.UIThread;
+import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.executor.JobExecutor;
 import com.alekseyld.collegetimetable.executor.PostExecutionThread;
 import com.alekseyld.collegetimetable.executor.ThreadExecutor;
+import com.google.gson.Gson;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -17,6 +19,10 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+import static android.content.Context.MODE_PRIVATE;
+import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.SETTINGS_KEY;
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -56,9 +62,16 @@ public class ApplicationModule {
     }
 
     @Provides @Singleton @Named("server") Retrofit provideServerRestAdapter(){
+        //fixme сделать по-нормальному
+        String json = application.getSharedPreferences(NAME_FILE, MODE_PRIVATE)
+                .getString(SETTINGS_KEY, "");
+        String url = new Gson().fromJson(json, Settings.class).getUrlServer();
+
+        if (url == null)
+            url = "http://www.example.org";
+
         return new Retrofit.Builder()
-                //todo host from shared pref
-                .baseUrl("http://192.168.0.100/collegetimetable/api/")
+                .baseUrl(url)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())

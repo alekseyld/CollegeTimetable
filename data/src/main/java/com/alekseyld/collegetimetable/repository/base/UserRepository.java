@@ -11,7 +11,10 @@ public interface UserRepository {
     String USER_KEY = "USER_KEY";
 
     User getUser();
+
     boolean putUser(User user);
     void updateUser(User user);
+
+    boolean deleteUser();
 
 }

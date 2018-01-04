@@ -95,8 +95,7 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
 
         switch (id) {
             case R.id.action_settings:
-                //todo click action_settings
-                showError("Еще не реализовано");
+                getBaseActivity().replaceFragment(SettingsFragment.newInstance(true));
                 break;
         }
         return super.onOptionsItemSelected(item);

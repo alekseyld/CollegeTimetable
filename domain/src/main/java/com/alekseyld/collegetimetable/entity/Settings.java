@@ -9,10 +9,16 @@ import java.util.Set;
 public class Settings {
 
     private Set<String> favoriteGroups;
+
     private String notificationGroup;
+
     private boolean notifOn;
+
     private boolean alarmMode;
+
     private boolean changeMode;
+
+    private String urlServer;
 
     public Settings() {}
 
@@ -70,5 +76,14 @@ public class Settings {
 
     public void setNotifOn(boolean notifOn) {
         this.notifOn = notifOn;
+    }
+
+    public String getUrlServer() {
+        return urlServer;
+    }
+
+    public Settings setUrlServer(String urlServer) {
+        this.urlServer = urlServer;
+        return this;
     }
 }
