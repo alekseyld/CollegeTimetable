@@ -68,4 +68,8 @@
     <string name="user_title">Пользователь:</string>
     <string name="setUrlServer_title">Адрес сервера</string>
     <string name="action_exit">Выйти</string>
+    <string name="certificate_title">Заказ справок</string>
+    <string name="notification_title">Оповещания</string>
+    <string name="action_notification">Оповещения</string>
+    <string name="action_certificate">Справки</string>
 </resources>

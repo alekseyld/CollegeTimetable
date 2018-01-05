@@ -26,8 +26,6 @@ public class FavoriteGroupAdapter extends BasePresenterAdapter<String, SettingsF
         mContext = context;
     }
 
-
-
     @Override
     public FavoriteGroupViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())

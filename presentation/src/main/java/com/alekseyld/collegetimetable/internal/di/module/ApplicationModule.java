@@ -9,6 +9,7 @@ import com.alekseyld.collegetimetable.executor.JobExecutor;
 import com.alekseyld.collegetimetable.executor.PostExecutionThread;
 import com.alekseyld.collegetimetable.executor.ThreadExecutor;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -63,9 +64,13 @@ public class ApplicationModule {
 
     @Provides @Singleton @Named("server") Retrofit provideServerRestAdapter(){
         //fixme сделать по-нормальному
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss:SSS")
+                .create();
+
         String json = application.getSharedPreferences(NAME_FILE, MODE_PRIVATE)
                 .getString(SETTINGS_KEY, "");
-        String url = new Gson().fromJson(json, Settings.class).getUrlServer();
+        String url = gson.fromJson(json, Settings.class).getUrlServer();
 
         if (url == null)
             url = "http://www.example.org";
@@ -73,7 +78,7 @@ public class ApplicationModule {
         return new Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
     }

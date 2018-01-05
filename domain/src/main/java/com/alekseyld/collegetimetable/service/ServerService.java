@@ -1,7 +1,10 @@
 package com.alekseyld.collegetimetable.service;
 
+import com.alekseyld.collegetimetable.entity.Notification;
 import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.entity.User;
+
+import java.util.List;
 
 import rx.Observable;
 
@@ -13,8 +16,10 @@ public interface ServerService {
 
     Observable<TimeTable> getTimetableFromServer(String group);
 
+    Observable<User> getUser(String authKey);
+
     //todo объект оповещения
-    Observable<Boolean> notification(String login, String password);
+    Observable<List<Notification>> getNewNotifications();
 
     Observable<Boolean> auth(String login, String password);
 
@@ -23,4 +28,6 @@ public interface ServerService {
     //todo вынести в UserService
     Observable<Boolean> deleteUser();
     Observable<User> getUser();
+
+    Observable<List<Notification>> getLocalNotifications();
 }

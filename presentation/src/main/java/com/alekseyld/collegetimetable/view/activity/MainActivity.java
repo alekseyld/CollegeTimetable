@@ -21,6 +21,8 @@ import com.alekseyld.collegetimetable.view.MainActivityView;
 import com.alekseyld.collegetimetable.view.activity.base.BaseInjectorActivity;
 import com.alekseyld.collegetimetable.view.fragment.AboutFragment;
 import com.alekseyld.collegetimetable.view.fragment.BellTableFragment;
+import com.alekseyld.collegetimetable.view.fragment.CertificateFragment;
+import com.alekseyld.collegetimetable.view.fragment.NotificationsFragment;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFragment;
 import com.alekseyld.collegetimetable.view.fragment.TableFragment;
 
@@ -75,6 +77,18 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> implements
                 return false;
             }
 
+            if (id == R.id.action_notification) {
+                replaceFragment(NotificationsFragment.newInstance());
+                drawer.closeDrawer(navigation);
+                return false;
+            }
+
+            if (id == R.id.action_certificate) {
+                replaceFragment(CertificateFragment.newInstance());
+                drawer.closeDrawer(navigation);
+                return false;
+            }
+
             if (id == R.id.action_settings) {
                 replaceFragment(SettingsFragment.newInstance(false));
                 drawer.closeDrawer(navigation);
@@ -107,7 +121,6 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> implements
 
         //buildMenu();
         initializeInjection();
-        mPresenter.setView(this);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -169,11 +182,15 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> implements
         }
 
         menu.add(Menu.NONE, R.id.action_belltable, Menu.NONE, R.string.action_belltable);
+        menu.add(Menu.NONE, R.id.action_notification, Menu.NONE, R.string.action_notification);
+        menu.add(Menu.NONE, R.id.action_certificate, Menu.NONE, R.string.action_certificate);
         menu.add(Menu.NONE, R.id.action_settings, Menu.NONE, R.string.action_settings);
         menu.add(Menu.NONE, R.id.action_exit, Menu.NONE, R.string.action_exit);
         menu.add(Menu.NONE, R.id.about, Menu.NONE, R.string.about);
 
-        menu.getItem(menu.size() - 4).setIcon(R.drawable.ic_access_time);
+        menu.getItem(menu.size() - 6).setIcon(R.drawable.ic_access_time);
+        menu.getItem(menu.size() - 5).setIcon(R.drawable.ic_notifications_black_24dp);
+        menu.getItem(menu.size() - 4).setIcon(R.drawable.ic_certificate_black);
         menu.getItem(menu.size() - 3).setIcon(R.drawable.ic_settings);
         menu.getItem(menu.size() - 2).setIcon(R.drawable.ic_exit_to_app_black);
         menu.getItem(menu.size() - 1).setIcon(R.drawable.ic_information);
@@ -207,6 +224,7 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> implements
 
     protected void initializeInjection() {
         getComponent().inject(this);
+        mPresenter.setView(this);
     }
 
     @Override

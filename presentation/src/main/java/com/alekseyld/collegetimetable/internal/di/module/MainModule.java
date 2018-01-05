@@ -6,9 +6,11 @@ import android.content.SharedPreferences;
 import com.alekseyld.collegetimetable.internal.di.PerActivity;
 import com.alekseyld.collegetimetable.navigator.NavigatorImpl;
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
+import com.alekseyld.collegetimetable.repository.NotificationRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.SettingsRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.TableRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.UserRepositoryImpl;
+import com.alekseyld.collegetimetable.repository.base.NotificationRepository;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 import com.alekseyld.collegetimetable.repository.base.TableRepository;
 import com.alekseyld.collegetimetable.repository.base.UserRepository;
@@ -78,6 +80,11 @@ public class MainModule {
     @PerActivity @Provides
     UserRepository provideUserRepository(UserRepositoryImpl userRepository){
         return userRepository;
+    }
+
+    @PerActivity @Provides
+    NotificationRepository provideNotificationRepository(NotificationRepositoryImpl notificationRepository){
+        return notificationRepository;
     }
 
     @PerActivity @Provides

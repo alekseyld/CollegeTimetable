@@ -1,5 +1,6 @@
 package com.alekseyld.collegetimetable.api;
 
+import com.alekseyld.collegetimetable.entity.Notification;
 import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.entity.User;
 
@@ -23,6 +24,10 @@ public interface ServerApi {
     @FormUrlEncoded
     @POST("getuser")
     Observable<User> getUser(@Field("authkey") String authkey);
+
+    @FormUrlEncoded
+    @POST("newnotifications")
+    Observable<Notification[]> getNewNotifications(@Field("authkey") String authkey);
 
     @GET("timetable?")
     Observable<TimeTable> getTimeTable(@Query("group") String group);

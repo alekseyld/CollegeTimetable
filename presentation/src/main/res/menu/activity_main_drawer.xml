@@ -26,6 +26,16 @@
             android:title="@string/action_exit"/>
 
         <item
+            android:icon="@drawable/ic_exit_to_app_black"
+            android:id="@+id/action_notification"
+            android:title="@string/action_notification"/>
+
+        <item
+            android:icon="@drawable/ic_exit_to_app_black"
+            android:id="@+id/action_certificate"
+            android:title="@string/action_certificate"/>
+
+        <item
             android:icon="@drawable/ic_information"
             android:id="@+id/about"
             android:title="@string/about"/>

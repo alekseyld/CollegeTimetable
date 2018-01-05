@@ -1,13 +1,20 @@
 package com.alekseyld.collegetimetable.service;
 
 import com.alekseyld.collegetimetable.api.ServerApi;
+import com.alekseyld.collegetimetable.entity.Notification;
 import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.entity.User;
 import com.alekseyld.collegetimetable.exception.UncriticalException;
+import com.alekseyld.collegetimetable.repository.base.NotificationRepository;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 import com.alekseyld.collegetimetable.repository.base.TableRepository;
 import com.alekseyld.collegetimetable.repository.base.UserRepository;
+import com.alekseyld.collegetimetable.utils.DataUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,17 +33,20 @@ public class ServerServiceImpl implements ServerService{
     private UserRepository mUserRepository;
     private SettingsRepository mSettingsRepository;
     private TableRepository mTableRepository;
+    private NotificationRepository mNotificationRepository;
 
     @Inject
     ServerServiceImpl(@Named("server") Retrofit restAdapter,
                       UserRepository userRepository,
                       SettingsRepository settingsRepository,
-                      TableRepository tableRepository) {
+                      TableRepository tableRepository,
+                      NotificationRepository notificationRepository) {
 
         mServerApi = restAdapter.create(ServerApi.class);
         mUserRepository = userRepository;
         mSettingsRepository = settingsRepository;
         mTableRepository = tableRepository;
+        mNotificationRepository = notificationRepository;
 
     }
 
@@ -71,9 +81,10 @@ public class ServerServiceImpl implements ServerService{
                 });
     }
 
-    private Observable<User> getUser(String authKey){
+    @Override
+    public Observable<User> getUser(String authKey){
         return mServerApi.getUser(authKey)
-                .onErrorReturn(error -> null)
+                .onErrorReturn(DataUtils::onErrorReturn)
                 .flatMap(user -> {
                     if (user == null)
                         return Observable.error(new UncriticalException("Ошибка при получении пользователя"));
@@ -86,7 +97,7 @@ public class ServerServiceImpl implements ServerService{
     @Override
     public Observable<TimeTable> getTimetableFromServer(String group) {
         return mServerApi.getTimeTable(group)
-                .onErrorReturn(throwable -> null)
+                .onErrorReturn(DataUtils::onErrorReturn)
                 .flatMap(timeTable -> {
                     if (timeTable == null)
                         return Observable.error(new UncriticalException("Пользователь не авторизирован"));
@@ -97,9 +108,33 @@ public class ServerServiceImpl implements ServerService{
     }
 
     @Override
-    public Observable<Boolean> notification(String login, String password) {
+    public Observable<List<Notification>> getNewNotifications() {
         //todo получение обновлений
-        return null;
+        return Observable.just(mUserRepository.getUser())
+                .onErrorReturn(DataUtils::onErrorReturn)
+                .flatMap(user -> {
+                    if (user == null || user.getAuthKey() == null || user.getAuthKey().equals(""))
+                        return Observable.error(new UncriticalException("Пользователь не авторизирован"));
+
+                    return mServerApi.getNewNotifications(user.getAuthKey());
+                })
+                .onErrorReturn(DataUtils::onErrorReturn)
+                .flatMap(notifications -> {
+                    if (notifications == null)
+                        return Observable.error(new UncriticalException("Ошибка при получении сообщений"));
+
+                    List<Notification> notificationList = new ArrayList<>(Arrays.asList(notifications));
+                    mNotificationRepository.saveNotifications(notificationList);
+
+                    return Observable.just(notificationList);
+                });
+    }
+
+    @Override
+    public Observable<List<Notification>> getLocalNotifications() {
+        return Observable.just(
+                mNotificationRepository.getNotifications()
+        );
     }
 
     @Override
@@ -121,4 +156,5 @@ public class ServerServiceImpl implements ServerService{
                 mUserRepository.getUser()
         );
     }
+
 }

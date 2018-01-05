@@ -243,4 +243,10 @@ public class DataUtils {
 
         return timeTable;
     }
+
+    public static <T> T onErrorReturn(Throwable throwable){
+        throwable.printStackTrace();
+        return null;
+    }
+
 }
