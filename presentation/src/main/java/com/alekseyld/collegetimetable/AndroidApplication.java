@@ -5,7 +5,6 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.StrictMode;
 
 import com.alekseyld.collegetimetable.internal.di.component.ApplicationComponent;
@@ -16,14 +15,15 @@ import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
 
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
+
 /**
  * Created by Alekseyld on 02.09.2017.
  */
 
 public class AndroidApplication extends Application {
 
-    private final String NAME_FILE = "DataStorage";
-    private final String NOTIFON_KEY = "NotifOn";
+
 
     private ApplicationComponent applicationComponent;
 
@@ -42,19 +42,16 @@ public class AndroidApplication extends Application {
     }
 
     private void initializeService() {
-        SharedPreferences preferences = this.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
-        if (preferences.getBoolean(NOTIFON_KEY, false)) {
-            boolean alarmUp = (PendingIntent.getBroadcast(getApplicationContext(), 0,
+        boolean alarmUp = (PendingIntent.getBroadcast(getApplicationContext(), 0,
                     new Intent(this, UpdateTimetableService.class),
                     PendingIntent.FLAG_NO_CREATE) != null);
 
-            if (!alarmUp) {
+        if (!alarmUp) {
                 Intent ishintent = new Intent(this, UpdateTimetableService.class);
                 PendingIntent pintent = PendingIntent.getService(this, 0, ishintent, 0);
                 AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 alarm.cancel(pintent);
-                alarm.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 30 * 60 * 1000, pintent);
-            }
+                alarm.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 10 * 60 * 1000, pintent);
         }
     }
 

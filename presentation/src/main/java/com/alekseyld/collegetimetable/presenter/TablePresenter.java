@@ -1,10 +1,7 @@
 package com.alekseyld.collegetimetable.presenter;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 
 import com.alekseyld.collegetimetable.entity.Settings;
@@ -13,7 +10,6 @@ import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
 import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOfflineUseCase;
-import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromServerUseCase;
 import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.TableView;
@@ -28,7 +24,6 @@ import javax.inject.Inject;
 
 public class TablePresenter extends BasePresenter<TableView> {
 
-    private GetTableFromOnlineUseCase mGetTableFromOnlineUseCase;
     private GetTableFromOfflineUseCase mGetTableFromOfflineUseCase;
 
     private GetTableFromServerUseCase mGetTableFromServerUseCase;
@@ -38,12 +33,10 @@ public class TablePresenter extends BasePresenter<TableView> {
     private Settings mSettings;
 
     @Inject
-    TablePresenter(GetTableFromOnlineUseCase getTableFromOnlineUseCase,
-                   GetSettingsUseCase getSettingsUseCase,
+    TablePresenter(GetSettingsUseCase getSettingsUseCase,
                    GetTableFromOfflineUseCase getTableFromOfflineUseCase,
                    GetTableFromServerUseCase getTableFromServerUseCase) {
 
-        mGetTableFromOnlineUseCase = getTableFromOnlineUseCase;
         mGetSettingsUseCase = getSettingsUseCase;
         mGetTableFromOfflineUseCase = getTableFromOfflineUseCase;
         mGetTableFromServerUseCase = getTableFromServerUseCase;
@@ -51,7 +44,6 @@ public class TablePresenter extends BasePresenter<TableView> {
 
     @Override
     public void resume() {
-//        mView.showLoading();
         mGetSettingsUseCase.execute(new BaseSubscriber<Settings>() {
             @Override
             public void onNext(Settings settings) {
@@ -61,7 +53,6 @@ public class TablePresenter extends BasePresenter<TableView> {
             @Override
             public void onCompleted() {
                 mView.presenterReady();
-                mView.hideLoading();
             }
         });
     }
@@ -76,29 +67,6 @@ public class TablePresenter extends BasePresenter<TableView> {
 
     public void getTimeTable() {
         mView.showLoading();
-
-//        mGetTableFromOnlineUseCase.setOnline(isOnline());
-//        mGetTableFromOnlineUseCase.setGroup(mView.getGroup());
-//        mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>() {
-//            @Override
-//            public void onNext(TimeTable timeTable) {
-////                Log.d("test", "TimeTable offline onNext" + timeTable.getDayList().size());
-//                mView.setTimeTable(timeTable);
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//                super.onError(e);
-//                e.printStackTrace();
-//                mView.showError(e.getMessage());
-//                mView.hideLoading();
-//            }
-//
-//            @Override
-//            public void onCompleted() {
-//                mView.hideLoading();
-//            }
-//        });
 
         mGetTableFromServerUseCase.setGroup(mView.getGroup());
         mGetTableFromServerUseCase.execute(new BaseSubscriber<TimeTable>() {
@@ -151,13 +119,6 @@ public class TablePresenter extends BasePresenter<TableView> {
                 }
             }
         });
-    }
-
-    private boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) mView.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     public void shareDay(Bitmap dayByBitmap) {

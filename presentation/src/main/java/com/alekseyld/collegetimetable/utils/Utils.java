@@ -1,6 +1,9 @@
 package com.alekseyld.collegetimetable.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 
 import java.io.File;
@@ -16,7 +19,7 @@ public class Utils {
 
     public static final String NAME_OF_CACHE_FILE = "cache_table.jpg";
 
-    public static File getPathToCacheDir(){
+    public static File getPathToCacheDir() {
         String path = Environment.getExternalStorageDirectory() + File.separator + "CollegeTimetable";
         File pathFile = new File(path);
         if (!pathFile.exists()) {
@@ -47,6 +50,24 @@ public class Utils {
         fOut.close();
 
         return file;
+    }
+
+    public static boolean isNetworkAvailable(Context mContext) {
+        Context context = mContext.getApplicationContext();
+        ConnectivityManager connectivity = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity == null) {
+            return false;
+        } else {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null) {
+                for (NetworkInfo anInfo : info) {
+                    if (anInfo.getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }

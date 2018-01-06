@@ -5,27 +5,18 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.IBinder;
-import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.alekseyld.collegetimetable.R;
-import com.alekseyld.collegetimetable.entity.Settings;
-import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerServiceComponent;
 import com.alekseyld.collegetimetable.internal.di.module.ServiceModule;
 import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
-import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
-import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
-import com.alekseyld.collegetimetable.usecase.SaveTableUseCase;
+import com.alekseyld.collegetimetable.usecase.CheckAndUpdateChangesUseCase;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
 
 import javax.inject.Inject;
@@ -35,17 +26,14 @@ import javax.inject.Inject;
  */
 
 public class UpdateTimetableService extends IntentService {
-    private final String LOG_TAG = "ServiceLog";
+
     private static boolean isRunning = false;
 
-    @Inject GetSettingsUseCase mGetSettingsUseCase;
-    @Inject GetTableFromOnlineUseCase mGetTableFromOnlineUseCase;
-    @Inject SaveTableUseCase mSaveTableUseCase;
-
-    private Settings mSettings;
+    @Inject
+    CheckAndUpdateChangesUseCase mGetSettingsUseCase;
 
     public UpdateTimetableService() {
-        super("DataService");
+        super(UpdateTimetableService.class.getName());
     }
 
     public static boolean isRunning() {
@@ -55,7 +43,6 @@ public class UpdateTimetableService extends IntentService {
     public void onCreate() {
         super.onCreate();
         this.initializeInjector();
-        Log.d(LOG_TAG, "onCreate");
         isRunning = true;
     }
 
@@ -68,78 +55,51 @@ public class UpdateTimetableService extends IntentService {
 
     public void onDestroy() {
         super.onDestroy();
-        Log.d(LOG_TAG, "onDestroy");
         isRunning = false;
     }
 
     public IBinder onBind(Intent intent) {
-        Log.d(LOG_TAG, "onBind");
         return null;
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d(LOG_TAG, "onHandleIntent");
-
-        mGetSettingsUseCase.execute(new BaseSubscriber<Settings>(){
-            @Override
-            public void onNext(Settings settings) {
-                mSettings = settings;
-            }
+        mGetSettingsUseCase.execute(new BaseSubscriber<String>() {
             @Override
             public void onCompleted() {
-                if(mSettings != null
-                        && mSettings.getNotificationGroup() != null
-                        && !mSettings.getNotificationGroup().equals("")
-                        && mSettings.getNotifOn()) {
-                    if(isOnline())
-                        getTimeTableOnline();
-                }else {
-                    stopSelf();
-                }
+                super.onCompleted();
             }
-        });
-    }
 
-    private void getTimeTableOnline(){
-        mGetTableFromOnlineUseCase.setGroup(mSettings.getNotificationGroup());
-        mGetTableFromOnlineUseCase.setOnline(isOnline());
-        mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>(){
-            @Override
-            public void onNext(TimeTable timeTable) {
-                if(timeTable != null
-                        && timeTable.getDayList() != null
-                        && timeTable.getDayList().size() > 0){
-
-                    saveTimeTable(timeTable);
-                    if(!mSettings.getAlarmMode()){
-                        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                        v.vibrate(300);
-                    }
-
-                    NotificationManager n = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                    Notification notification = getNotif("Изменение в расписании");
-                    notification.flags |= Notification.FLAG_AUTO_CANCEL;
-                    n.notify("com.alekseyld.collegetimetable", 5, notification);
-
-                }
-                stopSelf();
-            }
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
+            }
+
+            @Override
+            public void onNext(String title) {
+                super.onNext(title);
+
+//                if(!mSettings.getAlarmMode()){
+//                    Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+//                    v.vibrate(300);
+//                }
+                if (title.equals("")) {
+                    stopSelf();
+                    return;
+                }
+
+                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                Notification notification = getAndroidNotification(title);
+                notification.flags |= Notification.FLAG_AUTO_CANCEL;
+                manager.notify("com.alekseyld.collegetimetable", 5, notification);
+
                 stopSelf();
             }
         });
+
     }
 
-    private void saveTimeTable(TimeTable timeTable){
-        mSaveTableUseCase.setTimeTable(timeTable);
-        mSaveTableUseCase.setGroup(mSettings.getNotificationGroup());
-        mSaveTableUseCase.execute(new BaseSubscriber());
-    }
-
-    private Notification getNotif(String s) {
+    private Notification getAndroidNotification(String title) {
         Drawable myDrawable = getResources().getDrawable(R.mipmap.android_logo);
         Bitmap bitmap = ((BitmapDrawable) myDrawable).getBitmap();
 
@@ -147,10 +107,8 @@ public class UpdateTimetableService extends IntentService {
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.android_logo)
                         .setLargeIcon(bitmap)
-                        .setContentTitle(s)
-                        .setContentText("Изменение в расписании");
-//                        .setContentText("name = "+intent.getStringExtra("name")+"; "+
-//                                        "number = "+intent.getIntExtra("number", 0));
+                        .setContentTitle(title)
+                        .setContentText(title);
         Intent resultIntent = new Intent(this, MainActivity.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -162,16 +120,7 @@ public class UpdateTimetableService extends IntentService {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
         mBuilder.setContentIntent(resultPendingIntent);
-//        NotificationManager mNotificationManager =
-//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        mNotificationManager.notify(1, mBuilder.build());
-        return mBuilder.build();
-    }
 
-    private boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
+        return mBuilder.build();
     }
 }
