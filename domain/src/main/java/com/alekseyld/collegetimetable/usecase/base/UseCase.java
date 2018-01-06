@@ -10,7 +10,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.Subscriptions;
 
 /**
- * Created by Alekseyld on 02.09.2016.
+ * Created by Alekseyld on 02.09.2017.
  */
 
 public abstract class UseCase<Service> {

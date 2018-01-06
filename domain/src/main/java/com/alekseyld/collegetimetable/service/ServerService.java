@@ -18,16 +18,24 @@ public interface ServerService {
 
     Observable<User> getUser(String authKey);
 
+    Observable<TimeTable> getTimetableFromServerDefault();
+
     //todo объект оповещения
     Observable<List<Notification>> getNewNotifications();
 
     Observable<Boolean> auth(String login, String password);
 
-    Observable<Boolean> changes();
+    Observable<Boolean> getNewTimeTableAndNotifications();
+
+    Observable<Integer> changes();
+
+    Observable<String> getUserAuthKey();
 
     //todo вынести в UserService
     Observable<Boolean> deleteUser();
     Observable<User> getUser();
 
     Observable<List<Notification>> getLocalNotifications();
+
+    Observable<String> updateChanges();
 }

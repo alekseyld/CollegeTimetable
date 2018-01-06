@@ -42,7 +42,7 @@ import butterknife.ButterKnife;
 import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.GROUP_KEY;
 
 /**
- * Created by Alekseyld on 02.09.2016.
+ * Created by Alekseyld on 02.09.2017.
  */
 
 public class TableFragment extends BaseFragment<TablePresenter> implements TableView{

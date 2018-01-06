@@ -3,7 +3,7 @@ package com.alekseyld.collegetimetable.rx.subscriber;
 import com.alekseyld.collegetimetable.exception.UncriticalException;
 
 /**
- * Created by Alekseyld on 02.09.2016.
+ * Created by Alekseyld on 02.09.2017.
  */
 
 public class BaseSubscriber<T> extends rx.Subscriber<T> {

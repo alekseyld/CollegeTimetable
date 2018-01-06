@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import rx.Observable;
 
 /**
- * Created by Alekseyld on 04.11.2016.
+ * Created by Alekseyld on 04.11.2017.
  */
 
 public class SettingsServiceImpl implements SettingsService {

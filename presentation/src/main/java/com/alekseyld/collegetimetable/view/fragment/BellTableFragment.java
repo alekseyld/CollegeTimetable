@@ -15,7 +15,7 @@ import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 import butterknife.ButterKnife;
 
 /**
- * Created by Alekseyld on 12.10.2016.
+ * Created by Alekseyld on 12.10.2017.
  */
 
 public class BellTableFragment extends BaseFragment<BellTablePresenter> implements BellView {

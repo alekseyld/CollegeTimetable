@@ -6,7 +6,7 @@ import com.alekseyld.collegetimetable.view.BellView;
 import javax.inject.Inject;
 
 /**
- * Created by Alekseyld on 03.11.2016.
+ * Created by Alekseyld on 03.11.2017.
  */
 
 public class BellTablePresenter extends BasePresenter<BellView> {

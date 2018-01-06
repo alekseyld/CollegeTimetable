@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by Alekseyld on 02.09.2016.
+ * Created by Alekseyld on 02.09.2017.
  */
 
 public class TimeTable {

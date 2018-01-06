@@ -3,7 +3,7 @@ package com.alekseyld.collegetimetable.repository.base;
 import com.alekseyld.collegetimetable.entity.Settings;
 
 /**
- * Created by Alekseyld on 04.09.2016.
+ * Created by Alekseyld on 04.09.2017.
  */
 
 public interface SettingsRepository {

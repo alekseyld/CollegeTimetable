@@ -15,7 +15,7 @@ import com.alekseyld.collegetimetable.presenter.TablePresenter;
 import com.alekseyld.collegetimetable.view.adapter.holder.TimeTableHolder;
 
 /**
- * Created by Alekseyld on 02.09.2016.
+ * Created by Alekseyld on 02.09.2017.
  */
 
 public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {

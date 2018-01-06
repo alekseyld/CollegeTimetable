@@ -31,18 +31,12 @@ import com.alekseyld.collegetimetable.view.activity.MainActivity;
 import javax.inject.Inject;
 
 /**
- * Created by Alekseyld on 04.09.2016.
+ * Created by Alekseyld on 04.09.2017.
  */
 
 public class UpdateTimetableService extends IntentService {
     private final String LOG_TAG = "ServiceLog";
-    public static boolean isRunning = false;
-
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * UpdateTimetableService Used to name the worker thread, important only for debugging.
-     */
+    private static boolean isRunning = false;
 
     @Inject GetSettingsUseCase mGetSettingsUseCase;
     @Inject GetTableFromOnlineUseCase mGetTableFromOnlineUseCase;
@@ -52,6 +46,10 @@ public class UpdateTimetableService extends IntentService {
 
     public UpdateTimetableService() {
         super("DataService");
+    }
+
+    public static boolean isRunning() {
+        return isRunning;
     }
 
     public void onCreate() {

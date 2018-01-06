@@ -21,7 +21,7 @@ import retrofit2.Retrofit;
 import rx.Observable;
 
 /**
- * Created by Alekseyld on 02.09.2016.
+ * Created by Alekseyld on 02.09.2017.
  */
 
 public class TableServiceImpl implements TableService {

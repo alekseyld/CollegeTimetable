@@ -32,4 +32,8 @@ public interface ServerApi {
     @GET("timetable?")
     Observable<TimeTable> getTimeTable(@Query("group") String group);
 
+    @FormUrlEncoded
+    @POST("changes")
+    Observable<Integer> changes(@Field("authkey") String authkey);
+
 }

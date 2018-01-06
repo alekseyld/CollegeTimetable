@@ -28,7 +28,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 /**
- * Created by Alekseyld on 02.09.2016.
+ * Created by Alekseyld on 02.09.2017.
  */
 
 @Module

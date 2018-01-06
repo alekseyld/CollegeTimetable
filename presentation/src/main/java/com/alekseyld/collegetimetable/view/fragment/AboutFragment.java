@@ -24,7 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Alekseyld on 08.09.2016.
+ * Created by Alekseyld on 08.09.2017.
  */
 
 public class AboutFragment extends BaseFragment<AboutPresenter> implements AboutView {

@@ -13,7 +13,7 @@ import com.alekseyld.collegetimetable.view.fragment.TableFragment;
 import dagger.Component;
 
 /**
- * Created by Alekseyld on 02.09.2016.
+ * Created by Alekseyld on 02.09.2017.
  */
 
 @PerActivity

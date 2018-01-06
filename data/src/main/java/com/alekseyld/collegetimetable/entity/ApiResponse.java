@@ -3,7 +3,7 @@ package com.alekseyld.collegetimetable.entity;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by Alekseyld on 02.09.2016.
+ * Created by Alekseyld on 02.09.2017.
  */
 
 public class ApiResponse {

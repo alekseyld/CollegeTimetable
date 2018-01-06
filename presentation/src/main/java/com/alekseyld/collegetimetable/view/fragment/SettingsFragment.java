@@ -26,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Alekseyld on 04.09.2016.
+ * Created by Alekseyld on 04.09.2017.
  */
 
 public class SettingsFragment extends BaseFragment<SettingsPresenter> implements SettingsView {

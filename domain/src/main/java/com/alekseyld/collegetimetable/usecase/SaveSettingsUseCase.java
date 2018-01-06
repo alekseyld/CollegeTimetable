@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import rx.Observable;
 
 /**
- * Created by Alekseyld on 03.10.2016.
+ * Created by Alekseyld on 03.10.2017.
  */
 
 public class SaveSettingsUseCase extends UseCase<SettingsService>{

@@ -14,7 +14,7 @@ import dagger.Component;
 import retrofit2.Retrofit;
 
 /**
- * Created by Alekseyld on 02.09.2016.
+ * Created by Alekseyld on 02.09.2017.
  */
 
 @Singleton // Constraints this component to one-per-application or unscoped bindings.

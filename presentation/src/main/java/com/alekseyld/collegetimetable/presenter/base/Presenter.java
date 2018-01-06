@@ -1,7 +1,7 @@
 package com.alekseyld.collegetimetable.presenter.base;
 
 /**
- * Created by Alekseyld on 02.09.2016.
+ * Created by Alekseyld on 02.09.2017.
  */
 
 /**

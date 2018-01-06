@@ -3,7 +3,7 @@ package com.alekseyld.collegetimetable.entity;
 import java.util.Set;
 
 /**
- * Created by Alekseyld on 04.11.2016.
+ * Created by Alekseyld on 04.11.2017.
  */
 
 public class Settings {

@@ -14,7 +14,7 @@ import java.util.HashSet;
 import javax.inject.Inject;
 
 /**
- * Created by Alekseyld on 04.09.2016.
+ * Created by Alekseyld on 04.09.2017.
  */
 
 public class SettingsPresenter extends BasePresenter<SettingsView> {

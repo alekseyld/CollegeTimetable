@@ -5,7 +5,7 @@ import android.content.Context;
 import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 
 /**
- * Created by Alekseyld on 02.09.2016.
+ * Created by Alekseyld on 02.09.2017.
  */
 
 public interface BaseView {

@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import rx.Observable;
 
 /**
- * Created by Alekseyld on 02.09.2016.
+ * Created by Alekseyld on 02.09.2017.
  */
 
 public class GetTableFromOnlineUseCase extends UseCase<TableService> {

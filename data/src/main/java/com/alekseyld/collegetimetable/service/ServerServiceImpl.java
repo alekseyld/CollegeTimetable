@@ -53,14 +53,13 @@ public class ServerServiceImpl implements ServerService{
     @Override
     public Observable<Boolean> auth(String login, String password) {
         return mServerApi.auth(login, password)
-                .flatMap(response -> {
+                .flatMap(authKeyResponce -> {
 
-                    if (!response.contains("error")){
+                    if (!authKeyResponce.contains("error")){
 
-                        String authKey = response;
-                        return Observable.just(authKey);
+                        return Observable.just(authKeyResponce);
                     } else {
-                        String errorText = response.replace("error", "");
+                        String errorText = authKeyResponce.replace("error", "");
                         return Observable.error(new UncriticalException(errorText));
                     }
                 })
@@ -108,16 +107,17 @@ public class ServerServiceImpl implements ServerService{
     }
 
     @Override
-    public Observable<List<Notification>> getNewNotifications() {
-        //todo получение обновлений
-        return Observable.just(mUserRepository.getUser())
-                .onErrorReturn(DataUtils::onErrorReturn)
-                .flatMap(user -> {
-                    if (user == null || user.getAuthKey() == null || user.getAuthKey().equals(""))
-                        return Observable.error(new UncriticalException("Пользователь не авторизирован"));
+    public Observable<TimeTable> getTimetableFromServerDefault() {
+        return Observable.just(true)
+                .flatMap(b -> getUser())
+                .map(User::getGroup)
+                .flatMap(this::getTimetableFromServer);
+    }
 
-                    return mServerApi.getNewNotifications(user.getAuthKey());
-                })
+    @Override
+    public Observable<List<Notification>> getNewNotifications() {
+        return getUserAuthKey()
+                .flatMap(authKey -> mServerApi.getNewNotifications(authKey))
                 .onErrorReturn(DataUtils::onErrorReturn)
                 .flatMap(notifications -> {
                     if (notifications == null)
@@ -138,9 +138,67 @@ public class ServerServiceImpl implements ServerService{
     }
 
     @Override
-    public Observable<Boolean> changes() {
-        //todo есть ли обновления
-        return null;
+    public Observable<String> updateChanges() {
+        return changes()
+                .onErrorReturn(DataUtils::onErrorReturn)
+                .flatMap(integer -> {
+                    if (integer == null)
+                        return Observable.error(new UncriticalException("Ошибка при получении сообщений"));
+                    else if (integer == -1)
+                        return Observable.error(new UncriticalException("Сервер вернул ошибку"));
+                    else if (integer == 1)
+                        return getTimetableFromServerDefault();
+                    else if (integer == 2)
+                        return getNewTimeTableAndNotifications();
+                    else if (integer == 3)
+                        return getNewTimeTableAndNotifications();
+                    else
+                        return Observable.just(integer);
+                })
+                .map(responce -> {
+                    if (responce instanceof TimeTable)
+                        return "Изменения в расписании";
+                    else if (responce instanceof List)
+                        return "Новые сообщения";
+                    else if (responce instanceof Boolean)
+                        return "Изменения в расписании и новые сообщения";
+                    else
+                        return "";
+                });
+    }
+
+    @Override
+    public Observable<Boolean> getNewTimeTableAndNotifications(){
+        return getNewNotifications()
+                .flatMap(notifications -> getUser())
+                .map(User::getGroup)
+                .flatMap(this::getTimetableFromServer)
+                .map(timeTable -> true);
+    }
+
+    @Override
+    public Observable<Integer> changes() {
+        return getUserAuthKey()
+                .flatMap(authKey -> mServerApi.changes(authKey))
+                .onErrorReturn(DataUtils::onErrorReturn)
+                .flatMap(change -> {
+                    if (change == null)
+                        return Observable.error(new UncriticalException("Ошибка при получении изменений"));
+
+                    return Observable.just(change);
+                });
+    }
+
+    @Override
+    public Observable<String> getUserAuthKey(){
+        return Observable.just(mUserRepository.getUser())
+                .onErrorReturn(DataUtils::onErrorReturn)
+                .flatMap(user -> {
+                    if (user == null || user.getAuthKey() == null || user.getAuthKey().equals(""))
+                        return Observable.error(new UncriticalException("Пользователь не авторизирован"));
+
+                    return Observable.just(user.getAuthKey());
+                });
     }
 
     @Override

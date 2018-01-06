@@ -5,7 +5,7 @@ import com.alekseyld.collegetimetable.entity.TimeTable;
 import org.jsoup.nodes.Document;
 
 /**
- * Created by Alekseyld on 02.09.2016.
+ * Created by Alekseyld on 02.09.2017.
  */
 
 public interface TableRepository {

@@ -5,7 +5,7 @@ import com.alekseyld.collegetimetable.entity.Settings;
 import rx.Observable;
 
 /**
- * Created by Alekseyld on 04.11.2016.
+ * Created by Alekseyld on 04.11.2017.
  */
 
 public interface SettingsService {
