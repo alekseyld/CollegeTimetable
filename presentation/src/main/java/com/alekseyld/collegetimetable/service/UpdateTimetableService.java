@@ -83,6 +83,7 @@ public class UpdateTimetableService extends IntentService {
 //                    Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 //                    v.vibrate(300);
 //                }
+
                 if (title.equals("")) {
                     stopSelf();
                     return;

@@ -1,17 +1,15 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.LoginComponent;
@@ -126,6 +124,17 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         if (getArguments() != null)
             isLogin = getArguments().getBoolean("isLogin");
 
+        if (isLogin) {
+
+            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+
+            addFarvorite.setVisibility(View.GONE);
+            addNotif.setVisibility(View.GONE);
+            notifOn.setVisibility(View.GONE);
+            alarmMode.setVisibility(View.GONE);
+            changeMode.setVisibility(View.GONE);
+        }
+
         return v;
     }
 
@@ -159,25 +168,28 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
     }
 
     private void showUrlDialog() {
-        //todo переделать на material edit text
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
-        final EditText input = new EditText(getContext());
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        input.setLayoutParams(lp);
-        input.setHint("Адрес сервера");
-        if (mPresenter.getSettings().getUrlServer() != null)
-            input.setText(mPresenter.getSettings().getUrlServer());
-        alertDialog.setView(input)
-                .setTitle("")
-                .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mPresenter.saveUrlServer(input.getText().toString());
-                    }
-                })
-                .show();
+
+        Toast.makeText(getContext(), R.string.block_message, Toast.LENGTH_SHORT).show();
+
+        // todo переделать на material edit text
+//        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+//        final EditText input = new EditText(getContext());
+//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.MATCH_PARENT);
+//        input.setLayoutParams(lp);
+//        input.setHint("Адрес сервера");
+//        if (mPresenter.getSettings().getUrlServer() != null)
+//            input.setText(mPresenter.getSettings().getUrlServer());
+//        alertDialog.setView(input)
+//                .setTitle("")
+//                .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        mPresenter.saveUrlServer(input.getText().toString());
+//                    }
+//                })
+//                .show();
     }
 
     @Override

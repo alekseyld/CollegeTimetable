@@ -39,10 +39,10 @@ public class NotificationRepositoryImpl implements NotificationRepository {
 
     @Override
     public void saveNotifications(List<Notification> notifications) {
-        List<Notification> oldNotif = getNotifications();
-
-        if (oldNotif != null)
-            notifications.addAll(oldNotif);
+//        List<Notification> oldNotif = getNotifications();
+//
+//        if (oldNotif != null)
+//            notifications.addAll(oldNotif);
 
         String json = mGson.toJson(notifications);
         SharedPreferences.Editor ed = mPref.edit();

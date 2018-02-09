@@ -31,6 +31,8 @@ public interface ServerService {
 
     Observable<String> getUserAuthKey();
 
+    Observable<String> getStudentId();
+
     //todo вынести в UserService
     Observable<Boolean> deleteUser();
     Observable<User> getUser();

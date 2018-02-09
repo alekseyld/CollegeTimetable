@@ -55,8 +55,10 @@ public class NotificationPresenter extends BasePresenter<NotificationsView> {
             public void onNext(List<Notification> notifications) {
                 super.onNext(notifications);
 
-                mView.addNotification(notifications);
-                mView.hideLoading();
+//                mView.addNotification(notifications);
+//                mView.hideLoading();
+
+                getNotificationOffline();
             }
 
             @Override

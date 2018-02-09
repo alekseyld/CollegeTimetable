@@ -65,7 +65,7 @@ public class ApplicationModule {
     @Provides @Singleton @Named("server") Retrofit provideServerRestAdapter(){
         //fixme сделать по-нормальному
         Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd HH:mm:ss:SSS")
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
                 .create();
 
         String json = application.getSharedPreferences(NAME_FILE, MODE_PRIVATE)

@@ -72,4 +72,6 @@
     <string name="notification_title">Оповещания</string>
     <string name="action_notification">Оповещения</string>
     <string name="action_certificate">Справки</string>
+    <string name="action_qr">Настройка qr-кодом</string>
+    <string name="block_message">Эта функция заблокирована в демонстрационной версии приложения</string>
 </resources>

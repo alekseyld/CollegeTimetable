@@ -116,8 +116,8 @@ public class ServerServiceImpl implements ServerService{
 
     @Override
     public Observable<List<Notification>> getNewNotifications() {
-        return getUserAuthKey()
-                .flatMap(authKey -> mServerApi.getNewNotifications(authKey))
+        return getStudentId()
+                .flatMap(studentId -> mServerApi.getNewNotifications(studentId))
                 .onErrorReturn(DataUtils::onErrorReturn)
                 .flatMap(notifications -> {
                     if (notifications == null)
@@ -198,6 +198,18 @@ public class ServerServiceImpl implements ServerService{
                         return Observable.error(new UncriticalException("Пользователь не авторизирован"));
 
                     return Observable.just(user.getAuthKey());
+                });
+    }
+
+    @Override
+    public Observable<String> getStudentId(){
+        return Observable.just(mUserRepository.getUser())
+                .onErrorReturn(DataUtils::onErrorReturn)
+                .flatMap(user -> {
+                    if (user == null || user.getStudentId() == null || user.getStudentId().equals(""))
+                        return Observable.error(new UncriticalException("Пользователь не авторизирован"));
+
+                    return Observable.just(user.getStudentId());
                 });
     }
 

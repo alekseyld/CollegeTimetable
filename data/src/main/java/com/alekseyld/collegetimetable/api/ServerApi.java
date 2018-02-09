@@ -26,8 +26,8 @@ public interface ServerApi {
     Observable<User> getUser(@Field("authkey") String authkey);
 
     @FormUrlEncoded
-    @POST("newnotifications")
-    Observable<Notification[]> getNewNotifications(@Field("authkey") String authkey);
+    @POST("notifications")
+    Observable<Notification[]> getNewNotifications(@Field("userid") String userid);
 
     @GET("timetable?")
     Observable<TimeTable> getTimeTable(@Query("group") String group);
