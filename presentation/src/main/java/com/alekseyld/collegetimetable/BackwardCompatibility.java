@@ -38,17 +38,17 @@ class BackwardCompatibility {
     static void checkAppVersion(SharedPreferences preferences) {
 
         if (!preferences.contains(VERSION_KEY)) {
-        Gson gson = new Gson();
+            Gson gson = new Gson();
 
-        if (!preferences.contains(SETTINGS_KEY)){
-            settingToNewFormat(preferences, gson);
-        }
+            if (!preferences.contains(SETTINGS_KEY)){
+                settingToNewFormat(preferences, gson);
+            }
 
-        if (!preferences.contains(TIMETABLE_NEW_KEY)){
-            timeTableToNewFormat(preferences, gson);
-        }
+            if (!preferences.contains(TIMETABLE_NEW_KEY)){
+                timeTableToNewFormat(preferences, gson);
+            }
 
-        preferences.edit().putInt(VERSION_KEY, BuildConfig.VERSION_CODE).apply();
+            preferences.edit().putInt(VERSION_KEY, BuildConfig.VERSION_CODE).apply();
         }
     }
 

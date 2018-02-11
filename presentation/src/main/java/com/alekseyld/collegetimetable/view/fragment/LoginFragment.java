@@ -70,6 +70,10 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
 
         setHasOptionsMenu(true);
 
+        //fixme
+        loginEditText.setText("Alekseyld");
+        passwordEditText.setText("12345678");
+
         return v;
     }
 

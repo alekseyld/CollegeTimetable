@@ -5,16 +5,23 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.StrictMode;
 
+import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.internal.di.component.ApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.module.ApplicationModule;
 import com.alekseyld.collegetimetable.service.UpdateTimetableService;
 import com.crashlytics.android.Crashlytics;
+import com.google.gson.Gson;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import io.fabric.sdk.android.Fabric;
 
+import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.SETTINGS_KEY;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 /**
@@ -42,6 +49,24 @@ public class AndroidApplication extends Application {
     }
 
     private void initializeMockSettings() {
+        SharedPreferences preferences = this.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
+
+        if (!preferences.contains(SETTINGS_KEY)) {
+
+            Set<String> favoriteGroups = new HashSet<>();
+            favoriteGroups.add("3 ЭНН-2");
+            favoriteGroups.add("2 ПГ-2");
+            favoriteGroups.add("2 АПП-1");
+
+            Settings settings = new Settings();
+            settings.setFavoriteGroups(favoriteGroups);
+            settings.setUrlServer("http://81.30.211.85/wp-content/uploads/colledgett/api/index.php/");
+
+            preferences.edit()
+                    .putString(SETTINGS_KEY, new Gson().toJson(settings))
+                    .apply();
+
+        }
 
     }
 
