@@ -21,7 +21,7 @@ public class DeleteUserUseCase extends UseCase<ServerService> {
     }
 
     @Override
-    protected Observable buildUseCaseObservable() {
+    protected Observable<Boolean> buildUseCaseObservable() {
         return mService.deleteUser();
     }
 }

@@ -75,7 +75,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     @BindString(R.string.app_name)
     String app_name;
 
-    private String mGroup = "";
+    private String mGroupOrTeacher = "";
 
     @Nullable
     @Override
@@ -112,12 +112,12 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
         if(getArguments().containsKey(GROUP_KEY)) {
             String s = getArguments().getString(GROUP_KEY);
-            mGroup = s == null || s.equals("") ? mPresenter.getGroup() : s;
+            mGroupOrTeacher = s == null || s.equals("") ? mPresenter.getGroup() : s;
         }
 
-        if(mGroup != null && !mGroup.equals("")){
-            getActivity().setTitle("Группа: " + mGroup);
-            Crashlytics.setString("Group", mGroup);
+        if(mGroupOrTeacher != null && !mGroupOrTeacher.equals("")){
+            getActivity().setTitle((mGroupOrTeacher.charAt(1) == ' ' ? "Группа: " : "Преподаватель: ") + mGroupOrTeacher);
+            Crashlytics.setString("Group", mGroupOrTeacher);
         }
 
         mTableAdapter.setPresenter(mPresenter);
@@ -253,8 +253,8 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     }
 
     @Override
-    public String getGroup() {
-        return mGroup;
+    public String getGroupOrTeacher() {
+        return mGroupOrTeacher;
     }
 
 }

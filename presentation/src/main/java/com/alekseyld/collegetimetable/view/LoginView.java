@@ -8,4 +8,5 @@ public interface LoginView extends BaseView {
 
     void loginSuccessfully();
 
+    void loginDemonstrative();
 }

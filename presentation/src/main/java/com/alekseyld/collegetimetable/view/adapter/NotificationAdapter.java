@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.Notification;
+import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.adapter.holder.NotificationHolder;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -39,24 +42,34 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationHolder
         holder.title.setText(notification.getTitle());
         holder.text.setText(notification.getText());
         holder.author.setText(notification.getAuthor());
-        holder.date.setText(notification.getDate().toString());
+        holder.date.setText(Utils.dateFormat.format(notification.getDate()));
 
     }
 
     public void setNotifications(List<Notification> items) {
         if (items == null)
             return;
-
-        this.mItems = items;
+        this.mItems = sortNotificationByDate(items);
     }
 
     public void addNotifications(List<Notification> newItems) {
         //todo sort by date
-        this.mItems.addAll(newItems);
+
+        this.mItems.addAll(sortNotificationByDate(newItems));
     }
 
     @Override
     public int getItemCount() {
         return mItems.size();
+    }
+
+    private List<Notification> sortNotificationByDate(List<Notification> notifications) {
+        Collections.sort(notifications, new Comparator<Notification>() {
+            public int compare(Notification n1, Notification n2) {
+                return n2.getDate().compareTo(n1.getDate());
+            }
+        });
+
+        return notifications;
     }
 }

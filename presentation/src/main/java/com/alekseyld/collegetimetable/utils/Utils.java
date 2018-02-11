@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by Alekseyld on 08.10.2017.
@@ -18,6 +19,7 @@ import java.io.OutputStream;
 public class Utils {
 
     public static final String NAME_OF_CACHE_FILE = "cache_table.jpg";
+    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
     public static File getPathToCacheDir() {
         String path = Environment.getExternalStorageDirectory() + File.separator + "CollegeTimetable";

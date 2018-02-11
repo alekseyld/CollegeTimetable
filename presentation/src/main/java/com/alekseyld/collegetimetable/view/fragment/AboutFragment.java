@@ -1,11 +1,9 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,10 +44,6 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
         String[] about = new String[]{
                 getString(R.string.info_r),
                 "Версия: " + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ") " + " " + BuildConfig.BUILD_TYPE,
-                getString(R.string.info_star),
-                getString(R.string.disclaimer),
-                getString(R.string.utec_helper_lable),
-                getString(R.string.github)
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
@@ -66,39 +60,6 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
                         intent.setData(Uri.parse(url));
                         startActivity(intent);
                         break;
-                    case 2:
-                        Uri uri = Uri.parse("market://details?id=" + getContext().getPackageName());
-                        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                        try {
-                            startActivity(goToMarket);
-                        } catch (ActivityNotFoundException e) {
-                            startActivity(new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse("http://play.google.com/store/apps/details?id=" + getContext().getPackageName())));
-                        }
-                        break;
-                    case 3:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setTitle(getString(R.string.disclaimer))
-                                .setMessage("Все может баговать, не работатать и тд. Если нашли ошибку, сообщите мне о ней.")
-                                .setCancelable(true);
-                        AlertDialog alert = builder.create();
-                        alert.show();
-                        break;
-                    case 4:
-                        String url2 = "http://utechelper.ru";
-                        Intent intent2 = new Intent(Intent.ACTION_VIEW);
-                        intent2.setData(Uri.parse(url2));
-                        startActivity(intent2);
-                        break;
-                    case 5:
-                        String url1 = "https://github.com/alekseyld/CollegeTimetable";
-                        Intent intent1 = new Intent(Intent.ACTION_VIEW);
-                        intent1.setData(Uri.parse(url1));
-                        startActivity(intent1);
-                        break;
-
                 }
 
             }

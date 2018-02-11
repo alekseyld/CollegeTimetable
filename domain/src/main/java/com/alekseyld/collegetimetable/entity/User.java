@@ -105,4 +105,8 @@ public class User {
         return getSurname() + " " + getName().charAt(0) + "." + getPatronymic().charAt(0) + ".";
     }
 
+    public String getFullName() {
+        return getSurname() + " " + getName() + " " + getPatronymic();
+    }
+
 }

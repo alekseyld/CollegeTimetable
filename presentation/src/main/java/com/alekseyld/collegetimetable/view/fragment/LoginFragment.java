@@ -1,6 +1,7 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -16,16 +17,22 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.alekseyld.collegetimetable.R;
+import com.alekseyld.collegetimetable.entity.User;
 import com.alekseyld.collegetimetable.internal.di.component.LoginComponent;
 import com.alekseyld.collegetimetable.presenter.LoginPresenter;
 import com.alekseyld.collegetimetable.view.LoginView;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
+import com.google.gson.Gson;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.content.Context.MODE_PRIVATE;
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
+import static com.alekseyld.collegetimetable.repository.base.UserRepository.USER_KEY;
 
 /**
  * Created by Alekseyld on 02.01.2018.
@@ -104,6 +111,27 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
     @Override
     public void loginSuccessfully() {
         getBaseActivity().startActivity(new Intent(getBaseActivity(), MainActivity.class));
+    }
+
+    @Override
+    public void loginDemonstrative() {
+        //FIXME Этого метода быть не должно
+
+        User user = new User().setAuthKey("db182d2552835bec774847e06406bfa2")
+                .setGroup("3 АПП-1")
+                .setName("Алексей")
+                .setSurname("Лысов")
+                .setPatronymic("Дмитриевич")
+                .setStudentId("4708");
+
+        SharedPreferences preferences = getBaseActivity().getSharedPreferences(NAME_FILE, MODE_PRIVATE);
+        String json = new Gson().toJson(user);
+        SharedPreferences.Editor ed = preferences.edit();
+        ed.putString(USER_KEY, json);
+        ed.apply();
+
+        loginSuccessfully();
+        showError("Авторизация в демонстрационном режиме. Некоторые функции могут не работать.");
     }
 
     @Override

@@ -36,4 +36,14 @@ public interface ServerApi {
     @POST("changes")
     Observable<Integer> changes(@Field("authkey") String authkey);
 
+    @FormUrlEncoded
+    @POST("certificate")
+    Observable<Integer> certificate(@Field("authkey") String authkey,
+                                    @Field("type") int type,
+                                    @Field("count") int count,
+                                    @Field("fio") String  fio,
+                                    @Field("group") String  group,
+                                    @Field("studentid") String  studentid,
+                                    @Field("district") String  district);
+
 }

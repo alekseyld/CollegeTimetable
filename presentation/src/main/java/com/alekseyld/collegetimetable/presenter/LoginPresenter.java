@@ -45,6 +45,8 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                         if (e.getMessage().contains("Failed to connect to")) {
 
                             e = new UncriticalException("Не удалось подключиться к серверу " + e.getMessage().replace("Failed to connect to", ""));
+
+                            createMockUser();
                         }
                         super.onError(e);
                         e.printStackTrace();
@@ -62,5 +64,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     }
 
                 });
+    }
+
+    private void createMockUser() {
+        mView.loginDemonstrative();
     }
 }

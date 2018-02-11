@@ -23,8 +23,6 @@ import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAM
 
 public class AndroidApplication extends Application {
 
-
-
     private ApplicationComponent applicationComponent;
 
     @Override
@@ -39,6 +37,12 @@ public class AndroidApplication extends Application {
 
         initializeInjector();
         initializeService();
+
+        initializeMockSettings();
+    }
+
+    private void initializeMockSettings() {
+
     }
 
     private void initializeService() {

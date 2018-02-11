@@ -94,14 +94,14 @@ public class ServerServiceImpl implements ServerService{
     }
 
     @Override
-    public Observable<TimeTable> getTimetableFromServer(String group) {
-        return mServerApi.getTimeTable(group)
+    public Observable<TimeTable> getTimetableFromServer(String groupOrTeacher) {
+        return mServerApi.getTimeTable(groupOrTeacher)
                 .onErrorReturn(DataUtils::onErrorReturn)
                 .flatMap(timeTable -> {
                     if (timeTable == null)
                         return Observable.error(new UncriticalException("Пользователь не авторизирован"));
 
-                    mTableRepository.putTimeTable(timeTable, group);
+                    mTableRepository.putTimeTable(timeTable, groupOrTeacher);
                     return Observable.just(timeTable);
                 });
     }
@@ -227,4 +227,10 @@ public class ServerServiceImpl implements ServerService{
         );
     }
 
+    @Override
+    public Observable<Integer> certificate(int type, int count, String fio, String group, String studentid, String district) {
+        return getUserAuthKey()
+                .flatMap(authkey -> mServerApi.certificate(authkey, type, count, fio, group, studentid, district))
+                .onErrorReturn(DataUtils::onErrorReturn);
+    }
 }

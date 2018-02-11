@@ -16,7 +16,7 @@ import rx.Observable;
 
 public class GetTableFromServerUseCase extends UseCase<ServerService> {
 
-    private String mGroup;
+    private String mGroupOrTeacher;
 
     @Inject
     public GetTableFromServerUseCase(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread,
@@ -26,11 +26,11 @@ public class GetTableFromServerUseCase extends UseCase<ServerService> {
 
     @Override
     protected Observable<TimeTable> buildUseCaseObservable() {
-        return mService.getTimetableFromServer(mGroup);
+        return mService.getTimetableFromServer(mGroupOrTeacher);
     }
 
-    public GetTableFromServerUseCase setGroup(String group) {
-        this.mGroup = group;
+    public GetTableFromServerUseCase setGroupOrTeacher(String groupOrTeacher) {
+        this.mGroupOrTeacher = groupOrTeacher;
         return this;
     }
 }

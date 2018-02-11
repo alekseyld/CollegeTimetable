@@ -34,7 +34,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Завтра по субботе" />
+                    android:text="Завтра по субботе"
+                    android:textColor="@android:color/black"/>
             </LinearLayout>
 
             <LinearLayout
@@ -53,7 +54,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="29.12.16 будут занятия по субботе" />
+                    android:text="29.12.16 будут занятия по субботе"
+                    android:textColor="@android:color/black" />
             </LinearLayout>
 
             <LinearLayout
@@ -72,7 +74,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Утэк" />
+                    android:text="Утэк"
+                    android:textColor="@android:color/black" />
             </LinearLayout>
 
             <LinearLayout
@@ -91,7 +94,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Dec 28, 2017 11:02:57 PM" />
+                    android:text="Dec 28, 2017 11:02:57 PM"
+                    android:textColor="@android:color/black" />
             </LinearLayout>
 
         </LinearLayout>

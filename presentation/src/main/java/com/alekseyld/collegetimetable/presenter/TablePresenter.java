@@ -10,6 +10,7 @@ import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
 import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOfflineUseCase;
+import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromServerUseCase;
 import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.TableView;
@@ -26,6 +27,8 @@ public class TablePresenter extends BasePresenter<TableView> {
 
     private GetTableFromOfflineUseCase mGetTableFromOfflineUseCase;
 
+    private GetTableFromOnlineUseCase mGetTableFromOnlineUseCase;
+
     private GetTableFromServerUseCase mGetTableFromServerUseCase;
 
     private GetSettingsUseCase mGetSettingsUseCase;
@@ -35,11 +38,13 @@ public class TablePresenter extends BasePresenter<TableView> {
     @Inject
     TablePresenter(GetSettingsUseCase getSettingsUseCase,
                    GetTableFromOfflineUseCase getTableFromOfflineUseCase,
-                   GetTableFromServerUseCase getTableFromServerUseCase) {
+                   GetTableFromServerUseCase getTableFromServerUseCase,
+                   GetTableFromOnlineUseCase getTableFromOnlineUseCase) {
 
         mGetSettingsUseCase = getSettingsUseCase;
         mGetTableFromOfflineUseCase = getTableFromOfflineUseCase;
         mGetTableFromServerUseCase = getTableFromServerUseCase;
+        mGetTableFromOnlineUseCase = getTableFromOnlineUseCase;
     }
 
     @Override
@@ -68,11 +73,19 @@ public class TablePresenter extends BasePresenter<TableView> {
     public void getTimeTable() {
         mView.showLoading();
 
-        mGetTableFromServerUseCase.setGroup(mView.getGroup());
-        mGetTableFromServerUseCase.execute(new BaseSubscriber<TimeTable>() {
+        mGetTableFromOnlineUseCase.setGroup(mView.getGroupOrTeacher());
+        mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>() {
+
             @Override
             public void onNext(TimeTable timeTable) {
+                super.onNext(timeTable);
                 mView.setTimeTable(timeTable);
+            }
+
+            @Override
+            public void onCompleted() {
+                super.onCompleted();
+                mView.hideLoading();
             }
 
             @Override
@@ -82,19 +95,35 @@ public class TablePresenter extends BasePresenter<TableView> {
                 mView.showError(e.getMessage());
                 mView.hideLoading();
             }
-
-            @Override
-            public void onCompleted() {
-                mView.hideLoading();
-            }
         });
+
+//        mGetTableFromServerUseCase.setGroupOrTeacher(mView.getGroupOrTeacher());
+//        mGetTableFromServerUseCase.execute(new BaseSubscriber<TimeTable>() {
+//            @Override
+//            public void onNext(TimeTable timeTable) {
+//                mView.setTimeTable(timeTable);
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                super.onError(e);
+//                e.printStackTrace();
+//                mView.showError(e.getMessage());
+//                mView.hideLoading();
+//            }
+//
+//            @Override
+//            public void onCompleted() {
+//                mView.hideLoading();
+//            }
+//        });
 
     }
 
     public void getTableFromOffline() {
         mView.showLoading();
 
-        mGetTableFromOfflineUseCase.setGroup(mView.getGroup());
+        mGetTableFromOfflineUseCase.setGroup(mView.getGroupOrTeacher());
         mGetTableFromOfflineUseCase.execute(new BaseSubscriber<TimeTable>() {
             @Override
             public void onNext(TimeTable timeTable) {

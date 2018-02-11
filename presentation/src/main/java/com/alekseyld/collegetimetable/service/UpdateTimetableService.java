@@ -30,7 +30,7 @@ public class UpdateTimetableService extends IntentService {
     private static boolean isRunning = false;
 
     @Inject
-    CheckAndUpdateChangesUseCase mGetSettingsUseCase;
+    CheckAndUpdateChangesUseCase mCheckAndUpdateChangesUseCase;
 
     public UpdateTimetableService() {
         super(UpdateTimetableService.class.getName());
@@ -64,7 +64,7 @@ public class UpdateTimetableService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        mGetSettingsUseCase.execute(new BaseSubscriber<String>() {
+        mCheckAndUpdateChangesUseCase.execute(new BaseSubscriber<String>() {
             @Override
             public void onCompleted() {
                 super.onCompleted();

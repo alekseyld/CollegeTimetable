@@ -73,7 +73,7 @@ public class ApplicationModule {
         String url = gson.fromJson(json, Settings.class).getUrlServer();
 
         if (url == null)
-            url = "http://www.example.org";
+            url = "http://81.30.211.85/wp-content/uploads/colledgett/api/index.php/";
 
         return new Retrofit.Builder()
                 .baseUrl(url)

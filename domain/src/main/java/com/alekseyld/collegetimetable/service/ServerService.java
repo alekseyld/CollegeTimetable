@@ -14,7 +14,7 @@ import rx.Observable;
 
 public interface ServerService {
 
-    Observable<TimeTable> getTimetableFromServer(String group);
+    Observable<TimeTable> getTimetableFromServer(String groupOrTeacher);
 
     Observable<User> getUser(String authKey);
 
@@ -40,4 +40,6 @@ public interface ServerService {
     Observable<List<Notification>> getLocalNotifications();
 
     Observable<String> updateChanges();
+
+    Observable<Integer> certificate(int type, int count, String  fio, String  group, String  studentid, String  district);
 }

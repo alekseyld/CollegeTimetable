@@ -11,6 +11,6 @@ public interface TableView extends ViewWithSettingsPresenter {
     void setTimeTable(TimeTable timeTable);
     TimeTable getTimeTable();
     void showMessage();
-    String getGroup();
+    String getGroupOrTeacher();
 
 }

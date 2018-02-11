@@ -1,5 +1,6 @@
 package com.alekseyld.collegetimetable.usecase;
 
+import com.alekseyld.collegetimetable.entity.User;
 import com.alekseyld.collegetimetable.executor.PostExecutionThread;
 import com.alekseyld.collegetimetable.executor.ThreadExecutor;
 import com.alekseyld.collegetimetable.service.ServerService;
@@ -21,7 +22,7 @@ public class GetUserUseCase extends UseCase<ServerService> {
     }
 
     @Override
-    protected Observable buildUseCaseObservable() {
+    protected Observable<User> buildUseCaseObservable() {
         return mService.getUser();
     }
 }
