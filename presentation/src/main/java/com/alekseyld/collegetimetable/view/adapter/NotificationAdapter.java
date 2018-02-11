@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.Notification;
@@ -19,12 +21,15 @@ import java.util.List;
  * Created by Alekseyld on 05.01.2018.
  */
 
-public class NotificationAdapter extends RecyclerView.Adapter<NotificationHolder> {
+public class NotificationAdapter extends RecyclerView.Adapter<NotificationHolder> implements Filterable {
 
-    private List<Notification> mItems;
+    private List<Notification> notificationList;
+
+    private List<Notification> notificationListFiltered;
 
     public NotificationAdapter() {
-        mItems = new ArrayList<>();
+        notificationList = new ArrayList<>();
+        notificationListFiltered = new ArrayList<>();
     }
 
     @Override
@@ -37,7 +42,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationHolder
     @Override
     public void onBindViewHolder(NotificationHolder holder, int position) {
 
-        Notification notification = mItems.get(holder.getAdapterPosition());
+        Notification notification = notificationListFiltered.get(holder.getAdapterPosition());
 
         holder.title.setText(notification.getTitle());
         holder.text.setText(notification.getText());
@@ -49,18 +54,20 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationHolder
     public void setNotifications(List<Notification> items) {
         if (items == null)
             return;
-        this.mItems = sortNotificationByDate(items);
+        this.notificationList = sortNotificationByDate(items);
+        this.notificationListFiltered = notificationList;
     }
 
     public void addNotifications(List<Notification> newItems) {
         //todo sort by date
 
-        this.mItems.addAll(sortNotificationByDate(newItems));
+        this.notificationList.addAll(sortNotificationByDate(newItems));
+        this.notificationListFiltered.addAll(notificationList);
     }
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return notificationListFiltered.size();
     }
 
     private List<Notification> sortNotificationByDate(List<Notification> notifications) {
@@ -72,4 +79,41 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationHolder
 
         return notifications;
     }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    notificationListFiltered = notificationList;
+                } else {
+                    List<Notification> filteredList = new ArrayList<>();
+                    for (Notification notification : notificationList) {
+
+                        if (notification.getTitle().toLowerCase().contains(charString.toLowerCase())
+                                || notification.getText().contains(charSequence)
+                                || notification.getAuthor().contains(charSequence)
+                                || Utils.dateFormat.format(notification.getDate()).contains(charSequence)) {
+                            filteredList.add(notification);
+                        }
+                    }
+
+                    notificationListFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = notificationListFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                notificationListFiltered = (ArrayList<Notification>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
 }
