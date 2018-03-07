@@ -17,6 +17,7 @@ import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.SettingsPresenter;
 import com.alekseyld.collegetimetable.view.SettingsView;
 import com.alekseyld.collegetimetable.view.activity.SettingsFavoriteActivity;
+import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 import com.alekseyld.collegetimetable.view.fragment.dialog.GroupInputDialogFragment;
 
@@ -126,7 +127,8 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
 
         if (isLogin) {
 
-            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+            if (((BaseActivity)getActivity()).getSupportActionBar() != null)
+                ((BaseActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             addFarvorite.setVisibility(View.GONE);
             addNotif.setVisibility(View.GONE);

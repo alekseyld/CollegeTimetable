@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.User;
@@ -37,7 +38,16 @@ public class LoginActivity extends BaseInjectorActivity<LoginComponent> {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                getSupportActionBar().setDisplayShowHomeEnabled(false);
+            }
+        });
 
         SharedPreferences preferences = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
         if (preferences.contains(USER_KEY)) {
