@@ -2,6 +2,8 @@ package com.alekseyld.collegetimetable.service;
 
 import com.alekseyld.collegetimetable.entity.TimeTable;
 
+import java.util.Set;
+
 import rx.Observable;
 
 /**
@@ -16,5 +18,7 @@ public interface TableService {
     Observable<Boolean> saveTimetable(TimeTable tableTable, String group);
 
     Observable<Boolean> update(String minute, String group);
+
+    Observable<TimeTable> getTeacherTimeTable(boolean online, String teacherFio, Set<String> teacherGroup);
 
 }

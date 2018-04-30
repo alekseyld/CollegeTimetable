@@ -1,5 +1,6 @@
 package com.alekseyld.collegetimetable.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ public class Day {
 
     private String date;
 
-    private List<Lesson> dayLessons;
+    private List<Lesson> dayLessons = new ArrayList<>();
 
     public String getDate() {
         return date;

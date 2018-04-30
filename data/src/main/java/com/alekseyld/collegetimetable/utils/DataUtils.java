@@ -22,8 +22,13 @@ public class DataUtils {
 
     public static Pattern groupPattern = Pattern.compile("[0-9]\\s[А-Я]{1,}[-][0-9]");
     public static Pattern groupPatternWithoutNum = Pattern.compile("[0-9]\\s[А-Я]{1,}([-][0-9]){0,}");
+    public static Pattern fioPattern = Pattern.compile("([А-ЯЁа-яё]{1,}[\\s]([А-ЯЁа-яё]{1}[.]){2})");
 
     public static String getGroupUrl(String group) {
+        return getGroupUrl("", group);
+    }
+
+    public static String getGroupUrl(String root, String group) {
 
         if (group == null || !groupPatternWithoutNum.matcher(group).matches())
             return "";
@@ -56,7 +61,10 @@ public class DataUtils {
             url = switchAbbr(abbr);
         }
 
-        return url.equals("") ? url : "http://uecoll.ru/wp-content/uploads/time/" + url;
+        if (root.equals(""))
+            root = "http://uecoll.ru/wp-content/uploads/time/";
+
+        return url.equals("") ? url : root + url;
     }
 
     private static String switchAbbr(String abbr) {
@@ -120,7 +128,8 @@ public class DataUtils {
         Pattern dayPattern = Pattern.compile("[А-Я]\\s[А-Я]\\s\\b");
 
         TimeTable timeTable = new TimeTable()
-                .setLastRefresh(new Date());
+                .setLastRefresh(new Date())
+                .setGroup(group);
 
         List<Lesson> lessons = new ArrayList<>();
 //        HashMap<TimeTable.Day, String> days = new HashMap<>();
@@ -243,4 +252,17 @@ public class DataUtils {
 
         return timeTable;
     }
+
+    public static TimeTable getTeacherTimeTable(String teacherFio, Set<String> teacherGroups) {
+        TimeTable timeTable = new TimeTable();
+
+        for (String group: teacherGroups) {
+
+
+
+        }
+
+        return timeTable;
+    }
+
 }

@@ -72,7 +72,7 @@ public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePrese
 
     @OnClick(R.id.fab)
     void onFabClick(){
-        GroupInputDialogFragment groupInputDialogFragment = GroupInputDialogFragment.newInstance(false);
+        GroupInputDialogFragment groupInputDialogFragment = GroupInputDialogFragment.newInstance(true, false);
         groupInputDialogFragment.setTargetFragment(this, 2);
         groupInputDialogFragment.show(getFragmentManager(), GroupInputDialogFragment.class.getSimpleName());
     }

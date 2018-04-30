@@ -108,7 +108,17 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
         saveSettings();
     }
 
+    public void saveTeacherMode(boolean teacherMode) {
+        mSettings.setTeacherMode(teacherMode);
+        mSettings.setNotificationGroup("");
+        saveSettings();
+    }
+
     public boolean getChangeMode() {
         return mSettings.getChangeMode();
+    }
+
+    public boolean getTeacherMode() {
+        return mSettings.getTeacherMode();
     }
 }

@@ -14,6 +14,9 @@ public class Settings {
     private boolean alarmMode;
     private boolean changeMode;
 
+    private boolean teacherMode;
+    private Set<String> teacherGroups;
+
     public Settings() {}
 
     public Settings(Set<String> favoriteGroups, String notificationGroup, boolean notifOn, boolean alarmMode) {
@@ -21,6 +24,7 @@ public class Settings {
         this.notificationGroup = notificationGroup;
         this.alarmMode = alarmMode;
         this.notifOn = notifOn;
+        this.teacherMode = false;
     }
 
     public Set<String> getFavoriteGroups() {
@@ -60,15 +64,26 @@ public class Settings {
         return alarmMode;
     }
 
-    public void setAlarmMode(boolean alarmMode) {
+    public Settings setAlarmMode(boolean alarmMode) {
         this.alarmMode = alarmMode;
+        return this;
     }
 
     public boolean getNotifOn() {
         return notifOn;
     }
 
-    public void setNotifOn(boolean notifOn) {
+    public Settings setNotifOn(boolean notifOn) {
         this.notifOn = notifOn;
+        return this;
+    }
+
+    public boolean getTeacherMode() {
+        return teacherMode;
+    }
+
+    public Settings setTeacherMode(boolean teacherMode) {
+        this.teacherMode = teacherMode;
+        return this;
     }
 }

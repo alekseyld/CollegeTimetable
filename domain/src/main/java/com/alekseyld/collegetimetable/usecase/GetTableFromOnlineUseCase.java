@@ -6,6 +6,9 @@ import com.alekseyld.collegetimetable.executor.ThreadExecutor;
 import com.alekseyld.collegetimetable.service.TableService;
 import com.alekseyld.collegetimetable.usecase.base.UseCase;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.inject.Inject;
 
 import rx.Observable;
@@ -27,7 +30,14 @@ public class GetTableFromOnlineUseCase extends UseCase<TableService> {
 
     @Override
     protected Observable<TimeTable> buildUseCaseObservable() {
-        return mService.getTimetableFromOnline(isOnline, mGroup);
+        String teacherFio = "Ермолаева О.В.";
+        Set<String> teacherGroup = new HashSet<>();
+        teacherGroup.add("2 ТО-1");
+        teacherGroup.add("2 АПП-1");
+
+        return mService.getTeacherTimeTable(true, teacherFio, teacherGroup);
+
+        //return mService.getTimetableFromOnline(isOnline, mGroup);
     }
 
     public void setOnline(boolean online) {

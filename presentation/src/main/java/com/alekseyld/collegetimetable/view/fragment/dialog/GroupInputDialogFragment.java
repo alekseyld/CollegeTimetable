@@ -21,11 +21,12 @@ import com.alekseyld.collegetimetable.view.widget.GroupInputWidget;
 
 public class GroupInputDialogFragment extends DialogFragment {
 
-    public static GroupInputDialogFragment newInstance(boolean isFavorite){
+    public static GroupInputDialogFragment newInstance(boolean isFavorite, boolean teacherMode){
         GroupInputDialogFragment fragment = new GroupInputDialogFragment();
 
         Bundle bundle = new Bundle();
         bundle.putBoolean("isFavorite", isFavorite);
+        bundle.putBoolean("teacherMode", teacherMode);
 
         fragment.setArguments(bundle);
         return fragment;
