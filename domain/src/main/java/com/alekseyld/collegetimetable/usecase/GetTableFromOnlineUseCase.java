@@ -30,10 +30,13 @@ public class GetTableFromOnlineUseCase extends UseCase<TableService> {
 
     @Override
     protected Observable<TimeTable> buildUseCaseObservable() {
-        String teacherFio = "Ермолаева О.В.";
+        String teacherFio = "\u0415\u0440\u043c\u043e\u043b\u0430\u0435\u0432\u0430 \u041e.\u0412.";
         Set<String> teacherGroup = new HashSet<>();
-        teacherGroup.add("2 ТО-1");
-        teacherGroup.add("2 АПП-1");
+        teacherGroup.add("2 \u042d\u041d\u041d-1");
+        teacherGroup.add("2 \u042d\u041d\u041d-2");
+        teacherGroup.add("2 \u042d\u041d\u041d-3");
+        teacherGroup.add("2 \u0422\u041e-1");
+        teacherGroup.add("2 \u0422\u041e-2");
 
         return mService.getTeacherTimeTable(true, teacherFio, teacherGroup);
 

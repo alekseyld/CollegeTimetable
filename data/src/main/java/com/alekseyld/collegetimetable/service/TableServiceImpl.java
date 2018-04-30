@@ -15,7 +15,6 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -146,8 +145,7 @@ public class TableServiceImpl implements TableService {
 
     @Override
     public Observable<TimeTable> getTeacherTimeTable(boolean online, String teacherFio, Set<String> teacherGroup) {
-        TimeTable teacherTimeTable = new TimeTable()
-                .setLastRefresh(new Date())
+        TimeTable teacherTimeTable = DataUtils.getEmptyWeekTimeTable()
                 .setGroup(teacherFio);
 
         return Observable.from(teacherGroup)
@@ -157,12 +155,13 @@ public class TableServiceImpl implements TableService {
                     for (int i = 0; i < days.size(); i++){
                         Day day = days.get(i);
                         List<Lesson> lessons = day.getDayLessons();
+
+                        if (teacherTimeTable.getDayList().get(i).getDate().equals("")) {
+                            teacherTimeTable.getDayList().get(i).setDate(day.getDate()).setId(day.getId());
+                        }
+
                         for (int i1 = 0; i1 < lessons.size(); i1++){
-                            if (lessons.get(i1).getTeacher().equals(teacherFio)){
-                                if (teacherTimeTable.getDayList().get(i) == null) {
-                                    Day day1 = new Day().setDate(day.getDate()).setId(day.getId());
-                                    teacherTimeTable.getDayList().set(i, day1);
-                                }
+                            if (lessons.get(i1).getTeacher().contains(teacherFio)){
                                 teacherTimeTable.getDayList().get(i).getDayLessons().set(i1, new Lesson().setNumber(i1).setName(timeTable.getGroup()).setTeacher(teacherFio));
                             }
                         }

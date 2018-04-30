@@ -224,13 +224,20 @@ public class DataUtils {
                 String text = table.get(iterator).text();
 
                 boolean second = table.get(iterator).attr("colspan").equals("");
+                String secondName = second ? table.get(iterator + 1).text() : null;
+
+                boolean isChange = table.get(iterator).children().attr("color").equals("blue");
+
+                String teacherName = getTeacherName(table.get(iterator).children(), isChange);
 
                 lessons.add(
                         new Lesson()
                                 .setNumber(lesson)
                                 .setName(text)
-                                .setSecondName(second ? table.get(iterator + 1).text() : null)
-                                .setChange(table.get(iterator).children().attr("color").equals("blue"))
+                                .setSecondName(secondName)
+                                //todo Второй преподаватель
+                                .setTeacher(teacherName)
+                                .setChange(isChange)
                 );
 
                 lessonSpace = 0;
@@ -253,6 +260,18 @@ public class DataUtils {
         return timeTable;
     }
 
+    private static String getTeacherName(Elements childs, boolean isChange) {
+        if (childs.size() == 0) {
+            return "";
+        }
+
+        if (isChange) {
+            childs = childs.get(0).children();
+        }
+
+        return childs.get(2).text();
+    }
+
     public static TimeTable getTeacherTimeTable(String teacherFio, Set<String> teacherGroups) {
         TimeTable timeTable = new TimeTable();
 
@@ -261,6 +280,34 @@ public class DataUtils {
 
 
         }
+
+        return timeTable;
+    }
+
+    public static TimeTable getEmptyWeekTimeTable() {
+        TimeTable timeTable = new TimeTable()
+                .setGroup("")
+                .setLastRefresh(new Date());
+
+        for (int i = 0; i < 7; i++){
+            Day day = new Day()
+                    .setDate("")
+                    .setId(i);
+
+            for (int i1 = 0; i1 < 7; i1++) {
+                day.getDayLessons()
+                        .add(new Lesson()
+                                .setName("")
+                                .setTeacher("")
+                                .setNumber(i1)
+                                .setChange(false)
+                                //fixme убрать этот null и переделать на ""
+                                .setSecondName(null));
+            }
+
+            timeTable.addDay(day);
+        }
+
 
         return timeTable;
     }

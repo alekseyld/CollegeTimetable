@@ -18,6 +18,13 @@ import static org.junit.Assert.assertTrue;
 public class DataUtilsTest{
 
     @Test
+    public void getEmptyWeekTimeTable() throws Exception {
+
+        assertTrue(DataUtils.getEmptyWeekTimeTable().getDayList().size() == 7);
+
+    }
+
+    @Test
     public void getGroupUrl() throws Exception {
         assertTrue(DataUtils.getGroupUrl("").equals(""));
         assertTrue(DataUtils.getGroupUrl(" ").equals(""));
@@ -88,12 +95,19 @@ public class DataUtilsTest{
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
 
         assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(0).getTeacher().equals("Баймухаметова Ю.У."));
         assertTrue(lessons.get(1).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
+        assertTrue(lessons.get(1).getTeacher().equals("Сагдеева Г.А."));
         assertTrue(lessons.get(2).getDoubleName().equals("Основные процессы и технологии ТЭК Корепанова И.А."));
+        assertTrue(lessons.get(2).getTeacher().equals("Корепанова И.А."));
         assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
+        assertTrue(lessons.get(3).getTeacher().equals("Баймухаметова Ю.У."));
         assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(4).getTeacher().equals(""));
         assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getTeacher().equals(""));
         assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getTeacher().equals(""));
 
         // another group
 
@@ -119,13 +133,13 @@ public class DataUtilsTest{
         // empty group
 
         tableWrapper = DataUtils.parseDocument(document, "4 ЭНН-2");
-        assertTrue(tableWrapper.getDayList() == null);
+        assertTrue(tableWrapper.getDayList().size() == 0);
 
         tableWrapper = DataUtils.parseDocument(null, "4 АПП-2");
-        assertTrue(tableWrapper.getDayList() == null);
+        assertTrue(tableWrapper.getDayList().size() == 0);
 
         tableWrapper = DataUtils.parseDocument(document, "111441");
-        assertTrue(tableWrapper.getDayList() == null);
+        assertTrue(tableWrapper.getDayList().size() == 0);
     }
 
     @Test
