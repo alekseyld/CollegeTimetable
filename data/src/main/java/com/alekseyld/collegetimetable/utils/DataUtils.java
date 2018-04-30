@@ -24,6 +24,10 @@ public class DataUtils {
     public static Pattern groupPatternWithoutNum = Pattern.compile("[0-9]\\s[А-Я]{1,}([-][0-9]){0,}");
 
     public static String getGroupUrl(String group) {
+        return getGroupUrl("", group);
+    }
+
+    public static String getGroupUrl(String root, String group) {
 
         if (group == null || !groupPatternWithoutNum.matcher(group).matches())
             return "";
@@ -56,7 +60,10 @@ public class DataUtils {
             url = switchAbbr(abbr);
         }
 
-        return url.equals("") ? url : "http://uecoll.ru/wp-content/uploads/time/" + url;
+        if (root.equals(""))
+            root = "http://uecoll.ru/wp-content/uploads/time/";
+
+        return url.equals("") ? url : root + url;
     }
 
     private static String switchAbbr(String abbr) {
