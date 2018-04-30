@@ -1,8 +1,10 @@
 package com.alekseyld.collegetimetable.service;
 
-import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.api.ProxyApi;
 import com.alekseyld.collegetimetable.entity.ApiResponse;
+import com.alekseyld.collegetimetable.entity.Day;
+import com.alekseyld.collegetimetable.entity.Lesson;
+import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.exception.UncriticalException;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 import com.alekseyld.collegetimetable.repository.base.TableRepository;
@@ -13,6 +15,9 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -51,12 +56,12 @@ public class TableServiceImpl implements TableService {
 
                     return apiResponse;
                 }).flatMap(apiResponse -> {
-                    if (apiResponse.getStatus() == 1)
-                        return Observable.error(new UncriticalException("Введите корректную аббревиатуру группы"));
-                    else if (apiResponse.getStatus() == 2)
-                        return Observable.error(new UncriticalException("Не удалось подключиться к сайту (0)"));
-                    else if (apiResponse.getStatus() == 3)
-                        return Observable.error(new UncriticalException("Ошибка подключения"));
+//                    if (apiResponse.getStatus() == 1)
+//                        return Observable.error(new UncriticalException("Введите корректную аббревиатуру группы"));
+//                    else if (apiResponse.getStatus() == 2)
+//                        return Observable.error(new UncriticalException("Не удалось подключиться к сайту (0)"));
+//                    else if (apiResponse.getStatus() == 3)
+//                        return Observable.error(new UncriticalException("Ошибка подключения"));
                     return Observable.just(apiResponse);
                 }).map(apiResponse -> {
                     Document document;
@@ -76,13 +81,26 @@ public class TableServiceImpl implements TableService {
 
                     try {
                         for (int i = 0; i < 5; i++) {
-                            document = Jsoup.connect(DataUtils.getGroupUrl(group)).timeout(6000).get();
+                            document = Jsoup.connect(DataUtils.getGroupUrl(group)).timeout(5000).get();
                             if (document != null)
                                 break;
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
 
+                        document = null;
+                    }
+
+                    return document;
+                }).map(document -> {
+                    if (document != null)
+                        return document;
+
+
+                    try {
+                        document = Jsoup.connect(DataUtils.getGroupUrl("http://109.195.146.243/wp-content/uploads/time/", group)).timeout(5000).get();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                         document = null;
                     }
 
@@ -124,5 +142,34 @@ public class TableServiceImpl implements TableService {
     @Override
     public Observable<Boolean> update(String minute, String group) {
         return null;
+    }
+
+    @Override
+    public Observable<TimeTable> getTeacherTimeTable(boolean online, String teacherFio, Set<String> teacherGroup) {
+        TimeTable teacherTimeTable = new TimeTable()
+                .setLastRefresh(new Date())
+                .setGroup(teacherFio);
+
+        return Observable.from(teacherGroup)
+                .flatMap(group -> getTimetableFromOnline(online, group))
+                .map(timeTable -> {
+                    List<Day> days = timeTable.getDayList();
+                    for (int i = 0; i < days.size(); i++){
+                        Day day = days.get(i);
+                        List<Lesson> lessons = day.getDayLessons();
+                        for (int i1 = 0; i1 < lessons.size(); i1++){
+                            if (lessons.get(i1).getTeacher().equals(teacherFio)){
+                                if (teacherTimeTable.getDayList().get(i) == null) {
+                                    Day day1 = new Day().setDate(day.getDate()).setId(day.getId());
+                                    teacherTimeTable.getDayList().set(i, day1);
+                                }
+                                teacherTimeTable.getDayList().get(i).getDayLessons().set(i1, new Lesson().setNumber(i1).setName(timeTable.getGroup()).setTeacher(teacherFio));
+                            }
+                        }
+                    }
+                    return teacherTimeTable;
+                })
+                .toList()
+                .map(list -> teacherTimeTable);
     }
 }
