@@ -51,12 +51,12 @@ public class TableServiceImpl implements TableService {
 
                     return apiResponse;
                 }).flatMap(apiResponse -> {
-//                    if (apiResponse.getStatus() == 1)
-//                        return Observable.error(new UncriticalException("Введите корректную аббревиатуру группы"));
-//                    else if (apiResponse.getStatus() == 2)
-//                        return Observable.error(new UncriticalException("Не удалось подключиться к сайту (0)"));
-//                    else if (apiResponse.getStatus() == 3)
-//                        return Observable.error(new UncriticalException("Ошибка подключения"));
+                    if (apiResponse.getStatus() == 1)
+                        return Observable.error(new UncriticalException("Введите корректную аббревиатуру группы"));
+                    else if (apiResponse.getStatus() == 2)
+                        return Observable.error(new UncriticalException("Не удалось подключиться к сайту (0)"));
+                    else if (apiResponse.getStatus() == 3)
+                        return Observable.error(new UncriticalException("Ошибка подключения"));
                     return Observable.just(apiResponse);
                 }).map(apiResponse -> {
                     Document document;
@@ -90,7 +90,6 @@ public class TableServiceImpl implements TableService {
                 }).map(document -> {
                     if (document != null)
                         return document;
-
 
                     try {
                         document = Jsoup.connect(DataUtils.getGroupUrl("http://109.195.146.243/wp-content/uploads/time/", group)).timeout(5000).get();
