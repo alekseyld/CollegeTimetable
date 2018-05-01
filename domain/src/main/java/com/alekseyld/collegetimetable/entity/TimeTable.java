@@ -21,7 +21,9 @@ public class TimeTable {
      * 5 - Суббота
      * 6 - Понедельник следующей недели
      */
-    private List<Day> dayList;
+    private List<Day> dayList = new ArrayList<>();
+
+    private String group;
 
     public Date getLastRefresh() {
         return lastRefresh;
@@ -42,10 +44,16 @@ public class TimeTable {
     }
 
     public TimeTable addDay(Day day){
-        if (dayList == null)
-            dayList = new ArrayList<>();
-
         dayList.add(day);
+        return this;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public TimeTable setGroup(String group) {
+        this.group = group;
         return this;
     }
 }

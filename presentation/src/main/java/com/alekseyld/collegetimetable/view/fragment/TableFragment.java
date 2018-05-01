@@ -28,6 +28,7 @@ import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.TablePresenter;
+import com.alekseyld.collegetimetable.utils.DataUtils;
 import com.alekseyld.collegetimetable.view.TableView;
 import com.alekseyld.collegetimetable.view.adapter.TableAdapter;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
@@ -116,7 +117,12 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         }
 
         if(mGroup != null && !mGroup.equals("")){
-            getActivity().setTitle("Группа: " + mGroup);
+            if (DataUtils.fioPattern.matcher(mGroup).find()) {
+                getActivity().setTitle("Преподаватель: " + mGroup);
+            } else {
+                getActivity().setTitle("Группа: " + mGroup);
+            }
+
             Crashlytics.setString("Group", mGroup);
         }
 

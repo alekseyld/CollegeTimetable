@@ -1,11 +1,15 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -32,14 +36,23 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         return new SettingsFragment();
     }
 
+    @BindView(R.id.teacherMode)
+    Switch teachMode;
+
     @BindView(R.id.addFarvorite)
     TextView addFarvorite;
 
     @BindView(R.id.addNotif)
     LinearLayout addNotif;
 
+    @BindView(R.id.addNotif_title)
+    TextView addNotifTitle;
+
     @BindView(R.id.my_group_value)
     TextView addNotifValue;
+
+    @BindView(R.id.addTeacherGroup)
+    TextView addTeacherGroup;
 
     @BindView(R.id.alarmMode)
     Switch alarmMode;
@@ -60,14 +73,23 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         addFarvorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAddFavoriteDialog();
+                    showAddFavoriteDialog();
+            }
+        });
+
+        addTeacherGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddTeacherDialog();
             }
         });
 
         addNotif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAddNotif();
+                showAddNotif(
+                        mPresenter.getTeacherMode()
+                );
             }
         });
 
@@ -98,6 +120,19 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
             }
         });
 
+        teachMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSubmitDialog("Вы точно хотите перейти в режим преподавателя? Все данные будут утеряны.", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mPresenter.saveTeacherMode(teachMode.isChecked());
+                        addNotifTitle.startAnimation(getTeacherTitleAnimation());
+                    }
+                });
+            }
+        });
+
         TypedValue outValue = new TypedValue();
         getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
         addFarvorite.setBackgroundResource(outValue.resourceId);
@@ -106,12 +141,54 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         return v;
     }
 
+    private Animation getTeacherTitleAnimation() {
+        AlphaAnimation animation = new AlphaAnimation(1.0f, 0.0f);
+        animation.setDuration(200);
+        animation.setRepeatCount(1);
+        animation.setRepeatMode(Animation.REVERSE);
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+                if (teachMode.isChecked()) {
+                    addNotifTitle.setText(getString(R.string.teacherSettingTitle));
+                    addNotifValue.setVisibility(View.GONE);
+                    addNotifValue.setText("");
+                    addTeacherGroup.setVisibility(View.GONE);
+                } else {
+                    addNotifTitle.setText(getString(R.string.mygroup));
+                    addTeacherGroup.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+        return animation;
+    }
+
     @Override
     public void presenterReady() {
 
         alarmMode.setChecked(mPresenter.getAlarmMode());
         notifOn.setChecked(mPresenter.getNotifOn());
         changeMode.setChecked(mPresenter.getChangeMode());
+        teachMode.setChecked(mPresenter.getTeacherMode());
+
+        if (teachMode.isChecked()) {
+            addNotifTitle.setText(getString(R.string.teacherSettingTitle));
+            addTeacherGroup.setVisibility(View.VISIBLE);
+        } else {
+            addNotifTitle.setText(getString(R.string.mygroup));
+            addTeacherGroup.setVisibility(View.GONE);
+        }
 
         if (mPresenter.getNotificationGroup() != null && !mPresenter.getNotificationGroup().equals("")) {
             addNotifValue.setVisibility(View.VISIBLE);
@@ -125,14 +202,20 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         mPresenter.saveNotification(group);
     }
 
-    private void showAddNotif(){
-        GroupInputDialogFragment groupInputDialogFragment = GroupInputDialogFragment.newInstance(false);
+    private void showAddNotif(boolean teacherMode){
+        GroupInputDialogFragment groupInputDialogFragment = GroupInputDialogFragment.newInstance(false, teacherMode);
         groupInputDialogFragment.setTargetFragment(this, 1);
         groupInputDialogFragment.show(getFragmentManager(), GroupInputDialogFragment.class.getSimpleName());
     }
 
     private void showAddFavoriteDialog(){
         getBaseActivity().startActivity(SettingsFavoriteActivity.class);
+    }
+
+    private void showAddTeacherDialog(){
+        Intent intent = new Intent(getActivity(), SettingsFavoriteActivity.class);
+        intent.putExtra("teacherMode", true);
+        getActivity().startActivity(intent);
     }
 
     @Override

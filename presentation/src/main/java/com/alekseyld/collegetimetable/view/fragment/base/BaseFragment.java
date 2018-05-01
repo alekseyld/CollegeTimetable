@@ -4,7 +4,9 @@ package com.alekseyld.collegetimetable.view.fragment.base;
  * Created by Alekseyld on 02.09.2016.
  */
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -61,6 +63,19 @@ public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fra
      */
     protected void showToastMessage(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void showSubmitDialog(String title, DialogInterface.OnClickListener positiveOperation) {
+        new AlertDialog.Builder(getContext())
+                .setTitle(title)
+                .setPositiveButton("Да", positiveOperation)
+                .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 
     /**

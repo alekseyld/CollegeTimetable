@@ -73,6 +73,9 @@ public class TablePresenter extends BasePresenter<TableView> {
         mView.showLoading();
 
         mGetTableFromOnlineUseCase.setOnline(isOnline());
+        if (mSettings.getTeacherMode()) {
+            mGetTableFromOnlineUseCase.setTeacherGroup(mSettings.getTeacherGroups());
+        }
         mGetTableFromOnlineUseCase.setGroup(mView.getGroup());
         mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>() {
             @Override

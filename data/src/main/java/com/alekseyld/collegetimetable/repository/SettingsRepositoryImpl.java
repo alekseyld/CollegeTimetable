@@ -35,6 +35,7 @@ public class SettingsRepositoryImpl implements SettingsRepository {
         String json = mGson.toJson(settings);
         SharedPreferences.Editor ed = mPref.edit();
         ed.putString(SETTINGS_KEY, json);
+        ed.putBoolean(NOTIFON_KEY, settings.getNotifOn());
         ed.apply();
         return true;
     }

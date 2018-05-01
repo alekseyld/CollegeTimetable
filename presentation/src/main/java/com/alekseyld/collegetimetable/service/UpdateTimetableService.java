@@ -37,6 +37,7 @@ import javax.inject.Inject;
 public class UpdateTimetableService extends IntentService {
     private final String LOG_TAG = "ServiceLog";
     public static boolean isRunning = false;
+    private int i = 0;
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -104,6 +105,9 @@ public class UpdateTimetableService extends IntentService {
     }
 
     private void getTimeTableOnline(){
+        if (mSettings.getTeacherMode()) {
+            mGetTableFromOnlineUseCase.setTeacherGroup(mSettings.getTeacherGroups());
+        }
         mGetTableFromOnlineUseCase.setGroup(mSettings.getNotificationGroup());
         mGetTableFromOnlineUseCase.setOnline(isOnline());
         mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>(){
@@ -122,7 +126,7 @@ public class UpdateTimetableService extends IntentService {
                     NotificationManager n = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                     Notification notification = getNotif("Изменение в расписании");
                     notification.flags |= Notification.FLAG_AUTO_CANCEL;
-                    n.notify("com.alekseyld.collegetimetable", 5, notification);
+                    n.notify(UpdateTimetableService.class.getName(), i++, notification);
 
                 }
                 stopSelf();
@@ -142,12 +146,12 @@ public class UpdateTimetableService extends IntentService {
     }
 
     private Notification getNotif(String s) {
-        Drawable myDrawable = getResources().getDrawable(R.mipmap.android_logo);
+        Drawable myDrawable = getResources().getDrawable(R.mipmap.ic_launcher_square);
         Bitmap bitmap = ((BitmapDrawable) myDrawable).getBitmap();
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.android_logo)
+                        .setSmallIcon(R.mipmap.ic_launcher_square)
                         .setLargeIcon(bitmap)
                         .setContentTitle(s)
                         .setContentText("Изменение в расписании");

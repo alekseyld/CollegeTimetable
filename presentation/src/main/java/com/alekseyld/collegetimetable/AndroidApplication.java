@@ -43,6 +43,7 @@ public class AndroidApplication extends Application {
 
     private void initializeService() {
         SharedPreferences preferences = this.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
+
         if (preferences.getBoolean(NOTIFON_KEY, false)) {
             boolean alarmUp = (PendingIntent.getBroadcast(getApplicationContext(), 0,
                     new Intent(this, UpdateTimetableService.class),
