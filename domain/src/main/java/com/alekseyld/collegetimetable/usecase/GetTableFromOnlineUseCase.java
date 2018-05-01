@@ -30,7 +30,6 @@ public class GetTableFromOnlineUseCase extends UseCase<TableService> {
 
     @Override
     protected Observable<TimeTable> buildUseCaseObservable() {
-
         if (teacherGroup != null) {
             return mService.getTeacherTimeTable(true, mGroup, teacherGroup);
         } else {

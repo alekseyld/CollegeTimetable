@@ -105,6 +105,9 @@ public class UpdateTimetableService extends IntentService {
     }
 
     private void getTimeTableOnline(){
+        if (mSettings.getTeacherMode()) {
+            mGetTableFromOnlineUseCase.setTeacherGroup(mSettings.getTeacherGroups());
+        }
         mGetTableFromOnlineUseCase.setGroup(mSettings.getNotificationGroup());
         mGetTableFromOnlineUseCase.setOnline(isOnline());
         mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>(){
