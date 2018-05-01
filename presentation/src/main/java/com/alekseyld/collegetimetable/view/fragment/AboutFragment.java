@@ -48,7 +48,6 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
                 "Версия: " + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ") " + " " + BuildConfig.BUILD_TYPE,
                 getString(R.string.info_star),
                 getString(R.string.disclaimer),
-                getString(R.string.utec_helper_lable),
                 getString(R.string.github)
         };
 
@@ -85,12 +84,6 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
                                 .setCancelable(true);
                         AlertDialog alert = builder.create();
                         alert.show();
-                        break;
-                    case 4:
-                        String url2 = "http://utechelper.ru";
-                        Intent intent2 = new Intent(Intent.ACTION_VIEW);
-                        intent2.setData(Uri.parse(url2));
-                        startActivity(intent2);
                         break;
                     case 5:
                         String url1 = "https://github.com/alekseyld/CollegeTimetable";

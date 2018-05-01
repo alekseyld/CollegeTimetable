@@ -23,14 +23,14 @@ apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 27
     buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "com.alekseyld.collegetimetable"
         minSdkVersion 16
-        targetSdkVersion 25
-        versionCode 13
-        versionName "7.2"
+        targetSdkVersion 27
+        versionCode 14
+        versionName "8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {
