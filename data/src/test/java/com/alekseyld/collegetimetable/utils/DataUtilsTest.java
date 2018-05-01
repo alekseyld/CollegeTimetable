@@ -21,7 +21,6 @@ public class DataUtilsTest{
     public void getEmptyWeekTimeTable() throws Exception {
 
         assertTrue(DataUtils.getEmptyWeekTimeTable().getDayList().size() == 7);
-
     }
 
     @Test
@@ -95,13 +94,13 @@ public class DataUtilsTest{
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
 
         assertTrue(lessons.get(0).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
-        assertTrue(lessons.get(0).getTeacher().equals("Баймухаметова Ю.У."));
+        assertTrue(lessons.get(0).getTeacher().contains("Баймухаметова Ю.У."));
         assertTrue(lessons.get(1).getDoubleName().equals("МДК.01.03. Теоретические основы контроля и анализа функционирования систем автоматического управления Сагдеева Г.А."));
-        assertTrue(lessons.get(1).getTeacher().equals("Сагдеева Г.А."));
+        assertTrue(lessons.get(1).getTeacher().contains("Сагдеева Г.А."));
         assertTrue(lessons.get(2).getDoubleName().equals("Основные процессы и технологии ТЭК Корепанова И.А."));
-        assertTrue(lessons.get(2).getTeacher().equals("Корепанова И.А."));
+        assertTrue(lessons.get(2).getTeacher().contains("Корепанова И.А."));
         assertTrue(lessons.get(3).getDoubleName().equals("МДК.01.02. Методы осуществления стандартных и сертификационных испытаний, метрологических поверок средств измерений Баймухаметова Ю.У."));
-        assertTrue(lessons.get(3).getTeacher().equals("Баймухаметова Ю.У."));
+        assertTrue(lessons.get(3).getTeacher().contains("Баймухаметова Ю.У."));
         assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
         assertTrue(lessons.get(4).getTeacher().equals(""));
         assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
@@ -123,12 +122,18 @@ public class DataUtilsTest{
         lessons = timeTable.get(0).getDayLessons();
 
         assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(0).getTeacher().equals(""));
         assertTrue(lessons.get(1).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
+        assertTrue(lessons.get(1).getTeacher().contains("Милованова М.И."));
         assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
         assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(3).getTeacher().contains("Давыдова А.С."));
         assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(4).getTeacher().equals(""));
         assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getTeacher().equals(""));
         assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getTeacher().equals(""));
 
         // empty group
 
@@ -207,12 +212,20 @@ public class DataUtilsTest{
         lessons = timeTable.get(1).getDayLessons();
 
         assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(0).getTeacher().equals(""));
         assertTrue(lessons.get(1).getDoubleName().equals("Иностранный язык Захарова И.В. /Кусякова Л.Ф."));
+        assertTrue(lessons.get(1).getTeacher().contains("Захарова И.В."));
+        assertTrue(lessons.get(1).getTeacher().contains("Кусякова Л.Ф."));
         assertTrue(lessons.get(2).getDoubleName().equals("Компьютерное моделирование Гадельбаева Р.А."));
+        assertTrue(lessons.get(2).getTeacher().contains("Гадельбаева Р.А."));
         assertTrue(lessons.get(3).getDoubleName().equals("МДК.04.01. Теоретические основы разработки и моделирования несложных систем автоматизации с учетом специфики технологических процессов Милованова М.И."));
+        assertTrue(lessons.get(3).getTeacher().contains("Милованова М.И."));
         assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(4).getTeacher().equals(""));
         assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getTeacher().equals(""));
         assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getTeacher().equals(""));
 
         assertTrue(tableWrapper.getDayList().get(2).getDate().equals("С Р Е Д А   13.09.2017"));
         lessons = timeTable.get(2).getDayLessons();
@@ -648,6 +661,7 @@ public class DataUtilsTest{
         assertTrue(lessons.get(2).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
         assertTrue(lessons.get(3).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."
                 + "\n/\n" + "Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(3).getSecondName().equals("Экономика организации Давыдова А.С."));
         assertTrue(lessons.get(4).getDoubleName().equals("Физическая культура Кайниев А.А."));
         assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
         assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
@@ -690,6 +704,8 @@ public class DataUtilsTest{
         assertTrue(lessons.get(2).getDoubleName().equals("МДК.02.01.Теоретические основы организации монтажа, ремонта, наладки систем автоматического управления, средств измерений и мехатронных систем Милованова М.И."));
         assertTrue(lessons.get(3).getDoubleName().equals("Экономика организации Давыдова А.С."));
         assertTrue(lessons.get(4).getDoubleName().equals("Иностранный язык Коршунова Н.Е. /Галиева И.В."));
+        assertTrue(lessons.get(4).getTeacher().contains("Коршунова Н.Е."));
+        assertTrue(lessons.get(4).getTeacher().contains("Галиева И.В."));
         assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
         assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
 
@@ -697,13 +713,21 @@ public class DataUtilsTest{
         lessons = timeTable.get(2).getDayLessons();
 
         assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(0).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(1).getDoubleName().equals("\u00A0"));
         assertTrue(lessons.get(1).getDoubleName().equals("\u00A0"));
         assertTrue(lessons.get(2).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."));
+        assertTrue(lessons.get(2).getTeacher().contains("Милованов А.С."));
         assertTrue(lessons.get(3).getDoubleName().equals("МДК.03.01.Теоретические основы технического обслуживания и эксплуатации автоматических и мехатронных систем управления Милованов А.С."
                 + "\n/\n" + "Экономика организации Давыдова А.С."));
+        assertTrue(lessons.get(3).getTeacher().contains("Милованов А.С."));
+        assertTrue(lessons.get(3).getTeacher().contains("Давыдова А.С."));
         assertTrue(lessons.get(4).getDoubleName().equals("Физическая культура Кайниев А.А."));
+        assertTrue(lessons.get(4).getTeacher().contains("Кайниев А.А."));
         assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(5).getTeacher().equals(""));
         assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+        assertTrue(lessons.get(6).getTeacher().equals(""));
 
         assertTrue(tableWrapper.getDayList().get(3).getDate().equals("Ч Е Т В Е Р Г   14.09.2017"));
         lessons = timeTable.get(3).getDayLessons();

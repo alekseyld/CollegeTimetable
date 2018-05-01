@@ -228,7 +228,9 @@ public class DataUtils {
 
                 boolean isChange = table.get(iterator).children().attr("color").equals("blue");
 
-                String teacherName = getTeacherName(table.get(iterator).children(), isChange);
+                String teacherName = getTeacherName(table.get(iterator).children(),
+                        second ? table.get(iterator + 1).children() : null,
+                        isChange);
 
                 lessons.add(
                         new Lesson()
@@ -260,28 +262,24 @@ public class DataUtils {
         return timeTable;
     }
 
-    private static String getTeacherName(Elements childs, boolean isChange) {
+    private static String getTeacherName(Elements childs, Elements secondChilds, boolean isChange) {
+        String ret = "";
+
         if (childs.size() == 0) {
-            return "";
+            return ret;
         }
 
         if (isChange) {
             childs = childs.get(0).children();
         }
 
-        return childs.get(2).text();
-    }
+        ret = childs.get(2).text();
 
-    public static TimeTable getTeacherTimeTable(String teacherFio, Set<String> teacherGroups) {
-        TimeTable timeTable = new TimeTable();
-
-        for (String group: teacherGroups) {
-
-
-
+        if (secondChilds != null){
+            ret += " / " + secondChilds.get(2).text();
         }
 
-        return timeTable;
+        return ret;
     }
 
     public static TimeTable getEmptyWeekTimeTable() {

@@ -15,7 +15,9 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -55,12 +57,12 @@ public class TableServiceImpl implements TableService {
 
                     return apiResponse;
                 }).flatMap(apiResponse -> {
-//                    if (apiResponse.getStatus() == 1)
-//                        return Observable.error(new UncriticalException("Введите корректную аббревиатуру группы"));
-//                    else if (apiResponse.getStatus() == 2)
-//                        return Observable.error(new UncriticalException("Не удалось подключиться к сайту (0)"));
-//                    else if (apiResponse.getStatus() == 3)
-//                        return Observable.error(new UncriticalException("Ошибка подключения"));
+                    if (apiResponse.getStatus() == 1)
+                        return Observable.error(new UncriticalException("Введите корректную аббревиатуру группы"));
+                    else if (apiResponse.getStatus() == 2)
+                        return Observable.error(new UncriticalException("Не удалось подключиться к сайту (0)"));
+                    else if (apiResponse.getStatus() == 3)
+                        return Observable.error(new UncriticalException("Ошибка подключения"));
                     return Observable.just(apiResponse);
                 }).map(apiResponse -> {
                     Document document;
@@ -125,6 +127,36 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
+    public Observable<TimeTable> getTimetableFromOnlineAssociativity(boolean online, Set<String> groups) {
+        final String[] currentUrl = {"", ""};
+        Map<String, Document> documentAssociation = new HashMap<>();
+
+        return Observable.from(groups)
+                .map(group -> {
+                    currentUrl[1] = group;
+                    return group;
+                })
+                .map(DataUtils::getGroupUrl)
+                .map(url -> {
+                    if (documentAssociation.containsKey(url))
+                        return "";
+
+                    currentUrl[0] = url;
+                    return url;
+                })
+                .flatMap(url -> !url.equals("") ? connectAndGetData(currentUrl[1]) : Observable.just(null))
+                .map(document -> document != null ? documentAssociation.put(currentUrl[0], document) : Observable.just(null))
+                .toList()
+                .flatMap(list -> Observable.from(groups))
+                .map(group -> {
+                    String url = DataUtils.getGroupUrl(group);
+                    Document document = documentAssociation.get(url);
+
+                    return DataUtils.parseDocument(document, group);
+                });
+    }
+
+    @Override
     public Observable<TimeTable> getTimetableFromOffline(String group) {
         return Observable.just(
                 mTimetableRepository.getTimeTable(group)
@@ -148,8 +180,7 @@ public class TableServiceImpl implements TableService {
         TimeTable teacherTimeTable = DataUtils.getEmptyWeekTimeTable()
                 .setGroup(teacherFio);
 
-        return Observable.from(teacherGroup)
-                .flatMap(group -> getTimetableFromOnline(online, group))
+        return getTimetableFromOnlineAssociativity(online, teacherGroup)
                 .map(timeTable -> {
                     List<Day> days = timeTable.getDayList();
                     for (int i = 0; i < days.size(); i++){

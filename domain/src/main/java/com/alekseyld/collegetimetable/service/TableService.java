@@ -13,6 +13,7 @@ import rx.Observable;
 public interface TableService {
 
     Observable<TimeTable> getTimetableFromOnline(boolean online, String group);
+    Observable<TimeTable> getTimetableFromOnlineAssociativity(boolean online, Set<String> groups);
     Observable<TimeTable> getTimetableFromOffline(String group);
 
     Observable<Boolean> saveTimetable(TimeTable tableTable, String group);
