@@ -1,5 +1,6 @@
 package com.alekseyld.collegetimetable.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -8,14 +9,14 @@ import java.util.Set;
 
 public class Settings {
 
-    private Set<String> favoriteGroups;
+    private Set<String> favoriteGroups = new HashSet<>();
     private String notificationGroup;
     private boolean notifOn;
     private boolean alarmMode;
     private boolean changeMode;
 
     private boolean teacherMode;
-    private Set<String> teacherGroups;
+    private Set<String> teacherGroups = new HashSet<>();
 
     public Settings() {}
 
@@ -86,4 +87,22 @@ public class Settings {
         this.teacherMode = teacherMode;
         return this;
     }
+
+    public Set<String> getTeacherGroups() {
+        return teacherGroups;
+    }
+
+    public Settings setTeacherGroups(Set<String> teacherGroups) {
+        this.teacherGroups = teacherGroups;
+        return this;
+    }
+
+    public void addTeacherGroup(String favoriteGroup) {
+        this.teacherGroups.add(favoriteGroup);
+    }
+
+    public void removeTeacherGroup(String favoriteGroup) {
+        this.teacherGroups.remove(favoriteGroup);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.TypedValue;
@@ -50,6 +51,9 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
     @BindView(R.id.my_group_value)
     TextView addNotifValue;
 
+    @BindView(R.id.addTeacherGroup)
+    TextView addTeacherGroup;
+
     @BindView(R.id.alarmMode)
     Switch alarmMode;
 
@@ -70,6 +74,13 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
             @Override
             public void onClick(View view) {
                     showAddFavoriteDialog();
+            }
+        });
+
+        addTeacherGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddTeacherDialog();
             }
         });
 
@@ -152,8 +163,10 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
                     addNotifTitle.setText(getString(R.string.teacherSettingTitle));
                     addNotifValue.setVisibility(View.GONE);
                     addNotifValue.setText("");
+                    addTeacherGroup.setVisibility(View.GONE);
                 } else {
                     addNotifTitle.setText(getString(R.string.mygroup));
+                    addTeacherGroup.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -171,8 +184,10 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
 
         if (teachMode.isChecked()) {
             addNotifTitle.setText(getString(R.string.teacherSettingTitle));
+            addTeacherGroup.setVisibility(View.VISIBLE);
         } else {
             addNotifTitle.setText(getString(R.string.mygroup));
+            addTeacherGroup.setVisibility(View.GONE);
         }
 
         if (mPresenter.getNotificationGroup() != null && !mPresenter.getNotificationGroup().equals("")) {
@@ -195,6 +210,12 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
 
     private void showAddFavoriteDialog(){
         getBaseActivity().startActivity(SettingsFavoriteActivity.class);
+    }
+
+    private void showAddTeacherDialog(){
+        Intent intent = new Intent(getActivity(), SettingsFavoriteActivity.class);
+        intent.putExtra("teacherMode", true);
+        getActivity().startActivity(intent);
     }
 
     @Override

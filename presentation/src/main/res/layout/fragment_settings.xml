@@ -49,6 +49,14 @@
                 android:visibility="gone"/>
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/addTeacherGroup"
+            style="@style/SettingTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/addTeacherGroup"
+            android:visibility="gone"/>
+
         <include layout="@layout/divider" />
 
         <Switch

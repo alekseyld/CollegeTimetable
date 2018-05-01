@@ -265,12 +265,10 @@ public class DataUtils {
     private static String getTeacherName(Elements childs, Elements secondChilds, boolean isChange) {
         String ret = "";
 
-        if (childs.size() == 0) {
-            return ret;
-        }
-
         if (isChange) {
             childs = childs.get(0).children();
+        } else if (childs.size() < 3){
+            return ret;
         }
 
         ret = childs.get(2).text();

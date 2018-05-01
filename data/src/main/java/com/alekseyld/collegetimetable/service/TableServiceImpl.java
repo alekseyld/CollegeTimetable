@@ -193,13 +193,20 @@ public class TableServiceImpl implements TableService {
 
                         for (int i1 = 0; i1 < lessons.size(); i1++){
                             if (lessons.get(i1).getTeacher().contains(teacherFio)){
-                                teacherTimeTable.getDayList().get(i).getDayLessons().set(i1, new Lesson().setNumber(i1).setName(timeTable.getGroup()).setTeacher(teacherFio));
+                                teacherTimeTable.getDayList().get(i).getDayLessons()
+                                        .set(i1,
+                                                new Lesson().setNumber(i1)
+                                                        .setName(timeTable.getGroup() + "\n" + lessons.get(i1).getDoubleName())
+                                                        .setTeacher(teacherFio));
                             }
                         }
                     }
                     return teacherTimeTable;
                 })
                 .toList()
-                .map(list -> teacherTimeTable);
+                .map(list -> {
+                    mTimetableRepository.putTimeTable(teacherTimeTable, teacherFio);
+                    return teacherTimeTable;
+                });
     }
 }

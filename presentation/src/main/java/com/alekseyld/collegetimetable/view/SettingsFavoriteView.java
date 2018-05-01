@@ -9,4 +9,5 @@ import com.alekseyld.collegetimetable.view.adapter.FavoriteGroupAdapter;
 public interface SettingsFavoriteView extends BaseView {
     FavoriteGroupAdapter getAdapter();
     void setMessage(String mes);
+    boolean getTeacherMode();
 }
