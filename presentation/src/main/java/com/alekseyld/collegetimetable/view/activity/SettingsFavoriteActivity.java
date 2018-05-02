@@ -39,7 +39,10 @@ public class SettingsFavoriteActivity extends BaseInjectorActivity<SettingsFavor
             }
         });
 
-        boolean teacherMode = getIntent().getExtras().getBoolean("teacherMode", false);
+        boolean teacherMode = false;
+        if (getIntent().getExtras() != null) {
+            teacherMode = getIntent().getExtras().getBoolean("teacherMode", false);
+        }
 
         addFragment(SettingsFavoriteFragment.newInstance(teacherMode));
     }
