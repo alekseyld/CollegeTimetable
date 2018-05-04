@@ -29,6 +29,7 @@ import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOfflineUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
 import com.alekseyld.collegetimetable.usecase.SaveTableUseCase;
+import com.alekseyld.collegetimetable.utils.DataUtils;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
 
 import javax.inject.Inject;
@@ -108,7 +109,7 @@ public class UpdateTimetableService extends IntentService {
     }
 
     private void getTimeTableOnline(){
-        if (mSettings.getTeacherMode()) {
+        if (DataUtils.fioPattern.matcher(mSettings.getNotificationGroup()).find()) {
             mGetTableFromOnlineUseCase.setTeacherGroup(mSettings.getTeacherGroups());
         }
         mGetTableFromOnlineUseCase.setGroup(mSettings.getNotificationGroup());
