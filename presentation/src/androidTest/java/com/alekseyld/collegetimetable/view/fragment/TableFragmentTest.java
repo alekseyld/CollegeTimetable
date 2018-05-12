@@ -91,7 +91,7 @@ public class TableFragmentTest {
             public void run() {
                 message.setVisibility(View.GONE);
                 TableView tableView = (TableView)activityTestRule.getActivity().getSupportFragmentManager().getFragments().get(0);
-                tableView.getTableAdapter().setTimeTable(testTimeTable);
+                tableView.setTimeTable(testTimeTable);
             }
         });
 

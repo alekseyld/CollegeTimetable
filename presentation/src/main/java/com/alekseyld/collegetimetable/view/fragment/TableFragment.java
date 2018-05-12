@@ -228,11 +228,6 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     }
 
     @Override
-    public TableAdapter getTableAdapter() {
-        return mTableAdapter;
-    }
-
-    @Override
     public TimeTable getTimeTable() {
         return mTableAdapter.getTimeTable();
     }
