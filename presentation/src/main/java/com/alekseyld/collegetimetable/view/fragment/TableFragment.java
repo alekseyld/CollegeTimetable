@@ -3,6 +3,7 @@ package com.alekseyld.collegetimetable.view.fragment;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -100,10 +101,24 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         mLayoutManager = new LinearLayoutManager(getActivity());
         mTableList.setLayoutManager(mLayoutManager);
 
-        mTableAdapter = new TableAdapter(getContext(), mLayoutManager);
+        mTableAdapter = new TableAdapter(getContext(), mLayoutManager, this);
         mTableList.setAdapter(mTableAdapter);
 
         return v;
+    }
+
+    @Override
+    public boolean getChangeMode() {
+        return mPresenter != null && mPresenter.getChangeMode();
+    }
+
+    @Override
+    public void shareDay(Bitmap image) {
+        if (mPresenter != null) {
+            mPresenter.shareDay(image);
+        } else {
+            showError("Ошибка при отправке расписания");
+        }
     }
 
     @Override
@@ -126,7 +141,6 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
             Crashlytics.setString("Group", mGroup);
         }
 
-        mTableAdapter.setPresenter(mPresenter);
         mPresenter.getTableFromOffline();
     }
 
@@ -211,6 +225,11 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         mTableAdapter.setTimeTable(timeTable);
 
         onTimeTableUpdate();
+    }
+
+    @Override
+    public TableAdapter getTableAdapter() {
+        return mTableAdapter;
     }
 
     @Override

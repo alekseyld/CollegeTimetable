@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
  * Created by Alekseyld on 16.09.2017.
  */
 
-public class Utils {
+public class TestUtils {
 
     private static IdlingResource getIdlingResource(int time, TimeUnit timeUnit){
         IdlingPolicies.setMasterPolicyTimeout(

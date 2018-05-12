@@ -10,9 +10,9 @@ import android.widget.TextView;
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.utils.DataUtils;
-import com.alekseyld.collegetimetable.utils.Utils;
+import com.alekseyld.collegetimetable.utils.TestUtils;
+import com.alekseyld.collegetimetable.view.TableView;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
-import com.alekseyld.collegetimetable.view.adapter.TableAdapter;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -31,7 +31,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.alekseyld.collegetimetable.R.id.lesson_name;
 import static com.alekseyld.collegetimetable.R.id.recView;
-import static com.alekseyld.collegetimetable.utils.Utils.withDayLesson;
+import static com.alekseyld.collegetimetable.utils.TestUtils.withDayLesson;
 import static junit.framework.Assert.assertTrue;
 
 /**
@@ -90,12 +90,13 @@ public class TableFragmentTest {
             @Override
             public void run() {
                 message.setVisibility(View.GONE);
-                recyclerView.setAdapter(new TableAdapter(activityTestRule.getActivity(), testTimeTable));
+                TableView tableView = (TableView)activityTestRule.getActivity().getSupportFragmentManager().getFragments().get(0);
+                tableView.getTableAdapter().setTimeTable(testTimeTable);
             }
         });
 
-        Utils.sleepEspresso(1, TimeUnit.MICROSECONDS);
-//        Utils.sleepEspresso(10, TimeUnit.SECONDS);
+        TestUtils.sleepEspresso(1, TimeUnit.MICROSECONDS);
+//        TestUtils.sleepEspresso(10, TimeUnit.SECONDS);
     }
 
     @Test
