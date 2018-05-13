@@ -129,6 +129,12 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
                         mPresenter.saveTeacherMode(teachMode.isChecked());
                         addNotifTitle.startAnimation(getTeacherTitleAnimation());
                     }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        teachMode.setChecked(!teachMode.isChecked());
+                    }
                 });
             }
         });

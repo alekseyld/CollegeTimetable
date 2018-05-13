@@ -97,7 +97,6 @@ public class TableServiceImpl implements TableService {
                     if (document != null)
                         return document;
 
-
                     try {
                         document = Jsoup.connect(DataUtils.getGroupUrl("http://109.195.146.243/wp-content/uploads/time/", group)).timeout(5000).get();
                     } catch (IOException e) {
@@ -106,6 +105,12 @@ public class TableServiceImpl implements TableService {
                     }
 
                     return document;
+                }).flatMap(document -> {
+                    if (document == null) {
+                        return Observable.error(new UncriticalException("Не удалось подключиться к сайту (0:1)"));
+                    }
+
+                    return Observable.just(document);
                 });
     }
 

@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
@@ -65,11 +66,14 @@ public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fra
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
-    protected void showSubmitDialog(String title, DialogInterface.OnClickListener positiveOperation) {
+    protected void showSubmitDialog(String title,
+                                    DialogInterface.OnClickListener positiveOperation,
+                                    @Nullable  DialogInterface.OnClickListener negativeOperation) {
         new AlertDialog.Builder(getContext())
                 .setTitle(title)
+                .setCancelable(false)
                 .setPositiveButton("Да", positiveOperation)
-                .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Нет", negativeOperation != null ? negativeOperation : new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
