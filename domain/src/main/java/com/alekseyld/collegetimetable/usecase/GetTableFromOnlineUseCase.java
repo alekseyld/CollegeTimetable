@@ -6,6 +6,8 @@ import com.alekseyld.collegetimetable.executor.ThreadExecutor;
 import com.alekseyld.collegetimetable.service.TableService;
 import com.alekseyld.collegetimetable.usecase.base.UseCase;
 
+import java.util.Set;
+
 import javax.inject.Inject;
 
 import rx.Observable;
@@ -18,6 +20,7 @@ public class GetTableFromOnlineUseCase extends UseCase<TableService> {
 
     private boolean isOnline = true;
     private String mGroup = "";
+    private Set<String> teacherGroup = null;
 
     @Inject
     public GetTableFromOnlineUseCase(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread,
@@ -27,7 +30,11 @@ public class GetTableFromOnlineUseCase extends UseCase<TableService> {
 
     @Override
     protected Observable<TimeTable> buildUseCaseObservable() {
-        return mService.getTimetableFromOnline(isOnline, mGroup);
+        if (teacherGroup != null) {
+            return mService.getTeacherTimeTable(true, mGroup, teacherGroup);
+        } else {
+            return mService.getTimetableFromOnline(isOnline, mGroup);
+        }
     }
 
     public void setOnline(boolean online) {
@@ -36,5 +43,9 @@ public class GetTableFromOnlineUseCase extends UseCase<TableService> {
 
     public void setGroup(String Group) {
         this.mGroup = Group;
+    }
+
+    public void setTeacherGroup(Set<String> teacherGroup) {
+        this.teacherGroup = teacherGroup;
     }
 }

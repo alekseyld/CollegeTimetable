@@ -64,4 +64,7 @@
     <string name="my_group_string">Моя группа:</string>
     <string name="share_button_descript">Поделиться расписанием</string>
     <string name="changeMode">Выделять изменения фоном</string>
+    <string name="teacherSettingTitle">Настройки преподавателя</string>
+    <string name="teache_mode_title">Режим преподавателя (beta)</string>
+    <string name="addTeacherGroup">Группы преподавателя</string>
 </resources>

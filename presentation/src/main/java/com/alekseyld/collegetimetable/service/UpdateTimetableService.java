@@ -2,6 +2,7 @@ package com.alekseyld.collegetimetable.service;
 
 import android.app.IntentService;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -12,6 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
@@ -24,8 +26,10 @@ import com.alekseyld.collegetimetable.internal.di.component.DaggerServiceCompone
 import com.alekseyld.collegetimetable.internal.di.module.ServiceModule;
 import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
+import com.alekseyld.collegetimetable.usecase.GetTableFromOfflineUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
 import com.alekseyld.collegetimetable.usecase.SaveTableUseCase;
+import com.alekseyld.collegetimetable.utils.DataUtils;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
 
 import javax.inject.Inject;
@@ -46,6 +50,7 @@ public class UpdateTimetableService extends IntentService {
 
     @Inject GetSettingsUseCase mGetSettingsUseCase;
     @Inject GetTableFromOnlineUseCase mGetTableFromOnlineUseCase;
+    @Inject GetTableFromOfflineUseCase mGetTableFromOfflineUseCase;
     @Inject SaveTableUseCase mSaveTableUseCase;
 
     private Settings mSettings;
@@ -104,28 +109,51 @@ public class UpdateTimetableService extends IntentService {
     }
 
     private void getTimeTableOnline(){
+        if (DataUtils.fioPattern.matcher(mSettings.getNotificationGroup()).find()) {
+            mGetTableFromOnlineUseCase.setTeacherGroup(mSettings.getTeacherGroups());
+        }
         mGetTableFromOnlineUseCase.setGroup(mSettings.getNotificationGroup());
         mGetTableFromOnlineUseCase.setOnline(isOnline());
         mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>(){
             @Override
-            public void onNext(TimeTable timeTable) {
-                if(timeTable != null
-                        && timeTable.getDayList() != null
-                        && timeTable.getDayList().size() > 0){
+            public void onNext(final TimeTable timeTable) {
+                mGetTableFromOfflineUseCase.setGroup(mSettings.getNotificationGroup());
+                mGetTableFromOfflineUseCase.execute(new BaseSubscriber<TimeTable>() {
 
-                    saveTimeTable(timeTable);
-                    if(!mSettings.getAlarmMode()){
-                        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                        v.vibrate(300);
+                    @Override
+                    public void onNext(TimeTable oldTimeTable) {
+                        super.onNext(oldTimeTable);
+
+                        if(timeTable != null
+                                && timeTable.getDayList() != null
+                                && timeTable.getDayList().size() > 0
+                                && isTimeTableChanged(oldTimeTable, timeTable)){
+
+                            Log.d(LOG_TAG, "Timetable change");
+
+                            saveTimeTable(timeTable);
+                            if(!mSettings.getAlarmMode()){
+                                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                                v.vibrate(300);
+                            }
+
+                            NotificationManager n = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                            Notification notification = getNotif("Изменение в расписании");
+                            notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                NotificationChannel channel = new NotificationChannel("notify_001",
+                                        "Channel timetable app",
+                                        NotificationManager.IMPORTANCE_DEFAULT);
+                                n.createNotificationChannel(channel);
+                            }
+
+                            n.notify(0, notification);
+
+                        }
+                        stopSelf();
                     }
-
-                    NotificationManager n = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                    Notification notification = getNotif("Изменение в расписании");
-                    notification.flags |= Notification.FLAG_AUTO_CANCEL;
-                    n.notify("com.alekseyld.collegetimetable", 5, notification);
-
-                }
-                stopSelf();
+                });
             }
             @Override
             public void onError(Throwable e) {
@@ -135,6 +163,24 @@ public class UpdateTimetableService extends IntentService {
         });
     }
 
+    private boolean isTimeTableChanged(TimeTable oldTimeTable, TimeTable timeTable) {
+        if (oldTimeTable == null
+                || oldTimeTable.getDayList().size() == 0){
+            return true;
+        }
+
+        for (int day = 0; day < timeTable.getDayList().size(); day++) {
+            for (int lesson = 0; lesson < 7; lesson++) {
+                if (!oldTimeTable.getDayList().get(day).getDayLessons().get(lesson).getDoubleName()
+                        .equals(timeTable.getDayList().get(day).getDayLessons().get(lesson).getDoubleName())){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     private void saveTimeTable(TimeTable timeTable){
         mSaveTableUseCase.setTimeTable(timeTable);
         mSaveTableUseCase.setGroup(mSettings.getNotificationGroup());
@@ -142,12 +188,12 @@ public class UpdateTimetableService extends IntentService {
     }
 
     private Notification getNotif(String s) {
-        Drawable myDrawable = getResources().getDrawable(R.mipmap.android_logo);
+        Drawable myDrawable = getResources().getDrawable(R.mipmap.ic_launcher_square);
         Bitmap bitmap = ((BitmapDrawable) myDrawable).getBitmap();
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.android_logo)
+                        .setSmallIcon(R.mipmap.ic_launcher_square)
                         .setLargeIcon(bitmap)
                         .setContentTitle(s)
                         .setContentText("Изменение в расписании");

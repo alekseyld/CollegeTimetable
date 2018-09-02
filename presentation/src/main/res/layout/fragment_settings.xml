@@ -8,6 +8,16 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <Switch
+            android:id="@+id/teacherMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="@string/teache_mode_title"
+            android:textSize="15sp" />
+
+        <include layout="@layout/divider" />
+
         <TextView
             android:id="@+id/addFarvorite"
             style="@style/SettingTextView"
@@ -25,6 +35,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/addNotif_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/mygroup"
@@ -37,6 +48,14 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"/>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/addTeacherGroup"
+            style="@style/SettingTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/addTeacherGroup"
+            android:visibility="gone"/>
 
         <include layout="@layout/divider" />
 

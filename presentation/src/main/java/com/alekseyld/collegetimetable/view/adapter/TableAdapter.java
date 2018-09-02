@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.TimeTable;
-import com.alekseyld.collegetimetable.presenter.TablePresenter;
+import com.alekseyld.collegetimetable.view.TableView;
 import com.alekseyld.collegetimetable.view.adapter.holder.TimeTableHolder;
 
 /**
@@ -23,23 +23,14 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
     private TimeTable mTimeTable;
     private Context context;
 
-    private TablePresenter mPresenter;
+    private TableView mView;
     private RecyclerView.LayoutManager layoutManager;
 
-    public TableAdapter(Context context, RecyclerView.LayoutManager layoutManager) {
+    public TableAdapter(Context context, RecyclerView.LayoutManager layoutManager, TableView view) {
         this.context = context;
         mTimeTable = null;
         this.layoutManager = layoutManager;
-    }
-
-    public TableAdapter(Context context, TimeTable timeTable) {
-        this.context = context;
-        mTimeTable = timeTable;
-    }
-
-    public TableAdapter setPresenter(TablePresenter presenter) {
-        this.mPresenter = presenter;
-        return this;
+        this.mView = view;
     }
 
     @Override
@@ -53,7 +44,7 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
     @Override
     public void onBindViewHolder(final TimeTableHolder holder, int position) {
         holder.date.setText(mTimeTable.getDayList().get(position).getDateFirstUpperCase());
-        holder.lessons.setAdapter(new LessonAdapter(mTimeTable.getDayList().get(position), mPresenter.getChangeMode(), context));
+        holder.lessons.setAdapter(new LessonAdapter(mTimeTable.getDayList().get(position), mView.getChangeMode(), context));
 
         if (layoutManager != null) {
             holder.shareButton.setVisibility(View.VISIBLE);
@@ -61,7 +52,7 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
             holder.shareButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mPresenter.shareDay(getDayByBitmap(holder.getAdapterPosition()));
+                    mView.shareDay(getDayByBitmap(holder.getAdapterPosition()));
                 }
             });
 

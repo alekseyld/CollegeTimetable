@@ -14,6 +14,7 @@ import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOfflineUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
+import com.alekseyld.collegetimetable.utils.DataUtils;
 import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.TableView;
 
@@ -73,6 +74,10 @@ public class TablePresenter extends BasePresenter<TableView> {
         mView.showLoading();
 
         mGetTableFromOnlineUseCase.setOnline(isOnline());
+
+        if (DataUtils.fioPattern.matcher(mView.getGroup()).find()) {
+            mGetTableFromOnlineUseCase.setTeacherGroup(mSettings.getTeacherGroups());
+        }
         mGetTableFromOnlineUseCase.setGroup(mView.getGroup());
         mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>() {
             @Override

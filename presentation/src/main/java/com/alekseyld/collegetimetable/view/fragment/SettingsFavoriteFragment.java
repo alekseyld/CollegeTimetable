@@ -27,8 +27,12 @@ import butterknife.OnClick;
 
 public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePresenter> implements SettingsFavoriteView {
 
-    public static SettingsFavoriteFragment newInstance(){
-        return new SettingsFavoriteFragment();
+    public static SettingsFavoriteFragment newInstance(boolean teacherMode){
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("teacherMode", teacherMode);
+        SettingsFavoriteFragment favoriteFragment = new SettingsFavoriteFragment();
+        favoriteFragment.setArguments(bundle);
+        return favoriteFragment;
     }
 
     @BindView(R.id.listGroup)
@@ -39,12 +43,17 @@ public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePrese
 
     private FavoriteGroupAdapter mAdapter;
 
+    private boolean teacherMode;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_favorite, container, false);
         ButterKnife.bind(this, v);
         getActivity().setTitle(R.string.settings_favorite_activity_title);
+
+        teacherMode = getArguments().getBoolean("teacherMode", false);
+
         return v;
     }
 
@@ -60,6 +69,11 @@ public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePrese
     }
 
     @Override
+    public boolean getTeacherMode() {
+        return teacherMode;
+    }
+
+    @Override
     public FavoriteGroupAdapter getAdapter() {
         return mAdapter;
     }
@@ -72,13 +86,17 @@ public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePrese
 
     @OnClick(R.id.fab)
     void onFabClick(){
-        GroupInputDialogFragment groupInputDialogFragment = GroupInputDialogFragment.newInstance(false);
+        GroupInputDialogFragment groupInputDialogFragment = GroupInputDialogFragment.newInstance(true, false);
         groupInputDialogFragment.setTargetFragment(this, 2);
         groupInputDialogFragment.show(getFragmentManager(), GroupInputDialogFragment.class.getSimpleName());
     }
 
     public void addFavoriteGroup(String group){
-        mPresenter.addFavoriteGroup(group);
+        if (teacherMode) {
+            mPresenter.addTeacherGroup(group);
+        } else {
+            mPresenter.addFavoriteGroup(group);
+        }
     }
 
     @Override

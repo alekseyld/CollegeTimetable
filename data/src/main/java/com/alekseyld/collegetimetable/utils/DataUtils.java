@@ -22,8 +22,13 @@ public class DataUtils {
 
     public static Pattern groupPattern = Pattern.compile("[0-9]\\s[А-Я]{1,}[-][0-9]");
     public static Pattern groupPatternWithoutNum = Pattern.compile("[0-9]\\s[А-Я]{1,}([-][0-9]){0,}");
+    public static Pattern fioPattern = Pattern.compile("([А-ЯЁа-яё]{1,}[\\s]([А-ЯЁа-яё]{1}[.]){2})");
 
     public static String getGroupUrl(String group) {
+        return getGroupUrl("", group);
+    }
+
+    public static String getGroupUrl(String root, String group) {
 
         if (group == null || !groupPatternWithoutNum.matcher(group).matches())
             return "";
@@ -56,7 +61,10 @@ public class DataUtils {
             url = switchAbbr(abbr);
         }
 
-        return url.equals("") ? url : "http://uecoll.ru/wp-content/uploads/time/" + url;
+        if (root.equals(""))
+            root = "http://uecoll.ru/wp-content/uploads/time/";
+
+        return url.equals("") ? url : root + url;
     }
 
     private static String switchAbbr(String abbr) {
@@ -120,7 +128,8 @@ public class DataUtils {
         Pattern dayPattern = Pattern.compile("[А-Я]\\s[А-Я]\\s\\b");
 
         TimeTable timeTable = new TimeTable()
-                .setLastRefresh(new Date());
+                .setLastRefresh(new Date())
+                .setGroup(group);
 
         List<Lesson> lessons = new ArrayList<>();
 //        HashMap<TimeTable.Day, String> days = new HashMap<>();
@@ -215,13 +224,22 @@ public class DataUtils {
                 String text = table.get(iterator).text();
 
                 boolean second = table.get(iterator).attr("colspan").equals("");
+                String secondName = second ? table.get(iterator + 1).text() : null;
+
+                boolean isChange = table.get(iterator).children().attr("color").equals("blue");
+
+                String teacherName = getTeacherName(table.get(iterator).children(),
+                        second ? table.get(iterator + 1).children() : null,
+                        isChange);
 
                 lessons.add(
                         new Lesson()
                                 .setNumber(lesson)
                                 .setName(text)
-                                .setSecondName(second ? table.get(iterator + 1).text() : null)
-                                .setChange(table.get(iterator).children().attr("color").equals("blue"))
+                                .setSecondName(secondName)
+                                //todo Второй преподаватель
+                                .setTeacher(teacherName)
+                                .setChange(isChange)
                 );
 
                 lessonSpace = 0;
@@ -243,4 +261,51 @@ public class DataUtils {
 
         return timeTable;
     }
+
+    private static String getTeacherName(Elements childs, Elements secondChilds, boolean isChange) {
+        String ret = "";
+
+        if (isChange) {
+            childs = childs.get(0).children();
+        } else if (childs.size() < 3){
+            return ret;
+        }
+
+        ret = childs.get(2).text();
+
+        if (secondChilds != null){
+            ret += " / " + secondChilds.get(2).text();
+        }
+
+        return ret;
+    }
+
+    public static TimeTable getEmptyWeekTimeTable() {
+        TimeTable timeTable = new TimeTable()
+                .setGroup("")
+                .setLastRefresh(new Date());
+
+        for (int i = 0; i < 7; i++){
+            Day day = new Day()
+                    .setDate("")
+                    .setId(i);
+
+            for (int i1 = 0; i1 < 7; i1++) {
+                day.getDayLessons()
+                        .add(new Lesson()
+                                .setName("")
+                                .setTeacher("")
+                                .setNumber(i1)
+                                .setChange(false)
+                                //fixme убрать этот null и переделать на ""
+                                .setSecondName(null));
+            }
+
+            timeTable.addDay(day);
+        }
+
+
+        return timeTable;
+    }
+
 }

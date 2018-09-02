@@ -8,7 +8,6 @@ import com.alekseyld.collegetimetable.usecase.SaveSettingsUseCase;
 import com.alekseyld.collegetimetable.view.SettingsFavoriteView;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import javax.inject.Inject;
 
@@ -45,10 +44,6 @@ public class SettingsFavoritePresenter extends BasePresenter<SettingsFavoriteVie
     }
 
     public void addFavoriteGroup(String group) {
-
-        if (mSettings.getFavoriteGroups() == null)
-            mSettings.setFavoriteGroups(new HashSet<String>());
-
         mSettings.addFavoriteGroup(group);
         mSaveSettingsUseCase.setSettings(mSettings);
         mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>() {
@@ -62,7 +57,11 @@ public class SettingsFavoritePresenter extends BasePresenter<SettingsFavoriteVie
 
     private void refreshFavoriteGroups() {
         mView.getAdapter().removeAll();
-        mView.getAdapter().addAll(new ArrayList<>(mSettings.getFavoriteGroups()));
+        if (mView.getTeacherMode()) {
+            mView.getAdapter().addAll(new ArrayList<>(mSettings.getTeacherGroups()));
+        } else {
+            mView.getAdapter().addAll(new ArrayList<>(mSettings.getFavoriteGroups()));
+        }
         mView.getAdapter().notifyDataSetChanged();
 
         if (mView.getAdapter().getItemCount() == 0)
@@ -80,5 +79,17 @@ public class SettingsFavoritePresenter extends BasePresenter<SettingsFavoriteVie
                 refreshFavoriteGroups();
             }
         });
+    }
+
+    public void addTeacherGroup(String group) {
+        mSettings.addTeacherGroup(group);
+        mSaveSettingsUseCase.setSettings(mSettings);
+        mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>() {
+            @Override
+            public void onCompleted() {
+                refreshFavoriteGroups();
+            }
+        });
+
     }
 }

@@ -1,5 +1,6 @@
 package com.alekseyld.collegetimetable.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -8,11 +9,14 @@ import java.util.Set;
 
 public class Settings {
 
-    private Set<String> favoriteGroups;
+    private Set<String> favoriteGroups = new HashSet<>();
     private String notificationGroup;
     private boolean notifOn;
     private boolean alarmMode;
     private boolean changeMode;
+
+    private boolean teacherMode;
+    private Set<String> teacherGroups = new HashSet<>();
 
     public Settings() {}
 
@@ -21,6 +25,7 @@ public class Settings {
         this.notificationGroup = notificationGroup;
         this.alarmMode = alarmMode;
         this.notifOn = notifOn;
+        this.teacherMode = false;
     }
 
     public Set<String> getFavoriteGroups() {
@@ -60,15 +65,44 @@ public class Settings {
         return alarmMode;
     }
 
-    public void setAlarmMode(boolean alarmMode) {
+    public Settings setAlarmMode(boolean alarmMode) {
         this.alarmMode = alarmMode;
+        return this;
     }
 
     public boolean getNotifOn() {
         return notifOn;
     }
 
-    public void setNotifOn(boolean notifOn) {
+    public Settings setNotifOn(boolean notifOn) {
         this.notifOn = notifOn;
+        return this;
     }
+
+    public boolean getTeacherMode() {
+        return teacherMode;
+    }
+
+    public Settings setTeacherMode(boolean teacherMode) {
+        this.teacherMode = teacherMode;
+        return this;
+    }
+
+    public Set<String> getTeacherGroups() {
+        return teacherGroups;
+    }
+
+    public Settings setTeacherGroups(Set<String> teacherGroups) {
+        this.teacherGroups = teacherGroups;
+        return this;
+    }
+
+    public void addTeacherGroup(String favoriteGroup) {
+        this.teacherGroups.add(favoriteGroup);
+    }
+
+    public void removeTeacherGroup(String favoriteGroup) {
+        this.teacherGroups.remove(favoriteGroup);
+    }
+
 }

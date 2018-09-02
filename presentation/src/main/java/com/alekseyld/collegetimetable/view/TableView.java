@@ -1,5 +1,7 @@
 package com.alekseyld.collegetimetable.view;
 
+import android.graphics.Bitmap;
+
 import com.alekseyld.collegetimetable.entity.TimeTable;
 
 /**
@@ -12,5 +14,8 @@ public interface TableView extends ViewWithSettingsPresenter {
     TimeTable getTimeTable();
     void showMessage();
     String getGroup();
+
+    boolean getChangeMode();
+    void shareDay(Bitmap image);
 
 }
