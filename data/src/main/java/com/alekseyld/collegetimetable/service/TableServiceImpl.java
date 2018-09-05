@@ -199,7 +199,7 @@ public class TableServiceImpl implements TableService {
                             }
                         }
                     }
-                    return teacherTimeTable;
+                    return DataUtils.trimTimetable(teacherTimeTable);
                 })
                 .toList()
                 .map(list -> {

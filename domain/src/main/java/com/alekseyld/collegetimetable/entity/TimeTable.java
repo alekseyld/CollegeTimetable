@@ -1,7 +1,6 @@
 package com.alekseyld.collegetimetable.entity;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,7 +9,7 @@ import java.util.List;
 
 public class TimeTable {
 
-    private Date lastRefresh;
+    private String lastRefresh;
 
     /* Index default
      * 0 - Понедельник
@@ -25,11 +24,11 @@ public class TimeTable {
 
     private String group;
 
-    public Date getLastRefresh() {
+    public String getLastRefresh() {
         return lastRefresh;
     }
 
-    public TimeTable setLastRefresh(Date lastRefresh) {
+    public TimeTable setLastRefresh(String lastRefresh) {
         this.lastRefresh = lastRefresh;
         return this;
     }

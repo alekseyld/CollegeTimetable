@@ -7,6 +7,7 @@ import com.alekseyld.collegetimetable.entity.TimeTable;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -23,6 +24,7 @@ public class DataUtils {
     public static Pattern groupPattern = Pattern.compile("[0-9]\\s[А-Я]{1,}[-][0-9]");
     public static Pattern groupPatternWithoutNum = Pattern.compile("[0-9]\\s[А-Я]{1,}([-][0-9]){0,}");
     public static Pattern fioPattern = Pattern.compile("([А-ЯЁа-яё]{1,}[\\s]([А-ЯЁа-яё]{1}[.]){2})");
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
     public static String getGroupUrl(String group) {
         return getGroupUrl("", group);
@@ -128,7 +130,7 @@ public class DataUtils {
         Pattern dayPattern = Pattern.compile("[А-Я]\\s[А-Я]\\s\\b");
 
         TimeTable timeTable = new TimeTable()
-                .setLastRefresh(new Date())
+                .setLastRefresh(dateFormat.format(new Date()))
                 .setGroup(group);
 
         List<Lesson> lessons = new ArrayList<>();
@@ -283,7 +285,7 @@ public class DataUtils {
     public static TimeTable getEmptyWeekTimeTable() {
         TimeTable timeTable = new TimeTable()
                 .setGroup("")
-                .setLastRefresh(new Date());
+                .setLastRefresh(dateFormat.format(new Date()));
 
         for (int i = 0; i < 7; i++){
             Day day = new Day()
@@ -305,6 +307,22 @@ public class DataUtils {
         }
 
 
+        return timeTable;
+    }
+
+    public static TimeTable trimTimetable(TimeTable timeTable) {
+        for (Day day: timeTable.getDayList()) {
+            boolean emptyDay = true;
+
+            for (Lesson lesson: day.getDayLessons()) {
+                if (!lesson.getDoubleName().equals(""))
+                    emptyDay = false;
+            }
+
+            if (emptyDay){
+                timeTable.getDayList().remove(day);
+            }
+        }
         return timeTable;
     }
 

@@ -52,6 +52,7 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
             holder.shareButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (mView == null) return;
                     mView.shareDay(getDayByBitmap(holder.getAdapterPosition()));
                 }
             });

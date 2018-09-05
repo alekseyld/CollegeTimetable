@@ -60,7 +60,7 @@ public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePrese
     @Override
     public void onResume() {
         if (mAdapter == null){
-            mAdapter = new FavoriteGroupAdapter(mPresenter, getContext());
+            mAdapter = new FavoriteGroupAdapter(mPresenter, getContext(), teacherMode);
             listGroup.setAdapter(mAdapter);
             listGroup.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
@@ -92,11 +92,7 @@ public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePrese
     }
 
     public void addFavoriteGroup(String group){
-        if (teacherMode) {
-            mPresenter.addTeacherGroup(group);
-        } else {
-            mPresenter.addFavoriteGroup(group);
-        }
+        mPresenter.addFavoriteGroup(group, teacherMode);
     }
 
     @Override

@@ -35,8 +35,6 @@ import com.alekseyld.collegetimetable.view.adapter.TableAdapter;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 import com.crashlytics.android.Crashlytics;
 
-import java.text.SimpleDateFormat;
-
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -145,6 +143,9 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     }
 
     private void showPhoneStatePermission() {
+        if (getActivity() == null)
+            return;
+
         int permission = ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
@@ -203,8 +204,9 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
         switch (item.getItemId()){
             case R.id.action_info:
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-                showToastMessage("Последнее обновление: " + dateFormat.format(getTimeTable().getLastRefresh()));
+                if (getTimeTable() == null || getTimeTable().getLastRefresh() == null) break;
+
+                showToastMessage("Последнее обновление: " + getTimeTable().getLastRefresh());
                 break;
         }
         return super.onOptionsItemSelected(item);

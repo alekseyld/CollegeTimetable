@@ -20,13 +20,13 @@ import com.alekseyld.collegetimetable.view.adapter.holder.FavoriteGroupViewHolde
 public class FavoriteGroupAdapter extends BasePresenterAdapter<String, SettingsFavoritePresenter, FavoriteGroupViewHolder> {
 
     private Context mContext;
+    private boolean teacherMode;
 
-    public FavoriteGroupAdapter(SettingsFavoritePresenter presenter, Context context) {
+    public FavoriteGroupAdapter(SettingsFavoritePresenter presenter, Context context, boolean teacherMode) {
         super(presenter);
         mContext = context;
+        this.teacherMode = teacherMode;
     }
-
-
 
     @Override
     public FavoriteGroupViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -48,7 +48,7 @@ public class FavoriteGroupAdapter extends BasePresenterAdapter<String, SettingsF
                         .setPositiveButton("Да", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mPresenter.removeFavoriteGroup(getItems().get(holder.getAdapterPosition()));
+                                mPresenter.removeFavoriteGroup(getItems().get(holder.getAdapterPosition()), teacherMode);
                             }
                         })
                         .setNegativeButton("Нет", new DialogInterface.OnClickListener() {

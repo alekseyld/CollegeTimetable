@@ -43,8 +43,12 @@ public class SettingsFavoritePresenter extends BasePresenter<SettingsFavoriteVie
         });
     }
 
-    public void addFavoriteGroup(String group) {
-        mSettings.addFavoriteGroup(group);
+    public void addFavoriteGroup(String group, boolean teacherMode) {
+        if (teacherMode) {
+            mSettings.addTeacherGroup(group);
+        } else {
+            mSettings.addFavoriteGroup(group);
+        }
         mSaveSettingsUseCase.setSettings(mSettings);
         mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>() {
             @Override
@@ -70,8 +74,13 @@ public class SettingsFavoritePresenter extends BasePresenter<SettingsFavoriteVie
             mView.hideLoading();
     }
 
-    public void removeFavoriteGroup(String group) {
-        mSettings.removeFavoriteGroup(group);
+    public void removeFavoriteGroup(String group, boolean teacherMode) {
+        if (teacherMode) {
+            mSettings.removeTeacherGroup(group);
+        } else {
+            mSettings.removeFavoriteGroup(group);
+        }
+
         mSaveSettingsUseCase.setSettings(mSettings);
         mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>() {
             @Override
@@ -79,17 +88,5 @@ public class SettingsFavoritePresenter extends BasePresenter<SettingsFavoriteVie
                 refreshFavoriteGroups();
             }
         });
-    }
-
-    public void addTeacherGroup(String group) {
-        mSettings.addTeacherGroup(group);
-        mSaveSettingsUseCase.setSettings(mSettings);
-        mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>() {
-            @Override
-            public void onCompleted() {
-                refreshFavoriteGroups();
-            }
-        });
-
     }
 }
