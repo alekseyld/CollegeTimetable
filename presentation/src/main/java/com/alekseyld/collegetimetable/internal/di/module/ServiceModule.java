@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.SharedPreferences;
 
 import com.alekseyld.collegetimetable.UIThread;
+import com.alekseyld.collegetimetable.api.ProxyApi;
 import com.alekseyld.collegetimetable.executor.JobExecutor;
 import com.alekseyld.collegetimetable.executor.PostExecutionThread;
 import com.alekseyld.collegetimetable.executor.ThreadExecutor;
@@ -88,6 +89,12 @@ public class ServiceModule {
     @Provides
     TableRepository provideTableRepository(TableRepositoryImpl tableRepository){
         return tableRepository;
+    }
+
+    @Singleton
+    @Provides
+    ProxyApi provideProxyApi(Retrofit restAdapter){
+        return restAdapter.create(ProxyApi.class);
     }
 
     @Provides @Singleton

@@ -12,14 +12,14 @@ apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     buildToolsVersion "24.0.3"
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 13
-        versionName "7.2"
+        targetSdkVersion 28
+        versionCode 15
+        versionName "8.1"
 
     }
     buildTypes {

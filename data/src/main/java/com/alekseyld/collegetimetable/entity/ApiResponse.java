@@ -33,4 +33,8 @@ public class ApiResponse {
     public void setStatus(int status) {
         this.status = status;
     }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
 }

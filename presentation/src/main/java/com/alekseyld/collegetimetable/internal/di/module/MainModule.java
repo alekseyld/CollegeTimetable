@@ -3,6 +3,7 @@ package com.alekseyld.collegetimetable.internal.di.module;
 import android.app.Activity;
 import android.content.SharedPreferences;
 
+import com.alekseyld.collegetimetable.api.ProxyApi;
 import com.alekseyld.collegetimetable.internal.di.PerActivity;
 import com.alekseyld.collegetimetable.navigator.NavigatorImpl;
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
@@ -17,6 +18,7 @@ import com.alekseyld.collegetimetable.service.TableServiceImpl;
 
 import dagger.Module;
 import dagger.Provides;
+import retrofit2.Retrofit;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
@@ -69,5 +71,10 @@ public class MainModule {
     @PerActivity @Provides
     SettingsResultProcessor provideSettingsResultProcessor(NavigatorImpl navigator){
         return navigator;
+    }
+
+    @PerActivity @Provides
+    ProxyApi provideProxyApi(Retrofit restAdapter){
+        return restAdapter.create(ProxyApi.class);
     }
 }

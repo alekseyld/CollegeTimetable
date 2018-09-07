@@ -22,7 +22,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import retrofit2.Retrofit;
 import rx.Observable;
 
 /**
@@ -33,15 +32,14 @@ public class TableServiceImpl implements TableService {
 
     private TableRepository mTimetableRepository;
     private SettingsRepository mSettingsRepository;
-
     private ProxyApi urlApi;
 
 
     @Inject
-    TableServiceImpl(TableRepository tableRepository, SettingsRepository settingsRepository, Retrofit restAdapter) {
+    public TableServiceImpl(TableRepository tableRepository, SettingsRepository settingsRepository, ProxyApi urlApi) {
         mSettingsRepository = settingsRepository;
         mTimetableRepository = tableRepository;
-        urlApi = restAdapter.create(ProxyApi.class);
+        this.urlApi = urlApi;
     }
 
     private Observable<Document> connectAndGetData(String group) {
@@ -175,7 +173,7 @@ public class TableServiceImpl implements TableService {
 
     @Override
     public Observable<TimeTable> getTeacherTimeTable(boolean online, String teacherFio, Set<String> teacherGroup) {
-        TimeTable teacherTimeTable = DataUtils.getEmptyWeekTimeTable()
+        TimeTable teacherTimeTable = DataUtils.getEmptyWeekTimeTable(7, 7, true)
                 .setGroup(teacherFio);
 
         return getTimetableFromOnlineAssociativity(online, teacherGroup)
@@ -184,6 +182,10 @@ public class TableServiceImpl implements TableService {
                     for (int i = 0; i < days.size(); i++){
                         Day day = days.get(i);
                         List<Lesson> lessons = day.getDayLessons();
+
+                        if (i == teacherTimeTable.getDayList().size()) {
+                            teacherTimeTable.getDayList().add(DataUtils.getEmptyDay(i, 7));
+                        }
 
                         if (teacherTimeTable.getDayList().get(i).getDate().equals("")) {
                             teacherTimeTable.getDayList().get(i).setDate(day.getDate()).setId(day.getId());
@@ -199,7 +201,7 @@ public class TableServiceImpl implements TableService {
                             }
                         }
                     }
-                    return DataUtils.trimTimetable(teacherTimeTable);
+                    return teacherTimeTable;
                 })
                 .toList()
                 .map(list -> {

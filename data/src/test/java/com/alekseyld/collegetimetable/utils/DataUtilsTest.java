@@ -2,7 +2,12 @@ package com.alekseyld.collegetimetable.utils;
 
 import com.alekseyld.collegetimetable.entity.Day;
 import com.alekseyld.collegetimetable.entity.Lesson;
+import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.entity.TimeTable;
+import com.alekseyld.collegetimetable.service.TableServiceImpl;
+import com.alekseyld.collegetimetable.utils.api.ProxyApiMock;
+import com.alekseyld.collegetimetable.utils.repository.SettingsRepositoryMock;
+import com.alekseyld.collegetimetable.utils.repository.TableRepositoryMock;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,7 +25,7 @@ public class DataUtilsTest{
     @Test
     public void getEmptyWeekTimeTable() throws Exception {
 
-        assertTrue(DataUtils.getEmptyWeekTimeTable().getDayList().size() == 7);
+        assertTrue(DataUtils.getEmptyWeekTimeTable(7, 7).getDayList().size() == 7);
     }
 
     @Test
@@ -997,6 +1002,111 @@ public class DataUtilsTest{
         assertTrue(lessons.get(4).getDoubleName().equals("\u00A0"));
         assertTrue(lessons.get(5).getDoubleName().equals("\u00A0"));
         assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
+
+    }
+
+    @Test
+    public void parseTestTimetableTeacherVershinia_7() throws Exception {
+
+        SettingsRepositoryMock settingsRepositoryMock = new SettingsRepositoryMock();
+
+        Settings settings = settingsRepositoryMock.getSettings();
+        settings.addTeacherGroup("3 АПП-1");
+        settings.addTeacherGroup("3 АПП-2");
+        settings.addTeacherGroup("3 АПП-3");
+        settings.setTeacherMode(true);
+        settings.setNotificationGroup("Вершинина Н.П.");
+
+        TableServiceImpl tableRepository = new TableServiceImpl(
+                new TableRepositoryMock(),
+                settingsRepositoryMock,
+                new ProxyApiMock().setFromTestPages(true)
+        );
+
+        TimeTable tableWrapper = tableRepository.getTeacherTimeTable(false, settings.getNotificationGroup(), settings.getTeacherGroups()).toBlocking().first();
+
+        assertTrue(tableWrapper.getDayList() != null);
+
+        List<Day> timeTable = tableWrapper.getDayList();
+
+        assertTrue(timeTable.size() > 0);
+        assertTrue(tableWrapper.getDayList().get(0).getDate().equals("П О Н Е Д Е Л Ь Н И К   11.09.2017"));
+
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals(""));
+        assertTrue(lessons.get(1).getDoubleName().equals("3 АПП-3\n" + "Основы философии Вершинина Н.П."));
+        assertTrue(lessons.get(2).getDoubleName().equals(""));
+        assertTrue(lessons.get(3).getDoubleName().equals(""));
+        assertTrue(lessons.get(4).getDoubleName().equals(""));
+        assertTrue(lessons.get(5).getDoubleName().equals(""));
+        assertTrue(lessons.get(6).getDoubleName().equals(""));
+
+        assertTrue(tableWrapper.getDayList().get(1).getDate().equals("В Т О Р Н И К   12.09.2017"));
+        lessons = timeTable.get(1).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("3 АПП-2\n" + "Основы философии Вершинина Н.П."));
+        assertTrue(lessons.get(1).getDoubleName().equals("3 АПП-2\n" + "Основы философии Вершинина Н.П."));
+        assertTrue(lessons.get(2).getDoubleName().equals(""));
+        assertTrue(lessons.get(3).getDoubleName().equals(""));
+        assertTrue(lessons.get(4).getDoubleName().equals(""));
+        assertTrue(lessons.get(5).getDoubleName().equals(""));
+        assertTrue(lessons.get(6).getDoubleName().equals(""));
+
+        assertTrue(tableWrapper.getDayList().get(2).getDate().equals("С Р Е Д А   13.09.2017"));
+        lessons = timeTable.get(2).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals(""));
+        assertTrue(lessons.get(1).getDoubleName().equals(""));
+        assertTrue(lessons.get(2).getDoubleName().equals(""));
+        assertTrue(lessons.get(3).getDoubleName().equals(""));
+        assertTrue(lessons.get(4).getDoubleName().equals(""));
+        assertTrue(lessons.get(5).getDoubleName().equals(""));
+        assertTrue(lessons.get(6).getDoubleName().equals(""));
+
+        assertTrue(tableWrapper.getDayList().get(3).getDate().equals("Ч Е Т В Е Р Г   14.09.2017"));
+        lessons = timeTable.get(3).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals(""));
+        assertTrue(lessons.get(1).getDoubleName().equals(""));
+        assertTrue(lessons.get(2).getDoubleName().equals(""));
+        assertTrue(lessons.get(3).getDoubleName().equals(""));
+        assertTrue(lessons.get(4).getDoubleName().equals(""));
+        assertTrue(lessons.get(5).getDoubleName().equals(""));
+        assertTrue(lessons.get(6).getDoubleName().equals(""));
+
+        assertTrue(tableWrapper.getDayList().get(4).getDate().equals("П Я Т Н И Ц А   15.09.2017"));
+        lessons = timeTable.get(4).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals(""));
+        assertTrue(lessons.get(1).getDoubleName().equals(""));
+        assertTrue(lessons.get(2).getDoubleName().equals(""));
+        assertTrue(lessons.get(3).getDoubleName().equals(""));
+        assertTrue(lessons.get(4).getDoubleName().equals(""));
+        assertTrue(lessons.get(5).getDoubleName().equals(""));
+        assertTrue(lessons.get(6).getDoubleName().equals(""));
+
+        assertTrue(tableWrapper.getDayList().get(5).getDate().equals("С У Б Б О Т А   16.09.2017"));
+        lessons = timeTable.get(5).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals("3 АПП-3\n" + "Основы философии Вершинина Н.П."));
+        assertTrue(lessons.get(1).getDoubleName().equals("3 АПП-1\n" + "Основы философии Вершинина Н.П."));
+        assertTrue(lessons.get(2).getDoubleName().equals(""));
+        assertTrue(lessons.get(3).getDoubleName().equals(""));
+        assertTrue(lessons.get(4).getDoubleName().equals(""));
+        assertTrue(lessons.get(5).getDoubleName().equals(""));
+        assertTrue(lessons.get(6).getDoubleName().equals(""));
+
+        assertTrue(tableWrapper.getDayList().get(6).getDate().equals("П О Н Е Д Е Л Ь Н И К   18.09.2017"));
+        lessons = timeTable.get(6).getDayLessons();
+
+        assertTrue(lessons.get(0).getDoubleName().equals(""));
+        assertTrue(lessons.get(1).getDoubleName().equals("3 АПП-3\n" + "Основы философии Вершинина Н.П."));
+        assertTrue(lessons.get(2).getDoubleName().equals(""));
+        assertTrue(lessons.get(3).getDoubleName().equals(""));
+        assertTrue(lessons.get(4).getDoubleName().equals(""));
+        assertTrue(lessons.get(5).getDoubleName().equals(""));
+        assertTrue(lessons.get(6).getDoubleName().equals(""));
 
     }
 

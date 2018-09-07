@@ -3,6 +3,8 @@ package com.alekseyld.collegetimetable.utils;
 import com.alekseyld.collegetimetable.entity.Day;
 import com.alekseyld.collegetimetable.entity.Lesson;
 import com.alekseyld.collegetimetable.entity.TimeTable;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -10,6 +12,7 @@ import org.jsoup.select.Elements;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -58,7 +61,7 @@ public class DataUtils {
         }
 
         if (group.charAt(0) == '1' && neftGroups.contains(abbr)) {
-            url = "neft/10_1_8.html";
+            url = switchAbbr("1");
         } else {
             url = switchAbbr(abbr);
         }
@@ -70,52 +73,55 @@ public class DataUtils {
     }
 
     private static String switchAbbr(String abbr) {
-        switch (abbr) {
-            case "Т":
-                return "energy/10_1_8.html";
-            case "Э":
-                return "energy/10_1_7.html";
-            case "С":
-                return "energy/10_1_10.html";
-            case "Б":
-                return "energy/10_1_9.html";
-            case "В":
-                return "neft/10_1_4.html";
-            case "Л":
-                return "energy/10_1_3.html";
-            case "Р":
-                return "energy/10_1_4.html";
-            case "АПП":
-                return "neft/10_1_1.html";
-            case "БНГ":
-                return "neft/10_1_2.html";
-            case "ТО":
-                return "neft/10_1_3.html";
-            case "ПНГ":
-                return "neft/10_1_5.html";
-            case "ЭНН":
-                return "neft/10_1_6.html";
-            case "ЭННУ":
-                return "neft/10_1_6.html";
-            case "ТОВ":
-                return "neft/10_1_7.html";
-            case "ИС":
-                return "energy/10_1_1.html";
-            case "ГС":
-                return "energy/10_1_2.html";
-            case "ГСУ":
-                return "energy/10_1_2.html";
-            case "РУ":
-                return "energy/10_1_4.html";
-            case "ПГ":
-                return "energy/10_1_5.html";
-            case "ТС":
-                return "energy/10_1_6.html";
-            case "ТАК":
-                return "energy/10_1_9.html";
-            default:
-                return "";
-        }
+        String json = "{\"1\": \"neft/10_1_10.html\",\"Т\": \"energy/10_1_8.html\",\"Э\": \"energy/10_1_7.html\",\"С\": \"energy/10_1_10.html\",\"Б\": \"energy/10_1_9.html\",\"В\": \"neft/10_1_4.html\",\"Л\": \"energy/10_1_3.html\",\"Р\": \"energy/10_1_4.html\",\"АПП\": \"neft/10_1_1.html\",\"БНГ\": \"neft/10_1_2.html\",\"ТО\": \"neft/10_1_3.html\",\"ПНГ\": \"neft/10_1_5.html\",\"ЭНН\": \"neft/10_1_6.html\",\"ЭННУ\": \"neft/10_1_6.html\",\"ТОВ\": \"neft/10_1_7.html\",\"ИС\": \"energy/10_1_1.html\",\"ГС\": \"energy/10_1_2.html\",\"ГСУ\": \"energy/10_1_2.html\",\"РУ\": \"energy/10_1_4.html\",\"ПГ\": \"energy/10_1_5.html\",\"ТС\": \"energy/10_1_6.html\",\"ТАК\": \"energy/10_1_8.html\"}";
+        HashMap<String, String> abbrMap = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>(){}.getType());
+        return abbrMap.get(abbr);
+//        switch (abbr) {
+//            case "Т":
+//                return "energy/10_1_8.html";
+//            case "Э":
+//                return "energy/10_1_7.html";
+//            case "С":
+//                return "energy/10_1_10.html";
+//            case "Б":
+//                return "energy/10_1_9.html";
+//            case "В":
+//                return "neft/10_1_4.html";
+//            case "Л":
+//                return "energy/10_1_3.html";
+//            case "Р":
+//                return "energy/10_1_4.html";
+//            case "АПП":
+//                return "neft/10_1_1.html";
+//            case "БНГ":
+//                return "neft/10_1_2.html";
+//            case "ТО":
+//                return "neft/10_1_3.html";
+//            case "ПНГ":
+//                return "neft/10_1_5.html";
+//            case "ЭНН":
+//                return "neft/10_1_6.html";
+//            case "ЭННУ":
+//                return "neft/10_1_6.html";
+//            case "ТОВ":
+//                return "neft/10_1_7.html";
+//            case "ИС":
+//                return "energy/10_1_1.html";
+//            case "ГС":
+//                return "energy/10_1_2.html";
+//            case "ГСУ":
+//                return "energy/10_1_2.html";
+//            case "РУ":
+//                return "energy/10_1_4.html";
+//            case "ПГ":
+//                return "energy/10_1_5.html";
+//            case "ТС":
+//                return "energy/10_1_6.html";
+//            case "ТАК":
+//                return "energy/10_1_9.html";
+//            default:
+//                return "";
+//        }
     }
 
     public static TimeTable parseDocument(Document document, String group) {
@@ -282,36 +288,51 @@ public class DataUtils {
         return ret;
     }
 
-    public static TimeTable getEmptyWeekTimeTable() {
+    public static TimeTable getEmptyWeekTimeTable(int countDays, int lessonPerDayCount, boolean mock) {
         TimeTable timeTable = new TimeTable()
                 .setGroup("")
                 .setLastRefresh(dateFormat.format(new Date()));
 
-        for (int i = 0; i < 7; i++){
-            Day day = new Day()
-                    .setDate("")
-                    .setId(i);
-
-            for (int i1 = 0; i1 < 7; i1++) {
-                day.getDayLessons()
-                        .add(new Lesson()
-                                .setName("")
-                                .setTeacher("")
-                                .setNumber(i1)
-                                .setChange(false)
-                                //fixme убрать этот null и переделать на ""
-                                .setSecondName(null));
-            }
-
-            timeTable.addDay(day);
-        }
-
-
+       timeTable.setDayList(getEmptyDayList(countDays,lessonPerDayCount, mock));
         return timeTable;
     }
 
+    public static List<Day> getEmptyDayList(int count, int lessonPerDayCount, boolean mock) {
+        List<Day> days = new ArrayList<>();
+        for (int i = 0; i < count; i++){
+            days.add(getEmptyDay(i, lessonPerDayCount));
+        }
+        return days;
+    }
+
+    public static List<Lesson> getEmptyLessonList(int count) {
+        List<Lesson> lessons = new ArrayList<>();
+        for (int i1 = 0; i1 < count; i1++) {
+            lessons.add(getEmptyLesson(i1));
+        }
+        return lessons;
+    }
+
+    public static Day getEmptyDay(int num, int lessonCount) {
+        return new Day()
+                .setDate("")
+                .setId(num)
+                .setDayLessons(getEmptyLessonList(lessonCount));
+    }
+
+    public static Lesson getEmptyLesson(int num) {
+        return new Lesson()
+                .setName("")
+                .setTeacher("")
+                .setNumber(num)
+                .setChange(false)
+                //fixme убрать этот null и переделать на ""
+                .setSecondName(null);
+    }
+
     public static TimeTable trimTimetable(TimeTable timeTable) {
-        for (Day day: timeTable.getDayList()) {
+        for (int iDay = 0; iDay < timeTable.getDayList().size(); iDay++) {
+            Day day = timeTable.getDayList().get(iDay);
             boolean emptyDay = true;
 
             for (Lesson lesson: day.getDayLessons()) {
