@@ -200,11 +200,20 @@ public class TableServiceImpl implements TableService {
 
                         for (int i1 = 0; i1 < lessons.size(); i1++){
                             if (lessons.get(i1).getTeacher().contains(teacherFio)){
-                                teacherTimeTable.getDayList().get(i).getDayLessons()
-                                        .set(i1,
-                                                new Lesson().setNumber(i1)
-                                                        .setName(timeTable.getGroup() + "\n" + lessons.get(i1).getDoubleName())
-                                                        .setTeacher(teacherFio));
+                                if (teacherTimeTable.getDayList().get(i).getDayLessons().get(i1).getDoubleName().equals("")) {
+                                    teacherTimeTable.getDayList().get(i).getDayLessons()
+                                            .set(i1, new Lesson().setNumber(i1)
+                                                    .setName(timeTable.getGroup() + "\n" + lessons.get(i1).getDoubleName())
+                                                    .setTeacher(teacherFio));
+                                } else {
+                                    teacherTimeTable.getDayList().get(i).getDayLessons()
+                                            .set(i1, new Lesson().setNumber(i1)
+                                                    .setName(
+                                                            teacherTimeTable.getDayList().get(i).getDayLessons().get(i1).getDoubleName()
+                                                            + "\n\n" +
+                                                            timeTable.getGroup() + "\n" + lessons.get(i1).getDoubleName())
+                                                    .setTeacher(teacherFio));
+                                }
                             }
                         }
                     }

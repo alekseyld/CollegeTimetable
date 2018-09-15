@@ -245,7 +245,6 @@ public class DataUtils {
                                 .setNumber(lesson)
                                 .setName(text)
                                 .setSecondName(secondName)
-                                //todo Второй преподаватель
                                 .setTeacher(teacherName)
                                 .setChange(isChange)
                 );

@@ -25,7 +25,7 @@ public class DataUtilsTest{
     @Test
     public void getEmptyWeekTimeTable() throws Exception {
 
-        assertTrue(DataUtils.getEmptyWeekTimeTable(7, 7).getDayList().size() == 7);
+        assertTrue(DataUtils.getEmptyWeekTimeTable(7, 7, true).getDayList().size() == 7);
     }
 
     @Test
