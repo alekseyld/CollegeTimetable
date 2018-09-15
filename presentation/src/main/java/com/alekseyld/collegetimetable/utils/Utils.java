@@ -15,6 +15,7 @@ import java.io.OutputStream;
 public class Utils {
 
     public static final String NAME_OF_CACHE_FILE = "cache_table.jpg";
+    public static final int SERVICE_TIMER = 5000;//30 * 60 * 1000
 
     public static File getPathToCacheDir(){
         String path = Environment.getExternalStorageDirectory() + File.separator + "CollegeTimetable";
@@ -35,7 +36,7 @@ public class Utils {
         File file = null;
 
         OutputStream fOut;
-        file = new File(Utils.getPathToCacheDir(), Utils.NAME_OF_CACHE_FILE);
+        file = new File(getPathToCacheDir(), Utils.NAME_OF_CACHE_FILE);
 
         if (file.exists())
             file.delete();

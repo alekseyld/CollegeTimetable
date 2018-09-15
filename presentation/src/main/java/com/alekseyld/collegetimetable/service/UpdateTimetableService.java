@@ -1,5 +1,6 @@
 package com.alekseyld.collegetimetable.service;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -8,15 +9,13 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.Vibrator;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.alekseyld.collegetimetable.R;
@@ -30,9 +29,13 @@ import com.alekseyld.collegetimetable.usecase.GetTableFromOfflineUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
 import com.alekseyld.collegetimetable.usecase.SaveTableUseCase;
 import com.alekseyld.collegetimetable.utils.DataUtils;
+import com.alekseyld.collegetimetable.utils.NotificationID;
+import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
 
 import javax.inject.Inject;
+
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 /**
  * Created by Alekseyld on 04.09.2016.
@@ -40,6 +43,7 @@ import javax.inject.Inject;
 
 public class UpdateTimetableService extends IntentService {
     private final String LOG_TAG = "ServiceLog";
+    public final static String SERVICE_NAME = "UpdateTimetableService";
     public static boolean isRunning = false;
 
     /**
@@ -56,7 +60,7 @@ public class UpdateTimetableService extends IntentService {
     private Settings mSettings;
 
     public UpdateTimetableService() {
-        super("DataService");
+        super(SERVICE_NAME);
     }
 
     public void onCreate() {
@@ -64,6 +68,12 @@ public class UpdateTimetableService extends IntentService {
         this.initializeInjector();
         Log.d(LOG_TAG, "onCreate");
         isRunning = true;
+
+        getApplicationContext()
+                .getSharedPreferences(NAME_FILE, MODE_PRIVATE)
+                .edit()
+                .putLong(SERVICE_NAME, System.currentTimeMillis())
+                .apply();
     }
 
     private void initializeInjector(){
@@ -132,25 +142,27 @@ public class UpdateTimetableService extends IntentService {
                             Log.d(LOG_TAG, "Timetable change");
 
                             saveTimeTable(timeTable);
-                            if(!mSettings.getAlarmMode()){
-                                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                                v.vibrate(300);
-                            }
+//                            if(!mSettings.getAlarmMode()){
+//                                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+//                                v.vibrate(300);
+//                            }
 
-                            NotificationManager n = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                            Notification notification = getNotif("Изменение в расписании");
-                            notification.flags |= Notification.FLAG_AUTO_CANCEL;
+                            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 NotificationChannel channel = new NotificationChannel("notify_001",
                                         "Channel timetable app",
                                         NotificationManager.IMPORTANCE_DEFAULT);
-                                n.createNotificationChannel(channel);
+                                NotificationManager mNotificationManager =
+                                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                if (mNotificationManager != null)
+                                    mNotificationManager.createNotificationChannel(channel);
                             }
-
-                            n.notify(0, notification);
-
+                            notificationManager.cancelAll();
+                            notificationManager.notify(NotificationID.getID(), getChangeNotification("Изменение в расписании"));
                         }
+
+                        planRunning(20 * 60 * 1000);
                         stopSelf();
                     }
                 });
@@ -158,9 +170,23 @@ public class UpdateTimetableService extends IntentService {
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
+                planRunning(60 * 1000);
                 stopSelf();
             }
         });
+    }
+
+    private void planRunning(int timeing) {
+        if (!mSettings.getNotifOn()) return;
+
+        Intent ishintent = new Intent(getApplicationContext(), UpdateTimetableService.class);
+        PendingIntent pintent = PendingIntent.getService(getApplicationContext(), 0, ishintent, 0);
+        AlarmManager alarm = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        if (alarm != null) {
+            alarm.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), Utils.SERVICE_TIMER, pintent);
+            alarm.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() + timeing, pintent);
+        }
     }
 
     private boolean isTimeTableChanged(TimeTable oldTimeTable, TimeTable timeTable) {
@@ -187,16 +213,13 @@ public class UpdateTimetableService extends IntentService {
         mSaveTableUseCase.execute(new BaseSubscriber());
     }
 
-    private Notification getNotif(String s) {
-        Drawable myDrawable = getResources().getDrawable(R.mipmap.ic_launcher_square);
-        Bitmap bitmap = ((BitmapDrawable) myDrawable).getBitmap();
-
+    private Notification getChangeNotification(String s) {
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher_square)
-                        .setLargeIcon(bitmap)
+                new NotificationCompat.Builder(this,"notify_001")
+                        .setSmallIcon(R.drawable.ic_notification)
                         .setContentTitle(s)
-                        .setContentText("Изменение в расписании");
+                        .setContentText("Изменение в расписании")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 //                        .setContentText("name = "+intent.getStringExtra("name")+"; "+
 //                                        "number = "+intent.getIntExtra("number", 0));
         Intent resultIntent = new Intent(this, MainActivity.class);
@@ -210,9 +233,6 @@ public class UpdateTimetableService extends IntentService {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
         mBuilder.setContentIntent(resultPendingIntent);
-//        NotificationManager mNotificationManager =
-//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        mNotificationManager.notify(1, mBuilder.build());
         return mBuilder.build();
     }
 

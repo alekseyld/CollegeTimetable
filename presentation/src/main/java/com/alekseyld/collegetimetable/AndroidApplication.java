@@ -1,9 +1,6 @@
 package com.alekseyld.collegetimetable;
 
-import android.app.AlarmManager;
 import android.app.Application;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.StrictMode;
@@ -43,19 +40,10 @@ public class AndroidApplication extends Application {
 
     private void initializeService() {
         SharedPreferences preferences = this.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
-
-        if (preferences.getBoolean(NOTIFON_KEY, false)) {
-            boolean alarmUp = (PendingIntent.getBroadcast(getApplicationContext(), 0,
-                    new Intent(this, UpdateTimetableService.class),
-                    PendingIntent.FLAG_NO_CREATE) != null);
-
-            if (!alarmUp) {
-                Intent ishintent = new Intent(this, UpdateTimetableService.class);
-                PendingIntent pintent = PendingIntent.getService(this, 0, ishintent, 0);
-                AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                alarm.cancel(pintent);
-                alarm.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 30 * 60 * 1000, pintent);
-            }
+        if (preferences.getBoolean(NOTIFON_KEY, false) &&
+                System.currentTimeMillis() - preferences.getLong(UpdateTimetableService.SERVICE_NAME, 0L) > 33 * 60 * 1000) {
+            startService(
+                    new Intent(this, UpdateTimetableService.class));
         }
     }
 

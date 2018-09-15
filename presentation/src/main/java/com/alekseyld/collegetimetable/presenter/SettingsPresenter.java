@@ -1,9 +1,12 @@
 package com.alekseyld.collegetimetable.presenter;
 
+import android.content.Intent;
+
 import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
 import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
+import com.alekseyld.collegetimetable.service.UpdateTimetableService;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.SaveSettingsUseCase;
 import com.alekseyld.collegetimetable.view.SettingsView;
@@ -85,14 +88,22 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
     public void saveNotifOn(boolean notifOn) {
         mSettings.setNotifOn(notifOn);
         saveSettings();
+        processNotification(notifOn);
+    }
+
+    private void processNotification(boolean notifOn) {
+        if (notifOn) {
+            mView.getBaseActivity().startService(
+                    new Intent(mView.getBaseActivity(), UpdateTimetableService.class));
+        }
     }
 
     private void saveSettings() {
         mSaveSettingsUseCase.setSettings(mSettings);
-        mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>(){
+        mSaveSettingsUseCase.execute(new BaseSubscriber<Boolean>() {
             @Override
             public void onCompleted() {
-                ((MainActivity)mView.getBaseActivity()).rebuildMenu();
+                ((MainActivity) mView.getBaseActivity()).rebuildMenu();
             }
 
             @Override
