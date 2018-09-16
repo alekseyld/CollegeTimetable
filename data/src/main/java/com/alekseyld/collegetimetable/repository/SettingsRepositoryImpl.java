@@ -3,6 +3,7 @@ package com.alekseyld.collegetimetable.repository;
 import android.content.SharedPreferences;
 
 import com.alekseyld.collegetimetable.entity.Settings;
+import com.alekseyld.collegetimetable.entity.SettingsResponse;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -38,6 +39,15 @@ public class SettingsRepositoryImpl implements SettingsRepository {
         ed.putBoolean(NOTIFON_KEY, settings.getNotifOn());
         ed.apply();
         return true;
+    }
+
+    @Override
+    public Settings updateSettings(SettingsResponse settings) {
+        Settings settings1 = getSettings();
+        settings1.setAbbreviationMap(settings.getAbbreviationMap());
+        settings1.setRootUrl(settings.getRootUrl());
+        saveSettings(settings1);
+        return settings1;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.alekseyld.collegetimetable.entity;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -10,7 +12,9 @@ import java.util.Set;
 public class Settings {
 
     private Set<String> favoriteGroups = new HashSet<>();
-    private String notificationGroup;
+    private Map<String, String> abbreviationMap = new HashMap<>();
+    private String rootUrl = "";
+    private String notificationGroup = "";
     private boolean notifOn;
     private boolean alarmMode;
     private boolean changeMode;
@@ -105,4 +109,21 @@ public class Settings {
         this.teacherGroups.remove(favoriteGroup);
     }
 
+    public Map<String, String> getAbbreviationMap() {
+        return abbreviationMap;
+    }
+
+    public Settings setAbbreviationMap(Map<String, String> abbreviationMap) {
+        this.abbreviationMap = abbreviationMap;
+        return this;
+    }
+
+    public String getRootUrl() {
+        return rootUrl;
+    }
+
+    public Settings setRootUrl(String rootUrl) {
+        this.rootUrl = rootUrl;
+        return this;
+    }
 }

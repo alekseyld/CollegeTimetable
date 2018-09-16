@@ -1,6 +1,7 @@
 package com.alekseyld.collegetimetable.utils.repository;
 
 import com.alekseyld.collegetimetable.entity.Settings;
+import com.alekseyld.collegetimetable.entity.SettingsResponse;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 
 import java.util.HashSet;
@@ -30,5 +31,10 @@ public class SettingsRepositoryMock implements SettingsRepository {
          settings.setFavoriteGroups(new HashSet<>());
          settings.setNotificationGroup("");
         return settings;
+    }
+
+    @Override
+    public Settings updateSettings(SettingsResponse settings) {
+        return null;
     }
 }

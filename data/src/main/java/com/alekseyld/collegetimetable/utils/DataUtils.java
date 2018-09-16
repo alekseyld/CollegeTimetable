@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -30,10 +31,14 @@ public class DataUtils {
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
     public static String getGroupUrl(String group) {
-        return getGroupUrl("", group);
+        return getGroupUrl("", group, null);
     }
 
     public static String getGroupUrl(String root, String group) {
+        return getGroupUrl(root, group, null);
+    }
+
+    public static String getGroupUrl(String root, String group, Map<String, String> abbreviationMap) {
 
         if (group == null || !groupPatternWithoutNum.matcher(group).matches())
             return "";
@@ -61,10 +66,12 @@ public class DataUtils {
         }
 
         if (group.charAt(0) == '1' && neftGroups.contains(abbr)) {
-            url = switchAbbr("1");
+            url = switchAbbr(abbreviationMap,"1");
         } else {
-            url = switchAbbr(abbr);
+            url = switchAbbr(abbreviationMap, abbr);
         }
+
+        if (url == null) return "";
 
         if (root.equals(""))
             root = "http://uecoll.ru/wp-content/uploads/time/";
@@ -72,10 +79,21 @@ public class DataUtils {
         return url.equals("") ? url : root + url;
     }
 
-    private static String switchAbbr(String abbr) {
-        String json = "{\"1\": \"neft/10_1_10.html\",\"Т\": \"energy/10_1_8.html\",\"Э\": \"energy/10_1_7.html\",\"С\": \"energy/10_1_10.html\",\"Б\": \"energy/10_1_9.html\",\"В\": \"neft/10_1_4.html\",\"Л\": \"energy/10_1_3.html\",\"Р\": \"energy/10_1_4.html\",\"АПП\": \"neft/10_1_1.html\",\"БНГ\": \"neft/10_1_2.html\",\"ТО\": \"neft/10_1_3.html\",\"ПНГ\": \"neft/10_1_5.html\",\"ЭНН\": \"neft/10_1_6.html\",\"ЭННУ\": \"neft/10_1_6.html\",\"ТОВ\": \"neft/10_1_7.html\",\"ИС\": \"energy/10_1_1.html\",\"ГС\": \"energy/10_1_2.html\",\"ГСУ\": \"energy/10_1_2.html\",\"РУ\": \"energy/10_1_4.html\",\"ПГ\": \"energy/10_1_5.html\",\"ТС\": \"energy/10_1_6.html\",\"ТАК\": \"energy/10_1_8.html\"}";
-        HashMap<String, String> abbrMap = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>(){}.getType());
-        return abbrMap.get(abbr);
+    private static String switchAbbr(Map<String, String> abbreviationMap, String abbr) {
+        if (abbreviationMap == null || abbreviationMap.size() == 0) {
+            String json = "{\"1\": \"neft/10_1_10.html\",\"Т\": \"energy/10_1_8.html\",\"Э\": \"energy/10_1_7.html\",\"С\": \"energy/10_1_10.html\",\"Б\": \"energy/10_1_9.html\",\"В\": \"neft/10_1_4.html\",\"Л\": \"energy/10_1_3.html\",\"Р\": \"energy/10_1_4.html\",\"АПП\": \"neft/10_1_1.html\",\"БНГ\": \"neft/10_1_2.html\",\"ТО\": \"neft/10_1_3.html\",\"ПНГ\": \"neft/10_1_5.html\",\"ЭНН\": \"neft/10_1_6.html\",\"ЭННУ\": \"neft/10_1_6.html\",\"ТОВ\": \"neft/10_1_7.html\",\"ИС\": \"energy/10_1_1.html\",\"ГС\": \"energy/10_1_2.html\",\"ГСУ\": \"energy/10_1_2.html\",\"РУ\": \"energy/10_1_4.html\",\"ПГ\": \"energy/10_1_5.html\",\"ТС\": \"energy/10_1_6.html\",\"ТАК\": \"energy/10_1_8.html\"}";
+            abbreviationMap = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>() {
+            }.getType());
+        }
+
+        boolean contain = abbreviationMap.containsKey(abbr);
+
+        if (!contain && abbr.charAt(abbr.length() - 1) == 'У') {
+            abbr = abbr.substring(0, abbr.length() - 1);
+            contain = abbreviationMap.containsKey(abbr);
+        }
+
+        return contain ? abbreviationMap.get(abbr) : null;
 //        switch (abbr) {
 //            case "Т":
 //                return "energy/10_1_8.html";

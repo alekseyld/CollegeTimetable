@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 
 import com.alekseyld.collegetimetable.api.ProxyApi;
+import com.alekseyld.collegetimetable.api.SettingsApi;
 import com.alekseyld.collegetimetable.internal.di.PerActivity;
 import com.alekseyld.collegetimetable.navigator.NavigatorImpl;
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
@@ -15,6 +16,8 @@ import com.alekseyld.collegetimetable.service.SettingsService;
 import com.alekseyld.collegetimetable.service.SettingsServiceImpl;
 import com.alekseyld.collegetimetable.service.TableService;
 import com.alekseyld.collegetimetable.service.TableServiceImpl;
+
+import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -74,7 +77,12 @@ public class MainModule {
     }
 
     @PerActivity @Provides
-    ProxyApi provideProxyApi(Retrofit restAdapter){
+    ProxyApi provideProxyApi(@Named("proxy") Retrofit restAdapter){
         return restAdapter.create(ProxyApi.class);
+    }
+
+    @PerActivity @Provides
+    SettingsApi provideSettingsApi(@Named("settings") Retrofit restAdapter){
+        return restAdapter.create(SettingsApi.class);
     }
 }

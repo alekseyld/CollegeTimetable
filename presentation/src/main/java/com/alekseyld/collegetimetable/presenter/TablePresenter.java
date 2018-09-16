@@ -1,6 +1,7 @@
 package com.alekseyld.collegetimetable.presenter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
@@ -70,6 +71,24 @@ public class TablePresenter extends BasePresenter<TableView> {
         return mSettings != null ? mSettings.getNotificationGroup() : "";
     }
 
+    private void processGroupIncorectedMessage(String title) {
+        mView.showAlertDialog(title,
+                "Текущая группа: " + mView.getGroup() + "\n"
+                        + "Если Вы уверены в правильности набранной группы, пожалуйста сообщите мне об ошибке",
+                "Хорошо",
+                "Не сейчас",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String url = "https://vk.com/topic-167263982_39078750";
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(url));
+                        mView.getBaseActivity().startActivity(intent);
+                        dialog.dismiss();
+                    }
+                }, null);
+    }
+
     public void getTimeTable() {
         mView.showLoading();
 
@@ -90,7 +109,13 @@ public class TablePresenter extends BasePresenter<TableView> {
             public void onError(Throwable e) {
                 super.onError(e);
                 e.printStackTrace();
-                mView.showError(e.getMessage());
+
+                if (e.getMessage().contains("Некорректно введена группа")) {
+                    processGroupIncorectedMessage(e.getMessage());
+                } else {
+                    mView.showError(e.getMessage());
+                }
+
                 mView.hideLoading();
             }
 
@@ -116,7 +141,7 @@ public class TablePresenter extends BasePresenter<TableView> {
             public void onError(Throwable e) {
                 super.onError(e);
                 e.printStackTrace();
-                mView.showError("Он мертв, Джим");
+                mView.showError("Он мертв, Джим!");
                 mView.hideLoading();
             }
 

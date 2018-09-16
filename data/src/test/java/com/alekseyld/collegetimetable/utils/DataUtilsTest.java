@@ -4,13 +4,13 @@ import com.alekseyld.collegetimetable.entity.Day;
 import com.alekseyld.collegetimetable.entity.Lesson;
 import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.entity.TimeTable;
+import com.alekseyld.collegetimetable.service.TableService;
 import com.alekseyld.collegetimetable.service.TableServiceImpl;
 import com.alekseyld.collegetimetable.utils.api.ProxyApiMock;
+import com.alekseyld.collegetimetable.utils.api.SettingsApiMock;
 import com.alekseyld.collegetimetable.utils.repository.SettingsRepositoryMock;
 import com.alekseyld.collegetimetable.utils.repository.TableRepositoryMock;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.junit.Test;
 
 import java.util.List;
@@ -26,6 +26,14 @@ public class DataUtilsTest{
     public void getEmptyWeekTimeTable() throws Exception {
 
         assertTrue(DataUtils.getEmptyWeekTimeTable(7, 7, true).getDayList().size() == 7);
+    }
+
+    @Test
+    public void checkSettingsApiMock() throws Exception {
+
+        assertTrue(
+                new SettingsApiMock().getSettings().toBlocking().first().getRootUrl()
+                        .equals("http://109.195.146.243/wp-content/uploads/time/"));
     }
 
     @Test
@@ -66,28 +74,40 @@ public class DataUtilsTest{
         assertTrue(DataUtils.getGroupUrl("2 БНГ-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_2.html"));
         assertTrue(DataUtils.getGroupUrl("2 В-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_4.html"));
         assertTrue(DataUtils.getGroupUrl("2 ПНГ-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_5.html"));
-        assertTrue(DataUtils.getGroupUrl("2 ТАК-1").equals("http://uecoll.ru/wp-content/uploads/time/energy/10_1_9.html"));
+        assertTrue(DataUtils.getGroupUrl("2 ТАК-1").equals("http://uecoll.ru/wp-content/uploads/time/energy/10_1_8.html"));
         assertTrue(DataUtils.getGroupUrl("2 ТОВ-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_7.html"));
 
-        assertTrue(DataUtils.getGroupUrl("1 ТО-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
-        assertTrue(DataUtils.getGroupUrl("1 ЭННУ-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
-        assertTrue(DataUtils.getGroupUrl("1 ЭННУ").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
-        assertTrue(DataUtils.getGroupUrl("1 ЭНН-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
-        assertTrue(DataUtils.getGroupUrl("1 АПП-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
-        assertTrue(DataUtils.getGroupUrl("1 БНГ-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
-        assertTrue(DataUtils.getGroupUrl("1 В-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
-        assertTrue(DataUtils.getGroupUrl("1 ПНГ-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
-        assertTrue(DataUtils.getGroupUrl("1 ТАК-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
-        assertTrue(DataUtils.getGroupUrl("1 ТОВ-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_8.html"));
+        assertTrue(DataUtils.getGroupUrl("1 ТО-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_10.html"));
+        assertTrue(DataUtils.getGroupUrl("1 ЭННУ-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_10.html"));
+        assertTrue(DataUtils.getGroupUrl("1 ЭННУ").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_10.html"));
+        assertTrue(DataUtils.getGroupUrl("1 ЭНН-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_10.html"));
+        assertTrue(DataUtils.getGroupUrl("1 АПП-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_10.html"));
+        assertTrue(DataUtils.getGroupUrl("1 БНГ-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_10.html"));
+        assertTrue(DataUtils.getGroupUrl("1 В-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_10.html"));
+        assertTrue(DataUtils.getGroupUrl("1 ПНГ-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_10.html"));
+        assertTrue(DataUtils.getGroupUrl("1 ТАК-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_10.html"));
+        assertTrue(DataUtils.getGroupUrl("1 ТОВ-1").equals("http://uecoll.ru/wp-content/uploads/time/neft/10_1_10.html"));
+    }
+
+    private TableService getMockTableService(String group, String url) {
+        SettingsRepositoryMock settingsRepositoryMock = new SettingsRepositoryMock();
+
+        Settings settings = settingsRepositoryMock.getSettings();
+        settings.setNotificationGroup(group);
+        return new TableServiceImpl(
+                new TableRepositoryMock(),
+                settingsRepositoryMock,
+                new ProxyApiMock().setFromTestPages(true).setTestPages(url),
+                new SettingsApiMock()
+        );
     }
 
     // 3 АПП-1
     @Test
     public void parseTestTimetable3APP1_1() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_1").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+        TableService tableService = getMockTableService("3 АПП-1","https://alekseyld.github.io/CollegeTimetable/timetable_app_days_1");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(false, "3 АПП-1").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 
@@ -115,7 +135,7 @@ public class DataUtilsTest{
 
         // another group
 
-        tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+        tableWrapper = tableService.getTimetableFromOnline(true, "4 АПП-2").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 
@@ -139,25 +159,27 @@ public class DataUtilsTest{
         assertTrue(lessons.get(5).getTeacher().equals(""));
         assertTrue(lessons.get(6).getDoubleName().equals("\u00A0"));
         assertTrue(lessons.get(6).getTeacher().equals(""));
+    }
 
+    @Test
+    public void tesDataUtilsParseDocumentt() throws Exception {
         // empty group
 
-        tableWrapper = DataUtils.parseDocument(document, "4 ЭНН-2");
+        TimeTable tableWrapper = DataUtils.parseDocument(null, "4 ЭНН-2");
         assertTrue(tableWrapper.getDayList().size() == 0);
 
         tableWrapper = DataUtils.parseDocument(null, "4 АПП-2");
         assertTrue(tableWrapper.getDayList().size() == 0);
 
-        tableWrapper = DataUtils.parseDocument(document, "111441");
+        tableWrapper = DataUtils.parseDocument(null, "111441");
         assertTrue(tableWrapper.getDayList().size() == 0);
     }
 
     @Test
     public void parseTestTimetable3APP1_2() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_2").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+        TableService tableService = getMockTableService("3 АПП-1","https://alekseyld.github.io/CollegeTimetable/timetable_app_days_2");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(false, "3 АПП-1").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 
@@ -192,9 +214,8 @@ public class DataUtilsTest{
     @Test
     public void parseTestTimetable3APP1_3() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_3").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+        TableService tableService = getMockTableService("3 АПП-1","https://alekseyld.github.io/CollegeTimetable/timetable_app_days_3");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "3 АПП-1").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 
@@ -248,9 +269,8 @@ public class DataUtilsTest{
     @Test
     public void parseTestTimetable3APP1_4() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_4").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+        TableService tableService = getMockTableService("3 АПП-1","https://alekseyld.github.io/CollegeTimetable/timetable_app_days_4");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "3 АПП-1").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 
@@ -307,9 +327,8 @@ public class DataUtilsTest{
     @Test
     public void parseTestTimetable3APP1_5() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_5").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+        TableService tableService = getMockTableService("3 АПП-1","https://alekseyld.github.io/CollegeTimetable/timetable_app_days_5");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "3 АПП-1").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 
@@ -377,9 +396,8 @@ public class DataUtilsTest{
     @Test
     public void parseTestTimetable3APP1_6() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_6").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+        TableService tableService = getMockTableService("3 АПП-1","https://alekseyld.github.io/CollegeTimetable/timetable_app_days_6");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "3 АПП-1").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 
@@ -458,9 +476,8 @@ public class DataUtilsTest{
     @Test
     public void parseTestTimetable3APP1_7() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_all_week").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "3 АПП-1");
+        TableService tableService = getMockTableService("3 АПП-1","https://alekseyld.github.io/CollegeTimetable/timetable_app_all_week");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "3 АПП-1").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 
@@ -551,9 +568,8 @@ public class DataUtilsTest{
     @Test
     public void parseTestTimetable4APP2_1() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_1").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+        TableService tableService = getMockTableService("3 АПП-1","https://alekseyld.github.io/CollegeTimetable/timetable_app_days_1");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "4 АПП-2").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 
@@ -581,9 +597,8 @@ public class DataUtilsTest{
     @Test
     public void parseTestTimetable4APP2_2() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_2").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+        TableService tableService = getMockTableService("3 АПП-1","https://alekseyld.github.io/CollegeTimetable/timetable_app_days_2");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "4 АПП-2").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 
@@ -622,9 +637,8 @@ public class DataUtilsTest{
     @Test
     public void parseTestTimetable4APP2_3() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_3").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+        TableService tableService = getMockTableService("3 АПП-1","https://alekseyld.github.io/CollegeTimetable/timetable_app_days_3");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "4 АПП-2").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 
@@ -676,9 +690,8 @@ public class DataUtilsTest{
     @Test
     public void parseTestTimetable4APP2_4() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_4").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+        TableService tableService = getMockTableService("3 АПП-1","https://alekseyld.github.io/CollegeTimetable/timetable_app_days_4");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "4 АПП-2").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 
@@ -750,9 +763,8 @@ public class DataUtilsTest{
     @Test
     public void parseTestTimetable4APP2_5() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_5").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+        TableService tableService = getMockTableService("3 АПП-1","https://alekseyld.github.io/CollegeTimetable/timetable_app_days_5");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "4 АПП-2").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 
@@ -824,9 +836,8 @@ public class DataUtilsTest{
     @Test
     public void parseTestTimetable4APP2_6() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_days_6").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+        TableService tableService = getMockTableService("3 АПП-1","https://alekseyld.github.io/CollegeTimetable/timetable_app_days_6");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "4 АПП-2").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 
@@ -910,9 +921,8 @@ public class DataUtilsTest{
     @Test
     public void parseTestTimetable4APP2_7() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_app_all_week").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "4 АПП-2");
+        TableService tableService = getMockTableService("3 АПП-1","https://alekseyld.github.io/CollegeTimetable/timetable_app_all_week");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "4 АПП-2").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 
@@ -1020,7 +1030,8 @@ public class DataUtilsTest{
         TableServiceImpl tableRepository = new TableServiceImpl(
                 new TableRepositoryMock(),
                 settingsRepositoryMock,
-                new ProxyApiMock().setFromTestPages(true)
+                new ProxyApiMock().setFromTestPages(true),
+                new SettingsApiMock()
         );
 
         TimeTable tableWrapper = tableRepository.getTeacherTimeTable(false, settings.getNotificationGroup(), settings.getTeacherGroups()).toBlocking().first();
@@ -1114,9 +1125,8 @@ public class DataUtilsTest{
     @Test
     public void parseTestTimetable1PNG1_7() throws Exception {
 
-        Document document = Jsoup.connect("https://alekseyld.github.io/CollegeTimetable/timetable_1.html").timeout(0).get();
-
-        TimeTable tableWrapper = DataUtils.parseDocument(document, "1 ПНГ-1");
+        TableService tableService = getMockTableService("1 ПНГ-1","https://alekseyld.github.io/CollegeTimetable/timetable_1.html");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "1 ПНГ-1").toBlocking().first();
 
         assertTrue(tableWrapper.getDayList() != null);
 

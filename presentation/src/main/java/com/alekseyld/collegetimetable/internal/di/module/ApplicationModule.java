@@ -7,8 +7,8 @@ import com.alekseyld.collegetimetable.UIThread;
 import com.alekseyld.collegetimetable.executor.JobExecutor;
 import com.alekseyld.collegetimetable.executor.PostExecutionThread;
 import com.alekseyld.collegetimetable.executor.ThreadExecutor;
-import com.google.gson.Gson;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -24,7 +24,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class ApplicationModule {
     private final AndroidApplication application;
-    private static final String HOST = "http://noblockme.ru/api/";
+    static final String HOST_PROXY = "http://noblockme.ru/api/";
+    static final String HOST_SETTINGS = "https://alekseyld.github.io/CollegeTimetable/";
 
     public ApplicationModule(AndroidApplication application) {
         this.application = application;
@@ -46,9 +47,17 @@ public class ApplicationModule {
         return jobExecutor;
     }
 
-    @Provides @Singleton Retrofit provideRestAdapter(){
+    @Provides @Singleton @Named("proxy") Retrofit provideRestAdapter(){
         return new Retrofit.Builder()
-                .baseUrl(HOST)
+                .baseUrl(HOST_PROXY)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+    }
+
+    @Provides @Singleton @Named("settings") Retrofit provideRestSettingsAdapter(){
+        return new Retrofit.Builder()
+                .baseUrl(HOST_SETTINGS)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();

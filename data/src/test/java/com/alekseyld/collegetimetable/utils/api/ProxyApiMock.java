@@ -8,6 +8,7 @@ import rx.Observable;
 public class ProxyApiMock implements ProxyApi {
 
     boolean fromTestPages = false;
+    String testPages = "https://alekseyld.github.io/CollegeTimetable/timetable_app_all_week";
 
     @Override
     public Observable<ApiResponse> getUrl(String urls) {
@@ -15,7 +16,7 @@ public class ProxyApiMock implements ProxyApi {
         apiResponse.setStatus(0);
 
         if (fromTestPages) {
-            apiResponse.setResult("https://alekseyld.github.io/CollegeTimetable/timetable_app_all_week");
+            apiResponse.setResult(testPages);
         } else {
             apiResponse.setResult(urls.replace("uecoll.ru", "ovswg33mnqxhe5i.nblz.ru"));
         }
@@ -29,6 +30,15 @@ public class ProxyApiMock implements ProxyApi {
 
     public ProxyApiMock setFromTestPages(boolean fromTestPages) {
         this.fromTestPages = fromTestPages;
+        return this;
+    }
+
+    public String getTestPages() {
+        return testPages;
+    }
+
+    public ProxyApiMock setTestPages(String testPages) {
+        this.testPages = testPages;
         return this;
     }
 }

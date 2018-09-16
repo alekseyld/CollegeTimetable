@@ -7,6 +7,7 @@ import com.alekseyld.collegetimetable.executor.ThreadExecutor;
 import com.alekseyld.collegetimetable.internal.di.module.ApplicationModule;
 import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -25,5 +26,6 @@ public interface ApplicationComponent {
     Context context();
     ThreadExecutor threadExecutor();
     PostExecutionThread postExecutionThread();
-    Retrofit provideRestAdapter();
+    @Named("proxy") Retrofit provideRestAdapter();
+    @Named("settings") Retrofit provideRestSettingsAdapter();
 }

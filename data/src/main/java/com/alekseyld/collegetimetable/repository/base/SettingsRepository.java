@@ -1,6 +1,7 @@
 package com.alekseyld.collegetimetable.repository.base;
 
 import com.alekseyld.collegetimetable.entity.Settings;
+import com.alekseyld.collegetimetable.entity.SettingsResponse;
 
 /**
  * Created by Alekseyld on 04.09.2016.
@@ -18,6 +19,7 @@ public interface SettingsRepository {
     String FAVORITEGROUPS_KEY = "FavoriteGroups";
 
     boolean saveSettings(Settings settings);
+    Settings updateSettings(SettingsResponse settings);
     Settings getSettings();
 
 }

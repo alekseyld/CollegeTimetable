@@ -1,9 +1,11 @@
 package com.alekseyld.collegetimetable.service;
 
 import com.alekseyld.collegetimetable.api.ProxyApi;
+import com.alekseyld.collegetimetable.api.SettingsApi;
 import com.alekseyld.collegetimetable.entity.ApiResponse;
 import com.alekseyld.collegetimetable.entity.Day;
 import com.alekseyld.collegetimetable.entity.Lesson;
+import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.exception.UncriticalException;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
@@ -32,18 +34,47 @@ public class TableServiceImpl implements TableService {
 
     private TableRepository mTimetableRepository;
     private SettingsRepository mSettingsRepository;
-    private ProxyApi urlApi;
-
+    private ProxyApi mUrlApi;
+    private SettingsApi mSettingsApi;
 
     @Inject
-    public TableServiceImpl(TableRepository tableRepository, SettingsRepository settingsRepository, ProxyApi urlApi) {
+    public TableServiceImpl(TableRepository tableRepository,
+                            SettingsRepository settingsRepository,
+                            ProxyApi urlApi,
+                            SettingsApi settingsApi) {
         mSettingsRepository = settingsRepository;
         mTimetableRepository = tableRepository;
-        this.urlApi = urlApi;
+        this.mUrlApi = urlApi;
+        this.mSettingsApi = settingsApi;
+    }
+
+    private Observable<String> updateSettingsOnlineAndGetUrl(String group) {
+        return updateSettingsOnline()
+                .map(settings -> DataUtils.getGroupUrl(settings.getRootUrl(), group, settings.getAbbreviationMap()));
+    }
+
+    private Observable<Settings> updateSettingsOnline() {
+        return mSettingsApi.getSettings()
+                .map(settingsResponse -> mSettingsRepository.updateSettings(settingsResponse));
+    }
+
+    private Observable<Settings> getSettings() {
+        return Observable.just(mSettingsRepository.getSettings());
+    }
+
+    private Observable<String> getGroupUrl(final String group) {
+        return getSettings()
+                .map(settings -> DataUtils.getGroupUrl(settings.getRootUrl(), group, settings.getAbbreviationMap()))
+                .flatMap(url -> {
+                    if (!url.equals("")) return Observable.just(url);
+                    return Observable.error(new UncriticalException("empty"));
+                })
+                .onErrorResumeNext(throwable -> updateSettingsOnlineAndGetUrl(group));
     }
 
     private Observable<Document> connectAndGetData(String group) {
-        return urlApi.getUrl(DataUtils.getGroupUrl(group))
+        return getGroupUrl(group)
+                .flatMap(url -> mUrlApi.getUrl(url))
                 .onErrorReturn((error) -> {
                     ApiResponse apiResponse = new ApiResponse();
 
@@ -54,22 +85,24 @@ public class TableServiceImpl implements TableService {
                     }
 
                     return apiResponse;
-                }).map(apiResponse -> {
+                }).flatMap(apiResponse -> {
                     Document document;
 
                     try {
                         document = Jsoup.connect(apiResponse.getResult()).timeout(5000).get();
-                    } catch (IOException | IllegalArgumentException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
 
                         document = null;
+                    } catch (IllegalArgumentException e1) {
+                        return Observable.error(new UncriticalException("Некорректно введена группа"));
                     }
 
-                    return document;
-                }).map(document -> {
+                    return Observable.just(document);
+                }).flatMap(document -> {
                     if (document != null && !document.title().equals("NoBlockMe.ru - бесплатный анонимайзер для ВКонтакте и Одноклассники")
                             && document.html().contains("<body bgcolor=\"bbbbbb\">"))
-                        return document;
+                        return Observable.just(document);
 
                     try {
                         for (int i = 0; i < 5; i++) {
@@ -81,21 +114,25 @@ public class TableServiceImpl implements TableService {
                         e.printStackTrace();
 
                         document = null;
+                    } catch (IllegalArgumentException e1) {
+                        return Observable.error(new UncriticalException("Некорректно введена группа."));
                     }
 
-                    return document;
-                }).map(document -> {
+                    return Observable.just(document);
+                }).flatMap(document -> {
                     if (document != null && document.html().contains("<body bgcolor=\"bbbbbb\">"))
-                        return document;
+                        return Observable.just(document);
 
                     try {
                         document = Jsoup.connect(DataUtils.getGroupUrl("http://109.195.146.243/wp-content/uploads/time/", group)).timeout(5000).get();
                     } catch (IOException e) {
                         e.printStackTrace();
                         document = null;
+                    } catch (IllegalArgumentException e1) {
+                        return Observable.error(new UncriticalException("Некорректно введена группа"));
                     }
 
-                    return document;
+                    return Observable.just(document);
                 }).flatMap(document -> {
                     if (document == null || !document.html().contains("<body bgcolor=\"bbbbbb\">")) {
                         return Observable.error(new UncriticalException("Не удалось подключиться к сайту (0:1)"));
@@ -114,7 +151,7 @@ public class TableServiceImpl implements TableService {
             return Observable.just(document);
         }).map(document -> DataUtils.parseDocument(document, group)).flatMap(tableWrapper -> {
             if (tableWrapper.getDayList() == null || tableWrapper.getDayList().size() == 0)
-                return Observable.error(new UncriticalException("Timetable null or empty (2)"));
+                return Observable.error(new UncriticalException("Ну удалось получить расписание (2)"));
             return Observable.just(tableWrapper);
         }).map(tableWrapper -> {
             mTimetableRepository.putTimeTable(tableWrapper, group);

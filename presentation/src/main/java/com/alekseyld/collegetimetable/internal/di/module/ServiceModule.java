@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.alekseyld.collegetimetable.UIThread;
 import com.alekseyld.collegetimetable.api.ProxyApi;
+import com.alekseyld.collegetimetable.api.SettingsApi;
 import com.alekseyld.collegetimetable.executor.JobExecutor;
 import com.alekseyld.collegetimetable.executor.PostExecutionThread;
 import com.alekseyld.collegetimetable.executor.ThreadExecutor;
@@ -17,6 +18,7 @@ import com.alekseyld.collegetimetable.service.SettingsServiceImpl;
 import com.alekseyld.collegetimetable.service.TableService;
 import com.alekseyld.collegetimetable.service.TableServiceImpl;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -26,6 +28,8 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.alekseyld.collegetimetable.internal.di.module.ApplicationModule.HOST_PROXY;
+import static com.alekseyld.collegetimetable.internal.di.module.ApplicationModule.HOST_SETTINGS;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 /**
@@ -37,7 +41,6 @@ import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAM
 public class ServiceModule {
 
     private final IntentService mService;
-    private static final String HOST = "http://noblockme.ru/api/";
 
     public ServiceModule(IntentService service){
         mService = service;
@@ -93,14 +96,28 @@ public class ServiceModule {
 
     @Singleton
     @Provides
-    ProxyApi provideProxyApi(Retrofit restAdapter){
+    ProxyApi provideProxyApi(@Named("proxy") Retrofit restAdapter){
         return restAdapter.create(ProxyApi.class);
     }
 
-    @Provides @Singleton
+    @Singleton
+    @Provides
+    SettingsApi provideSettingsApi(@Named("settings") Retrofit restAdapter){
+        return restAdapter.create(SettingsApi.class);
+    }
+
+    @Provides @Singleton @Named("proxy")
     Retrofit provideRestAdapter(){
         return new Retrofit.Builder()
-                .baseUrl(HOST)
+                .baseUrl(HOST_PROXY)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+    }
+
+    @Provides @Singleton @Named("settings") Retrofit provideRestSettingsAdapter(){
+        return new Retrofit.Builder()
+                .baseUrl(HOST_SETTINGS)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();

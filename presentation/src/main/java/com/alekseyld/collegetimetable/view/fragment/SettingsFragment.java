@@ -32,36 +32,28 @@ import butterknife.ButterKnife;
 
 public class SettingsFragment extends BaseFragment<SettingsPresenter> implements SettingsView {
 
-    public static SettingsFragment newInstance(){
-        return new SettingsFragment();
-    }
-
     @BindView(R.id.teacherMode)
     Switch teachMode;
-
     @BindView(R.id.addFarvorite)
     TextView addFarvorite;
-
     @BindView(R.id.addNotif)
     LinearLayout addNotif;
-
     @BindView(R.id.addNotif_title)
     TextView addNotifTitle;
-
     @BindView(R.id.my_group_value)
     TextView addNotifValue;
-
     @BindView(R.id.addTeacherGroup)
     TextView addTeacherGroup;
-
     @BindView(R.id.alarmMode)
     Switch alarmMode;
-
     @BindView(R.id.notifOn)
     Switch notifOn;
-
     @BindView(R.id.changeMode)
     Switch changeMode;
+
+    public static SettingsFragment newInstance() {
+        return new SettingsFragment();
+    }
 
     @Nullable
     @Override
@@ -73,7 +65,7 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         addFarvorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    showAddFavoriteDialog();
+                showAddFavoriteDialog();
             }
         });
 
@@ -123,19 +115,23 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         teachMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSubmitDialog("Вы точно хотите перейти в режим преподавателя? Все данные будут утеряны.", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mPresenter.saveTeacherMode(teachMode.isChecked());
-                        addNotifTitle.startAnimation(getTeacherTitleAnimation());
-                    }
-                }, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        teachMode.setChecked(!teachMode.isChecked());
-                    }
-                });
+                showAlertDialog("Вы точно хотите перейти в режим преподавателя? ",
+                        "Все данные будут утеряны!",
+                        "Да",
+                        "Нет",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mPresenter.saveTeacherMode(teachMode.isChecked());
+                                addNotifTitle.startAnimation(getTeacherTitleAnimation());
+                            }
+                        }, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                teachMode.setChecked(!teachMode.isChecked());
+                            }
+                        });
             }
         });
 
@@ -158,6 +154,7 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
             public void onAnimationStart(Animation animation) {
 
             }
+
             @Override
             public void onAnimationEnd(Animation animation) {
 
@@ -204,21 +201,21 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         }
     }
 
-    public void saveNotification(String group){
+    public void saveNotification(String group) {
         mPresenter.saveNotification(group);
     }
 
-    private void showAddNotif(boolean teacherMode){
+    private void showAddNotif(boolean teacherMode) {
         GroupInputDialogFragment groupInputDialogFragment = GroupInputDialogFragment.newInstance(false, teacherMode);
         groupInputDialogFragment.setTargetFragment(this, 1);
         groupInputDialogFragment.show(getFragmentManager(), GroupInputDialogFragment.class.getSimpleName());
     }
 
-    private void showAddFavoriteDialog(){
+    private void showAddFavoriteDialog() {
         getBaseActivity().startActivity(SettingsFavoriteActivity.class);
     }
 
-    private void showAddTeacherDialog(){
+    private void showAddTeacherDialog() {
         Intent intent = new Intent(getActivity(), SettingsFavoriteActivity.class);
         intent.putExtra("teacherMode", true);
         getActivity().startActivity(intent);

@@ -66,14 +66,18 @@ public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fra
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
-    protected void showSubmitDialog(String title,
+    public void showAlertDialog(String title,
+                                    @Nullable String text,
+                                    String positiveText,
+                                    String negativeText,
                                     DialogInterface.OnClickListener positiveOperation,
                                     @Nullable  DialogInterface.OnClickListener negativeOperation) {
         new AlertDialog.Builder(getContext())
                 .setTitle(title)
+                .setMessage(text)
                 .setCancelable(false)
-                .setPositiveButton("Да", positiveOperation)
-                .setNegativeButton("Нет", negativeOperation != null ? negativeOperation : new DialogInterface.OnClickListener() {
+                .setPositiveButton(positiveText, positiveOperation)
+                .setNegativeButton(negativeText, negativeOperation != null ? negativeOperation : new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

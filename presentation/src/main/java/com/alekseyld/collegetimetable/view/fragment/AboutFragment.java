@@ -48,7 +48,8 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
                 "Версия: " + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ") " + " " + BuildConfig.BUILD_TYPE,
                 getString(R.string.info_star),
                 getString(R.string.disclaimer),
-                getString(R.string.github)
+                getString(R.string.github),
+                getString(R.string.group_about)
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
@@ -60,10 +61,7 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
                     case 0:
-                        String url = "https://vk.com/alekseyld";
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(url));
-                        startActivity(intent);
+                        openLink("https://vk.com/alekseyld");
                         break;
                     case 2:
                         Uri uri = Uri.parse("market://details?id=" + getContext().getPackageName());
@@ -85,19 +83,24 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
                         AlertDialog alert = builder.create();
                         alert.show();
                         break;
-                    case 5:
-                        String url1 = "https://github.com/alekseyld/CollegeTimetable";
-                        Intent intent1 = new Intent(Intent.ACTION_VIEW);
-                        intent1.setData(Uri.parse(url1));
-                        startActivity(intent1);
+                    case 4:
+                        openLink("https://github.com/alekseyld/CollegeTimetable");
                         break;
-
+                    case 5:
+                        openLink("https://vk.com/utec_time");
+                        break;
                 }
 
             }
         });
 
         return v;
+    }
+
+    private void openLink(String url) {
+        Intent intent1 = new Intent(Intent.ACTION_VIEW);
+        intent1.setData(Uri.parse(url));
+        startActivity(intent1);
     }
 
     @Override

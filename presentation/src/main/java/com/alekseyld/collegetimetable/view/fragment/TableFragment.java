@@ -84,7 +84,8 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
         ButterKnife.bind(this, v);
 
-        getActivity().setTitle(R.string.app_name);
+        if (getActivity() != null)
+            getActivity().setTitle(R.string.app_name);
         setHasOptionsMenu(true);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -119,17 +120,15 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         }
     }
 
-    @Override
-    public void presenterReady() {
-
-        showPhoneStatePermission();
+    private void processArgumentsGroup() {
+        if (getArguments() == null || !getArguments().containsKey(GROUP_KEY)) return;
 
         if(getArguments().containsKey(GROUP_KEY)) {
             String s = getArguments().getString(GROUP_KEY);
             mGroup = s == null || s.equals("") ? mPresenter.getGroup() : s;
         }
 
-        if(mGroup != null && !mGroup.equals("")){
+        if(getActivity() != null && mGroup != null && !mGroup.equals("")){
             if (DataUtils.fioPattern.matcher(mGroup).find()) {
                 getActivity().setTitle("Преподаватель: " + mGroup);
             } else {
@@ -138,9 +137,17 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
             Crashlytics.setString("Group", mGroup);
         }
+    }
+
+    @Override
+    public void presenterReady() {
+        showPhoneStatePermission();
+
+        processArgumentsGroup();
 
         mPresenter.getTableFromOffline();
     }
+
 
     private void showPhoneStatePermission() {
         if (getActivity() == null)

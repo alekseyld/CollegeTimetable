@@ -67,4 +67,5 @@
     <string name="teacherSettingTitle">Настройки преподавателя</string>
     <string name="teache_mode_title">Режим преподавателя (beta)</string>
     <string name="addTeacherGroup">Группы преподавателя</string>
+    <string name="group_about">Группа в VK</string>
 </resources>
