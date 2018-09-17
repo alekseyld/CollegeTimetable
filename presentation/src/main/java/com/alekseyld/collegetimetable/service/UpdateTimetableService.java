@@ -42,20 +42,23 @@ import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAM
  */
 
 public class UpdateTimetableService extends IntentService {
-    private final String LOG_TAG = "ServiceLog";
     public final static String SERVICE_NAME = "UpdateTimetableService";
     public static boolean isRunning = false;
-
+    private final String LOG_TAG = "ServiceLog";
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
+     * <p>
      * UpdateTimetableService Used to name the worker thread, important only for debugging.
      */
 
-    @Inject GetSettingsUseCase mGetSettingsUseCase;
-    @Inject GetTableFromOnlineUseCase mGetTableFromOnlineUseCase;
-    @Inject GetTableFromOfflineUseCase mGetTableFromOfflineUseCase;
-    @Inject SaveTableUseCase mSaveTableUseCase;
+    @Inject
+    GetSettingsUseCase mGetSettingsUseCase;
+    @Inject
+    GetTableFromOnlineUseCase mGetTableFromOnlineUseCase;
+    @Inject
+    GetTableFromOfflineUseCase mGetTableFromOfflineUseCase;
+    @Inject
+    SaveTableUseCase mSaveTableUseCase;
 
     private Settings mSettings;
 
@@ -76,7 +79,7 @@ public class UpdateTimetableService extends IntentService {
                 .apply();
     }
 
-    private void initializeInjector(){
+    private void initializeInjector() {
         DaggerServiceComponent.builder()
                 .serviceModule(new ServiceModule(this))
                 .build()
@@ -98,46 +101,103 @@ public class UpdateTimetableService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.d(LOG_TAG, "onHandleIntent");
 
-        mGetSettingsUseCase.execute(new BaseSubscriber<Settings>(){
+        mGetSettingsUseCase.execute(new BaseSubscriber<Settings>() {
             @Override
             public void onNext(Settings settings) {
                 mSettings = settings;
             }
+
             @Override
             public void onCompleted() {
-                if(mSettings != null
+                if (mSettings != null
                         && mSettings.getNotificationGroup() != null
                         && !mSettings.getNotificationGroup().equals("")
                         && mSettings.getNotifOn()) {
-                    if(isOnline())
+                    if (isOnline())
                         getTimeTableOnline();
-                }else {
+                } else {
                     stopSelf();
                 }
             }
         });
     }
 
-    private void getTimeTableOnline(){
-        if (DataUtils.fioPattern.matcher(mSettings.getNotificationGroup()).find()) {
-            mGetTableFromOnlineUseCase.setTeacherGroup(mSettings.getTeacherGroups());
-        }
-        mGetTableFromOnlineUseCase.setGroup(mSettings.getNotificationGroup());
-        mGetTableFromOnlineUseCase.setOnline(isOnline());
-        mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>(){
+    private void getTimeTableOnline() {
+//        if (DataUtils.fioPattern.matcher(mSettings.getNotificationGroup()).find()) {
+//            mGetTableFromOnlineUseCase.setTeacherGroup(mSettings.getTeacherGroups());
+//        }
+//        mGetTableFromOnlineUseCase.setGroup(mSettings.getNotificationGroup());
+//        mGetTableFromOnlineUseCase.setOnline(isOnline());
+//        mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>(){
+//            @Override
+//            public void onNext(final TimeTable timeTable) {
+//                mGetTableFromOfflineUseCase.setGroup(mSettings.getNotificationGroup());
+//                mGetTableFromOfflineUseCase.execute(new BaseSubscriber<TimeTable>() {
+//
+//                    @Override
+//                    public void onNext(TimeTable oldTimeTable) {
+//                        super.onNext(oldTimeTable);
+//
+//                        if(timeTable != null
+//                                && timeTable.getDayList() != null
+//                                && timeTable.getDayList().size() > 0
+//                                && isTimeTableChanged(oldTimeTable, timeTable)){
+//
+//                            Log.d(LOG_TAG, "Timetable change");
+//
+//                            saveTimeTable(timeTable);
+////                            if(!mSettings.getAlarmMode()){
+////                                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+////                                v.vibrate(300);
+////                            }
+//
+//                            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+//
+//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                                NotificationChannel channel = new NotificationChannel("notify_001",
+//                                        "Channel timetable app",
+//                                        NotificationManager.IMPORTANCE_DEFAULT);
+//                                NotificationManager mNotificationManager =
+//                                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//                                if (mNotificationManager != null)
+//                                    mNotificationManager.createNotificationChannel(channel);
+//                            }
+//                            notificationManager.cancelAll();
+//                            notificationManager.notify(NotificationID.getID(), getChangeNotification("Изменение в расписании"));
+//                        }
+//
+//                        planRunning(20 * 60 * 1000);
+//                        stopSelf();
+//                    }
+//                });
+//            }
+//            @Override
+//            public void onError(Throwable e) {
+//                super.onError(e);
+//                planRunning(60 * 1000);
+//                stopSelf();
+//            }
+//        });
+
+        mGetTableFromOfflineUseCase.setGroup(mSettings.getNotificationGroup());
+        mGetTableFromOfflineUseCase.execute(new BaseSubscriber<TimeTable>() {
             @Override
-            public void onNext(final TimeTable timeTable) {
-                mGetTableFromOfflineUseCase.setGroup(mSettings.getNotificationGroup());
-                mGetTableFromOfflineUseCase.execute(new BaseSubscriber<TimeTable>() {
+            public void onNext(final TimeTable oldTimeTable) {
+                if (DataUtils.fioPattern.matcher(mSettings.getNotificationGroup()).find()) {
+                    mGetTableFromOnlineUseCase.setTeacherGroup(mSettings.getTeacherGroups());
+                }
+                mGetTableFromOnlineUseCase.setGroup(mSettings.getNotificationGroup());
+                mGetTableFromOnlineUseCase.setOnline(isOnline());
+                mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>() {
 
                     @Override
-                    public void onNext(TimeTable oldTimeTable) {
-                        super.onNext(oldTimeTable);
+                    public void onNext(TimeTable timeTable) {
+                        super.onNext(timeTable);
 
-                        if(timeTable != null
+                        if (timeTable != null
                                 && timeTable.getDayList() != null
                                 && timeTable.getDayList().size() > 0
-                                && isTimeTableChanged(oldTimeTable, timeTable)){
+                                && isTimeTableChanged(oldTimeTable, timeTable)) {
 
                             Log.d(LOG_TAG, "Timetable change");
 
@@ -165,12 +225,20 @@ public class UpdateTimetableService extends IntentService {
                         planRunning(20 * 60 * 1000);
                         stopSelf();
                     }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        planRunning(60 * 1000);
+                        stopSelf();
+                    }
                 });
             }
+
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                planRunning(60 * 1000);
+                planRunning(20 * 60 * 1000);
                 stopSelf();
             }
         });
@@ -191,14 +259,14 @@ public class UpdateTimetableService extends IntentService {
 
     private boolean isTimeTableChanged(TimeTable oldTimeTable, TimeTable timeTable) {
         if (oldTimeTable == null
-                || oldTimeTable.getDayList().size() == 0){
+                || oldTimeTable.getDayList().size() == 0) {
             return true;
         }
 
         for (int day = 0; day < timeTable.getDayList().size(); day++) {
             for (int lesson = 0; lesson < 7; lesson++) {
                 if (!oldTimeTable.getDayList().get(day).getDayLessons().get(lesson).getDoubleName()
-                        .equals(timeTable.getDayList().get(day).getDayLessons().get(lesson).getDoubleName())){
+                        .equals(timeTable.getDayList().get(day).getDayLessons().get(lesson).getDoubleName())) {
                     return true;
                 }
             }
@@ -207,7 +275,7 @@ public class UpdateTimetableService extends IntentService {
         return false;
     }
 
-    private void saveTimeTable(TimeTable timeTable){
+    private void saveTimeTable(TimeTable timeTable) {
         mSaveTableUseCase.setTimeTable(timeTable);
         mSaveTableUseCase.setGroup(mSettings.getNotificationGroup());
         mSaveTableUseCase.execute(new BaseSubscriber());
@@ -215,7 +283,7 @@ public class UpdateTimetableService extends IntentService {
 
     private Notification getChangeNotification(String s) {
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this,"notify_001")
+                new NotificationCompat.Builder(this, "notify_001")
                         .setSmallIcon(R.drawable.ic_notification)
                         .setContentTitle(s)
                         .setContentText("Изменение в расписании")
