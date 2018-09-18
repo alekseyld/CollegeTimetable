@@ -1,15 +1,15 @@
 package com.alekseyld.collegetimetable;
 
 import android.app.Application;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.StrictMode;
 
 import com.alekseyld.collegetimetable.internal.di.component.ApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.module.ApplicationModule;
-import com.alekseyld.collegetimetable.service.UpdateTimetableService;
+import com.alekseyld.collegetimetable.job.TimetableJobCreator;
+import com.alekseyld.collegetimetable.utils.Utils;
 import com.crashlytics.android.Crashlytics;
+import com.evernote.android.job.JobManager;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -33,17 +33,17 @@ public class AndroidApplication extends Application {
         StrictMode.setVmPolicy(builder.build());
 
         Fabric.with(this, new Crashlytics());
+
+        JobManager.create(this).addJobCreator(new TimetableJobCreator());
+
         initializeInjector();
         initializeDBFlow();
         initializeService();
     }
 
     private void initializeService() {
-        SharedPreferences preferences = this.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
-        if (preferences.getBoolean(NOTIFON_KEY, false) &&
-                System.currentTimeMillis() - preferences.getLong(UpdateTimetableService.SERVICE_NAME, 0L) > 33 * 60 * 1000) {
-            startService(
-                    new Intent(this, UpdateTimetableService.class));
+        if (System.currentTimeMillis() - Utils.getTimeTableJobLastRun() > 33 * 60 * 1000) {
+            Utils.initTimeTableJob();
         }
     }
 

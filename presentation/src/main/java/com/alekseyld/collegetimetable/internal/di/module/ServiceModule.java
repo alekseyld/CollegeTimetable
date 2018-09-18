@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.internal.di.module;
 
-import android.app.IntentService;
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.alekseyld.collegetimetable.UIThread;
@@ -40,9 +40,9 @@ import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAM
 @Module
 public class ServiceModule {
 
-    private final IntentService mService;
+    private Context mService;
 
-    public ServiceModule(IntentService service){
+    public ServiceModule(Context service){
         mService = service;
     }
 
@@ -54,7 +54,7 @@ public class ServiceModule {
 
     @Singleton
     @Provides
-    IntentService getService(){
+    Context getService(){
         return mService;
     }
 

@@ -97,6 +97,18 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         notifOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (mPresenter.getNotificationGroup().equals("")) {
+                    showAlertDialog("Сначала необходимо выбрать мою группу!",
+                            "Чтобы включить уведомления, необходимо сначала заполнить поле \"Моя группа\"", "Ок", "", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }, null);
+                    notifOn.setChecked(!notifOn.isChecked());
+                    return;
+                }
+
                 mPresenter.saveNotifOn(
                         notifOn.isChecked()
                 );

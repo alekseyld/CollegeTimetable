@@ -1,5 +1,6 @@
 package com.alekseyld.collegetimetable.view.activity;
 
+import android.app.NotificationManager;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -96,6 +97,11 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (manager != null) {
+            manager.cancel(getIntent().getIntExtra("NOTIFICATION_ID", -1));
+        }
 
         buildMenu();
 

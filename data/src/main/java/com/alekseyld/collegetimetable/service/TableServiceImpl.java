@@ -142,7 +142,6 @@ public class TableServiceImpl implements TableService {
                             document = Jsoup.connect(DataUtils.getGroupUrl("http://109.195.146.243/wp-content/uploads/time/", group)).timeout(5000).get();
                         }
 
-
                     } catch (IOException e) {
                         e.printStackTrace();
                         document = null;

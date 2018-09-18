@@ -1,14 +1,12 @@
 package com.alekseyld.collegetimetable.presenter;
 
-import android.content.Intent;
-
 import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
 import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
-import com.alekseyld.collegetimetable.service.UpdateTimetableService;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.SaveSettingsUseCase;
+import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.SettingsView;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
 
@@ -93,8 +91,9 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
 
     private void processNotification(boolean notifOn) {
         if (notifOn) {
-            mView.getBaseActivity().startService(
-                    new Intent(mView.getBaseActivity(), UpdateTimetableService.class));
+            Utils.initTimeTableJob();
+//            mView.getBaseActivity().startService(
+//                    new Intent(mView.getBaseActivity(), UpdateTimetableService.class));
         }
     }
 
