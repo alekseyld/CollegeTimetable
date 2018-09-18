@@ -9,6 +9,7 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -30,7 +31,6 @@ import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
 import com.alekseyld.collegetimetable.usecase.SaveTableUseCase;
 import com.alekseyld.collegetimetable.utils.DataUtils;
 import com.alekseyld.collegetimetable.utils.NotificationID;
-import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
 
 import javax.inject.Inject;
@@ -71,12 +71,6 @@ public class UpdateTimetableService extends IntentService {
         this.initializeInjector();
         Log.d(LOG_TAG, "onCreate");
         isRunning = true;
-
-        getApplicationContext()
-                .getSharedPreferences(NAME_FILE, MODE_PRIVATE)
-                .edit()
-                .putLong(SERVICE_NAME, System.currentTimeMillis())
-                .apply();
     }
 
     private void initializeInjector() {
@@ -101,6 +95,11 @@ public class UpdateTimetableService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.d(LOG_TAG, "onHandleIntent");
 
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(NAME_FILE, MODE_PRIVATE);
+        SharedPreferences.Editor ed = sharedPreferences.edit();
+        ed.putLong(SERVICE_NAME, System.currentTimeMillis());
+        ed.apply();
+
         mGetSettingsUseCase.execute(new BaseSubscriber<Settings>() {
             @Override
             public void onNext(Settings settings) {
@@ -123,62 +122,6 @@ public class UpdateTimetableService extends IntentService {
     }
 
     private void getTimeTableOnline() {
-//        if (DataUtils.fioPattern.matcher(mSettings.getNotificationGroup()).find()) {
-//            mGetTableFromOnlineUseCase.setTeacherGroup(mSettings.getTeacherGroups());
-//        }
-//        mGetTableFromOnlineUseCase.setGroup(mSettings.getNotificationGroup());
-//        mGetTableFromOnlineUseCase.setOnline(isOnline());
-//        mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>(){
-//            @Override
-//            public void onNext(final TimeTable timeTable) {
-//                mGetTableFromOfflineUseCase.setGroup(mSettings.getNotificationGroup());
-//                mGetTableFromOfflineUseCase.execute(new BaseSubscriber<TimeTable>() {
-//
-//                    @Override
-//                    public void onNext(TimeTable oldTimeTable) {
-//                        super.onNext(oldTimeTable);
-//
-//                        if(timeTable != null
-//                                && timeTable.getDayList() != null
-//                                && timeTable.getDayList().size() > 0
-//                                && isTimeTableChanged(oldTimeTable, timeTable)){
-//
-//                            Log.d(LOG_TAG, "Timetable change");
-//
-//                            saveTimeTable(timeTable);
-////                            if(!mSettings.getAlarmMode()){
-////                                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-////                                v.vibrate(300);
-////                            }
-//
-//                            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
-//
-//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                                NotificationChannel channel = new NotificationChannel("notify_001",
-//                                        "Channel timetable app",
-//                                        NotificationManager.IMPORTANCE_DEFAULT);
-//                                NotificationManager mNotificationManager =
-//                                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//                                if (mNotificationManager != null)
-//                                    mNotificationManager.createNotificationChannel(channel);
-//                            }
-//                            notificationManager.cancelAll();
-//                            notificationManager.notify(NotificationID.getID(), getChangeNotification("Изменение в расписании"));
-//                        }
-//
-//                        planRunning(20 * 60 * 1000);
-//                        stopSelf();
-//                    }
-//                });
-//            }
-//            @Override
-//            public void onError(Throwable e) {
-//                super.onError(e);
-//                planRunning(60 * 1000);
-//                stopSelf();
-//            }
-//        });
-
         mGetTableFromOfflineUseCase.setGroup(mSettings.getNotificationGroup());
         mGetTableFromOfflineUseCase.execute(new BaseSubscriber<TimeTable>() {
             @Override
@@ -219,10 +162,10 @@ public class UpdateTimetableService extends IntentService {
                                     mNotificationManager.createNotificationChannel(channel);
                             }
                             notificationManager.cancelAll();
-                            notificationManager.notify(NotificationID.getID(), getChangeNotification("Изменение в расписании"));
+                            notificationManager.notify(NotificationID.getID(), getChangeNotification("Изменение в расписании", mSettings.getNotificationGroup()));
                         }
 
-                        planRunning(20 * 60 * 1000);
+                        planRunning(20 * 60 * 1000);//20 * 60 * 1000
                         stopSelf();
                     }
 
@@ -248,12 +191,15 @@ public class UpdateTimetableService extends IntentService {
         if (!mSettings.getNotifOn()) return;
 
         Intent ishintent = new Intent(getApplicationContext(), UpdateTimetableService.class);
-        PendingIntent pintent = PendingIntent.getService(getApplicationContext(), 0, ishintent, 0);
+        PendingIntent pintent = PendingIntent.getService(getApplicationContext(), 0, ishintent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarm = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+
         if (alarm != null) {
-            alarm.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), Utils.SERVICE_TIMER, pintent);
-            alarm.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime() + timeing, pintent);
+            alarm.cancel(pintent);
+            alarm.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() + timeing,
+                    timeing, pintent);
+//            alarm.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), Utils.SERVICE_TIMER, pintent);
         }
     }
 
@@ -281,12 +227,20 @@ public class UpdateTimetableService extends IntentService {
         mSaveTableUseCase.execute(new BaseSubscriber());
     }
 
-    private Notification getChangeNotification(String s) {
+    private Notification getChangeNotification(String s, String group) {
+
+        String text = "";
+        if (DataUtils.fioPattern.matcher(group).find()) {
+            text = "Для преподавателя " + group;
+        } else {
+            text = "Для группы " + group;
+        }
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this, "notify_001")
                         .setSmallIcon(R.drawable.ic_notification)
                         .setContentTitle(s)
-                        .setContentText("Изменение в расписании")
+                        .setContentText(text)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 //                        .setContentText("name = "+intent.getStringExtra("name")+"; "+
 //                                        "number = "+intent.getIntExtra("number", 0));

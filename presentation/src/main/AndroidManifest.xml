@@ -30,11 +30,20 @@
         <activity android:name=".view.activity.SettingsFavoriteActivity"/>
         <service
             android:name=".service.UpdateTimetableService"
-            android:enabled="true" >
+            android:enabled="true"
+            android:process=":remote">
         </service>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="ad1fdc6770082a011031dc220e8f65b968faa092" />
+        <receiver
+            android:name=".receiver.BootReceiver"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

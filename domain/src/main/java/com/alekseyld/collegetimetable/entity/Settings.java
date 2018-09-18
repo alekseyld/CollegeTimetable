@@ -126,4 +126,9 @@ public class Settings {
         this.rootUrl = rootUrl;
         return this;
     }
+
+    public boolean hasExternalSettings() {
+        return !this.getRootUrl().equals("")
+                && abbreviationMap.size() != 0;
+    }
 }

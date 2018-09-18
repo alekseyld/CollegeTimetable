@@ -36,6 +36,7 @@ public class TableServiceImpl implements TableService {
     private SettingsRepository mSettingsRepository;
     private ProxyApi mUrlApi;
     private SettingsApi mSettingsApi;
+    private Settings mSettings;
 
     @Inject
     public TableServiceImpl(TableRepository tableRepository,
@@ -64,7 +65,10 @@ public class TableServiceImpl implements TableService {
 
     private Observable<String> getGroupUrl(final String group) {
         return getSettings()
-                .map(settings -> DataUtils.getGroupUrl(settings.getRootUrl(), group, settings.getAbbreviationMap()))
+                .map(settings -> {
+                    mSettings = settings;
+                    return DataUtils.getGroupUrl(settings.getRootUrl(), group, settings.getAbbreviationMap());
+                })
                 .flatMap(url -> {
                     if (!url.equals("")) return Observable.just(url);
                     return Observable.error(new UncriticalException("empty"));
@@ -105,8 +109,15 @@ public class TableServiceImpl implements TableService {
                         return Observable.just(document);
 
                     try {
+                        boolean hasExternalSettings = mSettings != null && mSettings.hasExternalSettings();
                         for (int i = 0; i < 5; i++) {
-                            document = Jsoup.connect(DataUtils.getGroupUrl(group)).timeout(5000).get();
+
+                            if (hasExternalSettings) {
+                                document = Jsoup.connect(DataUtils.getGroupUrl(mSettings.getRootUrl(), group, mSettings.getAbbreviationMap())).timeout(5000).get();
+                            } else {
+                                document = Jsoup.connect(DataUtils.getGroupUrl(group)).timeout(5000).get();
+                            }
+
                             if (document != null)
                                 break;
                         }
@@ -124,7 +135,14 @@ public class TableServiceImpl implements TableService {
                         return Observable.just(document);
 
                     try {
-                        document = Jsoup.connect(DataUtils.getGroupUrl("http://109.195.146.243/wp-content/uploads/time/", group)).timeout(5000).get();
+//                        document = Jsoup.connect(DataUtils.getGroupUrl("http://192.168.1.4/uecoll/", group)).timeout(5000).get();
+                        if (mSettings != null && mSettings.hasExternalSettings()) {
+                            document = Jsoup.connect(DataUtils.getGroupUrl(mSettings.getRootUrl(), group, mSettings.getAbbreviationMap())).timeout(5000).get();
+                        } else {
+                            document = Jsoup.connect(DataUtils.getGroupUrl("http://109.195.146.243/wp-content/uploads/time/", group)).timeout(5000).get();
+                        }
+
+
                     } catch (IOException e) {
                         e.printStackTrace();
                         document = null;
