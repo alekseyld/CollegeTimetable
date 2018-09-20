@@ -1,15 +1,20 @@
 package com.alekseyld.collegetimetable;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.os.StrictMode;
 
 import com.alekseyld.collegetimetable.internal.di.component.ApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.module.ApplicationModule;
+import com.alekseyld.collegetimetable.job.TimetableJob;
 import com.alekseyld.collegetimetable.job.TimetableJobCreator;
 import com.alekseyld.collegetimetable.utils.Utils;
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobRequest;
+
+import java.util.Set;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -42,8 +47,38 @@ public class AndroidApplication extends Application {
     }
 
     private void initializeService() {
-        if (System.currentTimeMillis() - Utils.getTimeTableJobLastRun() > 33 * 60 * 1000) {
-            Utils.initTimeTableJob();
+        Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequestsForTag(TimetableJob.TAG);
+
+//        JobRequest jobRequest = null;
+//        if (jobRequests.size() > 1) {
+//            int i = 0;
+//            for (JobRequest j: jobRequests) {
+//                if (i++ == 0) {
+//                    jobRequest = j;
+//                } else {
+//                    j.cancelAndEdit();
+//                }
+//            }
+//        }
+//
+//        boolean isNew = false;
+//        if (jobRequest == null) {
+//            jobRequest = Utils.getTimeTableJob();
+//            isNew = true;
+//        }
+
+
+        SharedPreferences preferences = this.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
+        if (preferences.getBoolean(NOTIFON_KEY, false) &&
+                jobRequests.size() == 0) {
+//                (System.currentTimeMillis() - jobRequest.getLastRun() > 1800000000 || jobRequests.size() == 0)) {
+//            if (isNew) {
+//                jobRequest.schedule();
+//            } else {
+//                jobRequest.cancelAndEdit().build().schedule();
+//            }
+            Utils.getTimeTableJob().schedule();
+
         }
     }
 

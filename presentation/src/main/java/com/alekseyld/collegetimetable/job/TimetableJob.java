@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -27,9 +28,9 @@ import com.alekseyld.collegetimetable.usecase.GetTableFromOfflineUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
 import com.alekseyld.collegetimetable.usecase.SaveTableUseCase;
 import com.alekseyld.collegetimetable.utils.DataUtils;
+import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
 import com.evernote.android.job.Job;
-import com.evernote.android.job.JobRequest;
 
 import javax.inject.Inject;
 
@@ -56,6 +57,9 @@ public class TimetableJob extends Job {
     private Settings mSettings;
 
     private int connectionState;
+    private boolean isFinish = false;
+
+    private int timing = DEFAULT_TIMING;
 
     @Override
     @NonNull
@@ -65,11 +69,15 @@ public class TimetableJob extends Job {
         connectionState = isOnline();
 
         if (connectionState == 0) {
-            planRunning(5 * 60 * 1000);
+//            planRunning(5 * 60 * 1000);
             return Result.SUCCESS;
         }
 
         initializeInjector();
+
+        SharedPreferences.Editor ed = mSharedPreferences.edit();
+        ed.putLong(TAG, System.currentTimeMillis());
+        ed.apply();
 
         mGetSettingsUseCase.execute(new BaseSubscriber<Settings>() {
             @Override
@@ -88,21 +96,44 @@ public class TimetableJob extends Job {
                     getTimeTableOnline();
                 }
             }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                isFinish = true;
+            }
         });
+
+        while (!isFinish) {
+            SystemClock.sleep(50);
+        }
+
+        Log.d(TAG, "SUCCESS job");
+
+        planRunning(timing);
 
         return Result.SUCCESS;
     }
 
     private void planRunning(int timeing) {
-        if (!mSettings.getNotifOn()) return;
-
-        new JobRequest.Builder(TimetableJob.TAG)
-                .setExecutionWindow(timeing, timeing + 60_000L)
-                .setRequiresCharging(true)
-                .setRequiredNetworkType(JobRequest.NetworkType.UNMETERED)
-                .setRequirementsEnforced(true)
-                .build()
-                .schedule();
+        Log.d(TAG, "planRunning = " + timeing);
+//
+//        boolean notifOn = !mSettings.getNotifOn();
+//        Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequestsForTag(TimetableJob.TAG);
+//        if (jobRequests.size() > 1) {
+//            for (JobRequest j: jobRequests) {
+//                j.cancelAndEdit();
+//            }
+//        }
+//
+//        if (!notifOn) {
+//            isFinish = true;
+//            return;
+//        }
+//
+        Utils.getTimeTableJob(timing).schedule();
+//
+        isFinish = true;
     }
 
     private void getTimeTableOnline() {
@@ -146,16 +177,19 @@ public class TimetableJob extends Job {
                         }
 
                         if (connectionState == 1) {
-                            planRunning(WIFI_TIMING);
+//                            planRunning(WIFI_TIMING);
+                            timing = WIFI_TIMING;
                         } else {
-                            planRunning(DEFAULT_TIMING);
+                            timing = DEFAULT_TIMING;
                         }
+                        isFinish = true;
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-                        planRunning(ERROR_TIMING);
+                        timing = ERROR_TIMING;
+                        isFinish = true;
                     }
                 });
             }
@@ -163,7 +197,8 @@ public class TimetableJob extends Job {
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                planRunning(DEFAULT_TIMING);
+                timing = DEFAULT_TIMING;
+                isFinish = true;
             }
         });
     }

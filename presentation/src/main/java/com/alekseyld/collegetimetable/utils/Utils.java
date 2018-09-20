@@ -55,13 +55,19 @@ public class Utils {
     }
 
     public static JobRequest getTimeTableJob() {
+        return getTimeTableJob(20_000l);
+    }
+
+    public static JobRequest getTimeTableJob(long timing) {
         return new JobRequest.Builder(TimetableJob.TAG)
-                .setExecutionWindow(20_000L, 60_000L)
-                .setRequiresCharging(true)
-                .setRequiredNetworkType(JobRequest.NetworkType.UNMETERED)
+                .setUpdateCurrent(true)
+                .setExecutionWindow(timing, timing + 60_000L)
+                .setRequiresCharging(false)
+                .setRequiredNetworkType(JobRequest.NetworkType.NOT_ROAMING)
                 .setRequirementsEnforced(true)
                 .build();
     }
+
 
     public static void initTimeTableJob() {
         getTimeTableJob().schedule();
