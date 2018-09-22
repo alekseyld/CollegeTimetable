@@ -1,18 +1,20 @@
 package com.alekseyld.collegetimetable.presenter;
 
-import android.content.Intent;
-
 import com.alekseyld.collegetimetable.entity.Settings;
+import com.alekseyld.collegetimetable.job.TimetableJob;
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
 import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
-import com.alekseyld.collegetimetable.service.UpdateTimetableService;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.SaveSettingsUseCase;
+import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.SettingsView;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobRequest;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -92,9 +94,28 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
     }
 
     private void processNotification(boolean notifOn) {
+        Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequestsForTag(TimetableJob.TAG);
+
+        JobRequest jobRequest = null;
+        if (jobRequests.size() > 1) {
+            int i = 0;
+            for (JobRequest j: jobRequests) {
+                if (i++ == 0 && notifOn) {
+                    jobRequest = j;
+                } else {
+                    j.cancelAndEdit();
+                }
+            }
+        }
+
         if (notifOn) {
-            mView.getBaseActivity().startService(
-                    new Intent(mView.getBaseActivity(), UpdateTimetableService.class));
+            if (jobRequest == null) {
+                jobRequest = Utils.getTimeTableJob();
+            }
+
+            jobRequest.cancelAndEdit().startNow().build().schedule();
+//            mView.getBaseActivity().startService(
+//                    new Intent(mView.getBaseActivity(), UpdateTimetableService.class));
         }
     }
 

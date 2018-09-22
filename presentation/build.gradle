@@ -32,8 +32,8 @@ android {
         applicationId "com.alekseyld.collegetimetable"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 16
-        versionName "9"
+        versionCode 18
+        versionName "10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {
@@ -109,6 +109,8 @@ dependencies {
 
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
+
+    compile 'com.evernote:android-job:1.2.6'
 
     compile('com.crashlytics.sdk.android:crashlytics:2.6.3@aar') {
         transitive = true;

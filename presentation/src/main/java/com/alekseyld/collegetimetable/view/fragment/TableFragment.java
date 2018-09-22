@@ -28,12 +28,14 @@ import android.widget.Toast;
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
+import com.alekseyld.collegetimetable.job.TimetableJob;
 import com.alekseyld.collegetimetable.presenter.TablePresenter;
 import com.alekseyld.collegetimetable.utils.DataUtils;
 import com.alekseyld.collegetimetable.view.TableView;
 import com.alekseyld.collegetimetable.view.adapter.TableAdapter;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 import com.crashlytics.android.Crashlytics;
+import com.evernote.android.job.JobManager;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -213,7 +215,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
             case R.id.action_info:
                 if (getTimeTable() == null || getTimeTable().getLastRefresh() == null) break;
 
-                showToastMessage("Последнее обновление: " + getTimeTable().getLastRefresh());
+                showToastMessage("Последнее обновление: " + getTimeTable().getLastRefresh() + "\n count jobs="+ JobManager.instance().getAllJobRequestsForTag(TimetableJob.TAG).size());//fixme
                 break;
         }
         return super.onOptionsItemSelected(item);

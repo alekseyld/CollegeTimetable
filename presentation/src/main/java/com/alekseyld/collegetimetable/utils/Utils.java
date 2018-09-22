@@ -3,6 +3,9 @@ package com.alekseyld.collegetimetable.utils;
 import android.graphics.Bitmap;
 import android.os.Environment;
 
+import com.alekseyld.collegetimetable.job.TimetableJob;
+import com.evernote.android.job.JobRequest;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,6 +18,7 @@ import java.io.OutputStream;
 public class Utils {
 
     public static final String NAME_OF_CACHE_FILE = "cache_table.jpg";
+    public static final int TIMETABLE_NOTIFICATION_ID = 42;
     public static final int SERVICE_TIMER = 5000;//30 * 60 * 1000
 
     public static File getPathToCacheDir(){
@@ -48,6 +52,29 @@ public class Utils {
         fOut.close();
 
         return file;
+    }
+
+    public static JobRequest getTimeTableJob() {
+        return getTimeTableJob(20_000l);
+    }
+
+    public static JobRequest getTimeTableJob(long timing) {
+        return new JobRequest.Builder(TimetableJob.TAG)
+                .setUpdateCurrent(true)
+                .setExecutionWindow(timing, timing + 60_000L)
+                .setRequiresCharging(false)
+                .setRequiredNetworkType(JobRequest.NetworkType.NOT_ROAMING)
+                .setRequirementsEnforced(true)
+                .build();
+    }
+
+
+    public static void initTimeTableJob() {
+        getTimeTableJob().schedule();
+    }
+
+    public static long getTimeTableJobLastRun() {
+        return getTimeTableJob().getLastRun();
     }
 
 }

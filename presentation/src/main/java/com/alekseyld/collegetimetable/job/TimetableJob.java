@@ -1,7 +1,5 @@
-package com.alekseyld.collegetimetable.service;
+package com.alekseyld.collegetimetable.job;
 
-import android.app.AlarmManager;
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,8 +11,8 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.os.IBinder;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -30,29 +28,25 @@ import com.alekseyld.collegetimetable.usecase.GetTableFromOfflineUseCase;
 import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
 import com.alekseyld.collegetimetable.usecase.SaveTableUseCase;
 import com.alekseyld.collegetimetable.utils.DataUtils;
+import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
+import com.evernote.android.job.Job;
 
 import javax.inject.Inject;
 
-import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 import static com.alekseyld.collegetimetable.utils.Utils.TIMETABLE_NOTIFICATION_ID;
 
-/**
- * Created by Alekseyld on 04.09.2016.
- */
+public class TimetableJob extends Job {
+    public static final String TAG = "TimetableJob_Tag";
 
-public class UpdateTimetableService extends IntentService {
-    public final static String SERVICE_NAME = "UpdateTimetableService";
-    public static boolean isRunning = false;
-    private final String LOG_TAG = "ServiceLog";
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     * <p>
-     * UpdateTimetableService Used to name the worker thread, important only for debugging.
-     */
+    private static final int WIFI_TIMING = 10 * 60 * 1000;//10 * 60 * 1000
+    private static final int ERROR_TIMING = 60 * 1000;
+    private static final int DEFAULT_TIMING = 25 * 60 * 1000;
 
     @Inject
     GetSettingsUseCase mGetSettingsUseCase;
+    @Inject
+    SharedPreferences mSharedPreferences;
     @Inject
     GetTableFromOnlineUseCase mGetTableFromOnlineUseCase;
     @Inject
@@ -62,42 +56,27 @@ public class UpdateTimetableService extends IntentService {
 
     private Settings mSettings;
 
-    public UpdateTimetableService() {
-        super(SERVICE_NAME);
-    }
+    private int connectionState;
+    private boolean isFinish = false;
 
-    public void onCreate() {
-        super.onCreate();
-        this.initializeInjector();
-        Log.d(LOG_TAG, "onCreate");
-        isRunning = true;
-    }
-
-    private void initializeInjector() {
-        DaggerServiceComponent.builder()
-                .serviceModule(new ServiceModule(this))
-                .build()
-                .inject(this);
-    }
-
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(LOG_TAG, "onDestroy");
-        isRunning = false;
-    }
-
-    public IBinder onBind(Intent intent) {
-        Log.d(LOG_TAG, "onBind");
-        return null;
-    }
+    private int timing = DEFAULT_TIMING;
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-        Log.d(LOG_TAG, "onHandleIntent");
+    @NonNull
+    protected Result onRunJob(Params params) {
+        Log.d(TAG, "onRunJob");
 
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(NAME_FILE, MODE_PRIVATE);
-        SharedPreferences.Editor ed = sharedPreferences.edit();
-        ed.putLong(SERVICE_NAME, System.currentTimeMillis());
+        connectionState = isOnline();
+
+        if (connectionState == 0) {
+//            planRunning(5 * 60 * 1000);
+            return Result.SUCCESS;
+        }
+
+        initializeInjector();
+
+        SharedPreferences.Editor ed = mSharedPreferences.edit();
+        ed.putLong(TAG, System.currentTimeMillis());
         ed.apply();
 
         mGetSettingsUseCase.execute(new BaseSubscriber<Settings>() {
@@ -108,17 +87,53 @@ public class UpdateTimetableService extends IntentService {
 
             @Override
             public void onCompleted() {
+
                 if (mSettings != null
                         && mSettings.getNotificationGroup() != null
                         && !mSettings.getNotificationGroup().equals("")
                         && mSettings.getNotifOn()) {
-                    if (isOnline())
-                        getTimeTableOnline();
-                } else {
-                    stopSelf();
+
+                    getTimeTableOnline();
                 }
             }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                isFinish = true;
+            }
         });
+
+        while (!isFinish) {
+            SystemClock.sleep(50);
+        }
+
+        Log.d(TAG, "SUCCESS job");
+
+        planRunning(timing);
+
+        return Result.SUCCESS;
+    }
+
+    private void planRunning(int timeing) {
+        Log.d(TAG, "planRunning = " + timeing);
+//
+//        boolean notifOn = !mSettings.getNotifOn();
+//        Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequestsForTag(TimetableJob.TAG);
+//        if (jobRequests.size() > 1) {
+//            for (JobRequest j: jobRequests) {
+//                j.cancelAndEdit();
+//            }
+//        }
+//
+//        if (!notifOn) {
+//            isFinish = true;
+//            return;
+//        }
+//
+        Utils.getTimeTableJob(timing).schedule();
+//
+        isFinish = true;
     }
 
     private void getTimeTableOnline() {
@@ -130,7 +145,7 @@ public class UpdateTimetableService extends IntentService {
                     mGetTableFromOnlineUseCase.setTeacherGroup(mSettings.getTeacherGroups());
                 }
                 mGetTableFromOnlineUseCase.setGroup(mSettings.getNotificationGroup());
-                mGetTableFromOnlineUseCase.setOnline(isOnline());
+                mGetTableFromOnlineUseCase.setOnline(isOnline() > 0);
                 mGetTableFromOnlineUseCase.execute(new BaseSubscriber<TimeTable>() {
 
                     @Override
@@ -142,22 +157,18 @@ public class UpdateTimetableService extends IntentService {
                                 && timeTable.getDayList().size() > 0
                                 && isTimeTableChanged(oldTimeTable, timeTable)) {
 
-                            Log.d(LOG_TAG, "Timetable change");
+                            Log.d(TAG, "Timetable change");
 
                             saveTimeTable(timeTable);
-//                            if(!mSettings.getAlarmMode()){
-//                                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-//                                v.vibrate(300);
-//                            }
 
-                            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+                            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 NotificationChannel channel = new NotificationChannel("notify_001",
                                         "Channel timetable app",
                                         NotificationManager.IMPORTANCE_DEFAULT);
                                 NotificationManager mNotificationManager =
-                                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                        (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
                                 if (mNotificationManager != null)
                                     mNotificationManager.createNotificationChannel(channel);
                             }
@@ -165,15 +176,20 @@ public class UpdateTimetableService extends IntentService {
                             notificationManager.notify(TIMETABLE_NOTIFICATION_ID, getChangeNotification("Изменение в расписании", mSettings.getNotificationGroup()));
                         }
 
-//                        planRunning(20 * 60 * 1000);//20 * 60 * 1000
-                        stopSelf();
+                        if (connectionState == 1) {
+//                            planRunning(WIFI_TIMING);
+                            timing = WIFI_TIMING;
+                        } else {
+                            timing = DEFAULT_TIMING;
+                        }
+                        isFinish = true;
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-//                        planRunning(60 * 1000);
-                        stopSelf();
+                        timing = ERROR_TIMING;
+                        isFinish = true;
                     }
                 });
             }
@@ -181,26 +197,10 @@ public class UpdateTimetableService extends IntentService {
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-//                planRunning(20 * 60 * 1000);
-                stopSelf();
+                timing = DEFAULT_TIMING;
+                isFinish = true;
             }
         });
-    }
-
-    private void planRunning(int timeing) {
-        if (!mSettings.getNotifOn()) return;
-
-        Intent ishintent = new Intent(getApplicationContext(), UpdateTimetableService.class);
-        PendingIntent pintent = PendingIntent.getService(getApplicationContext(), 0, ishintent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarm = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-
-        if (alarm != null) {
-            alarm.cancel(pintent);
-            alarm.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime() + timeing,
-                    timeing, pintent);
-//            alarm.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), Utils.SERVICE_TIMER, pintent);
-        }
     }
 
     private boolean isTimeTableChanged(TimeTable oldTimeTable, TimeTable timeTable) {
@@ -237,16 +237,16 @@ public class UpdateTimetableService extends IntentService {
         }
 
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this, "notify_001")
+                new NotificationCompat.Builder(getContext(), "notify_001")
                         .setSmallIcon(R.drawable.ic_notification)
                         .setContentTitle(s)
                         .setContentText(text)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 //                        .setContentText("name = "+intent.getStringExtra("name")+"; "+
 //                                        "number = "+intent.getIntExtra("number", 0));
-        Intent resultIntent = new Intent(this, MainActivity.class);
+        Intent resultIntent = new Intent(getContext(), MainActivity.class);
 
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getContext());
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent =
@@ -258,10 +258,33 @@ public class UpdateTimetableService extends IntentService {
         return mBuilder.build();
     }
 
-    private boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
+    private int isOnline() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI")) {
+                if (ni.isConnected()) {
+                    haveConnectedWifi = true;
+                }
+            }
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE")) {
+                if (ni.isConnected()) {
+                    haveConnectedMobile = true;
+                }
+            }
+        }
+        return (haveConnectedWifi ? 1 : 0) + (haveConnectedMobile ? 2 : 0);
+    }
+
+    private void initializeInjector() {
+        DaggerServiceComponent.builder()
+                .serviceModule(new ServiceModule(getContext()))
+                .build()
+                .inject(this);
+
     }
 }
