@@ -48,37 +48,11 @@ public class AndroidApplication extends Application {
 
     private void initializeService() {
         Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequestsForTag(TimetableJob.TAG);
-
-//        JobRequest jobRequest = null;
-//        if (jobRequests.size() > 1) {
-//            int i = 0;
-//            for (JobRequest j: jobRequests) {
-//                if (i++ == 0) {
-//                    jobRequest = j;
-//                } else {
-//                    j.cancelAndEdit();
-//                }
-//            }
-//        }
-//
-//        boolean isNew = false;
-//        if (jobRequest == null) {
-//            jobRequest = Utils.getTimeTableJob();
-//            isNew = true;
-//        }
-
-
         SharedPreferences preferences = this.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
         if (preferences.getBoolean(NOTIFON_KEY, false) &&
                 jobRequests.size() == 0) {
-//                (System.currentTimeMillis() - jobRequest.getLastRun() > 1800000000 || jobRequests.size() == 0)) {
-//            if (isNew) {
-//                jobRequest.schedule();
-//            } else {
-//                jobRequest.cancelAndEdit().build().schedule();
-//            }
+            
             Utils.getTimeTableJob().schedule();
-
         }
     }
 

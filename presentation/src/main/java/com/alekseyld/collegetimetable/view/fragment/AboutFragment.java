@@ -2,23 +2,30 @@ package com.alekseyld.collegetimetable.view.fragment;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.alekseyld.collegetimetable.BuildConfig;
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
+import com.alekseyld.collegetimetable.job.TimetableJob;
 import com.alekseyld.collegetimetable.presenter.AboutPresenter;
 import com.alekseyld.collegetimetable.view.AboutView;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
+import com.evernote.android.job.JobManager;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +42,14 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
 
     @BindView(R.id.listView)
     ListView listView;
+
+    @BindView(R.id.debug_info)
+    TextView debugInfo;
+
+    @Inject
+    SharedPreferences mSharedPreferences;
+
+    private int debug = 0;
 
     @Nullable
     @Override
@@ -62,6 +77,9 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
                 switch (i){
                     case 0:
                         openLink("https://vk.com/alekseyld");
+                        break;
+                    case 1:
+                        if (++debug == 3) debugInfo();
                         break;
                     case 2:
                         Uri uri = Uri.parse("market://details?id=" + getContext().getPackageName());
@@ -95,6 +113,22 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
         });
 
         return v;
+    }
+
+    public void debugInfo() {
+
+        StringBuilder keys = new StringBuilder();
+
+        for (String key: mSharedPreferences.getAll().keySet())
+            keys.append("-").append(key).append("\n");
+
+        debugInfo.setMovementMethod(new ScrollingMovementMethod());
+
+        debugInfo.setText(
+                "Количество работ для обновления расписания (если оповещения включены должно быть равно 1, если нет - 0)="+ JobManager.instance().getAllJobRequestsForTag(TimetableJob.TAG).size()
+                + "\n " + "Объекты в базе данных: "
+                + "\n" + keys.toString()
+        );
     }
 
     private void openLink(String url) {

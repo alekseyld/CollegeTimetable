@@ -62,9 +62,6 @@ public class Utils {
         return new JobRequest.Builder(TimetableJob.TAG)
                 .setUpdateCurrent(true)
                 .setExecutionWindow(timing, timing + 60_000L)
-                .setRequiresCharging(false)
-                .setRequiredNetworkType(JobRequest.NetworkType.NOT_ROAMING)
-                .setRequirementsEnforced(true)
                 .build();
     }
 
