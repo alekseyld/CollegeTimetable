@@ -1,10 +1,13 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.method.ScrollingMovementMethod;
@@ -19,22 +22,13 @@ import android.widget.TextView;
 import com.alekseyld.collegetimetable.BuildConfig;
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
-import com.alekseyld.collegetimetable.job.RecursiveJob;
-import com.alekseyld.collegetimetable.job.TimetableJob;
 import com.alekseyld.collegetimetable.presenter.AboutPresenter;
-import com.alekseyld.collegetimetable.utils.DataUtils;
 import com.alekseyld.collegetimetable.view.AboutView;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
-import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobRequest;
-
-import java.util.Date;
-import java.util.Set;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Alekseyld on 08.09.2016.
@@ -52,14 +46,12 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
     @BindView(R.id.debug_info)
     TextView debugInfo;
 
-    @Inject
-    SharedPreferences mSharedPreferences;
-
     private int debug = 0;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_about, container, false);
         ButterKnife.bind(this, v);
         getActivity().setTitle(R.string.about);
@@ -73,7 +65,7 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
                 getString(R.string.group_about)
         };
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_list_item_1, about);
 
         listView.setAdapter(adapter);
@@ -85,7 +77,7 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
                         openLink("https://vk.com/alekseyld");
                         break;
                     case 1:
-                        if (++debug == 3) debugInfo();
+                        if (++debug % 3 == 0) debugInfo();
                         break;
                     case 2:
                         Uri uri = Uri.parse("market://details?id=" + getContext().getPackageName());
@@ -122,40 +114,24 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
     }
 
     public void debugInfo() {
-
-        StringBuilder keys = new StringBuilder();
-
-        for (String key: mSharedPreferences.getAll().keySet())
-            keys.append("-").append(key).append("\n");
-
         debugInfo.setMovementMethod(new ScrollingMovementMethod());
-
-        Set<JobRequest> timetableJob = JobManager.instance().getAllJobRequestsForTag(TimetableJob.TAG);
-        String timetableJobDate = "";
-        if (timetableJob.iterator().hasNext()) {
-            timetableJobDate = DataUtils.dateFormat.format(new Date(timetableJob.iterator().next().getScheduledAt()));
-        }
-
-        Set<JobRequest> recursiveJob = JobManager.instance().getAllJobRequestsForTag(RecursiveJob.TAG);
-        String recursiveJobDate = "";
-        if (recursiveJob.iterator().hasNext()) {
-            recursiveJobDate = DataUtils.dateFormat.format(new Date(recursiveJob.iterator().next().getLastRun()));
-        }
-
-        debugInfo.setText(
-                "TimetableJob count = "+ timetableJob.size()
-                + "\n TimetableJob next at = " + timetableJobDate
-                + "\n RecursiveJobDate count = " + recursiveJob.size()
-                + "\n RecursiveJobDate last = " +  recursiveJobDate
-                + "\n\n " + "Объекты в базе данных: "
-                + "\n"  + keys.toString()
-        );
+        debugInfo.setText(mPresenter.getDebugText());
     }
 
     private void openLink(String url) {
         Intent intent1 = new Intent(Intent.ACTION_VIEW);
         intent1.setData(Uri.parse(url));
         startActivity(intent1);
+    }
+
+    @OnClick(R.id.debug_info)
+    public void onClickDebugInfo() {
+        ClipboardManager clipboard = (ClipboardManager) getBaseActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(debugInfo.getText(), debugInfo.getText());
+        if (clipboard != null) {
+            clipboard.setPrimaryClip(clip);
+            showToastMessage("Отладочная информация скопирована");
+        }
     }
 
     @Override
@@ -170,7 +146,7 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
 
     @Override
     public void showError(String message) {
-
+        showToastMessage(message);
     }
 
     @Override
