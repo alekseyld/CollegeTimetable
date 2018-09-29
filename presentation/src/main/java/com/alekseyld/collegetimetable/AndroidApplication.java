@@ -42,28 +42,24 @@ public class AndroidApplication extends Application {
         JobManager.create(this).addJobCreator(new TimetableJobCreator());
 
         initializeInjector();
-        initializeDBFlow();
         initializeService();
     }
 
     private void initializeService() {
         Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequestsForTag(TimetableJob.TAG);
         SharedPreferences preferences = this.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
-        if (preferences.getBoolean(NOTIFON_KEY, false) &&
+        boolean notifOn = preferences.getBoolean(NOTIFON_KEY, false);
+        if (notifOn &&
                 jobRequests.size() == 0) {
-            
             Utils.getTimeTableJob().schedule();
         }
+        Utils.toggleRecursiveJob(notifOn);
     }
 
     private void initializeInjector() {
         this.applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .build();
-    }
-
-    private void initializeDBFlow() {
-//        FlowManager.init(new FlowConfig.Builder(this).build());
     }
 
     public ApplicationComponent getApplicationComponent() {

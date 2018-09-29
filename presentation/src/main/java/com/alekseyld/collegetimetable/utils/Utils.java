@@ -3,13 +3,16 @@ package com.alekseyld.collegetimetable.utils;
 import android.graphics.Bitmap;
 import android.os.Environment;
 
+import com.alekseyld.collegetimetable.job.RecursiveJob;
 import com.alekseyld.collegetimetable.job.TimetableJob;
+import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Set;
 
 /**
  * Created by Alekseyld on 08.10.2017.
@@ -65,9 +68,26 @@ public class Utils {
                 .build();
     }
 
-
     public static void initTimeTableJob() {
         getTimeTableJob().schedule();
+    }
+
+    public static void toggleRecursiveJob(boolean notifOn) {
+        Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequestsForTag(RecursiveJob.TAG);
+
+        if (notifOn && jobRequests.size() == 0) {
+            new JobRequest.Builder(RecursiveJob.TAG)
+                    .setUpdateCurrent(true)
+                    .setPeriodic(45 * 60 * 1000)
+                    .build()
+                    .schedule();
+        } else {
+            if (jobRequests.size() != 0) {
+                for (JobRequest jobRequest: jobRequests) {
+                    jobRequest.cancelAndEdit();
+                }
+            }
+        }
     }
 
     public static long getTimeTableJobLastRun() {

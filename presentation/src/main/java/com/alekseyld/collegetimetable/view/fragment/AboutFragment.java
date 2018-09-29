@@ -19,11 +19,17 @@ import android.widget.TextView;
 import com.alekseyld.collegetimetable.BuildConfig;
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
+import com.alekseyld.collegetimetable.job.RecursiveJob;
 import com.alekseyld.collegetimetable.job.TimetableJob;
 import com.alekseyld.collegetimetable.presenter.AboutPresenter;
+import com.alekseyld.collegetimetable.utils.DataUtils;
 import com.alekseyld.collegetimetable.view.AboutView;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobRequest;
+
+import java.util.Date;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -124,10 +130,25 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
 
         debugInfo.setMovementMethod(new ScrollingMovementMethod());
 
+        Set<JobRequest> timetableJob = JobManager.instance().getAllJobRequestsForTag(TimetableJob.TAG);
+        String timetableJobDate = "";
+        if (timetableJob.iterator().hasNext()) {
+            timetableJobDate = DataUtils.dateFormat.format(new Date(timetableJob.iterator().next().getScheduledAt()));
+        }
+
+        Set<JobRequest> recursiveJob = JobManager.instance().getAllJobRequestsForTag(RecursiveJob.TAG);
+        String recursiveJobDate = "";
+        if (recursiveJob.iterator().hasNext()) {
+            recursiveJobDate = DataUtils.dateFormat.format(new Date(recursiveJob.iterator().next().getLastRun()));
+        }
+
         debugInfo.setText(
-                "Количество работ для обновления расписания (если оповещения включены должно быть равно 1, если нет - 0)="+ JobManager.instance().getAllJobRequestsForTag(TimetableJob.TAG).size()
-                + "\n " + "Объекты в базе данных: "
-                + "\n" + keys.toString()
+                "TimetableJob count = "+ timetableJob.size()
+                + "\n TimetableJob next at = " + timetableJobDate
+                + "\n RecursiveJobDate count = " + recursiveJob.size()
+                + "\n RecursiveJobDate last = " +  recursiveJobDate
+                + "\n\n " + "Объекты в базе данных: "
+                + "\n"  + keys.toString()
         );
     }
 

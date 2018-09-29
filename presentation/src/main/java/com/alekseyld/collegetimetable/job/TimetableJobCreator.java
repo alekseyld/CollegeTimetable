@@ -14,6 +14,8 @@ public class TimetableJobCreator implements JobCreator {
         switch (tag) {
             case TimetableJob.TAG:
                 return new TimetableJob();
+            case RecursiveJob.TAG:
+                return new RecursiveJob();
             default:
                 return null;
         }
