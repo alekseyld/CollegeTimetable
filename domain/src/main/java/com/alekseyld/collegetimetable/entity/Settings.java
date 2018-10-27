@@ -1,7 +1,9 @@
 package com.alekseyld.collegetimetable.entity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,6 +15,7 @@ public class Settings {
 
     private Set<String> favoriteGroups = new HashSet<>();
     private Map<String, String> abbreviationMap = new HashMap<>();
+    private List<String> neftGroup = new ArrayList<>();
     private String rootUrl = "";
     private String notificationGroup = "";
     private boolean notifOn;
@@ -127,8 +130,18 @@ public class Settings {
         return this;
     }
 
+    public List<String> getNeftGroup() {
+        return neftGroup;
+    }
+
+    public Settings setNeftGroup(List<String> neftGroup) {
+        this.neftGroup = neftGroup;
+        return this;
+    }
+
     public boolean hasExternalSettings() {
         return !this.getRootUrl().equals("")
-                && abbreviationMap.size() != 0;
+                && abbreviationMap.size() != 0
+                && neftGroup.size() != 0;
     }
 }

@@ -38,6 +38,8 @@ public class TableServiceImpl implements TableService {
     private SettingsApi mSettingsApi;
     private Settings mSettings;
 
+    private boolean hasError = false;
+
     @Inject
     public TableServiceImpl(TableRepository tableRepository,
                             SettingsRepository settingsRepository,
@@ -51,7 +53,7 @@ public class TableServiceImpl implements TableService {
 
     private Observable<String> updateSettingsOnlineAndGetUrl(String group) {
         return updateSettingsOnline()
-                .map(settings -> DataUtils.getGroupUrl(settings.getRootUrl(), group, settings.getAbbreviationMap()));
+                .map(settings -> DataUtils.getGroupUrl(settings.getRootUrl(), group, settings.getAbbreviationMap(), settings.getNeftGroup()));
     }
 
     private Observable<Settings> updateSettingsOnline() {
@@ -67,10 +69,10 @@ public class TableServiceImpl implements TableService {
         return getSettings()
                 .map(settings -> {
                     mSettings = settings;
-                    return DataUtils.getGroupUrl(settings.getRootUrl(), group, settings.getAbbreviationMap());
+                    return DataUtils.getGroupUrl(settings.getRootUrl(), group, settings.getAbbreviationMap(), mSettings.getNeftGroup());
                 })
                 .flatMap(url -> {
-                    if (!url.equals("")) return Observable.just(url);
+                    if (!url.equals("") && !hasError) return Observable.just(url);
                     return Observable.error(new UncriticalException("empty"));
                 })
                 .onErrorResumeNext(throwable -> updateSettingsOnlineAndGetUrl(group));
@@ -113,7 +115,7 @@ public class TableServiceImpl implements TableService {
                         for (int i = 0; i < 5; i++) {
 
                             if (hasExternalSettings) {
-                                document = Jsoup.connect(DataUtils.getGroupUrl(mSettings.getRootUrl(), group, mSettings.getAbbreviationMap())).timeout(5000).get();
+                                document = Jsoup.connect(DataUtils.getGroupUrl(mSettings.getRootUrl(), group, mSettings.getAbbreviationMap(), mSettings.getNeftGroup())).timeout(5000).get();
                             } else {
                                 document = Jsoup.connect(DataUtils.getGroupUrl(group)).timeout(5000).get();
                             }
@@ -137,9 +139,12 @@ public class TableServiceImpl implements TableService {
                     try {
 //                        document = Jsoup.connect(DataUtils.getGroupUrl("http://192.168.1.4/uecoll/", group)).timeout(5000).get();
                         if (mSettings != null && mSettings.hasExternalSettings()) {
-                            document = Jsoup.connect(DataUtils.getGroupUrl(mSettings.getRootUrl(), group, mSettings.getAbbreviationMap())).timeout(5000).get();
+                            document = Jsoup.connect(
+                                    DataUtils.getGroupUrl(mSettings.getRootUrl(), group, mSettings.getAbbreviationMap(), mSettings.getNeftGroup()))
+                                    .timeout(5000).get();
                         } else {
-                            document = Jsoup.connect(DataUtils.getGroupUrl("http://109.195.146.243/wp-content/uploads/time/", group)).timeout(5000).get();
+                            document = Jsoup.connect(DataUtils.getGroupUrl("http://109.195.146.243/wp-content/uploads/time/", group))
+                                    .timeout(5000).get();
                         }
 
                     } catch (IOException e) {
@@ -161,14 +166,19 @@ public class TableServiceImpl implements TableService {
 
     @Override
     public Observable<TimeTable> getTimetableFromOnline(boolean online, String group) {
-
         return connectAndGetData(group).flatMap(document -> {
             if (document == null)
                 return Observable.error(new UncriticalException("Не удалось подключиться к сайту (1)"));
             return Observable.just(document);
         }).map(document -> DataUtils.parseDocument(document, group)).flatMap(tableWrapper -> {
-            if (tableWrapper.getDayList() == null || tableWrapper.getDayList().size() == 0)
+            if (tableWrapper.getDayList() == null || tableWrapper.getDayList().size() == 0) {
+                if (!hasError) {
+                    hasError = true;
+                    return getTimetableFromOnline(online, group);
+                }
                 return Observable.error(new UncriticalException("Ну удалось получить расписание (2)"));
+            }
+
             return Observable.just(tableWrapper);
         }).map(tableWrapper -> {
             mTimetableRepository.putTimeTable(tableWrapper, group);

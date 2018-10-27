@@ -13,10 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -31,31 +29,33 @@ public class DataUtils {
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
     public static String getGroupUrl(String group) {
-        return getGroupUrl("", group, null);
+        return getGroupUrl("", group, null, null);
     }
 
     public static String getGroupUrl(String root, String group) {
-        return getGroupUrl(root, group, null);
+        return getGroupUrl(root, group, null, null);
     }
 
-    public static String getGroupUrl(String root, String group, Map<String, String> abbreviationMap) {
+    public static String getGroupUrl(String root, String group, Map<String, String> abbreviationMap, List<String> neftGroup) {
 
         if (group == null || !groupPatternWithoutNum.matcher(group).matches())
             return "";
 
         String url = "";
 
-        Set<String> neftGroups = new HashSet<String>() {{
-            add("АПП");
-            add("БНГ");
-            add("В");
-            add("ПНГ");
-            add("ТАК");
-            add("ТО");
-            add("ТОВ");
-            add("ЭНН");
-            add("ЭННУ");
-        }};
+        if (neftGroup == null || neftGroup.size() == 0) {
+            neftGroup = new ArrayList<String>() {{
+                add("АПП");
+                add("БНГ");
+                add("В");
+                add("ПНГ");
+                add("ТАК");
+                add("ТО");
+                add("ТОВ");
+                add("ЭНН");
+                add("ЭННУ");
+            }};
+        }
 
         String abbr = "";
 
@@ -65,7 +65,7 @@ public class DataUtils {
             abbr = group.split(" ")[1];
         }
 
-        if (group.charAt(0) == '1' && neftGroups.contains(abbr)) {
+        if (group.charAt(0) == '1' && neftGroup.contains(abbr)) {
             url = switchAbbr(abbreviationMap,"1");
         } else {
             url = switchAbbr(abbreviationMap, abbr);
