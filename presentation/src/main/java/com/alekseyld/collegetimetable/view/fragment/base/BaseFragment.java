@@ -72,6 +72,8 @@ public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fra
                                     String negativeText,
                                     DialogInterface.OnClickListener positiveOperation,
                                     @Nullable  DialogInterface.OnClickListener negativeOperation) {
+        if (getContext() == null) return;
+
         new AlertDialog.Builder(getContext())
                 .setTitle(title)
                 .setMessage(text)
