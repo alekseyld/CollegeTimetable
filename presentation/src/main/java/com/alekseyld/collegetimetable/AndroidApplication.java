@@ -10,13 +10,13 @@ import com.alekseyld.collegetimetable.internal.di.module.ApplicationModule;
 import com.alekseyld.collegetimetable.job.TimetableJob;
 import com.alekseyld.collegetimetable.job.TimetableJobCreator;
 import com.alekseyld.collegetimetable.utils.Utils;
-import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 
 import java.util.Set;
 
-import io.fabric.sdk.android.Fabric;
+//import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -37,7 +37,7 @@ public class AndroidApplication extends Application {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
-        Fabric.with(this, new Crashlytics());
+        //Fabric.with(this, new Crashlytics());
 
         JobManager.create(this).addJobCreator(new TimetableJobCreator());
 

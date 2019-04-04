@@ -31,7 +31,6 @@ import com.alekseyld.collegetimetable.utils.DataUtils;
 import com.alekseyld.collegetimetable.view.TableView;
 import com.alekseyld.collegetimetable.view.adapter.TableAdapter;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
-import com.crashlytics.android.Crashlytics;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -133,7 +132,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
                 getActivity().setTitle("Группа: " + mGroup);
             }
 
-            Crashlytics.setString("Group", mGroup);
+            //Crashlytics.setString("Group", mGroup);
         }
     }
 
