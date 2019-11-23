@@ -1,9 +1,10 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
 import android.content.Intent;
-import androidx.test.rule.ActivityTestRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
+
 import android.view.View;
 import android.widget.TextView;
 
