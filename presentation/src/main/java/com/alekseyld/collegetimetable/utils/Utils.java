@@ -1,8 +1,11 @@
 package com.alekseyld.collegetimetable.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Environment;
 
+import com.alekseyld.collegetimetable.BuildConfig;
 import com.alekseyld.collegetimetable.job.RecursiveJob;
 import com.alekseyld.collegetimetable.job.TimetableJob;
 import com.evernote.android.job.JobManager;
@@ -13,6 +16,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Set;
+
+import androidx.core.content.FileProvider;
 
 /**
  * Created by Alekseyld on 08.10.2017.
@@ -39,11 +44,11 @@ public class Utils {
         return pathFile;
     }
 
-    public static File getImageFile(Bitmap pictureBitmap) throws IOException, NullPointerException {
+    public static File getImageFile(Bitmap pictureBitmap, File cacheDir) throws IOException, NullPointerException {
         File file = null;
 
         OutputStream fOut;
-        file = new File(getPathToCacheDir(), Utils.NAME_OF_CACHE_FILE);
+        file = new File(cacheDir, Utils.NAME_OF_CACHE_FILE);
 
         if (file.exists())
             file.delete();
@@ -55,6 +60,11 @@ public class Utils {
         fOut.close();
 
         return file;
+    }
+
+    public static Uri getImageFileUri(Context context, Bitmap pictureBitmap, File cacheDir) throws IOException, NullPointerException {
+
+        return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, getImageFile(pictureBitmap, cacheDir));
     }
 
     public static JobRequest getTimeTableJob() {

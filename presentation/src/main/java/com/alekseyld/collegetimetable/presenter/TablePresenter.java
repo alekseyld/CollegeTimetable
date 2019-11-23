@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 
+import com.alekseyld.collegetimetable.BuildConfig;
 import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
@@ -19,6 +20,7 @@ import com.alekseyld.collegetimetable.utils.DataUtils;
 import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.TableView;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.inject.Inject;
@@ -164,12 +166,15 @@ public class TablePresenter extends BasePresenter<TableView> {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    public void shareDay(Bitmap dayByBitmap) {
+    public void shareDay(Bitmap dayByBitmap, File cacheDir) {
         try {
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("image/*");
-            final Uri imageUri = Uri.fromFile(Utils.getImageFile(dayByBitmap));
+//            final Uri imageUri = Uri.fromFile(Utils.getImageFile(dayByBitmap, cacheDir));
+            final Uri imageUri = Utils.getImageFileUri(mView.getContext(), dayByBitmap, cacheDir);
             i.putExtra(Intent.EXTRA_STREAM, imageUri);
+
+            mView.getContext().grantUriPermission(BuildConfig.APPLICATION_ID, imageUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
             mView.getContext().startActivity(Intent.createChooser(i, "Поделиться расписанием"));
         } catch (android.content.ActivityNotFoundException | IOException | NullPointerException ex) {

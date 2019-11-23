@@ -111,7 +111,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     @Override
     public void shareDay(Bitmap image) {
         if (mPresenter != null) {
-            mPresenter.shareDay(image);
+            mPresenter.shareDay(image, getContext().getCacheDir());
         } else {
             showError("Ошибка при отправке расписания");
         }
@@ -147,14 +147,14 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
 
     private void showPhoneStatePermission() {
-        if (getActivity() == null)
-            return;
+//        if (getActivity() == null)
+//            return;
 
-        int permission = ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//        int permission = ContextCompat.checkSelfPermission(getActivity(),
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            makeRequest();
+//        if (permission != PackageManager.PERMISSION_GRANTED) {
+//            makeRequest();
 //            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
 //                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 //                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -175,7 +175,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 //            } else {
 //                makeRequest();
 //            }
-        }
+//        }
 
     }
 
