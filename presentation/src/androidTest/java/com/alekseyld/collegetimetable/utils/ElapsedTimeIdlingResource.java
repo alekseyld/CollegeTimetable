@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.utils;
 
-import android.support.test.espresso.IdlingResource;
+import androidx.test.espresso.IdlingResource;
 
 public class ElapsedTimeIdlingResource implements IdlingResource {
     private final long startTime;

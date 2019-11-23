@@ -1,7 +1,7 @@
 package com.alekseyld.collegetimetable.view.activity.base;
 
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
+import androidx.annotation.CallSuper;
 
 import com.alekseyld.collegetimetable.internal.di.HasComponent;
 
