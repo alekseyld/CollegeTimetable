@@ -95,13 +95,15 @@ public class TableServiceImpl implements TableService {
                     Document document;
 
                     try {
-                        document = Jsoup.connect(apiResponse.getResult()).timeout(5000).get();
+                        document = Jsoup.connect(apiResponse.getResult()).timeout(300).get();
                     } catch (IOException e) {
                         e.printStackTrace();
 
                         document = null;
-                    } catch (IllegalArgumentException e1) {
-                        return Observable.error(new UncriticalException("Некорректно введена группа"));
+                    }
+                    catch (IllegalArgumentException e1) {
+//                        return Observable.error(new UncriticalException("Некорректно введена группа"));
+                        document = null;
                     }
 
                     return Observable.just(document);

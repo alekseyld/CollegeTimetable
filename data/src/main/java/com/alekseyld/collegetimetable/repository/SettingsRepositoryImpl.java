@@ -45,6 +45,7 @@ public class SettingsRepositoryImpl implements SettingsRepository {
     public Settings updateSettings(SettingsResponse settings) {
         Settings settings1 = getSettings();
         settings1.setAbbreviationMap(settings.getAbbreviationMap());
+        settings1.setNeftGroup(settings.getNeftGroup());
         settings1.setRootUrl(settings.getRootUrl());
         saveSettings(settings1);
         return settings1;
