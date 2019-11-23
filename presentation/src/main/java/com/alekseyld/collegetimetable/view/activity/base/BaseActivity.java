@@ -24,12 +24,14 @@ import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAM
  */
 public abstract class BaseActivity extends AppCompatActivity{
 
+    public static boolean isDarkMode = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         SharedPreferences sharedPreferences = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
-        boolean isDarkMode = sharedPreferences.getBoolean(DARK_MODE_KEY, false);
+        isDarkMode = sharedPreferences.getBoolean(DARK_MODE_KEY, false);
 
         if (isDarkMode) {
             setTheme(R.style.DarkAppTheme);

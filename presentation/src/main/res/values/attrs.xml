@@ -5,6 +5,8 @@
         <attr name="listBackground" format="color" />
         <attr name="colorBackground" format="color" />
         <attr name="dividerColor" format="color|reference" />
+
+        <attr name="navigationHeader" format="reference" />
     </declare-styleable>
     
 </resources>
