@@ -18,8 +18,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 23
-        versionName "11"
+        versionCode 24
+        versionName "12"
 
     }
     buildTypes {
