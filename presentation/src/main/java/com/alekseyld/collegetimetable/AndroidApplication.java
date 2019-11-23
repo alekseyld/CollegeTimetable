@@ -41,8 +41,8 @@ public class AndroidApplication extends Application {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
-//        Fabric.with(this, new Crashlytics());
         FirebaseApp.initializeApp(this);
+        Fabric.with(this, new Crashlytics());
 
         JobManager.create(this).addJobCreator(new TimetableJobCreator());
 
