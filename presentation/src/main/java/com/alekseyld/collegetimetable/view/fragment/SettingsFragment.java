@@ -3,7 +3,9 @@ package com.alekseyld.collegetimetable.view.fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
+
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +52,9 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
     Switch notifOn;
     @BindView(R.id.changeMode)
     Switch changeMode;
+    @BindView(R.id.darkMode)
+    Switch darkMode;
+
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -147,6 +152,17 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
             }
         });
 
+        darkMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean isDarkMode = darkMode.isChecked();
+
+                mPresenter.saveDarkMode(isDarkMode);
+
+                if (getActivity() != null) getActivity().recreate();
+            }
+        });
+
         TypedValue outValue = new TypedValue();
         getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
         addFarvorite.setBackgroundResource(outValue.resourceId);
@@ -196,6 +212,7 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         notifOn.setChecked(mPresenter.getNotifOn());
         changeMode.setChecked(mPresenter.getChangeMode());
         teachMode.setChecked(mPresenter.getTeacherMode());
+        darkMode.setChecked(mPresenter.getDarkMode());
 
         if (teachMode.isChecked()) {
             addNotifTitle.setText(getString(R.string.teacherSettingTitle));

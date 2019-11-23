@@ -21,6 +21,7 @@ public class Settings {
     private boolean notifOn;
     private boolean alarmMode;
     private boolean changeMode;
+    private boolean darkMode;
 
     private boolean teacherMode;
     private Set<String> teacherGroups = new HashSet<>();
@@ -136,6 +137,15 @@ public class Settings {
 
     public Settings setNeftGroup(List<String> neftGroup) {
         this.neftGroup = neftGroup;
+        return this;
+    }
+
+    public boolean isDarkMode() {
+        return darkMode;
+    }
+
+    public Settings setDarkMode(boolean darkMode) {
+        this.darkMode = darkMode;
         return this;
     }
 

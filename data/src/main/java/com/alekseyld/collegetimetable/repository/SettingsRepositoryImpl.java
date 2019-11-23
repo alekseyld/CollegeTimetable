@@ -37,6 +37,7 @@ public class SettingsRepositoryImpl implements SettingsRepository {
         SharedPreferences.Editor ed = mPref.edit();
         ed.putString(SETTINGS_KEY, json);
         ed.putBoolean(NOTIFON_KEY, settings.getNotifOn());
+        ed.putBoolean(DARK_MODE_KEY, settings.isDarkMode());
         ed.apply();
         return true;
     }

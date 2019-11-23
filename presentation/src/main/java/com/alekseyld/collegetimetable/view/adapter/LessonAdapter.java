@@ -4,6 +4,8 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.res.TypedArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +51,17 @@ class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
         holder.lessonName.setText(lesson.getDoubleName());
         holder.lessonTeacher.setVisibility(View.GONE);
 
+        if (position == getItemCount() - 1) {
+            holder.itemView.setBackground(ContextCompat.getDrawable(context, R.drawable.border_background));
+
+        } else {
+            TypedArray ta = context.getTheme().obtainStyledAttributes(R.styleable.AppTheme);
+
+            int dividerColor = ta.getColor(R.styleable.AppTheme_listBackground, 0);
+
+            holder.itemView.setBackgroundColor(dividerColor);
+        }
+
         if (lesson.isChange()) {
             if (isChangeMode) {
                 holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorChanges));
@@ -56,6 +69,7 @@ class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
                 holder.lessonName.setTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_dark));
             }
         }
+
 
     }
 

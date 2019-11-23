@@ -36,6 +36,8 @@ android {
         versionCode 24
         versionName "12"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables.useSupportLibrary = true
     }
     packagingOptions {
         exclude 'LICENSE.txt'

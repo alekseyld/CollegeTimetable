@@ -130,4 +130,14 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
     public boolean getTeacherMode() {
         return mSettings.getTeacherMode();
     }
+
+    public boolean getDarkMode() {
+        return mSettings.isDarkMode();
+    }
+
+    public void saveDarkMode(boolean darkMode) {
+        mSettings.setDarkMode(darkMode);
+        saveSettings();
+    }
+
 }

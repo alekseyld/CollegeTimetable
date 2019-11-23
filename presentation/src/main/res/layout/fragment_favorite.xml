@@ -26,8 +26,10 @@
         app:useCompatPadding="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_gravity="bottom|end"
         android:clickable="true"
+        android:focusable="true"
         app:fabSize="normal"
         app:srcCompat="@drawable/ic_add_white_24dp" />
 

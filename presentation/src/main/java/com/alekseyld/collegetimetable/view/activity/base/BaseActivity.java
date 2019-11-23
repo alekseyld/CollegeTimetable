@@ -2,6 +2,7 @@ package com.alekseyld.collegetimetable.view.activity.base;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -15,6 +16,9 @@ import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.ApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.module.ActivityModule;
 
+import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.DARK_MODE_KEY;
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
+
 /**
  * Base {@link android.app.Activity} class for every Activity in this application.
  */
@@ -23,6 +27,15 @@ public abstract class BaseActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
+        boolean isDarkMode = sharedPreferences.getBoolean(DARK_MODE_KEY, false);
+
+        if (isDarkMode) {
+            setTheme(R.style.DarkAppTheme);
+        } else  {
+            setTheme(R.style.AppTheme);
+        }
     }
 
     protected void addFragment(Fragment fragment) {

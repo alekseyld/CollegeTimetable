@@ -32,7 +32,8 @@
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/nav_header"/>
+        app:headerLayout="@layout/nav_header"
+        app:itemTextColor="?android:textColor"/>
         <!--app:menu="@menu/activity_main_drawer"-->
         <!--/>-->
 
