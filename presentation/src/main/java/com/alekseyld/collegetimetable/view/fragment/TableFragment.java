@@ -31,6 +31,8 @@ import com.alekseyld.collegetimetable.utils.DataUtils;
 import com.alekseyld.collegetimetable.view.TableView;
 import com.alekseyld.collegetimetable.view.adapter.TableAdapter;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
+import com.crashlytics.android.Crashlytics;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -112,6 +114,12 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     public void shareDay(Bitmap image) {
         if (mPresenter != null) {
             mPresenter.shareDay(image, getContext().getCacheDir());
+
+            Bundle b = new Bundle();
+            b.putString("group", getGroup());
+            FirebaseAnalytics.getInstance(getContext())
+                    .logEvent(FirebaseAnalytics.Event.SHARE, b);
+
         } else {
             showError("Ошибка при отправке расписания");
         }
@@ -132,7 +140,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
                 getActivity().setTitle("Группа: " + mGroup);
             }
 
-            //Crashlytics.setString("Group", mGroup);
+            Crashlytics.setString("Group", mGroup);
         }
     }
 

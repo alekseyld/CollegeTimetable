@@ -130,7 +130,8 @@ public class TableServiceImpl implements TableService {
 
                         document = null;
                     } catch (IllegalArgumentException e1) {
-                        return Observable.error(new UncriticalException("Некорректно введена группа."));
+//                        return Observable.error(new UncriticalException("Некорректно введена группа."));
+                        document = null;
                     }
 
                     return Observable.just(document);
