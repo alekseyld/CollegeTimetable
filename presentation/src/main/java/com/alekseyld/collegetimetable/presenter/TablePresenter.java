@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Bundle;
 
 import com.alekseyld.collegetimetable.BuildConfig;
 import com.alekseyld.collegetimetable.entity.Settings;
@@ -19,6 +20,7 @@ import com.alekseyld.collegetimetable.usecase.GetTableFromOnlineUseCase;
 import com.alekseyld.collegetimetable.utils.DataUtils;
 import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.TableView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,18 +77,22 @@ public class TablePresenter extends BasePresenter<TableView> {
 
     private void processGroupIncorectedMessage(String title) {
         mView.showAlertDialog(title,
-                "Текущая группа: " + mView.getGroup() + "\n"
-                        + "Если Вы уверены в правильности набранной группы, пожалуйста сообщите мне об ошибке",
-                "Хорошо",
-                "Не сейчас",
+                "Текущая группа: " + mView.getGroup(),
+                "Ок",
+                null,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String url = "https://vk.com/topic-167263982_39078750";
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(url));
-                        mView.getBaseActivity().startActivity(intent);
-                        dialog.dismiss();
+//                        String url = "https://vk.com/topic-167263982_39078750";
+//                        Intent intent = new Intent(Intent.ACTION_VIEW);
+//                        intent.setData(Uri.parse(url));
+//                        mView.getBaseActivity().startActivity(intent);
+//                        dialog.dismiss();
+
+                        Bundle b = new Bundle();
+                        b.putString("group", mView.getGroup());
+                        FirebaseAnalytics.getInstance(mView.getContext())
+                                .logEvent("incorrect_group", b);
                     }
                 }, null);
     }

@@ -15,6 +15,7 @@ import com.alekseyld.collegetimetable.AndroidApplication;
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.component.ApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.module.ActivityModule;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.DARK_MODE_KEY;
 import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
@@ -32,6 +33,9 @@ public abstract class BaseActivity extends AppCompatActivity{
 
         SharedPreferences sharedPreferences = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
         isDarkMode = sharedPreferences.getBoolean(DARK_MODE_KEY, false);
+
+        FirebaseAnalytics.getInstance(this)
+                .setUserProperty("dark_mode", Boolean.toString(isDarkMode));
 
         if (isDarkMode) {
             setTheme(R.style.DarkAppTheme);
