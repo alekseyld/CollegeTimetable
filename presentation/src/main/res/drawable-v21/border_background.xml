@@ -8,7 +8,7 @@
     <item android:right="0dp" android:left="0dp" android:bottom="0dp" android:top="0dp">
         <shape
             android:shape="rectangle">
-            <solid android:color="@color/colorList"/>
+            <solid android:color="?attr/listBackground"/>
             <corners android:topLeftRadius="0.1dp" android:topRightRadius="0.1dp"
                 android:bottomLeftRadius="4dp" android:bottomRightRadius="4dp"/>
         </shape>
