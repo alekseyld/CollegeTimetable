@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.Day;
 import com.alekseyld.collegetimetable.entity.Lesson;
+import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 import com.alekseyld.collegetimetable.view.adapter.holder.LessonViewHolder;
 
 /**
@@ -64,7 +65,14 @@ class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
 
         if (lesson.isChange()) {
             if (isChangeMode) {
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorChanges));
+
+                if (BaseActivity.isDarkMode) {
+                    holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.darkColorChanges));
+                } else {
+                    holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorChanges));
+                }
+
+
             } else {
                 holder.lessonName.setTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_dark));
             }
