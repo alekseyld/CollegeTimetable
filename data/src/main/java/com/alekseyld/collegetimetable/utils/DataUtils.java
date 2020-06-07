@@ -41,6 +41,8 @@ public class DataUtils {
         if (group == null || !groupPatternWithoutNum.matcher(group).matches())
             return "";
 
+        if (root.equals("")) return "";
+
         String url = "";
 
         if (neftGroup == null || neftGroup.size() == 0) {
@@ -72,9 +74,6 @@ public class DataUtils {
         }
 
         if (url == null) return "";
-
-        if (root.equals(""))
-            root = "http://uecoll.ru/wp-content/uploads/time/";
 
         return url.equals("") ? url : root + url;
     }
