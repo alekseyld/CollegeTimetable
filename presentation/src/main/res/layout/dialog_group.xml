@@ -11,13 +11,15 @@
     <com.alekseyld.collegetimetable.view.widget.GroupInputWidget
         android:id="@+id/group_widget"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/teacher_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Фамилия И.О."
+        android:textColor="?android:textColor"
+        android:textColorHint="?android:textColorSecondary"
         android:visibility="gone"/>
 
 </LinearLayout>

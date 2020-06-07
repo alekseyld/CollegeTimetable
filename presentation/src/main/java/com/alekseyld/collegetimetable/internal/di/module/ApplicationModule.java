@@ -24,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class ApplicationModule {
     private final AndroidApplication application;
-    static final String HOST_PROXY = "http://noblockme.ru/api/";
+    static final String HOST_PROXY = "https://noblockme.ru/api/";
     static final String HOST_SETTINGS = "https://alekseyld.github.io/CollegeTimetable/";
 
     public ApplicationModule(AndroidApplication application) {

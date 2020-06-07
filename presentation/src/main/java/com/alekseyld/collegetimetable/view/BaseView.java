@@ -2,7 +2,7 @@ package com.alekseyld.collegetimetable.view;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 

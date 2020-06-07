@@ -29,7 +29,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:textColor="?android:textColor"
             android:textAlignment="center"
             android:text="@string/tv_course"
             android:layout_weight="1.2" />
@@ -37,7 +37,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:textColor="?android:textColor"
             android:textAlignment="center"
             android:text="@string/tv_abriv"
             android:layout_weight="1"/>
@@ -45,14 +45,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:textColor="?android:textColor"
             android:textAlignment="center"
             android:layout_weight="1.4"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:textColor="?android:textColor"
             android:textAlignment="center"
             android:text="@string/tv_num"
             android:layout_weight="1.2"/>
@@ -75,6 +75,8 @@
             android:maxLines="1"
             android:inputType="number"
             android:textAlignment="center"
+            android:textColor="?android:textColor"
+            android:textColorHint="?android:textColorSecondary"
             android:nextFocusDown="@+id/abbreviation" />
 
         <EditText
@@ -86,6 +88,8 @@
             android:hint="@string/hint_abbr"
             android:textAlignment="center"
             android:maxLength="5"
+            android:textColor="?android:textColor"
+            android:textColorHint="?android:textColorSecondary"
             android:nextFocusDown="@+id/index_number" />
 
         <TextView
@@ -94,7 +98,7 @@
             android:layout_weight="1.4"
             android:text="-"
             android:gravity="center"
-            android:textColor="@android:color/black" />
+            android:textColor="?android:textColor" />
 
         <EditText
             android:id="@+id/index_number"
@@ -104,12 +108,14 @@
             android:hint="@string/hint_num"
             android:inputType="number"
             android:maxLength="1"
+            android:textColor="?android:textColor"
+            android:textColorHint="?android:textColorSecondary"
             android:textAlignment="center"
             />
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/selectedGroups"
         android:visibility="gone"
         android:layout_width="match_parent"

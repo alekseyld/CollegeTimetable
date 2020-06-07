@@ -5,13 +5,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
 import com.alekseyld.collegetimetable.R;
+import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFavoriteFragment;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFragment;
 import com.alekseyld.collegetimetable.view.widget.GroupInputWidget;
@@ -24,7 +27,7 @@ public class GroupInputDialogFragment extends DialogFragment {
 
     private boolean teacherMode = false;
 
-    public static GroupInputDialogFragment newInstance(boolean isFavorite, boolean teacherMode){
+    public static GroupInputDialogFragment newInstance(boolean isFavorite, boolean teacherMode) {
         GroupInputDialogFragment fragment = new GroupInputDialogFragment();
 
         Bundle bundle = new Bundle();
@@ -46,31 +49,38 @@ public class GroupInputDialogFragment extends DialogFragment {
 
         teacherMode = getArguments().getBoolean("teacherMode");
 
-        if (teacherMode){
+        if (teacherMode) {
             groupInputWidget.setVisibility(View.GONE);
             teacherInput.setVisibility(View.VISIBLE);
         }
 
         String positiveText = "Сохранить";
 
-        if (getArguments().getBoolean("isFavorite")){
+        if (getArguments().getBoolean("isFavorite")) {
             positiveText = "Добавить";
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setView(v)
+        AlertDialog.Builder builder;
+
+        if (BaseActivity.isDarkMode) {
+            builder = new AlertDialog.Builder(getActivity(), R.style.DarkDialogTheme);
+        } else {
+            builder = new AlertDialog.Builder(getActivity());
+        }
+
+        builder.setView(v)
                 .setPositiveButton(positiveText, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (teacherMode) {
-                            ((SettingsFragment)getTargetFragment()).saveNotification(teacherInput.getText().toString());
+                            ((SettingsFragment) getTargetFragment()).saveNotification(teacherInput.getText().toString());
                             return;
                         }
 
-                        if (getTargetFragment() instanceof SettingsFragment){
-                            ((SettingsFragment)getTargetFragment()).saveNotification(groupInputWidget.getGroup());
-                        } else if (getTargetFragment() instanceof SettingsFavoriteFragment){
-                            ((SettingsFavoriteFragment)getTargetFragment()).addFavoriteGroup(groupInputWidget.getGroup());
+                        if (getTargetFragment() instanceof SettingsFragment) {
+                            ((SettingsFragment) getTargetFragment()).saveNotification(groupInputWidget.getGroup());
+                        } else if (getTargetFragment() instanceof SettingsFavoriteFragment) {
+                            ((SettingsFavoriteFragment) getTargetFragment()).addFavoriteGroup(groupInputWidget.getGroup());
                         }
 
                     }

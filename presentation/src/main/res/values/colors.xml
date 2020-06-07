@@ -6,10 +6,28 @@
 
     <color name="colorBorder">#4fa5d5</color>
     <color name="colorBackground">#F5F5F5</color>
+
     <color name="colorList">#FFFFFF</color>
 
     <color name="colorChanges">#d7ebfc</color>
+    <color name="darkColorChanges">#272E3C</color>
+
+    <color name="dividerColor">#DCDCDC</color>
 
     <color name="color_nav_background">#EEEEEE</color>
+
+    <color name="darkColorPrimary">#19212C</color>
+    <color name="darkColorPrimaryDark">#141B23</color>
+    <color name="darkColorAccent">#48689C</color>
+
+    <color name="darkWindowBackground">#181A27</color>
+    <color name="darkColorBackground">@color/darkWindowBackground</color>
+
+    <color name="darkColorList">#11131B</color>
+
+    <color name="darkDividerColor">#2C313F</color>
+
+    <color name="darkTextColor">@android:color/white</color>
+    <color name="darkTextColorSecondary">#757575</color>
 
 </resources>

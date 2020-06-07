@@ -8,11 +8,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.widget.Toast;
 
+import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.HasComponent;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
 import com.alekseyld.collegetimetable.view.BaseView;
@@ -24,7 +27,7 @@ import javax.inject.Inject;
 /**
  * Base {@link android.app.Fragment} class for every fragment in this application.
  */
-public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fragment implements BaseView{
+public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fragment implements BaseView {
 
     @Inject
     protected TPresenter mPresenter;
@@ -38,9 +41,9 @@ public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fra
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mPresenter != null) {
+        if (mPresenter != null) {
             mPresenter.destroy();
-        }else {
+        } else {
             Log.e("BaseFragment", "onDestroy");
         }
     }
@@ -67,15 +70,22 @@ public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fra
     }
 
     public void showAlertDialog(String title,
-                                    @Nullable String text,
-                                    String positiveText,
-                                    String negativeText,
-                                    DialogInterface.OnClickListener positiveOperation,
-                                    @Nullable  DialogInterface.OnClickListener negativeOperation) {
+                                @Nullable String text,
+                                String positiveText,
+                                String negativeText,
+                                DialogInterface.OnClickListener positiveOperation,
+                                @Nullable DialogInterface.OnClickListener negativeOperation) {
         if (getContext() == null) return;
 
-        new AlertDialog.Builder(getContext())
-                .setTitle(title)
+        AlertDialog.Builder builder;
+
+        if (BaseActivity.isDarkMode) {
+            builder = new AlertDialog.Builder(getContext(), R.style.DarkDialogTheme);
+        } else {
+            builder = new AlertDialog.Builder(getContext());
+        }
+
+        builder.setTitle(title)
                 .setMessage(text)
                 .setCancelable(false)
                 .setPositiveButton(positiveText, positiveOperation)
@@ -96,14 +106,14 @@ public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fra
         return componentType.cast(((HasComponent<C>) getActivity()).getComponent());
     }
 
-    protected void initialize(){
+    protected void initialize() {
         initializeInjections();
         mPresenter.setView(this);
     }
 
     @Override
-    public BaseActivity getBaseActivity(){
-        return (BaseActivity)this.getActivity();
+    public BaseActivity getBaseActivity() {
+        return (BaseActivity) this.getActivity();
     }
 
     @Override

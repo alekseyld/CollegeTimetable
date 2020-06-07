@@ -51,7 +51,7 @@
     <string name="_17_10_18_30">17:10 - 18:30</string>
     <string name="message">Попробуйте обновить расписание,\nЛибо настроить приложение</string>
     <string name="disclaimer">Дисклеймер</string>
-    <string name="github">Участвовать в процессе разработки</string>
+    <string name="github">Исходный код на Github</string>
     <string name="tv_abriv">Аббревиатура</string>
     <string name="tv_course">Курс</string>
     <string name="tv_num">Номер</string>
@@ -68,4 +68,6 @@
     <string name="teache_mode_title">Режим преподавателя (beta)</string>
     <string name="addTeacherGroup">Группы преподавателя</string>
     <string name="group_about">Группа в VK</string>
+    <string name="darkMode">Темная тема</string>
+    <string name="updateLinks">Обновить ссылки</string>
 </resources>

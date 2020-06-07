@@ -17,6 +17,7 @@ public interface SettingsRepository {
     String ALARMMODE_KEY = "AlarmMode";
     String NOTIFON_KEY = "NotifOn";
     String FAVORITEGROUPS_KEY = "FavoriteGroups";
+    String DARK_MODE_KEY = "DarkMode";
 
     boolean saveSettings(Settings settings);
     Settings updateSettings(SettingsResponse settings);

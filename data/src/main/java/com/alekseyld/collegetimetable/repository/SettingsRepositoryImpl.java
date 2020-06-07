@@ -37,17 +37,19 @@ public class SettingsRepositoryImpl implements SettingsRepository {
         SharedPreferences.Editor ed = mPref.edit();
         ed.putString(SETTINGS_KEY, json);
         ed.putBoolean(NOTIFON_KEY, settings.getNotifOn());
+        ed.putBoolean(DARK_MODE_KEY, settings.isDarkMode());
         ed.apply();
         return true;
     }
 
     @Override
     public Settings updateSettings(SettingsResponse settings) {
-        Settings settings1 = getSettings();
-        settings1.setAbbreviationMap(settings.getAbbreviationMap());
-        settings1.setRootUrl(settings.getRootUrl());
-        saveSettings(settings1);
-        return settings1;
+        Settings updatedSettings = getSettings();
+        updatedSettings.setAbbreviationMap(settings.getAbbreviationMap());
+        updatedSettings.setNeftGroup(settings.getNeftGroup());
+        updatedSettings.setRootUrl(settings.getRootUrl());
+        saveSettings(updatedSettings);
+        return updatedSettings;
     }
 
     @Override

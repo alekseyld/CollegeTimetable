@@ -1,18 +1,25 @@
 package com.alekseyld.collegetimetable.presenter;
 
+import android.webkit.URLUtil;
+
 import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
 import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.SaveSettingsUseCase;
+import com.alekseyld.collegetimetable.usecase.UpdateSettingsUseCase;
 import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.SettingsView;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashSet;
 
 import javax.inject.Inject;
+
+import io.fabric.sdk.android.services.network.UrlUtils;
 
 /**
  * Created by Alekseyld on 04.09.2016.
@@ -25,14 +32,18 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
     private Settings mSettings;
     private SaveSettingsUseCase mSaveSettingsUseCase;
     private GetSettingsUseCase mGetSettingsUseCase;
+    private UpdateSettingsUseCase mUpdateSettingsUseCase;
 
     @Inject
     public SettingsPresenter(SettingsResultProcessor settingsResultProcessor,
                              SaveSettingsUseCase saveSettingsUseCase,
-                             GetSettingsUseCase getSettingsUseCase) {
+                             GetSettingsUseCase getSettingsUseCase,
+                             UpdateSettingsUseCase updateSettingsUseCase) {
         mProcessor = settingsResultProcessor;
         mSaveSettingsUseCase = saveSettingsUseCase;
         mGetSettingsUseCase = getSettingsUseCase;
+        mUpdateSettingsUseCase = updateSettingsUseCase;
+
         mSettings = new Settings(new HashSet<String>(), "", false, true);
     }
 
@@ -130,4 +141,45 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
     public boolean getTeacherMode() {
         return mSettings.getTeacherMode();
     }
+
+    public boolean getDarkMode() {
+        return mSettings.isDarkMode();
+    }
+
+    public void saveDarkMode(boolean darkMode) {
+        mSettings.setDarkMode(darkMode);
+        saveSettings();
+    }
+
+    public void updateLinks() {
+        mUpdateSettingsUseCase.execute(new BaseSubscriber<Settings>() {
+
+            @Override
+            public void onNext(Settings settings) {
+                super.onNext(settings);
+
+                String newRootUrl = settings.getRootUrl();
+
+                if (URLUtil.isValidUrl(newRootUrl)) {
+                    try {
+                        String domain = new URL(newRootUrl).getAuthority();
+                        mView.showError(String.format("Новый домен: %s", domain));
+
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    mView.showError("Не удалось обновить настройки приложения");
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                e.printStackTrace();
+                mView.showError("Не удалось обновить настройки приложения");
+            }
+        });
+    }
+
 }

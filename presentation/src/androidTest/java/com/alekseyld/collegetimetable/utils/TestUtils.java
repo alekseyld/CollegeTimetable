@@ -1,8 +1,8 @@
 package com.alekseyld.collegetimetable.utils;
 
-import android.support.test.espresso.Espresso;
-import android.support.test.espresso.IdlingPolicies;
-import android.support.test.espresso.IdlingResource;
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.IdlingPolicies;
+import androidx.test.espresso.IdlingResource;
 
 import java.util.concurrent.TimeUnit;
 

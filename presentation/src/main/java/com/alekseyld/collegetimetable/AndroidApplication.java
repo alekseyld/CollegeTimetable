@@ -11,10 +11,14 @@ import com.alekseyld.collegetimetable.job.TimetableJob;
 import com.alekseyld.collegetimetable.job.TimetableJobCreator;
 import com.alekseyld.collegetimetable.utils.Utils;
 //import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
+import com.google.firebase.FirebaseApp;
 
 import java.util.Set;
+
+import io.fabric.sdk.android.Fabric;
 
 //import io.fabric.sdk.android.Fabric;
 
@@ -37,7 +41,8 @@ public class AndroidApplication extends Application {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
-        //Fabric.with(this, new Crashlytics());
+        FirebaseApp.initializeApp(this);
+        Fabric.with(this, new Crashlytics());
 
         JobManager.create(this).addJobCreator(new TimetableJobCreator());
 

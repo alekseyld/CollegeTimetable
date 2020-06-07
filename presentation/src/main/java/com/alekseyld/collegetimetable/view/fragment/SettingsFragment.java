@@ -2,8 +2,11 @@ package com.alekseyld.collegetimetable.view.fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
+
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +53,11 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
     Switch notifOn;
     @BindView(R.id.changeMode)
     Switch changeMode;
+    @BindView(R.id.darkMode)
+    Switch darkMode;
+    @BindView(R.id.updateLinks)
+    TextView updateLinks;
+
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -147,6 +155,45 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
             }
         });
 
+        darkMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean isDarkMode = darkMode.isChecked();
+
+                mPresenter.saveDarkMode(isDarkMode);
+
+                if (getActivity() != null) getActivity().recreate();
+            }
+        });
+
+        updateLinks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAlertDialog("Обновить данные ссылке и группах?",
+                        "Чтобы посмотреть откуда и что будет обновляться, нажмите на \"Источник\" (откроется в браузере)",
+                        "Обновить",
+                        "Источник",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mPresenter.updateLinks();
+                                dialog.dismiss();
+                                Toast.makeText(getContext(), "Идет обновление..", Toast.LENGTH_SHORT).show();
+                            }
+                        }, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(
+                                        new Intent(Intent.ACTION_VIEW,
+                                                Uri.parse("https://raw.githubusercontent.com/alekseyld/CollegeTimetable/master/docs/pref.html")
+                                        )
+                                );
+                                dialog.dismiss();
+                            }
+                        });
+            }
+        });
+
         TypedValue outValue = new TypedValue();
         getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
         addFarvorite.setBackgroundResource(outValue.resourceId);
@@ -196,6 +243,7 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         notifOn.setChecked(mPresenter.getNotifOn());
         changeMode.setChecked(mPresenter.getChangeMode());
         teachMode.setChecked(mPresenter.getTeacherMode());
+        darkMode.setChecked(mPresenter.getDarkMode());
 
         if (teachMode.isChecked()) {
             addNotifTitle.setText(getString(R.string.teacherSettingTitle));

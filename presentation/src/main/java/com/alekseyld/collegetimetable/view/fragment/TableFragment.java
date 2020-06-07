@@ -6,12 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +31,8 @@ import com.alekseyld.collegetimetable.utils.DataUtils;
 import com.alekseyld.collegetimetable.view.TableView;
 import com.alekseyld.collegetimetable.view.adapter.TableAdapter;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
+import com.crashlytics.android.Crashlytics;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -111,7 +113,13 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     @Override
     public void shareDay(Bitmap image) {
         if (mPresenter != null) {
-            mPresenter.shareDay(image);
+            mPresenter.shareDay(image, getContext().getCacheDir());
+
+            Bundle b = new Bundle();
+            b.putString("group", getGroup());
+            FirebaseAnalytics.getInstance(getContext())
+                    .logEvent(FirebaseAnalytics.Event.SHARE, b);
+
         } else {
             showError("Ошибка при отправке расписания");
         }
@@ -132,7 +140,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
                 getActivity().setTitle("Группа: " + mGroup);
             }
 
-            //Crashlytics.setString("Group", mGroup);
+            Crashlytics.setString("Group", mGroup);
         }
     }
 
@@ -147,14 +155,14 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
 
     private void showPhoneStatePermission() {
-        if (getActivity() == null)
-            return;
+//        if (getActivity() == null)
+//            return;
 
-        int permission = ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//        int permission = ContextCompat.checkSelfPermission(getActivity(),
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            makeRequest();
+//        if (permission != PackageManager.PERMISSION_GRANTED) {
+//            makeRequest();
 //            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
 //                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 //                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -175,7 +183,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 //            } else {
 //                makeRequest();
 //            }
-        }
+//        }
 
     }
 

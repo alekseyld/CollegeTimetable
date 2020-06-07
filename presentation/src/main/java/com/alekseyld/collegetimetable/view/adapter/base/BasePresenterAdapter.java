@@ -1,7 +1,7 @@
 package com.alekseyld.collegetimetable.view.adapter.base;
 
 import android.os.Handler;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.alekseyld.collegetimetable.presenter.base.Presenter;
 

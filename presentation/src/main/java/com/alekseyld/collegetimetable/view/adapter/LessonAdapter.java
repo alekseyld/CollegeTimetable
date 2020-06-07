@@ -1,9 +1,11 @@
 package com.alekseyld.collegetimetable.view.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.res.TypedArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.Day;
 import com.alekseyld.collegetimetable.entity.Lesson;
+import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
 import com.alekseyld.collegetimetable.view.adapter.holder.LessonViewHolder;
 
 /**
@@ -49,13 +52,32 @@ class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
         holder.lessonName.setText(lesson.getDoubleName());
         holder.lessonTeacher.setVisibility(View.GONE);
 
+        if (position == getItemCount() - 1) {
+            holder.itemView.setBackground(ContextCompat.getDrawable(context, R.drawable.border_background));
+
+        } else {
+            TypedArray ta = context.getTheme().obtainStyledAttributes(R.styleable.AppTheme);
+
+            int dividerColor = ta.getColor(R.styleable.AppTheme_listBackground, 0);
+
+            holder.itemView.setBackgroundColor(dividerColor);
+        }
+
         if (lesson.isChange()) {
             if (isChangeMode) {
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorChanges));
+
+                if (BaseActivity.isDarkMode) {
+                    holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.darkColorChanges));
+                } else {
+                    holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorChanges));
+                }
+
+
             } else {
                 holder.lessonName.setTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_dark));
             }
         }
+
 
     }
 
