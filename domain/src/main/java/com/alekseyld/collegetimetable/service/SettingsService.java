@@ -12,5 +12,6 @@ public interface SettingsService {
 
     Observable<Boolean> saveSettings(Settings settings);
     Observable<Settings> getSettings();
+    Observable<Settings> updateSettingsOnline();
 
 }

@@ -108,5 +108,15 @@
 
         <include layout="@layout/divider" />
 
+        <TextView
+            android:id="@+id/updateLinks"
+            style="@style/SettingTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?android:textColor"
+            android:text="@string/updateLinks" />
+
+        <include layout="@layout/divider" />
+
     </LinearLayout>
 </ScrollView>

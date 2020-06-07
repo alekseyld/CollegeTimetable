@@ -69,4 +69,5 @@
     <string name="addTeacherGroup">Группы преподавателя</string>
     <string name="group_about">Группа в VK</string>
     <string name="darkMode">Темная тема</string>
+    <string name="updateLinks">Обновить ссылки</string>
 </resources>
