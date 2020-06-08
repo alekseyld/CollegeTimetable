@@ -206,7 +206,7 @@ public class TableServiceImpl implements TableService {
                     currentUrl[1] = group;
                     return group;
                 })
-                .map(DataUtils::getGroupUrl)
+                .flatMap(this::getGroupUrl)
                 .map(url -> {
                     if (documentAssociation.containsKey(url))
                         return "";
@@ -215,12 +215,11 @@ public class TableServiceImpl implements TableService {
                     return url;
                 })
                 .flatMap(url -> !url.equals("") ? connectAndGetData(currentUrl[1]) : Observable.just(null))
-                .map(document -> document != null ? documentAssociation.put(currentUrl[0], document) : Observable.just(null))
+                .map(document -> document != null ? documentAssociation.put(currentUrl[1], document) : Observable.just(null))
                 .toList()
                 .flatMap(list -> Observable.from(groups))
                 .map(group -> {
-                    String url = DataUtils.getGroupUrl(group);
-                    Document document = documentAssociation.get(url);
+                    Document document = documentAssociation.get(group);
 
                     return DataUtils.parseDocument(document, group);
                 });
