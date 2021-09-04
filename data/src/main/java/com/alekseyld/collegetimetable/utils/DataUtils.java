@@ -28,57 +28,7 @@ public class DataUtils {
     public static Pattern fioPattern = Pattern.compile("([А-ЯЁа-яё]{1,}[\\s]([А-ЯЁа-яё]{1}[.]){2})");
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
-    public static String getGroupUrl(String group) {
-        return getGroupUrl("", group, null, null);
-    }
-
-    public static String getGroupUrl(String root, String group) {
-        return getGroupUrl(root, group, null, null);
-    }
-
-    public static String getGroupUrl(String root, String group, Map<String, String> abbreviationMap, List<String> neftGroup) {
-
-        if (group == null || !groupPatternWithoutNum.matcher(group).matches())
-            return "";
-
-        if (root.equals("")) return "";
-
-        String url = "";
-
-        if (neftGroup == null || neftGroup.size() == 0) {
-            neftGroup = new ArrayList<String>() {{
-                add("АПП");
-                add("БНГ");
-                add("В");
-                add("ПНГ");
-                add("ТАК");
-                add("ТО");
-                add("ТОВ");
-                add("ЭНН");
-                add("ЭННУ");
-            }};
-        }
-
-        String abbr = "";
-
-        if (groupPatternWithoutNum.matcher(group).matches()) {
-            abbr = group.split(" ")[1].split("-")[0];
-        } else {
-            abbr = group.split(" ")[1];
-        }
-
-        if (group.charAt(0) == '1' && neftGroup.contains(abbr)) {
-            url = switchAbbr(abbreviationMap,"1");
-        } else {
-            url = switchAbbr(abbreviationMap, abbr);
-        }
-
-        if (url == null) return "";
-
-        return url.equals("") ? url : root + url;
-    }
-
-    private static String switchAbbr(Map<String, String> abbreviationMap, String abbr) {
+    public static String switchAbbr(Map<String, String> abbreviationMap, String abbr) {
         if (abbreviationMap == null || abbreviationMap.size() == 0) {
             String json = "{\"1\": \"neft/10_1_10.html\",\"Т\": \"energy/10_1_8.html\",\"Э\": \"energy/10_1_7.html\",\"С\": \"energy/10_1_10.html\",\"Б\": \"energy/10_1_9.html\",\"В\": \"neft/10_1_4.html\",\"Л\": \"energy/10_1_3.html\",\"Р\": \"energy/10_1_4.html\",\"АПП\": \"neft/10_1_1.html\",\"БНГ\": \"neft/10_1_2.html\",\"ТО\": \"neft/10_1_3.html\",\"ПНГ\": \"neft/10_1_5.html\",\"ЭНН\": \"neft/10_1_6.html\",\"ЭННУ\": \"neft/10_1_6.html\",\"ТОВ\": \"neft/10_1_7.html\",\"ИС\": \"energy/10_1_1.html\",\"ГС\": \"energy/10_1_2.html\",\"ГСУ\": \"energy/10_1_2.html\",\"РУ\": \"energy/10_1_4.html\",\"ПГ\": \"energy/10_1_5.html\",\"ТС\": \"energy/10_1_6.html\",\"ТАК\": \"energy/10_1_8.html\"}";
             abbreviationMap = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>() {
