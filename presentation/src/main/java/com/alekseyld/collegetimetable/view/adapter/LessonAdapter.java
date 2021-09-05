@@ -1,14 +1,14 @@
 package com.alekseyld.collegetimetable.view.adapter;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.res.TypedArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.Day;
@@ -51,6 +51,13 @@ class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
         holder.lessonNumber.setText(lesson.getNumber() + ".");
         holder.lessonName.setText(lesson.getDoubleName());
         holder.lessonTeacher.setVisibility(View.GONE);
+
+        if (!lesson.getTime().isEmpty()) {
+            holder.lessonTime.setText(lesson.getTime());
+            holder.lessonTime.setVisibility(View.VISIBLE);
+        } else {
+            holder.lessonTime.setVisibility(View.GONE);
+        }
 
         if (position == getItemCount() - 1) {
             holder.itemView.setBackground(ContextCompat.getDrawable(context, R.drawable.border_background));
