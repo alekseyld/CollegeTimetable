@@ -1,10 +1,14 @@
 package com.alekseyld.collegetimetable.internal.di.module;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.alekseyld.collegetimetable.internal.di.module.ApplicationModule.HOST_PROXY;
+import static com.alekseyld.collegetimetable.internal.di.module.ApplicationModule.HOST_SETTINGS;
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.alekseyld.collegetimetable.UIThread;
-import com.alekseyld.collegetimetable.api.ProxyApi;
 import com.alekseyld.collegetimetable.api.SettingsApi;
 import com.alekseyld.collegetimetable.executor.JobExecutor;
 import com.alekseyld.collegetimetable.executor.PostExecutionThread;
@@ -13,6 +17,8 @@ import com.alekseyld.collegetimetable.repository.SettingsRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.TableRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 import com.alekseyld.collegetimetable.repository.base.TableRepository;
+import com.alekseyld.collegetimetable.service.GroupService;
+import com.alekseyld.collegetimetable.service.GroupServiceImpl;
 import com.alekseyld.collegetimetable.service.SettingsService;
 import com.alekseyld.collegetimetable.service.SettingsServiceImpl;
 import com.alekseyld.collegetimetable.service.TableService;
@@ -26,11 +32,6 @@ import dagger.Provides;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static android.content.Context.MODE_PRIVATE;
-import static com.alekseyld.collegetimetable.internal.di.module.ApplicationModule.HOST_PROXY;
-import static com.alekseyld.collegetimetable.internal.di.module.ApplicationModule.HOST_SETTINGS;
-import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 /**
  * Created by Alekseyld on 05.11.2016.
@@ -84,6 +85,12 @@ public class ServiceModule {
 
     @Singleton
     @Provides
+    GroupService provideGroupService(GroupServiceImpl groupService){
+        return groupService;
+    }
+
+    @Singleton
+    @Provides
     TableService provideTableService(TableServiceImpl tableService){
         return tableService;
     }
@@ -92,12 +99,6 @@ public class ServiceModule {
     @Provides
     TableRepository provideTableRepository(TableRepositoryImpl tableRepository){
         return tableRepository;
-    }
-
-    @Singleton
-    @Provides
-    ProxyApi provideProxyApi(@Named("proxy") Retrofit restAdapter){
-        return restAdapter.create(ProxyApi.class);
     }
 
     @Singleton

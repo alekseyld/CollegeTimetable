@@ -5,13 +5,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.view.activity.base.BaseActivity;
@@ -65,7 +64,7 @@ public class GroupInputDialogFragment extends DialogFragment {
         if (BaseActivity.isDarkMode) {
             builder = new AlertDialog.Builder(getActivity(), R.style.DarkDialogTheme);
         } else {
-            builder = new AlertDialog.Builder(getActivity());
+            builder = new AlertDialog.Builder(getActivity(), R.style.LightDialogTheme);
         }
 
         builder.setView(v)

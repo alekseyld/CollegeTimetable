@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.view.fragment.base;
 
-/**
+/*
  * Created by Alekseyld on 02.09.2016.
  */
 
@@ -8,12 +8,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import android.util.Log;
-import android.widget.Toast;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.internal.di.HasComponent;
@@ -82,7 +81,7 @@ public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fra
         if (BaseActivity.isDarkMode) {
             builder = new AlertDialog.Builder(getContext(), R.style.DarkDialogTheme);
         } else {
-            builder = new AlertDialog.Builder(getContext());
+            builder = new AlertDialog.Builder(getContext(), R.style.LightDialogTheme);
         }
 
         builder.setTitle(title)

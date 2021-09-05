@@ -1,8 +1,9 @@
 package com.alekseyld.collegetimetable.view.adapter.holder;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.alekseyld.collegetimetable.R;
 
@@ -17,6 +18,9 @@ public class LessonViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.lesson_number)
     public TextView lessonNumber;
+
+    @BindView(R.id.lesson_time)
+    public TextView lessonTime;
 
     @BindView(R.id.lesson_name)
     public TextView lessonName;

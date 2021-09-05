@@ -2,6 +2,8 @@
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">uecoll.ru</domain>
+        <domain includeSubdomains="true">uecoll.club</domain>
         <domain includeSubdomains="true">109.195.146.243</domain>
+        <domain includeSubdomains="true">213.59.131.62</domain>
     </domain-config>
 </network-security-config>

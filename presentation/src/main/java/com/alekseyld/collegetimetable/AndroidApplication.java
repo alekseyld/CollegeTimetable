@@ -10,7 +10,6 @@ import com.alekseyld.collegetimetable.internal.di.module.ApplicationModule;
 import com.alekseyld.collegetimetable.job.TimetableJob;
 import com.alekseyld.collegetimetable.job.TimetableJobCreator;
 import com.alekseyld.collegetimetable.utils.Utils;
-//import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
@@ -19,8 +18,6 @@ import com.google.firebase.FirebaseApp;
 import java.util.Set;
 
 import io.fabric.sdk.android.Fabric;
-
-//import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Alekseyld on 02.09.2016.

@@ -1,8 +1,6 @@
 package com.alekseyld.collegetimetable.service;
 
-import com.alekseyld.collegetimetable.api.ProxyApi;
 import com.alekseyld.collegetimetable.api.SettingsApi;
-import com.alekseyld.collegetimetable.entity.ApiResponse;
 import com.alekseyld.collegetimetable.entity.Day;
 import com.alekseyld.collegetimetable.entity.Lesson;
 import com.alekseyld.collegetimetable.entity.Settings;
@@ -16,7 +14,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,10 +29,10 @@ import rx.Observable;
 
 public class TableServiceImpl implements TableService {
 
-    private TableRepository mTimetableRepository;
-    private SettingsRepository mSettingsRepository;
-    private ProxyApi mUrlApi;
-    private SettingsApi mSettingsApi;
+    private final TableRepository mTimetableRepository;
+    private final SettingsRepository mSettingsRepository;
+    private final SettingsApi mSettingsApi;
+    private final GroupService mGroupService;
     private Settings mSettings;
 
     private boolean hasError = false;
@@ -43,22 +40,23 @@ public class TableServiceImpl implements TableService {
     @Inject
     public TableServiceImpl(TableRepository tableRepository,
                             SettingsRepository settingsRepository,
-                            ProxyApi urlApi,
-                            SettingsApi settingsApi) {
+                            SettingsApi settingsApi,
+                            GroupService groupService
+    ) {
         mSettingsRepository = settingsRepository;
         mTimetableRepository = tableRepository;
-        this.mUrlApi = urlApi;
+        mGroupService = groupService;
         this.mSettingsApi = settingsApi;
     }
 
     private Observable<String> updateSettingsOnlineAndGetUrl(String group) {
         return updateSettingsOnline()
-                .map(settings -> DataUtils.getGroupUrl(settings.getRootUrl(), group, settings.getAbbreviationMap(), settings.getNeftGroup()));
+                .map(settings -> mGroupService.getGroupUrl(settings.getRootUrl(), group, settings.getAbbreviationMap(), settings.getNeftGroup()));
     }
 
     private Observable<Settings> updateSettingsOnline() {
         return mSettingsApi.getSettings()
-                .map(settingsResponse -> mSettingsRepository.updateSettings(settingsResponse));
+                .map(mSettingsRepository::updateSettings);
     }
 
     private Observable<Settings> getSettings() {
@@ -69,7 +67,7 @@ public class TableServiceImpl implements TableService {
         return getSettings()
                 .map(settings -> {
                     mSettings = settings;
-                    return DataUtils.getGroupUrl(settings.getRootUrl(), group, settings.getAbbreviationMap(), mSettings.getNeftGroup());
+                    return mGroupService.getGroupUrl(settings.getRootUrl(), group, settings.getAbbreviationMap(), mSettings.getNeftGroup());
                 })
                 .flatMap(url -> {
                     if (!url.equals("") && !hasError) return Observable.just(url);
@@ -80,76 +78,71 @@ public class TableServiceImpl implements TableService {
 
     private Observable<Document> connectAndGetData(String group) {
         return getGroupUrl(group)
-                .flatMap(url -> mUrlApi.getUrl(url))
-                .onErrorReturn((error) -> {
-                    ApiResponse apiResponse = new ApiResponse();
-
-                    if (error instanceof UnknownHostException) {
-                        apiResponse.setStatus(2);
-                    } else {
-                        apiResponse.setStatus(3);
-                    }
-
-                    return apiResponse;
-                }).flatMap(apiResponse -> {
+                .flatMap(url -> {
                     Document document;
 
                     try {
-                        document = Jsoup.connect(apiResponse.getResult()).timeout(300).get();
+                        document = Jsoup.connect(url).get();
                     } catch (IOException e) {
                         e.printStackTrace();
 
                         document = null;
-                    }
-                    catch (IllegalArgumentException e1) {
-//                        return Observable.error(new UncriticalException("Некорректно введена группа"));
+                    } catch (IllegalArgumentException e1) {
                         document = null;
                     }
 
                     return Observable.just(document);
                 }).flatMap(document -> {
-                    if (document != null && !document.title().equals("NoBlockMe.ru - бесплатный анонимайзер для ВКонтакте и Одноклассники")
-                            && document.html().contains("<body bgcolor=\"bbbbbb\">"))
-                        return Observable.just(document);
+                    if (isTableHtml(document)) {
+                        return Observable.just(new java.util.HashMap.SimpleEntry<String, Document>(null, document));
+                    }
+
+                    return updateSettingsOnlineAndGetUrl(group)
+                            .map(url -> new HashMap.SimpleEntry<String, Document>(url, null));
+
+                }).flatMap(entry -> {
+                    if (entry.getValue() != null) {
+                        return Observable.just(entry.getValue());
+                    }
+
+                    Document document = null;
 
                     try {
                         boolean hasExternalSettings = mSettings != null && mSettings.hasExternalSettings();
                         for (int i = 0; i < 5; i++) {
 
                             if (hasExternalSettings) {
-                                document = Jsoup.connect(DataUtils.getGroupUrl(mSettings.getRootUrl(), group, mSettings.getAbbreviationMap(), mSettings.getNeftGroup())).timeout(5000).get();
+                                document = Jsoup.connect(mGroupService.getGroupUrl(mSettings.getRootUrl(), group, mSettings.getAbbreviationMap(), mSettings.getNeftGroup())).timeout(5000).get();
                             } else {
-                                document = Jsoup.connect(DataUtils.getGroupUrl(group)).timeout(5000).get();
+                                document = Jsoup.connect(mGroupService.getGroupUrl(group)).timeout(5000).get();
                             }
 
-                            if (document != null)
+                            if (document != null) {
                                 break;
+                            }
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
 
                         document = null;
                     } catch (IllegalArgumentException e1) {
-//                        return Observable.error(new UncriticalException("Некорректно введена группа."));
+                        e1.printStackTrace();
+
                         document = null;
                     }
 
                     return Observable.just(document);
                 }).flatMap(document -> {
-                    if (document != null && document.html().contains("<body bgcolor=\"bbbbbb\">"))
+                    if (isTableHtml(document)) {
                         return Observable.just(document);
+                    }
 
                     try {
-//                        document = Jsoup.connect(DataUtils.getGroupUrl("http://192.168.1.4/uecoll/", group)).timeout(5000).get();
                         if (mSettings != null && mSettings.hasExternalSettings()) {
                             document = Jsoup.connect(
-                                    DataUtils.getGroupUrl(mSettings.getRootUrl(), group, mSettings.getAbbreviationMap(), mSettings.getNeftGroup()))
-                                    .timeout(5000).get();
-                        } else {
-                            document = Jsoup.connect(DataUtils.getGroupUrl("http://109.195.146.243/wp-content/uploads/time/", group))
+                                    mGroupService.getGroupUrl(mSettings.getRootUrl(), group, mSettings.getAbbreviationMap(), mSettings.getNeftGroup()))
                                     .timeout(5000).get();
                         }
-
                     } catch (IOException e) {
                         e.printStackTrace();
                         document = null;
@@ -165,6 +158,10 @@ public class TableServiceImpl implements TableService {
 
                     return Observable.just(document);
                 });
+    }
+
+    private boolean isTableHtml(Document document) {
+        return document != null && document.html().contains("<body bgcolor=\"bbbbbb\">");
     }
 
     @Override
@@ -252,7 +249,7 @@ public class TableServiceImpl implements TableService {
         return getTimetableFromOnlineAssociativity(online, teacherGroup)
                 .map(timeTable -> {
                     List<Day> days = timeTable.getDayList();
-                    for (int i = 0; i < days.size(); i++){
+                    for (int i = 0; i < days.size(); i++) {
                         Day day = days.get(i);
                         List<Lesson> lessons = day.getDayLessons();
 
@@ -264,8 +261,8 @@ public class TableServiceImpl implements TableService {
                             teacherTimeTable.getDayList().get(i).setDate(day.getDate()).setId(day.getId());
                         }
 
-                        for (int i1 = 0; i1 < lessons.size(); i1++){
-                            if (lessons.get(i1).getTeacher().contains(teacherFio)){
+                        for (int i1 = 0; i1 < lessons.size(); i1++) {
+                            if (lessons.get(i1).getTeacher().contains(teacherFio)) {
                                 if (teacherTimeTable.getDayList().get(i).getDayLessons().get(i1).getDoubleName().equals("")) {
                                     teacherTimeTable.getDayList().get(i).getDayLessons()
                                             .set(i1, new Lesson().setNumber(i1)
@@ -276,8 +273,8 @@ public class TableServiceImpl implements TableService {
                                             .set(i1, new Lesson().setNumber(i1)
                                                     .setName(
                                                             teacherTimeTable.getDayList().get(i).getDayLessons().get(i1).getDoubleName()
-                                                            + "\n\n" +
-                                                            timeTable.getGroup() + "\n" + lessons.get(i1).getDoubleName())
+                                                                    + "\n\n" +
+                                                                    timeTable.getGroup() + "\n" + lessons.get(i1).getDoubleName())
                                                     .setTeacher(teacherFio));
                                 }
                             }

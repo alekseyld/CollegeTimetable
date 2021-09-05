@@ -21,7 +21,7 @@ public class SettingsRepositoryMock implements SettingsRepository {
         if (settings != null)
             return settings;
 
-         Settings settings = new Settings()
+        settings = new Settings()
                 .setAlarmMode(false)
                 .setChangeMode(false)
                 .setNotifOn(false)
@@ -35,6 +35,11 @@ public class SettingsRepositoryMock implements SettingsRepository {
 
     @Override
     public Settings updateSettings(SettingsResponse settings) {
-        return null;
+        Settings updatedSettings = getSettings();
+//        updatedSettings.setAbbreviationMap(settings.getAbbreviationMap());
+//        updatedSettings.setNeftGroup(settings.getNeftGroup());
+//        updatedSettings.setRootUrl(settings.getRootUrl());
+        saveSettings(updatedSettings);
+        return updatedSettings;
     }
 }

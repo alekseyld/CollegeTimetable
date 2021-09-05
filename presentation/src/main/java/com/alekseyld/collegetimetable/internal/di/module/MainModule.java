@@ -1,9 +1,11 @@
 package com.alekseyld.collegetimetable.internal.di.module;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 
-import com.alekseyld.collegetimetable.api.ProxyApi;
 import com.alekseyld.collegetimetable.api.SettingsApi;
 import com.alekseyld.collegetimetable.internal.di.PerActivity;
 import com.alekseyld.collegetimetable.navigator.NavigatorImpl;
@@ -12,6 +14,8 @@ import com.alekseyld.collegetimetable.repository.SettingsRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.TableRepositoryImpl;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 import com.alekseyld.collegetimetable.repository.base.TableRepository;
+import com.alekseyld.collegetimetable.service.GroupService;
+import com.alekseyld.collegetimetable.service.GroupServiceImpl;
 import com.alekseyld.collegetimetable.service.SettingsService;
 import com.alekseyld.collegetimetable.service.SettingsServiceImpl;
 import com.alekseyld.collegetimetable.service.TableService;
@@ -22,9 +26,6 @@ import javax.inject.Named;
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
-
-import static android.content.Context.MODE_PRIVATE;
-import static com.alekseyld.collegetimetable.repository.base.TableRepository.NAME_FILE;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -57,6 +58,11 @@ public class MainModule {
     }
 
     @PerActivity @Provides
+    GroupService provideGroupService(GroupServiceImpl groupService){
+        return groupService;
+    }
+
+    @PerActivity @Provides
     SettingsService provideSettingsService(SettingsServiceImpl settingsService){
         return settingsService;
     }
@@ -74,11 +80,6 @@ public class MainModule {
     @PerActivity @Provides
     SettingsResultProcessor provideSettingsResultProcessor(NavigatorImpl navigator){
         return navigator;
-    }
-
-    @PerActivity @Provides
-    ProxyApi provideProxyApi(@Named("proxy") Retrofit restAdapter){
-        return restAdapter.create(ProxyApi.class);
     }
 
     @PerActivity @Provides

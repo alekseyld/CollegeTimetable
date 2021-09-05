@@ -14,6 +14,8 @@ public class Lesson {
 
     private String teacher;
 
+    private String time;
+
     private boolean change;
 
     public int getNumber() {
@@ -67,6 +69,15 @@ public class Lesson {
 
     public Lesson setSecondName(String secondName) {
         this.secondName = secondName;
+        return this;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public Lesson setTime(String time) {
+        this.time = time;
         return this;
     }
 }
