@@ -107,7 +107,7 @@
             android:layout_weight="1.2"
             android:hint="@string/hint_num"
             android:inputType="number"
-            android:maxLength="1"
+            android:maxLength="2"
             android:textColor="?android:textColor"
             android:textColorHint="?android:textColorSecondary"
             android:textAlignment="center"

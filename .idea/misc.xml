@@ -3,10 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../layout/custom_preview.xml" value="0.23229166666666667" />
+        <entry key="presentation/src/main/res/layout/dialog_group.xml" value="0.20572916666666666" />
         <entry key="presentation/src/main/res/layout/fragment_belltable.xml" value="0.29357926944826607" />
         <entry key="presentation/src/main/res/layout/fragment_table.xml" value="0.17831813576494426" />
         <entry key="presentation/src/main/res/layout/list_table.xml" value="0.335" />
         <entry key="presentation/src/main/res/layout/list_table_lesson.xml" value="0.45" />
+        <entry key="presentation/src/main/res/layout/widget_group.xml" value="0.20572916666666666" />
       </map>
     </option>
   </component>
