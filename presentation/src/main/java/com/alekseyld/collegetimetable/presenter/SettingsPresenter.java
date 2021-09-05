@@ -19,7 +19,6 @@ import java.util.HashSet;
 
 import javax.inject.Inject;
 
-import io.fabric.sdk.android.services.network.UrlUtils;
 
 /**
  * Created by Alekseyld on 04.09.2016.
