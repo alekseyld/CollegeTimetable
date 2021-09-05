@@ -243,7 +243,7 @@ public class TableServiceImpl implements TableService {
 
     @Override
     public Observable<TimeTable> getTeacherTimeTable(boolean online, String teacherFio, Set<String> teacherGroup) {
-        TimeTable teacherTimeTable = DataUtils.getEmptyWeekTimeTable(7, 7, true)
+        TimeTable teacherTimeTable = DataUtils.getEmptyWeekTimeTable(7, 8, true)
                 .setGroup(teacherFio);
 
         return getTimetableFromOnlineAssociativity(online, teacherGroup)
@@ -265,9 +265,12 @@ public class TableServiceImpl implements TableService {
                             if (lessons.get(i1).getTeacher().contains(teacherFio)) {
                                 if (teacherTimeTable.getDayList().get(i).getDayLessons().get(i1).getDoubleName().equals("")) {
                                     teacherTimeTable.getDayList().get(i).getDayLessons()
-                                            .set(i1, new Lesson().setNumber(i1)
+                                            .set(i1, new Lesson()
+                                                    .setNumber(i1)
                                                     .setName(timeTable.getGroup() + "\n" + lessons.get(i1).getDoubleName())
-                                                    .setTeacher(teacherFio));
+                                                    .setTime(lessons.get(i1).getTime())
+                                                    .setTeacher(teacherFio)
+                                            );
                                 } else {
                                     teacherTimeTable.getDayList().get(i).getDayLessons()
                                             .set(i1, new Lesson().setNumber(i1)
