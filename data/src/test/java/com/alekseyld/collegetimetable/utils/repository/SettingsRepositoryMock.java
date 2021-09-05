@@ -36,9 +36,9 @@ public class SettingsRepositoryMock implements SettingsRepository {
     @Override
     public Settings updateSettings(SettingsResponse settings) {
         Settings updatedSettings = getSettings();
-        updatedSettings.setAbbreviationMap(settings.getAbbreviationMap());
-        updatedSettings.setNeftGroup(settings.getNeftGroup());
-        updatedSettings.setRootUrl(settings.getRootUrl());
+//        updatedSettings.setAbbreviationMap(settings.getAbbreviationMap());
+//        updatedSettings.setNeftGroup(settings.getNeftGroup());
+//        updatedSettings.setRootUrl(settings.getRootUrl());
         saveSettings(updatedSettings);
         return updatedSettings;
     }

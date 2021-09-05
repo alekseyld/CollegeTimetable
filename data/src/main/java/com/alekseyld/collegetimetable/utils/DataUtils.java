@@ -99,7 +99,7 @@ public class DataUtils {
 
         Elements table = document.select("tr").select("td");
 
-        Pattern numberPattern = Pattern.compile("^[0-9]");
+        Pattern lessonNumPattern = Pattern.compile("^[0-9](.)?(.\\d?\\d.\\d\\d-\\d?\\d.\\d\\d)?");
         Pattern dayPattern = Pattern.compile("[А-Я]\\s[А-Я]\\s\\b");
 
         TimeTable timeTable = new TimeTable()
@@ -126,7 +126,7 @@ public class DataUtils {
 
         //Пропуск группы
         int iSpace = 0;
-        int lessonSpace = -1;
+        int lessonSpace = 0;
 
         //Счетчик дней
         int day = -1;
@@ -134,6 +134,8 @@ public class DataUtils {
         int lesson = 0;
 
         int i = 0;
+
+        String lessonTime = "";
 
         for (int iterator = 0; iterator < table.size(); iterator++) {
 
@@ -143,7 +145,7 @@ public class DataUtils {
             }
 
             //Ищем начало групп
-            if (table.get(iterator).text().equals("День/Пара") && first) {
+            if (table.get(iterator).text().contains("День/Пара") && first) {
                 space = true;
                 first = false;
             }
@@ -163,24 +165,38 @@ public class DataUtils {
                 timeTable.addDay(
                         new Day()
                                 .setId(day)
-                                .setDate(day == 0 && !dayString[0].equals("") || (day != 0 && !dayString[0].equals(timeTable.getDayList().get(day - 1).getDate()))  ? dayString[0] : dayString[1])
+                                .setDate(day == 0 && !dayString[0].equals("") || (day != 0 && !dayString[0].equals(timeTable.getDayList().get(day - 1).getDate())) ? dayString[0] : dayString[1])
                                 .setDayLessons(lessons)
                 );
 
             }
 
-            if (toLesson && numberPattern.matcher(table.get(iterator).text()).matches()) {
+            String lessonNumberText = table.get(iterator).text().replaceAll("\\u00a0", " ").trim();
+            boolean isLessonNumberBloc = lessonNumPattern.matcher(lessonNumberText).matches();
+            if (toLesson && isLessonNumberBloc) {
                 toLesson = false;
                 spaceToLessonBlock = true;
                 lessonSpace = 0;
 
-                lesson = Integer.parseInt(table.get(iterator).text());
+                lessonTime = "";
+
+                if (lessonNumberText.length() == 1) {
+                    lesson = Integer.parseInt(lessonNumberText);
+                } else {
+                    String substring = lessonNumberText.substring(0, 1);
+                    lesson = Integer.parseInt(substring);
+
+                    String[] splits = lessonNumberText.split(" ");
+                    if (splits.length > 1) {
+                        lessonTime = splits[1];
+                    }
+                }
 
                 if (lesson == 0 && day != -1) {
                     timeTable.addDay(
                             new Day()
                                     .setId(day)
-                                    .setDate(day == 0 && !dayString[0].equals("") || !dayString[0].equals(timeTable.getDayList().get(day - 1).getDate())  ? dayString[0] : dayString[1])
+                                    .setDate(day == 0 && !dayString[0].equals("") || !dayString[0].equals(timeTable.getDayList().get(day - 1).getDate()) ? dayString[0] : dayString[1])
                                     .setDayLessons(lessons)
                     );
 
@@ -214,6 +230,7 @@ public class DataUtils {
                                 .setSecondName(secondName)
                                 .setTeacher(teacherName)
                                 .setChange(isChange)
+                                .setTime(lessonTime)
                 );
 
                 lessonSpace = 0;
@@ -223,7 +240,7 @@ public class DataUtils {
                 if (table.get(iterator).tagName().equals("td") &&
                         table.get(iterator).attr("colspan").equals("") &&
                         table.get(iterator).attr("rowspan").equals("") &&
-                        !numberPattern.matcher(table.get(iterator).text()).matches() &&
+                        !isLessonNumberBloc &&
                         firstDoubleLesson) {
                     lessonSpace--;
                     firstDoubleLesson = false;
@@ -241,13 +258,13 @@ public class DataUtils {
 
         if (isChange) {
             childs = childs.get(0).children();
-        } else if (childs.size() < 3){
+        } else if (childs.size() < 3) {
             return ret;
         }
 
         ret = childs.get(2).text();
 
-        if (secondChilds != null){
+        if (secondChilds != null) {
             ret += " / " + secondChilds.get(2).text();
         }
 
@@ -259,13 +276,13 @@ public class DataUtils {
                 .setGroup("")
                 .setLastRefresh(dateFormat.format(new Date()));
 
-       timeTable.setDayList(getEmptyDayList(countDays,lessonPerDayCount, mock));
+        timeTable.setDayList(getEmptyDayList(countDays, lessonPerDayCount, mock));
         return timeTable;
     }
 
     public static List<Day> getEmptyDayList(int count, int lessonPerDayCount, boolean mock) {
         List<Day> days = new ArrayList<>();
-        for (int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++) {
             days.add(getEmptyDay(i, lessonPerDayCount));
         }
         return days;
@@ -301,12 +318,12 @@ public class DataUtils {
             Day day = timeTable.getDayList().get(iDay);
             boolean emptyDay = true;
 
-            for (Lesson lesson: day.getDayLessons()) {
+            for (Lesson lesson : day.getDayLessons()) {
                 if (!lesson.getDoubleName().equals(""))
                     emptyDay = false;
             }
 
-            if (emptyDay){
+            if (emptyDay) {
                 timeTable.getDayList().remove(day);
             }
         }

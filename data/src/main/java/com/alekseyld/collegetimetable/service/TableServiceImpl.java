@@ -82,7 +82,7 @@ public class TableServiceImpl implements TableService {
                     Document document;
 
                     try {
-                        document = Jsoup.connect(url).timeout(300).get();
+                        document = Jsoup.connect(url).get();
                     } catch (IOException e) {
                         e.printStackTrace();
 
@@ -94,8 +94,18 @@ public class TableServiceImpl implements TableService {
                     return Observable.just(document);
                 }).flatMap(document -> {
                     if (isTableHtml(document)) {
-                        return Observable.just(document);
+                        return Observable.just(new java.util.HashMap.SimpleEntry<String, Document>(null, document));
                     }
+
+                    return updateSettingsOnlineAndGetUrl(group)
+                            .map(url -> new HashMap.SimpleEntry<String, Document>(url, null));
+
+                }).flatMap(entry -> {
+                    if (entry.getValue() != null) {
+                        return Observable.just(entry.getValue());
+                    }
+
+                    Document document = null;
 
                     try {
                         boolean hasExternalSettings = mSettings != null && mSettings.hasExternalSettings();
@@ -116,6 +126,8 @@ public class TableServiceImpl implements TableService {
 
                         document = null;
                     } catch (IllegalArgumentException e1) {
+                        e1.printStackTrace();
+
                         document = null;
                     }
 

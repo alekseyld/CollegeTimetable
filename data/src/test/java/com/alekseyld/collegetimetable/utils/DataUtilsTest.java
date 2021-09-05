@@ -1035,6 +1035,7 @@ public class DataUtilsTest {
         settings.addTeacherGroup("3 АПП-3");
         settings.setTeacherMode(true);
         settings.setNotificationGroup("Вершинина Н.П.");
+        settings.setRootUrl("https://alekseyld.github.io/CollegeTimetable/timetable_app_all_week");
 
         TableServiceImpl tableRepository = new TableServiceImpl(
                 new TableRepositoryMock(),
@@ -1223,6 +1224,109 @@ public class DataUtilsTest {
         assertEquals("\u00A0", lessons.get(6).getDoubleName());
 
         assertTrue(lessons.get(2).isChange());
+
+    }
+
+    @Test
+    public void parseNewTimetable() {
+
+        TableService tableService = getMockTableService("2 ТОВ-2", "https://alekseyld.github.io/CollegeTimetable/new_timetable_all_week.html");
+        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "2 ТОВ-2").toBlocking().first();
+
+//        TableService tableService = getMockTableService("3 ТОВ", "https://alekseyld.github.io/CollegeTimetable/new_timetable_all_week.html");
+//        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "3 ТОВ").toBlocking().first();
+
+        assertNotNull(tableWrapper.getDayList());
+
+        List<Day> timeTable = tableWrapper.getDayList();
+
+        assertTrue(timeTable.size() > 0);
+        assertEquals("П О Н Е Д Е Л Ь Н И К   30.08.2021", tableWrapper.getDayList().get(0).getDate());
+
+        List<Lesson> lessons = timeTable.get(0).getDayLessons();
+
+        assertEquals("\u00A0", lessons.get(0).getDoubleName());
+        assertEquals("\u00A0", lessons.get(1).getDoubleName());
+        assertEquals("\u00A0", lessons.get(2).getDoubleName());
+        assertEquals("\u00A0", lessons.get(3).getDoubleName());
+        assertEquals("Органическая химия Зайнуллина Л.Ф. -", lessons.get(4).getDoubleName());
+        assertEquals("Башкирский язык Ахмадеева Л.И. -", lessons.get(5).getDoubleName());
+        assertEquals("\u00A0", lessons.get(6).getDoubleName());
+        assertEquals("\u00A0", lessons.get(7).getDoubleName());
+
+        assertEquals("В Т О Р Н И К   31.08.2021", tableWrapper.getDayList().get(1).getDate());
+        lessons = timeTable.get(1).getDayLessons();
+
+        assertEquals("\u00A0", lessons.get(0).getDoubleName());
+        assertEquals("Математика Валиахметова Г.В. -", lessons.get(1).getDoubleName());
+        assertEquals("Иностранный язык Захарова И.В. - /Салимова Г.Р. -", lessons.get(2).getDoubleName());
+        assertEquals("Математика Валиахметова Г.В. -", lessons.get(3).getDoubleName());
+        assertEquals("\u00A0", lessons.get(4).getDoubleName());
+        assertEquals("\u00A0", lessons.get(5).getDoubleName());
+        assertEquals("\u00A0", lessons.get(6).getDoubleName());
+        assertEquals("\u00A0", lessons.get(7).getDoubleName());
+
+        assertEquals("С Р Е Д А   01.09.2021", tableWrapper.getDayList().get(2).getDate());
+        lessons = timeTable.get(2).getDayLessons();
+
+        assertEquals("\u00A0", lessons.get(0).getDoubleName());
+        assertEquals("\u00A0", lessons.get(1).getDoubleName());
+        assertEquals("Теоретические основы химической технологии Мунасыпова А.М. -", lessons.get(2).getDoubleName());
+        assertEquals("Физическая и коллодная химия Файзуллина С.Р. -", lessons.get(3).getDoubleName());
+        assertEquals("Общая и неорганическая химия Зайнуллина Л.Ф. -", lessons.get(4).getDoubleName());
+        assertEquals("Башкирский язык Ахмадеева Л.И. -", lessons.get(5).getDoubleName());
+        assertEquals("\u00A0", lessons.get(6).getDoubleName());
+        assertEquals("\u00A0", lessons.get(7).getDoubleName());
+
+        assertEquals("Ч Е Т В Е Р Г   02.09.2021", tableWrapper.getDayList().get(3).getDate());
+        lessons = timeTable.get(3).getDayLessons();
+
+        assertEquals("\u00A0", lessons.get(0).getDoubleName());
+        assertEquals("Информационные технологии в профессиональной деятельности Галина Р.Р. -", lessons.get(1).getName());
+        assertEquals("-", lessons.get(1).getSecondName());
+        assertEquals("Информационные технологии в профессиональной деятельности Галина Р.Р. -", lessons.get(2).getName());
+        assertEquals("-", lessons.get(2).getSecondName());
+        assertEquals("Теоретические основы химической технологии Мунасыпова А.М. -", lessons.get(3).getDoubleName());
+        assertEquals("Информационные технологии в профессиональной деятельности Галина Р.Р. -", lessons.get(4).getSecondName());
+        assertEquals("Информационные технологии в профессиональной деятельности Галина Р.Р. -", lessons.get(5).getSecondName());
+        assertEquals("\u00A0", lessons.get(6).getDoubleName());
+        assertEquals("\u00A0", lessons.get(7).getDoubleName());
+
+        assertEquals("П Я Т Н И Ц А   03.09.2021", tableWrapper.getDayList().get(4).getDate());
+        lessons = timeTable.get(4).getDayLessons();
+
+        assertEquals("История Кадочникова М.Р. -", lessons.get(0).getDoubleName());
+        assertEquals("Физическая культура Кайниев А.А. -", lessons.get(1).getDoubleName());
+        assertEquals("Экологические основы природопользования Соломатина М.С. -", lessons.get(2).getDoubleName());
+        assertEquals("\u00A0", lessons.get(3).getDoubleName());
+        assertEquals("\u00A0", lessons.get(4).getDoubleName());
+        assertEquals("\u00A0", lessons.get(5).getDoubleName());
+        assertEquals("\u00A0", lessons.get(6).getDoubleName());
+        assertEquals("\u00A0", lessons.get(7).getDoubleName());
+
+        assertEquals("С У Б Б О Т А   04.09.2021", tableWrapper.getDayList().get(5).getDate());
+        lessons = timeTable.get(5).getDayLessons();
+
+        assertEquals("\u00A0", lessons.get(0).getDoubleName());
+        assertEquals("Аналитическая химия Зайнуллина Л.Ф. -", lessons.get(1).getDoubleName());
+        assertEquals("Органическая химия Зайнуллина Л.Ф. -", lessons.get(2).getDoubleName());
+        assertEquals("Общая и неорганическая химия Зайнуллина Л.Ф. -", lessons.get(3).getDoubleName());
+        assertEquals("\u00A0", lessons.get(4).getDoubleName());
+        assertEquals("\u00A0", lessons.get(5).getDoubleName());
+        assertEquals("\u00A0", lessons.get(6).getDoubleName());
+        assertEquals("\u00A0", lessons.get(7).getDoubleName());
+
+        assertEquals("П О Н Е Д Е Л Ь Н И К   06.09.2021", tableWrapper.getDayList().get(6).getDate());
+        lessons = timeTable.get(6).getDayLessons();
+
+        assertEquals("\u00A0", lessons.get(0).getDoubleName());
+        assertEquals("\u00A0", lessons.get(1).getDoubleName());
+        assertEquals("\u00A0", lessons.get(2).getDoubleName());
+        assertEquals("\u00A0", lessons.get(3).getDoubleName());
+        assertEquals("Органическая химия Зайнуллина Л.Ф. -", lessons.get(4).getDoubleName());
+        assertEquals("Башкирский язык Ахмадеева Л.И. -", lessons.get(5).getDoubleName());
+        assertEquals("\u00A0", lessons.get(6).getDoubleName());
+        assertEquals("\u00A0", lessons.get(7).getDoubleName());
 
     }
 
