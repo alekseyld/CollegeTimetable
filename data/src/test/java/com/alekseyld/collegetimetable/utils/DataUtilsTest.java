@@ -1233,9 +1233,6 @@ public class DataUtilsTest {
         TableService tableService = getMockTableService("2 ТОВ-2", "https://alekseyld.github.io/CollegeTimetable/new_timetable_all_week.html");
         TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "2 ТОВ-2").toBlocking().first();
 
-//        TableService tableService = getMockTableService("3 ТОВ", "https://alekseyld.github.io/CollegeTimetable/new_timetable_all_week.html");
-//        TimeTable tableWrapper = tableService.getTimetableFromOnline(true, "3 ТОВ").toBlocking().first();
-
         assertNotNull(tableWrapper.getDayList());
 
         List<Day> timeTable = tableWrapper.getDayList();
