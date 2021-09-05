@@ -1,17 +1,12 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
+import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.GROUP_KEY;
+
 import android.Manifest;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +18,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
@@ -31,14 +32,12 @@ import com.alekseyld.collegetimetable.utils.DataUtils;
 import com.alekseyld.collegetimetable.view.TableView;
 import com.alekseyld.collegetimetable.view.adapter.TableAdapter;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.GROUP_KEY;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -140,7 +139,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
                 getActivity().setTitle("Группа: " + mGroup);
             }
 
-            Crashlytics.setString("Group", mGroup);
+            FirebaseCrashlytics.getInstance().setCustomKey("Group", mGroup);
         }
     }
 

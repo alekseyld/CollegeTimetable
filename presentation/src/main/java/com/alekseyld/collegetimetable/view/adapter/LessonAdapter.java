@@ -52,7 +52,7 @@ class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
         holder.lessonName.setText(lesson.getDoubleName());
         holder.lessonTeacher.setVisibility(View.GONE);
 
-        if (!lesson.getTime().isEmpty()) {
+        if (lesson.getTime() != null && !lesson.getTime().isEmpty()) {
             holder.lessonTime.setText(lesson.getTime());
             holder.lessonTime.setVisibility(View.VISIBLE);
         } else {
