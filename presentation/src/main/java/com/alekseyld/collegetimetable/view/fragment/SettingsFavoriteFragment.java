@@ -1,15 +1,16 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alekseyld.collegetimetable.R;
+import com.alekseyld.collegetimetable.databinding.FragmentFavoriteBinding;
 import com.alekseyld.collegetimetable.internal.di.component.SettingsFavoriteComponent;
 import com.alekseyld.collegetimetable.presenter.SettingsFavoritePresenter;
 import com.alekseyld.collegetimetable.view.SettingsFavoriteView;
@@ -17,29 +18,13 @@ import com.alekseyld.collegetimetable.view.adapter.FavoriteGroupAdapter;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 import com.alekseyld.collegetimetable.view.fragment.dialog.GroupInputDialogFragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
  * Created by Alekseyld on 07.09.2017.
  */
 
 public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePresenter> implements SettingsFavoriteView {
 
-    public static SettingsFavoriteFragment newInstance(boolean teacherMode){
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("teacherMode", teacherMode);
-        SettingsFavoriteFragment favoriteFragment = new SettingsFavoriteFragment();
-        favoriteFragment.setArguments(bundle);
-        return favoriteFragment;
-    }
-
-    @BindView(R.id.listGroup)
-    RecyclerView listGroup;
-
-    @BindView(R.id.error_message)
-    TextView message;
+    private FragmentFavoriteBinding binding;
 
     private FavoriteGroupAdapter mAdapter;
 
@@ -47,22 +32,23 @@ public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePrese
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_favorite, container, false);
-        ButterKnife.bind(this, v);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentFavoriteBinding.inflate(inflater, container, false);
         getActivity().setTitle(R.string.settings_favorite_activity_title);
 
         teacherMode = getArguments().getBoolean("teacherMode", false);
 
-        return v;
+        binding.fab.setOnClickListener(v -> onFabClick());
+
+        return binding.getRoot();
     }
 
     @Override
     public void onResume() {
         if (mAdapter == null){
             mAdapter = new FavoriteGroupAdapter(mPresenter, getContext(), teacherMode);
-            listGroup.setAdapter(mAdapter);
-            listGroup.setLayoutManager(new LinearLayoutManager(getActivity()));
+            binding.listGroup.setAdapter(mAdapter);
+            binding.listGroup.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
 
         super.onResume();
@@ -80,11 +66,10 @@ public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePrese
 
     @Override
     public void setMessage(String mes) {
-        message.setVisibility(View.VISIBLE);
-        message.setText(mes);
+        binding.errorMessage.setVisibility(View.VISIBLE);
+        binding.errorMessage.setText(mes);
     }
 
-    @OnClick(R.id.fab)
     void onFabClick(){
         GroupInputDialogFragment groupInputDialogFragment = GroupInputDialogFragment.newInstance(true, false);
         groupInputDialogFragment.setTargetFragment(this, 2);
@@ -97,12 +82,12 @@ public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePrese
 
     @Override
     public void showLoading() {
-        message.setVisibility(View.VISIBLE);
+        binding.errorMessage.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-        message.setVisibility(View.GONE);
+        binding.errorMessage.setVisibility(View.GONE);
     }
 
     @Override
@@ -113,5 +98,13 @@ public class SettingsFavoriteFragment extends BaseFragment<SettingsFavoritePrese
     @Override
     protected void initializeInjections() {
         getComponent(SettingsFavoriteComponent.class).inject(this);
+    }
+
+    public static SettingsFavoriteFragment newInstance(boolean teacherMode){
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("teacherMode", teacherMode);
+        SettingsFavoriteFragment favoriteFragment = new SettingsFavoriteFragment();
+        favoriteFragment.setArguments(bundle);
+        return favoriteFragment;
     }
 }

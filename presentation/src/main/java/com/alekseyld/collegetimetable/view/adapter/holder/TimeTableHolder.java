@@ -1,15 +1,13 @@
 package com.alekseyld.collegetimetable.view.adapter.holder;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alekseyld.collegetimetable.R;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.alekseyld.collegetimetable.databinding.ListTableBinding;
 
 /**
  * Created by Alekseyld on 16.09.2017.
@@ -17,18 +15,21 @@ import butterknife.ButterKnife;
 
 public class TimeTableHolder extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.date)
+    private ListTableBinding binding;
+
     public TextView date;
 
-    @BindView(R.id.lesson_list)
     public RecyclerView lessons;
 
-    @BindView(R.id.share_button)
     public ImageView shareButton;
 
     public TimeTableHolder(View v) {
         super(v);
-        ButterKnife.bind(this, v);
+        binding = ListTableBinding.bind(v);
+
+        date = binding.date;
+        lessons = binding.lessonList;
+        shareButton = binding.shareButton;
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(v.getContext());
         lessons.setLayoutManager(linearLayoutManager);

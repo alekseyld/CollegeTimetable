@@ -7,28 +7,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import com.alekseyld.collegetimetable.BuildConfig;
 import com.alekseyld.collegetimetable.R;
+import com.alekseyld.collegetimetable.databinding.FragmentAboutBinding;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.AboutPresenter;
 import com.alekseyld.collegetimetable.view.AboutView;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Alekseyld on 08.09.2016.
@@ -36,15 +32,7 @@ import butterknife.OnClick;
 
 public class AboutFragment extends BaseFragment<AboutPresenter> implements AboutView {
 
-    public static AboutFragment newInstance(){
-        return new AboutFragment();
-    }
-
-    @BindView(R.id.listView)
-    ListView listView;
-
-    @BindView(R.id.debug_info)
-    TextView debugInfo;
+    private FragmentAboutBinding binding;
 
     private int debug = 0;
 
@@ -52,8 +40,7 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_about, container, false);
-        ButterKnife.bind(this, v);
+        binding = FragmentAboutBinding.inflate(inflater, container, false);
         getActivity().setTitle(R.string.about);
 
         String[] about = new String[]{
@@ -68,8 +55,8 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_list_item_1, about);
 
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        binding.listView.setAdapter(adapter);
+        binding.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
@@ -110,12 +97,14 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
             }
         });
 
-        return v;
+        binding.debugInfo.setOnClickListener(v -> onClickDebugInfo());
+
+        return binding.getRoot();
     }
 
     public void debugInfo() {
-        debugInfo.setMovementMethod(new ScrollingMovementMethod());
-        debugInfo.setText(mPresenter.getDebugText());
+        binding.debugInfo.setMovementMethod(new ScrollingMovementMethod());
+        binding.debugInfo.setText(mPresenter.getDebugText());
     }
 
     private void openLink(String url) {
@@ -124,10 +113,9 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
         startActivity(intent1);
     }
 
-    @OnClick(R.id.debug_info)
     public void onClickDebugInfo() {
         ClipboardManager clipboard = (ClipboardManager) getBaseActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText(debugInfo.getText(), debugInfo.getText());
+        ClipData clip = ClipData.newPlainText(binding.debugInfo.getText(), binding.debugInfo.getText());
         if (clipboard != null) {
             clipboard.setPrimaryClip(clip);
             showToastMessage("Отладочная информация скопирована");
@@ -152,5 +140,9 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
     @Override
     protected void initializeInjections() {
         getComponent(MainComponent.class).inject(this);
+    }
+
+    public static AboutFragment newInstance(){
+        return new AboutFragment();
     }
 }

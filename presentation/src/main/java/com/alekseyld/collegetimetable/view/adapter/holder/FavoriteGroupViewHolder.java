@@ -1,14 +1,12 @@
 package com.alekseyld.collegetimetable.view.adapter.holder;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alekseyld.collegetimetable.R;
+import androidx.recyclerview.widget.RecyclerView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.alekseyld.collegetimetable.databinding.ListFavoriteGroupBinding;
 
 /**
  * Created by Alekseyld on 16.09.2017.
@@ -16,14 +14,18 @@ import butterknife.ButterKnife;
 
 public class FavoriteGroupViewHolder extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.group_name)
-    public TextView groupName;
-
-    @BindView(R.id.delete)
-    public ImageView delete;
+    private final ListFavoriteGroupBinding binding;
 
     public FavoriteGroupViewHolder(View v) {
         super(v);
-        ButterKnife.bind(this, v);
+        binding = ListFavoriteGroupBinding.bind(v);
+    }
+
+    public TextView getGroupName() {
+        return binding.groupName;
+    }
+
+    public ImageView getDelete() {
+        return binding.delete;
     }
 }

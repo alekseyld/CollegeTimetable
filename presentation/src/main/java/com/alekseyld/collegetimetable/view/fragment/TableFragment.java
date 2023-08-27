@@ -14,8 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -25,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alekseyld.collegetimetable.R;
+import com.alekseyld.collegetimetable.databinding.FragmentTableBinding;
 import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.TablePresenter;
@@ -35,73 +34,46 @@ import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
-import butterknife.BindString;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * Created by Alekseyld on 02.09.2016.
  */
 
-public class TableFragment extends BaseFragment<TablePresenter> implements TableView{
+public class TableFragment extends BaseFragment<TablePresenter> implements TableView {
 
-    public static TableFragment newInstance(String group){
-        TableFragment tableFragment = new TableFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(GROUP_KEY, group);
-        tableFragment.setArguments(bundle);
-        return tableFragment;
-    }
-
-    @BindView(R.id.recView)
-    RecyclerView mTableList;
-
-    @BindView(R.id.swipeRefreshLayout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
-
-    @BindView(R.id.message)
-    TextView message;
+    private FragmentTableBinding binding;
 
     private RecyclerView.LayoutManager mLayoutManager;
     private TableAdapter mTableAdapter;
 
     private Menu mMenu;
 
-    @BindString(R.string.app_name)
-    String app_name;
-
     private String mGroup = "";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_table, container, false);
-
-        ButterKnife.bind(this, v);
+        binding = FragmentTableBinding.inflate(inflater, container, false);
 
         if (getActivity() != null)
             getActivity().setTitle(R.string.app_name);
         setHasOptionsMenu(true);
 
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshItems();
             }
         });
 
-        mTableList.setHasFixedSize(true);
+        binding.recView.setHasFixedSize(true);
 
         mLayoutManager = new LinearLayoutManager(getActivity());
-        mTableList.setLayoutManager(mLayoutManager);
+        binding.recView.setLayoutManager(mLayoutManager);
 
         mTableAdapter = new TableAdapter(getContext(), mLayoutManager, this);
-        mTableList.setAdapter(mTableAdapter);
+        binding.recView.setAdapter(mTableAdapter);
 
-        return v;
+        return binding.getRoot();
     }
 
     @Override
@@ -117,7 +89,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
             Bundle b = new Bundle();
             b.putString("group", getGroup());
             FirebaseAnalytics.getInstance(getContext())
-                    .logEvent(FirebaseAnalytics.Event.SHARE, b);
+                .logEvent(FirebaseAnalytics.Event.SHARE, b);
 
         } else {
             showError("Ошибка при отправке расписания");
@@ -127,12 +99,12 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     private void processArgumentsGroup() {
         if (getArguments() == null || !getArguments().containsKey(GROUP_KEY)) return;
 
-        if(getArguments().containsKey(GROUP_KEY)) {
+        if (getArguments().containsKey(GROUP_KEY)) {
             String s = getArguments().getString(GROUP_KEY);
             mGroup = s == null || s.equals("") ? mPresenter.getGroup() : s;
         }
 
-        if(getActivity() != null && mGroup != null && !mGroup.equals("")){
+        if (getActivity() != null && mGroup != null && !mGroup.equals("")) {
             if (DataUtils.fioPattern.matcher(mGroup).find()) {
                 getActivity().setTitle("Преподаватель: " + mGroup);
             } else {
@@ -190,8 +162,8 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         if (getActivity() == null) return;
 
         ActivityCompat.requestPermissions(getActivity(),
-                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                255);
+            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+            255);
     }
 
     @Override
@@ -201,7 +173,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         inflater.inflate(R.menu.menu_table, menu);
 
         Drawable drawable = menu.findItem(R.id.action_info).getIcon();
-        if(drawable != null) {
+        if (drawable != null) {
             drawable.mutate();
             drawable.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
         }
@@ -214,21 +186,20 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
-            case R.id.action_info:
-                if (getTimeTable() == null || getTimeTable().getLastRefresh() == null) break;
+        if (item.getItemId() == R.id.action_info) {
+            if (getTimeTable() == null || getTimeTable().getLastRefresh() == null)
+                return super.onOptionsItemSelected(item);
 
-                showToastMessage("Последнее обновление: " + getTimeTable().getLastRefresh());
-                break;
+            showToastMessage("Последнее обновление: " + getTimeTable().getLastRefresh());
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void onTimeTableUpdate(){
+    public void onTimeTableUpdate() {
         if (getTimeTable() != null
-                && getTimeTable().getLastRefresh() != null
-                && mMenu != null
-                && mMenu.findItem(R.id.action_info) != null){
+            && getTimeTable().getLastRefresh() != null
+            && mMenu != null
+            && mMenu.findItem(R.id.action_info) != null) {
             mMenu.findItem(R.id.action_info).setVisible(true);
         }
 
@@ -248,37 +219,37 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
     @Override
     public void showMessage() {
-        message.setVisibility(View.VISIBLE);
+        binding.message.setVisibility(View.VISIBLE);
     }
 
     private void refreshItems() {
-        message.setVisibility(View.GONE);
+        binding.message.setVisibility(View.GONE);
         mPresenter.getTimeTable();
         onItemsLoadComplete();
     }
 
     private void onItemsLoadComplete() {
-        mSwipeRefreshLayout.setRefreshing(false);
+        binding.swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void showLoading() {
-        mTableList.setVisibility(View.INVISIBLE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        binding.recView.setVisibility(View.INVISIBLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-        mTableList.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.INVISIBLE);
+        binding.recView.setVisibility(View.VISIBLE);
+        binding.progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void showError(String message) {
-        if(getActivity() != null)
+        if (getActivity() != null)
             Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
         else
-            Log.e("TableFragment", "Activity is null \n"+message);
+            Log.e("TableFragment", "Activity is null \n" + binding.message);
     }
 
     @Override
@@ -291,4 +262,11 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
         return mGroup;
     }
 
+    public static TableFragment newInstance(String group) {
+        TableFragment tableFragment = new TableFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(GROUP_KEY, group);
+        tableFragment.setArguments(bundle);
+        return tableFragment;
+    }
 }
