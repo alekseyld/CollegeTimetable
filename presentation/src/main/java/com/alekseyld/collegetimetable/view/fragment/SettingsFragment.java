@@ -4,21 +4,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.widget.LinearLayout;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.alekseyld.collegetimetable.R;
+import com.alekseyld.collegetimetable.databinding.FragmentSettingsBinding;
 import com.alekseyld.collegetimetable.internal.di.component.MainComponent;
 import com.alekseyld.collegetimetable.presenter.SettingsPresenter;
 import com.alekseyld.collegetimetable.view.SettingsView;
@@ -26,139 +24,108 @@ import com.alekseyld.collegetimetable.view.activity.SettingsFavoriteActivity;
 import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 import com.alekseyld.collegetimetable.view.fragment.dialog.GroupInputDialogFragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * Created by Alekseyld on 04.09.2016.
  */
-
 public class SettingsFragment extends BaseFragment<SettingsPresenter> implements SettingsView {
 
-    @BindView(R.id.teacherMode)
-    Switch teachMode;
-    @BindView(R.id.addFarvorite)
-    TextView addFarvorite;
-    @BindView(R.id.addNotif)
-    LinearLayout addNotif;
-    @BindView(R.id.addNotif_title)
-    TextView addNotifTitle;
-    @BindView(R.id.my_group_value)
-    TextView addNotifValue;
-    @BindView(R.id.addTeacherGroup)
-    TextView addTeacherGroup;
-    @BindView(R.id.alarmMode)
-    Switch alarmMode;
-    @BindView(R.id.notifOn)
-    Switch notifOn;
-    @BindView(R.id.changeMode)
-    Switch changeMode;
-    @BindView(R.id.darkMode)
-    Switch darkMode;
-    @BindView(R.id.updateLinks)
-    TextView updateLinks;
-
-
-    public static SettingsFragment newInstance() {
-        return new SettingsFragment();
-    }
+    private FragmentSettingsBinding binding;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_settings, container, false);
-        ButterKnife.bind(this, v);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentSettingsBinding.inflate(inflater, container, false);
         getActivity().setTitle(R.string.action_settings);
 
-        addFarvorite.setOnClickListener(new View.OnClickListener() {
+        binding.addFarvorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showAddFavoriteDialog();
             }
         });
 
-        addTeacherGroup.setOnClickListener(new View.OnClickListener() {
+        binding.addTeacherGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAddTeacherDialog();
             }
         });
 
-        addNotif.setOnClickListener(new View.OnClickListener() {
+        binding.addNotif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showAddNotif(
-                        mPresenter.getTeacherMode()
+                    mPresenter.getTeacherMode()
                 );
             }
         });
 
-        alarmMode.setOnClickListener(new View.OnClickListener() {
+        binding.alarmMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mPresenter.saveAlarmMode(
-                        alarmMode.isChecked()
+                    binding.alarmMode.isChecked()
                 );
             }
         });
 
-        notifOn.setOnClickListener(new View.OnClickListener() {
+        binding.notifOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mPresenter.getNotificationGroup().equals("")) {
                     showAlertDialog("Сначала необходимо выбрать мою группу!",
-                            "Чтобы включить уведомления, необходимо сначала заполнить поле \"Моя группа\"", "Ок", "", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }, null);
-                    notifOn.setChecked(!notifOn.isChecked());
+                        "Чтобы включить уведомления, необходимо сначала заполнить поле \"Моя группа\"", "Ок", "", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }, null);
+                    binding.notifOn.setChecked(!binding.notifOn.isChecked());
                     return;
                 }
 
                 mPresenter.saveNotifOn(
-                        notifOn.isChecked()
+                    binding.notifOn.isChecked()
                 );
             }
         });
 
-        changeMode.setOnClickListener(new View.OnClickListener() {
+        binding.changeMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPresenter.saveChangeMode(
-                        changeMode.isChecked()
+                    binding.changeMode.isChecked()
                 );
             }
         });
 
-        teachMode.setOnClickListener(new View.OnClickListener() {
+        binding.teacherMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAlertDialog("Вы точно хотите перейти в режим преподавателя? ",
-                        "Все данные будут утеряны!",
-                        "Да",
-                        "Нет",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mPresenter.saveTeacherMode(teachMode.isChecked());
-                                addNotifTitle.startAnimation(getTeacherTitleAnimation());
-                            }
-                        }, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                teachMode.setChecked(!teachMode.isChecked());
-                            }
-                        });
+                    "Все данные будут утеряны!",
+                    "Да",
+                    "Нет",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mPresenter.saveTeacherMode(binding.teacherMode.isChecked());
+                            binding.addNotifTitle.startAnimation(getTeacherTitleAnimation());
+                        }
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            binding.teacherMode.setChecked(!binding.teacherMode.isChecked());
+                        }
+                    });
             }
         });
 
-        darkMode.setOnClickListener(new View.OnClickListener() {
+        binding.darkMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean isDarkMode = darkMode.isChecked();
+                boolean isDarkMode = binding.darkMode.isChecked();
 
                 mPresenter.saveDarkMode(isDarkMode);
 
@@ -166,40 +133,40 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
             }
         });
 
-        updateLinks.setOnClickListener(new View.OnClickListener() {
+        binding.updateLinks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showAlertDialog("Обновить данные ссылке и группах?",
-                        "Чтобы посмотреть откуда и что будет обновляться, нажмите на \"Источник\" (откроется в браузере)",
-                        "Обновить",
-                        "Источник",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mPresenter.updateLinks();
-                                dialog.dismiss();
-                                Toast.makeText(getContext(), "Идет обновление..", Toast.LENGTH_SHORT).show();
-                            }
-                        }, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                startActivity(
-                                        new Intent(Intent.ACTION_VIEW,
-                                                Uri.parse("https://raw.githubusercontent.com/alekseyld/CollegeTimetable/master/docs/pref.html")
-                                        )
-                                );
-                                dialog.dismiss();
-                            }
-                        });
+                    "Чтобы посмотреть откуда и что будет обновляться, нажмите на \"Источник\" (откроется в браузере)",
+                    "Обновить",
+                    "Источник",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mPresenter.updateLinks();
+                            dialog.dismiss();
+                            Toast.makeText(getContext(), "Идет обновление..", Toast.LENGTH_SHORT).show();
+                        }
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(
+                                new Intent(Intent.ACTION_VIEW,
+                                    Uri.parse("https://raw.githubusercontent.com/alekseyld/CollegeTimetable/master/docs/pref.html")
+                                )
+                            );
+                            dialog.dismiss();
+                        }
+                    });
             }
         });
 
         TypedValue outValue = new TypedValue();
         getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
-        addFarvorite.setBackgroundResource(outValue.resourceId);
-        addNotif.setBackgroundResource(outValue.resourceId);
+        binding.addFarvorite.setBackgroundResource(outValue.resourceId);
+        binding.addNotif.setBackgroundResource(outValue.resourceId);
 
-        return v;
+        return binding.getRoot();
     }
 
     private Animation getTeacherTitleAnimation() {
@@ -221,14 +188,14 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                if (teachMode.isChecked()) {
-                    addNotifTitle.setText(getString(R.string.teacherSettingTitle));
-                    addNotifValue.setVisibility(View.GONE);
-                    addNotifValue.setText("");
-                    addTeacherGroup.setVisibility(View.GONE);
+                if (binding.teacherMode.isChecked()) {
+                    binding.addNotifTitle.setText(getString(R.string.teacherSettingTitle));
+                    binding.myGroupValue.setVisibility(View.GONE);
+                    binding.myGroupValue.setText("");
+                    binding.addTeacherGroup.setVisibility(View.GONE);
                 } else {
-                    addNotifTitle.setText(getString(R.string.mygroup));
-                    addTeacherGroup.setVisibility(View.VISIBLE);
+                    binding.addNotifTitle.setText(getString(R.string.mygroup));
+                    binding.addTeacherGroup.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -239,25 +206,25 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
     @Override
     public void presenterReady() {
 
-        alarmMode.setChecked(mPresenter.getAlarmMode());
-        notifOn.setChecked(mPresenter.getNotifOn());
-        changeMode.setChecked(mPresenter.getChangeMode());
-        teachMode.setChecked(mPresenter.getTeacherMode());
-        darkMode.setChecked(mPresenter.getDarkMode());
+        binding.alarmMode.setChecked(mPresenter.getAlarmMode());
+        binding.notifOn.setChecked(mPresenter.getNotifOn());
+        binding.changeMode.setChecked(mPresenter.getChangeMode());
+        binding.teacherMode.setChecked(mPresenter.getTeacherMode());
+        binding.darkMode.setChecked(mPresenter.getDarkMode());
 
-        if (teachMode.isChecked()) {
-            addNotifTitle.setText(getString(R.string.teacherSettingTitle));
-            addTeacherGroup.setVisibility(View.VISIBLE);
+        if (binding.teacherMode.isChecked()) {
+            binding.addNotifTitle.setText(getString(R.string.teacherSettingTitle));
+            binding.addTeacherGroup.setVisibility(View.VISIBLE);
         } else {
-            addNotifTitle.setText(getString(R.string.mygroup));
-            addTeacherGroup.setVisibility(View.GONE);
+            binding.addNotifTitle.setText(getString(R.string.mygroup));
+            binding.addTeacherGroup.setVisibility(View.GONE);
         }
 
         if (mPresenter.getNotificationGroup() != null && !mPresenter.getNotificationGroup().equals("")) {
-            addNotifValue.setVisibility(View.VISIBLE);
-            addNotifValue.setText(mPresenter.getNotificationGroup());
+            binding.myGroupValue.setVisibility(View.VISIBLE);
+            binding.myGroupValue.setText(mPresenter.getNotificationGroup());
         } else {
-            addNotifValue.setVisibility(View.GONE);
+            binding.myGroupValue.setVisibility(View.GONE);
         }
     }
 
@@ -299,4 +266,7 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
         getComponent(MainComponent.class).inject(this);
     }
 
+    public static SettingsFragment newInstance() {
+        return new SettingsFragment();
+    }
 }

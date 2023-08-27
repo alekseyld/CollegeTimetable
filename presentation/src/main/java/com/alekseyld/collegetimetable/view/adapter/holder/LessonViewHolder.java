@@ -5,10 +5,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alekseyld.collegetimetable.R;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.alekseyld.collegetimetable.databinding.ListTableLessonBinding;
 
 /**
  * Created by Alekseyld on 16.09.2017.
@@ -16,20 +13,23 @@ import butterknife.ButterKnife;
 
 public class LessonViewHolder extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.lesson_number)
+    private final ListTableLessonBinding binding;
+
     public TextView lessonNumber;
 
-    @BindView(R.id.lesson_time)
     public TextView lessonTime;
 
-    @BindView(R.id.lesson_name)
     public TextView lessonName;
 
-    @BindView(R.id.lesson_teacher)
     public TextView lessonTeacher;
 
     public LessonViewHolder(View v) {
         super(v);
-        ButterKnife.bind(this, v);
+        binding = ListTableLessonBinding.bind(v);
+
+        lessonNumber = binding.lessonNumber;
+        lessonTime = binding.lessonTime;
+        lessonName = binding.lessonName;
+        lessonTeacher = binding.lessonTeacher;
     }
 }

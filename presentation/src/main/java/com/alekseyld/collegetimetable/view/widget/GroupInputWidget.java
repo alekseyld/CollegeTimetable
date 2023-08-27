@@ -5,13 +5,9 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.alekseyld.collegetimetable.R;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.alekseyld.collegetimetable.databinding.WidgetGroupBinding;
 
 /**
  * Created by Alekseyld on 06.09.2017.
@@ -19,14 +15,7 @@ import butterknife.ButterKnife;
 
 public class GroupInputWidget extends LinearLayout {
 
-    @BindView(R.id.course)
-    EditText course;
-
-    @BindView(R.id.abbreviation)
-    EditText abbreviation;
-
-    @BindView(R.id.index_number)
-    EditText index_number;
+    private WidgetGroupBinding binding;
 
     public GroupInputWidget(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -36,8 +25,7 @@ public class GroupInputWidget extends LinearLayout {
     private void init(Context context) {
         LayoutInflater layoutInflater =
                 (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        layoutInflater.inflate(R.layout.widget_group, this);
-        ButterKnife.bind(this);
+        binding = WidgetGroupBinding.inflate(layoutInflater, this, true);
 
         InputFilter filter = new InputFilter() {
             @Override
@@ -49,20 +37,20 @@ public class GroupInputWidget extends LinearLayout {
             }
         };
 
-        abbreviation.setFilters(new InputFilter[]{filter, new InputFilter.LengthFilter(5)});
+        binding.abbreviation.setFilters(new InputFilter[]{filter, new InputFilter.LengthFilter(5)});
     }
 
     public String getGroup() {
 
-        if (course.getText().toString().equals("") ||
-                abbreviation.getText().toString().equals("")) {
+        if (binding.course.getText().toString().equals("") ||
+                binding.abbreviation.getText().toString().equals("")) {
             return null;
         }
 
-        if (!index_number.getText().toString().equals("")){
-            return course.getText().toString() + " " + abbreviation.getText().toString().trim() + "-" + index_number.getText().toString();
+        if (!binding.indexNumber.getText().toString().equals("")){
+            return binding.course.getText().toString() + " " + binding.abbreviation.getText().toString().trim() + "-" + binding.indexNumber.getText().toString();
         } else {
-            return course.getText().toString() + " " + abbreviation.getText().toString().trim();
+            return binding.course.getText().toString() + " " + binding.abbreviation.getText().toString().trim();
         }
     }
 

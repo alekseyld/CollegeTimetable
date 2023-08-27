@@ -14,7 +14,7 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 33
 
-    namespace "com.alekseyld.collegetimetable"
+    namespace "com.alekseyld.data"
 
     defaultConfig {
         minSdkVersion 16

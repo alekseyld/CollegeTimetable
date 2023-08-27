@@ -2,10 +2,11 @@ package com.alekseyld.collegetimetable.view.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.presenter.SettingsFavoritePresenter;
@@ -19,8 +20,8 @@ import com.alekseyld.collegetimetable.view.adapter.holder.FavoriteGroupViewHolde
 
 public class FavoriteGroupAdapter extends BasePresenterAdapter<String, SettingsFavoritePresenter, FavoriteGroupViewHolder> {
 
-    private Context mContext;
-    private boolean teacherMode;
+    private final Context mContext;
+    private final boolean teacherMode;
 
     public FavoriteGroupAdapter(SettingsFavoritePresenter presenter, Context context, boolean teacherMode) {
         super(presenter);
@@ -38,9 +39,9 @@ public class FavoriteGroupAdapter extends BasePresenterAdapter<String, SettingsF
 
     @Override
     public void onBindViewHolder(final FavoriteGroupViewHolder holder, int position) {
-        holder.groupName.setText(getItems().get(holder.getAdapterPosition()));
+        holder.getGroupName().setText(getItems().get(holder.getAdapterPosition()));
 
-        holder.delete.setOnClickListener(new View.OnClickListener() {
+        holder.getDelete().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(mContext)

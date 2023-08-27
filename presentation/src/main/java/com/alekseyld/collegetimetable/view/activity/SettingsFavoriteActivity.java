@@ -1,18 +1,15 @@
 package com.alekseyld.collegetimetable.view.activity;
 
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 
-import com.alekseyld.collegetimetable.R;
+import com.alekseyld.collegetimetable.databinding.ActivityFavoriteBinding;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerSettingsFavoriteComponent;
 import com.alekseyld.collegetimetable.internal.di.component.SettingsFavoriteComponent;
 import com.alekseyld.collegetimetable.internal.di.module.MainModule;
 import com.alekseyld.collegetimetable.view.activity.base.BaseInjectorActivity;
 import com.alekseyld.collegetimetable.view.fragment.SettingsFavoriteFragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by Alekseyld on 07.09.2017.
@@ -20,19 +17,18 @@ import butterknife.ButterKnife;
 
 public class SettingsFavoriteActivity extends BaseInjectorActivity<SettingsFavoriteComponent> {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    private ActivityFavoriteBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorite);
-        ButterKnife.bind(this);
+        binding = ActivityFavoriteBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbarInclude.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        binding.toolbarInclude.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -47,7 +43,7 @@ public class SettingsFavoriteActivity extends BaseInjectorActivity<SettingsFavor
         addFragment(SettingsFavoriteFragment.newInstance(teacherMode));
     }
 
-    private void showAddFavoriteDialog(){
+    private void showAddFavoriteDialog() {
 
 //        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
 //        View promptView = layoutInflater.inflate(R.layout.dialog_favorite, null);
@@ -124,8 +120,8 @@ public class SettingsFavoriteActivity extends BaseInjectorActivity<SettingsFavor
     @Override
     protected SettingsFavoriteComponent initializeInjections() {
         return DaggerSettingsFavoriteComponent.builder()
-                .applicationComponent(getApplicationComponent())
-                .mainModule(new MainModule(this))
-                .build();
+            .applicationComponent(getApplicationComponent())
+            .mainModule(new MainModule(this))
+            .build();
     }
 }
