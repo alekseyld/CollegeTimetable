@@ -12,26 +12,30 @@ apply plugin: 'com.android.library'
 //apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion 33
+
+    namespace "com.alekseyld.collegetimetable"
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 29
+        targetSdkVersion 33
+
         versionCode 30
         versionName "13.1"
-
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     packagingOptions {
         exclude 'LICENSE.txt'
         exclude 'META-INF/DEPENDENCIES'
@@ -55,9 +59,11 @@ android {
 
 dependencies {
     testImplementation 'junit:junit:4.12'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.5'
-    implementation 'com.google.dagger:dagger:2.5'
+
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.46.1'
+    implementation 'com.google.dagger:dagger:2.46.1'
     compileOnly 'javax.annotation:jsr250-api:1.0'
+
     implementation 'io.reactivex:rxandroid:1.2.1'
     implementation 'io.reactivex:rxjava:1.1.6'
 //    implementation 'com.jakewharton:butterknife:9.0.0-SNAPSHOT'
