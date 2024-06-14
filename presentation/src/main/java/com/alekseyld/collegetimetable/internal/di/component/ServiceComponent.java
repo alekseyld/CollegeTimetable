@@ -1,8 +1,7 @@
 package com.alekseyld.collegetimetable.internal.di.component;
 
 import com.alekseyld.collegetimetable.internal.di.module.ServiceModule;
-import com.alekseyld.collegetimetable.job.TimetableJob;
-import com.alekseyld.collegetimetable.service.UpdateTimetableService;
+import com.alekseyld.collegetimetable.job.TimetableUpdateWorker;
 
 import javax.inject.Singleton;
 
@@ -13,8 +12,7 @@ import dagger.Component;
  */
 
 @Singleton
-@Component(modules=ServiceModule.class)
+@Component(modules = ServiceModule.class)
 public interface ServiceComponent {
-    void inject(UpdateTimetableService service);
-    void inject(TimetableJob service);
+    void inject(TimetableUpdateWorker service);
 }

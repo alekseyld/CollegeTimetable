@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="?attr/colorBackground">
+        android:background="?attr/colorBackground"
+        android:orientation="vertical">
 
         <Switch
             android:id="@+id/teacherMode"
@@ -25,8 +26,8 @@
             style="@style/SettingTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?android:textColor"
-            android:text="@string/addFarvorite" />
+            android:text="@string/addFarvorite"
+            android:textColor="?android:textColor" />
 
         <include layout="@layout/divider" />
 
@@ -50,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="?android:textColor"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </LinearLayout>
 
         <TextView
@@ -60,10 +61,11 @@
             android:layout_height="wrap_content"
             android:text="@string/addTeacherGroup"
             android:textColor="?android:textColor"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <include layout="@layout/divider" />
 
+        <!--   TODO change visibility after migrate notification     -->
         <Switch
             android:id="@+id/notifOn"
             android:layout_width="match_parent"
@@ -71,9 +73,12 @@
             android:padding="15dp"
             android:text="@string/notifS"
             android:textColor="?android:textColor"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="gone" />
 
-        <include layout="@layout/divider" />
+        <include
+            layout="@layout/divider"
+            android:visibility="gone" />
 
         <Switch
             android:id="@+id/alarmMode"
@@ -113,8 +118,8 @@
             style="@style/SettingTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?android:textColor"
-            android:text="@string/updateLinks" />
+            android:text="@string/updateLinks"
+            android:textColor="?android:textColor" />
 
         <include layout="@layout/divider" />
 
