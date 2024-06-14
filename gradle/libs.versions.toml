@@ -22,7 +22,7 @@ jsoup = "1.17.2"
 gson = "2.11.0"
 retrofit = "2.11.0"
 
-evernote-android-job = "1.4.3"
+workmanager = "2.9.0"
 
 firebase-bom = "33.1.0"
 
@@ -60,7 +60,7 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 
-evernote-android-job = { module = "com.evernote:android-job", version.ref = "evernote-android-job" }
+workmanager = { module = "androidx.work:work-runtime", version.ref = "workmanager" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }

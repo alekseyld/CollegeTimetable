@@ -7,14 +7,7 @@ import android.os.StrictMode;
 import com.alekseyld.collegetimetable.internal.di.component.ApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.component.DaggerApplicationComponent;
 import com.alekseyld.collegetimetable.internal.di.module.ApplicationModule;
-import com.alekseyld.collegetimetable.job.TimetableJob;
-import com.alekseyld.collegetimetable.job.TimetableJobCreator;
-import com.alekseyld.collegetimetable.utils.Utils;
-import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobRequest;
 import com.google.firebase.FirebaseApp;
-
-import java.util.Set;
 
 
 /**
@@ -38,21 +31,16 @@ public class AndroidApplication extends Application {
 
         FirebaseApp.initializeApp(this);
 
-        JobManager.create(this).addJobCreator(new TimetableJobCreator());
-
         initializeInjector();
         initializeService();
     }
 
     private void initializeService() {
-        Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequestsForTag(TimetableJob.TAG);
         SharedPreferences preferences = this.getSharedPreferences(NAME_FILE, MODE_PRIVATE);
         boolean notifOn = preferences.getBoolean(NOTIFON_KEY, false);
-        if (notifOn &&
-                jobRequests.size() == 0) {
-            Utils.getTimeTableJob().schedule();
+        if (notifOn) {
+            //TODO Run Worker for update timetable
         }
-        Utils.toggleRecursiveJob(notifOn);
     }
 
     private void initializeInjector() {

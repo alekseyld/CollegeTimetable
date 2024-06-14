@@ -90,7 +90,7 @@ dependencies {
     implementation libs.retrofit.gson
     implementation libs.retrofit.rxjava
 
-    implementation libs.evernote.android.job
+    implementation libs.workmanager
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.bundles.firebase)

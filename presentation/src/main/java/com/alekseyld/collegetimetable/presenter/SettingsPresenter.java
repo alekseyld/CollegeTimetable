@@ -9,7 +9,6 @@ import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.SaveSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.UpdateSettingsUseCase;
-import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.SettingsView;
 import com.alekseyld.collegetimetable.view.activity.MainActivity;
 
@@ -101,9 +100,9 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
 
     private void processNotification(boolean notifOn) {
         if (notifOn) {
-            Utils.getTimeTableJob().schedule();
+            //TODO Request runtime notification permission
+            //TODO Run Worker for update timetable
         }
-        Utils.toggleRecursiveJob(notifOn);
     }
 
     private void saveSettings() {

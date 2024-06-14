@@ -4,12 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
-
-    <uses-sdk
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:overrideLibrary="android.support.v14.preference,android.support.v7.appcompat,android.support.v7.preference,android.support.graphics.drawable,android.support.compat,android.support.v4,android.support.coreutils,android.support.mediacompat,android.support.coreui,android.support.fragment,android.support.v7.recyclerview" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
         android:name=".AndroidApplication"
@@ -35,21 +30,6 @@
         <activity
             android:name=".view.activity.SettingsFavoriteActivity"
             android:exported="false" />
-
-        <service
-            android:name=".service.UpdateTimetableService"
-            android:enabled="true"
-            android:exported="false"
-            android:process=":remote" />
-
-        <receiver
-            android:name=".receiver.BootReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
 
         <provider
             android:name="androidx.core.content.FileProvider"
