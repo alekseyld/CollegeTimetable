@@ -1,3 +1,11 @@
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("projectVersions") {
+            from(files("./gradle/project.versions.toml"))
+        }
+    }
+}
+
 include ':presentation'
 include ':domain'
 include ':data'

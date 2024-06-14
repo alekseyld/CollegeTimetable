@@ -1,10 +1,9 @@
-//apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'java'
 
-//noinspection GroovyUnusedAssignment
-sourceCompatibility = 1.7
-//noinspection GroovyUnusedAssignment
-targetCompatibility = 1.7
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 configurations {
     provided
