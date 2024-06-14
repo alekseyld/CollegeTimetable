@@ -21,15 +21,10 @@
 -verbose
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 
+-keepattributes Signature
 -keepattributes *Annotation*
 -keepattributes SourceFile,LineNumberTable
 -keep public class * extends java.lang.Exception
-
-# Kepp Google libs
--keepattributes Signature
--keep class com.google.** { *; }
--keep interface com.google.** { *; }
--keep class sun.misc.** { *; }
 
 # RxJava 1
 -keep class rx.schedulers.Schedulers {
