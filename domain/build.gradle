@@ -1,8 +1,8 @@
 apply plugin: 'java'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 configurations {
@@ -16,9 +16,11 @@ sourceSets {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.12'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.46.1'
-    implementation 'com.google.dagger:dagger:2.46.1'
-    compileOnly 'javax.annotation:jsr250-api:1.0'
-    implementation 'io.reactivex:rxjava:1.1.6'
+    annotationProcessor libs.dagger.compiler
+    implementation libs.dagger
+    compileOnly libs.jsr250.api
+    
+    implementation libs.rxjava
+
+    testImplementation libs.junit
 }
