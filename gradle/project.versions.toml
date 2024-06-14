@@ -3,5 +3,5 @@ androidMinSdk = "21"
 androidCompileSdk = "34"
 androidTargetSdk = "34"
 
-versionCode = "31"
-versionName = "13.2"
+versionCode = "32"
+versionName = "14.0"
