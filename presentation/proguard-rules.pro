@@ -15,3 +15,37 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-ignorewarnings
+-optimizationpasses 5
+-dontusemixedcaseclassnames
+-verbose
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
+
+# Kepp Google libs
+-keepattributes Signature
+-keep class com.google.** { *; }
+-keep interface com.google.** { *; }
+-keep class sun.misc.** { *; }
+
+# RxJava 1
+-keep class rx.schedulers.Schedulers {
+    public static <methods>;
+}
+-keep class rx.schedulers.ImmediateScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.TestScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.Schedulers {
+    public static ** test();
+}
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef { *; }
