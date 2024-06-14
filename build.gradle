@@ -1,13 +1,10 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-//apply from: 'buildsystem/ci.gradle'
-
 buildscript {
     repositories {
         mavenCentral()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.0'
+        classpath 'com.android.tools.build:gradle:8.5.0'
         classpath 'com.google.gms:google-services:4.3.15'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.6'
         // NOTE: Do not place your application dependencies here; they belong
@@ -25,5 +22,6 @@ allprojects {
 }
 
 tasks.register('clean', Delete) {
-    delete rootProject.buildDir
+    group 'build'
+    delete layout.buildDirectory
 }

@@ -7,18 +7,17 @@ repositories {
 }
 
 android {
-    compileSdkVersion 33
-
     namespace "com.alekseyld.collegetimetable"
 
     defaultConfig {
         applicationId "com.alekseyld.collegetimetable"
 
-        minSdkVersion 16
-        targetSdkVersion 33
+        minSdkVersion projectVersions.versions.androidMinSdk.get().toInteger()
+        compileSdk projectVersions.versions.androidCompileSdk.get().toInteger()
+        targetSdkVersion projectVersions.versions.androidTargetSdk.get().toInteger()
 
-        versionCode 31
-        versionName "13.2"
+        versionCode projectVersions.versions.versionCode.get().toInteger()
+        versionName projectVersions.versions.versionName.get()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -26,21 +25,9 @@ android {
     }
 
     packagingOptions {
-        exclude 'LICENSE.txt'
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/ASL2.0'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
-    }
-
-    lintOptions {
-        quiet true
-        abortOnError false
-        ignoreWarnings true
-        disable 'InvalidPackage'            //Some libraries have issues with this.
-        disable 'OldTargetApi'              //Lint gives this warning but SDK 20 would be Android L Beta.
-        disable 'IconDensities'             //For testing purpose. This is safe to remove.
-        disable 'IconMissingDensityFolder'  //For testing purpose. This is safe to remove.
+        resources {
+            excludes += ['LICENSE.txt', 'META-INF/DEPENDENCIES', 'META-INF/ASL2.0', 'META-INF/NOTICE', 'META-INF/LICENSE']
+        }
     }
 
     buildTypes {
@@ -56,8 +43,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     signingConfigs {
@@ -67,6 +54,13 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+    }
+
+    lint {
+        abortOnError false
+        disable 'InvalidPackage', 'OldTargetApi', 'IconDensities', 'IconMissingDensityFolder'
+        ignoreWarnings true
+        quiet true
     }
 }
 
@@ -115,7 +109,8 @@ dependencies {
     implementation project(':domain')
 }
 
-task testAll(dependsOn: [':data:test', ':data:connectedAndroidTest', 'test', 'connectedAndroidTest']) {
+tasks.register('testAll') {
+    dependsOn[':data:test', ':data:connectedAndroidTest', 'test', 'connectedAndroidTest']
     group = 'custom_tasks'
     description = "Run all tests"
 }
