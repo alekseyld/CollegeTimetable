@@ -40,8 +40,9 @@ public class Settings {
         return favoriteGroups;
     }
 
-    public void setFavoriteGroups(Set<String> favoriteGroups) {
+    public Settings setFavoriteGroups(Set<String> favoriteGroups) {
         this.favoriteGroups = favoriteGroups;
+        return this;
     }
 
     public void addFavoriteGroup(String favoriteGroup) {
@@ -56,8 +57,9 @@ public class Settings {
         return notificationGroup;
     }
 
-    public void setNotificationGroup(String notificationGroup) {
+    public Settings setNotificationGroup(String notificationGroup) {
         this.notificationGroup = notificationGroup;
+        return this;
     }
 
     public Settings setChangeMode(boolean changeMode) {
@@ -150,8 +152,8 @@ public class Settings {
     }
 
     public boolean hasExternalSettings() {
-        return !this.getRootUrl().equals("")
-                && abbreviationMap.size() != 0
-                && neftGroup.size() != 0;
+        return !this.getRootUrl().isEmpty()
+                && !abbreviationMap.isEmpty()
+                && !neftGroup.isEmpty();
     }
 }

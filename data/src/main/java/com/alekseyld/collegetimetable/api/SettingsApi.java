@@ -1,6 +1,6 @@
 package com.alekseyld.collegetimetable.api;
 
-import com.alekseyld.collegetimetable.entity.SettingsResponse;
+import com.alekseyld.collegetimetable.dto.SettingsResponse;
 
 import retrofit2.http.GET;
 import rx.Observable;

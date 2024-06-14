@@ -10,6 +10,7 @@ swiperefreshlayout = "1.1.0"
 cardview = "1.0.0"
 appcompat = "1.7.0"
 rules = "1.5.0"
+annotationJvm = "1.8.0"
 
 dagger = "2.51.1"
 daggerCompiler = "2.51.1"
@@ -42,6 +43,7 @@ androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefre
 androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-rules = { module = "androidx.test:rules", version.ref = "rules" }
+androidx-annotation-jvm = { group = "androidx.annotation", name = "annotation-jvm", version.ref = "annotationJvm" }
 
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompiler" }

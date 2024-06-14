@@ -2,13 +2,17 @@ package com.alekseyld.collegetimetable.repository;
 
 import android.content.SharedPreferences;
 
+import androidx.annotation.NonNull;
+
+import com.alekseyld.collegetimetable.dto.SettingsDto;
+import com.alekseyld.collegetimetable.dto.SettingsResponse;
 import com.alekseyld.collegetimetable.entity.Settings;
-import com.alekseyld.collegetimetable.entity.SettingsResponse;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.HashSet;
 
 import javax.inject.Inject;
 
@@ -18,21 +22,21 @@ import javax.inject.Inject;
 
 public class SettingsRepositoryImpl implements SettingsRepository {
 
-    private SharedPreferences mPref;
+    private final SharedPreferences mPref;
 
-    private Gson mGson;
-    private Type mSettingType;
+    private final Gson mGson;
+    private final Type mSettingType;
 
     @Inject
-    SettingsRepositoryImpl(SharedPreferences sharedPreferences){
+    SettingsRepositoryImpl(SharedPreferences sharedPreferences) {
         mPref = sharedPreferences;
 
         mGson = new Gson();
-        mSettingType = new TypeToken<Settings>(){}.getType();
+        mSettingType = new TypeToken<SettingsDto>() {}.getType();
     }
 
     @Override
-    public boolean saveSettings(Settings settings) {
+    public boolean saveSettings(SettingsDto settings) {
         String json = mGson.toJson(settings);
         SharedPreferences.Editor ed = mPref.edit();
         ed.putString(SETTINGS_KEY, json);
@@ -42,20 +46,35 @@ public class SettingsRepositoryImpl implements SettingsRepository {
         return true;
     }
 
+    @NonNull
     @Override
-    public Settings updateSettings(SettingsResponse settings) {
-        Settings updatedSettings = getSettings();
+    public SettingsDto updateSettings(SettingsResponse settings) {
+        SettingsDto updatedSettings = getSettings();
+
         updatedSettings.setAbbreviationMap(settings.getAbbreviationMap());
         updatedSettings.setNeftGroup(settings.getNeftGroup());
         updatedSettings.setRootUrl(settings.getRootUrl());
+
         saveSettings(updatedSettings);
+
         return updatedSettings;
     }
 
+    @NonNull
     @Override
-    public Settings getSettings() {
+    public SettingsDto getSettings() {
         String json = mPref.getString(SETTINGS_KEY, "");
-        return mGson.fromJson(json, mSettingType);
+        SettingsDto dto = mGson.fromJson(json, mSettingType);
+
+        if (dto != null) return dto;
+
+        Settings defaultSettings = new Settings()
+            .setAlarmMode(false)
+            .setChangeMode(false)
+            .setNotifOn(false)
+            .setTeacherGroups(new HashSet<>())
+            .setTeacherMode(false);
+        return new SettingsDto(defaultSettings);
     }
 
 }
