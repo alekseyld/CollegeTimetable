@@ -7,6 +7,8 @@ import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
 import com.alekseyld.collegetimetable.usecase.SaveSettingsUseCase;
 import com.alekseyld.collegetimetable.view.SettingsFavoriteView;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -17,9 +19,11 @@ import javax.inject.Inject;
 
 public class SettingsFavoritePresenter extends BasePresenter<SettingsFavoriteView> {
 
+    private final SaveSettingsUseCase mSaveSettingsUseCase;
+    private final GetSettingsUseCase mGetSettingsUseCase;
+
+    @Nullable
     private Settings mSettings;
-    private SaveSettingsUseCase mSaveSettingsUseCase;
-    private GetSettingsUseCase mGetSettingsUseCase;
 
     @Inject
     public SettingsFavoritePresenter(SaveSettingsUseCase saveSettingsUseCase,
@@ -44,6 +48,8 @@ public class SettingsFavoritePresenter extends BasePresenter<SettingsFavoriteVie
     }
 
     public void addFavoriteGroup(String group, boolean teacherMode) {
+        if (mSettings == null) return;
+
         if (teacherMode) {
             mSettings.addTeacherGroup(group);
         } else {
@@ -60,6 +66,8 @@ public class SettingsFavoritePresenter extends BasePresenter<SettingsFavoriteVie
     }
 
     private void refreshFavoriteGroups() {
+        if (mSettings == null) return;
+
         mView.getAdapter().removeAll();
         if (mView.getTeacherMode()) {
             mView.getAdapter().addAll(new ArrayList<>(mSettings.getTeacherGroups()));
@@ -75,6 +83,8 @@ public class SettingsFavoritePresenter extends BasePresenter<SettingsFavoriteVie
     }
 
     public void removeFavoriteGroup(String group, boolean teacherMode) {
+        if (mSettings == null) return;
+
         if (teacherMode) {
             mSettings.removeTeacherGroup(group);
         } else {

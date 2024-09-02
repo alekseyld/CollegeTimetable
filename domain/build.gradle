@@ -21,6 +21,7 @@ dependencies {
     compileOnly libs.jsr250.api
     
     implementation libs.rxjava
+    implementation libs.annotations
 
     testImplementation libs.junit
 }

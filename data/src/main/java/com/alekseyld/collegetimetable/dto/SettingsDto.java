@@ -3,6 +3,8 @@ package com.alekseyld.collegetimetable.dto;
 import com.alekseyld.collegetimetable.entity.Settings;
 import com.google.gson.annotations.SerializedName;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,6 +27,7 @@ public class SettingsDto {
     private String rootUrl;
 
     @SerializedName("notificationGroup")
+    @Nullable
     private final String notificationGroup;
 
     @SerializedName("notifOn")
@@ -65,7 +68,7 @@ public class SettingsDto {
             .setAbbreviationMap(abbreviationMap)
             .setNeftGroup(neftGroup)
             .setRootUrl(rootUrl)
-            .setNotificationGroup(notificationGroup)
+            .setNotificationGroup(notificationGroup != null ? notificationGroup : "")
             .setNotifOn(notifOn)
             .setAlarmMode(alarmMode)
             .setChangeMode(changeMode)

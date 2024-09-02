@@ -34,6 +34,8 @@ import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Created by Alekseyld on 02.09.2016.
  */
@@ -47,6 +49,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
     private Menu mMenu;
 
+    @NotNull
     private String mGroup = "";
 
     @Nullable
@@ -101,7 +104,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
         if (getArguments().containsKey(GROUP_KEY)) {
             String s = getArguments().getString(GROUP_KEY);
-            mGroup = s == null || s.equals("") ? mPresenter.getGroup() : s;
+            mGroup = s == null || s.isEmpty() ? mPresenter.getGroup() : s;
         }
 
         if (getActivity() != null && mGroup != null && !mGroup.equals("")) {

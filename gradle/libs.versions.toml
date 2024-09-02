@@ -30,6 +30,7 @@ firebase-bom = "33.1.0"
 junit = "4.13.2"
 espressoCore = "3.5.1"
 espressoContrib = "3.5.1"
+annotations = "15.0"
 
 [libraries]
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
@@ -67,6 +68,7 @@ workmanager = { module = "androidx.work:work-runtime", version.ref = "workmanage
 junit = { module = "junit:junit", version.ref = "junit" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
 espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espressoContrib" }
+annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
 
 [plugins]
 
