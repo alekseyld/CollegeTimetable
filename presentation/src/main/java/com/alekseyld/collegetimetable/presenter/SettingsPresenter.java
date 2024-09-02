@@ -2,8 +2,9 @@ package com.alekseyld.collegetimetable.presenter;
 
 import android.webkit.URLUtil;
 
+import androidx.annotation.Nullable;
+
 import com.alekseyld.collegetimetable.entity.Settings;
-import com.alekseyld.collegetimetable.navigator.base.SettingsResultProcessor;
 import com.alekseyld.collegetimetable.presenter.base.BasePresenter;
 import com.alekseyld.collegetimetable.rx.subscriber.BaseSubscriber;
 import com.alekseyld.collegetimetable.usecase.GetSettingsUseCase;
@@ -25,24 +26,21 @@ import javax.inject.Inject;
 
 public class SettingsPresenter extends BasePresenter<SettingsView> {
 
-    private SettingsResultProcessor mProcessor;
+    private final SaveSettingsUseCase mSaveSettingsUseCase;
+    private final GetSettingsUseCase mGetSettingsUseCase;
+    private final UpdateSettingsUseCase mUpdateSettingsUseCase;
 
     private Settings mSettings;
-    private SaveSettingsUseCase mSaveSettingsUseCase;
-    private GetSettingsUseCase mGetSettingsUseCase;
-    private UpdateSettingsUseCase mUpdateSettingsUseCase;
 
     @Inject
-    public SettingsPresenter(SettingsResultProcessor settingsResultProcessor,
-                             SaveSettingsUseCase saveSettingsUseCase,
+    public SettingsPresenter(SaveSettingsUseCase saveSettingsUseCase,
                              GetSettingsUseCase getSettingsUseCase,
                              UpdateSettingsUseCase updateSettingsUseCase) {
-        mProcessor = settingsResultProcessor;
         mSaveSettingsUseCase = saveSettingsUseCase;
         mGetSettingsUseCase = getSettingsUseCase;
         mUpdateSettingsUseCase = updateSettingsUseCase;
 
-        mSettings = new Settings(new HashSet<String>(), "", false, true);
+        mSettings = new Settings(new HashSet<>(), "", false, true);
     }
 
     @Override
@@ -76,7 +74,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
         return mSettings;
     }
 
-    public void saveNotification(String group) {
+    public void saveNotification(@Nullable String group) {
         if (group == null) {
             mView.showError("Заполните все поля группы");
             return;

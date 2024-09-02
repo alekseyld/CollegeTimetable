@@ -22,6 +22,9 @@ import com.alekseyld.collegetimetable.utils.Utils;
 import com.alekseyld.collegetimetable.view.TableView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -33,11 +36,12 @@ import javax.inject.Inject;
 
 public class TablePresenter extends BasePresenter<TableView> {
 
-    private GetTableFromOnlineUseCase mGetTableFromOnlineUseCase;
-    private GetTableFromOfflineUseCase mGetTableFromOfflineUseCase;
+    private final GetTableFromOnlineUseCase mGetTableFromOnlineUseCase;
+    private final GetTableFromOfflineUseCase mGetTableFromOfflineUseCase;
 
-    private GetSettingsUseCase mGetSettingsUseCase;
+    private final GetSettingsUseCase mGetSettingsUseCase;
 
+    @Nullable
     private Settings mSettings;
 
     @Inject
@@ -71,6 +75,7 @@ public class TablePresenter extends BasePresenter<TableView> {
         return mSettings.getChangeMode();
     }
 
+    @NotNull
     public String getGroup() {
         return mSettings != null ? mSettings.getNotificationGroup() : "";
     }

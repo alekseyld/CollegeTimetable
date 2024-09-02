@@ -1,5 +1,7 @@
 package com.alekseyld.collegetimetable.entity;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -57,7 +59,7 @@ public class Settings {
         return notificationGroup;
     }
 
-    public Settings setNotificationGroup(String notificationGroup) {
+    public Settings setNotificationGroup(@NotNull String notificationGroup) {
         this.notificationGroup = notificationGroup;
         return this;
     }
