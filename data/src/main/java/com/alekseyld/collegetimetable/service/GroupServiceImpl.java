@@ -56,7 +56,7 @@ public class GroupServiceImpl implements GroupService {
             }};
         }
 
-        String abbr;
+        final String abbr;
 
         if (groupPatternWithoutNum.matcher(group).matches()) {
             abbr = group.split(" ")[1].split("-")[0];
@@ -65,14 +65,17 @@ public class GroupServiceImpl implements GroupService {
         }
 
         if (group.charAt(0) == '1' && neftGroup.contains(abbr)) {
-            url = DataUtils.switchAbbr(abbreviationMap,"1");
-        } else {
+            url = DataUtils.switchAbbr(abbreviationMap, "1");
+        } else if (abbr.equals("ГС") && group.charAt(0) != '4')
+            //TODO: It's hot-fix
+            url = "neft/10_1_11.html";
+        else {
             url = DataUtils.switchAbbr(abbreviationMap, abbr);
         }
 
         if (url == null) return "";
 
-        return url.equals("") ? url : root + url;
+        return url.isEmpty() ? url : root + url;
     }
 
 }

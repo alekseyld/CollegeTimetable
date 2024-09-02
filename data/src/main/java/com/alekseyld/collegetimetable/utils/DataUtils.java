@@ -6,6 +6,7 @@ import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.jetbrains.annotations.Nullable;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
@@ -23,13 +24,13 @@ import java.util.regex.Pattern;
 
 public class DataUtils {
 
-    public static Pattern groupPattern = Pattern.compile("[0-9]\\s[А-Я]{1,}[-][0-9]");
     public static Pattern groupPatternWithoutNum = Pattern.compile("[0-9]\\s[А-Я]{1,}([-][0-9]){0,}");
     public static Pattern fioPattern = Pattern.compile("([А-ЯЁа-яё]{1,}[\\s]([А-ЯЁа-яё]{1}[.]){2})");
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
+    @Nullable
     public static String switchAbbr(Map<String, String> abbreviationMap, String abbr) {
-        if (abbreviationMap == null || abbreviationMap.size() == 0) {
+        if (abbreviationMap == null || abbreviationMap.isEmpty()) {
             String json = "{\"1\": \"neft/10_1_10.html\",\"Т\": \"energy/10_1_8.html\",\"Э\": \"energy/10_1_7.html\",\"С\": \"energy/10_1_10.html\",\"Б\": \"energy/10_1_9.html\",\"В\": \"neft/10_1_4.html\",\"Л\": \"energy/10_1_3.html\",\"Р\": \"energy/10_1_4.html\",\"АПП\": \"neft/10_1_1.html\",\"БНГ\": \"neft/10_1_2.html\",\"ТО\": \"neft/10_1_3.html\",\"ПНГ\": \"neft/10_1_5.html\",\"ЭНН\": \"neft/10_1_6.html\",\"ЭННУ\": \"neft/10_1_6.html\",\"ТОВ\": \"neft/10_1_7.html\",\"ИС\": \"energy/10_1_1.html\",\"ГС\": \"energy/10_1_2.html\",\"ГСУ\": \"energy/10_1_2.html\",\"РУ\": \"energy/10_1_4.html\",\"ПГ\": \"energy/10_1_5.html\",\"ТС\": \"energy/10_1_6.html\",\"ТАК\": \"energy/10_1_8.html\"}";
             abbreviationMap = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>() {
             }.getType());
