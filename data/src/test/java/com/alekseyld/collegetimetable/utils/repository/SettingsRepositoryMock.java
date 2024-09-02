@@ -1,41 +1,47 @@
 package com.alekseyld.collegetimetable.utils.repository;
 
+import androidx.annotation.NonNull;
+
+import com.alekseyld.collegetimetable.dto.SettingsDto;
 import com.alekseyld.collegetimetable.entity.Settings;
-import com.alekseyld.collegetimetable.entity.SettingsResponse;
+import com.alekseyld.collegetimetable.dto.SettingsResponse;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 
 import java.util.HashSet;
 
 public class SettingsRepositoryMock implements SettingsRepository {
 
-    Settings settings = null;
+    SettingsDto settings = null;
 
     @Override
-    public boolean saveSettings(Settings settings) {
+    public boolean saveSettings(SettingsDto settings) {
         this.settings = settings;
         return true;
     }
 
+    @NonNull
     @Override
-    public Settings getSettings() {
+    public SettingsDto getSettings() {
         if (settings != null)
             return settings;
 
-        settings = new Settings()
-                .setAlarmMode(false)
-                .setChangeMode(false)
-                .setNotifOn(false)
-                .setTeacherGroups(new HashSet<>())
-                .setTeacherMode(false);
+        Settings settings = new Settings()
+            .setAlarmMode(false)
+            .setChangeMode(false)
+            .setNotifOn(false)
+            .setTeacherGroups(new HashSet<>())
+            .setTeacherMode(false);
 
-         settings.setFavoriteGroups(new HashSet<>());
-         settings.setNotificationGroup("");
-        return settings;
+        settings.setFavoriteGroups(new HashSet<>());
+        settings.setNotificationGroup("");
+
+        return new SettingsDto(settings);
     }
 
+    @NonNull
     @Override
-    public Settings updateSettings(SettingsResponse settings) {
-        Settings updatedSettings = getSettings();
+    public SettingsDto updateSettings(SettingsResponse settings) {
+        SettingsDto updatedSettings = getSettings();
 //        updatedSettings.setAbbreviationMap(settings.getAbbreviationMap());
 //        updatedSettings.setNeftGroup(settings.getNeftGroup());
 //        updatedSettings.setRootUrl(settings.getRootUrl());

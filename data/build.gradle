@@ -46,6 +46,7 @@ dependencies {
     implementation libs.dagger
     compileOnly libs.jsr250.api
 
+    implementation libs.androidx.annotation.jvm
     implementation libs.rxandroid
     implementation libs.rxjava
     implementation libs.gson

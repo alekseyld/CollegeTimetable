@@ -1,6 +1,7 @@
 package com.alekseyld.collegetimetable.service;
 
 import com.alekseyld.collegetimetable.api.SettingsApi;
+import com.alekseyld.collegetimetable.dto.SettingsDto;
 import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 
@@ -14,8 +15,8 @@ import rx.Observable;
 
 public class SettingsServiceImpl implements SettingsService {
 
-    private SettingsRepository mSettingsRepository;
-    private SettingsApi mSettingsApi;
+    private final SettingsRepository mSettingsRepository;
+    private final SettingsApi mSettingsApi;
 
     @Inject
     public SettingsServiceImpl(SettingsRepository settingsRepository,
@@ -27,22 +28,19 @@ public class SettingsServiceImpl implements SettingsService {
 
     @Override
     public Observable<Boolean> saveSettings(Settings settings) {
-        return Observable.just(
-                mSettingsRepository.saveSettings(settings)
-        );
+        return Observable.just(mSettingsRepository.saveSettings(new SettingsDto(settings)));
     }
 
     @Override
     public Observable<Settings> getSettings() {
-        return Observable.just(
-                mSettingsRepository.getSettings()
-        );
+        return Observable.just(mSettingsRepository.getSettings().toEntity());
     }
 
     @Override
     public Observable<Settings> updateSettingsOnline() {
         return mSettingsApi.getSettings()
-                .map(settingsResponse -> mSettingsRepository.updateSettings(settingsResponse));
+            .map(mSettingsRepository::updateSettings)
+            .map(SettingsDto::toEntity);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.alekseyld.collegetimetable.utils.api;
 
 import com.alekseyld.collegetimetable.api.SettingsApi;
-import com.alekseyld.collegetimetable.entity.SettingsResponse;
+import com.alekseyld.collegetimetable.dto.SettingsResponse;
 import com.google.gson.Gson;
 
 import rx.Observable;

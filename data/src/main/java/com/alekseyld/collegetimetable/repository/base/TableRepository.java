@@ -1,8 +1,8 @@
 package com.alekseyld.collegetimetable.repository.base;
 
-import com.alekseyld.collegetimetable.entity.TimeTable;
+import androidx.annotation.Nullable;
 
-import org.jsoup.nodes.Document;
+import com.alekseyld.collegetimetable.dto.TimeTableDto;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -16,12 +16,8 @@ public interface TableRepository {
     String DAYS_KEY = "Days";
     String DOC_KEY = "Doc";
 
-    TimeTable getTimeTable(String group);
-    String getDocument();
+    @Nullable
+    TimeTableDto getTimeTable(String group);
 
-    boolean putTimeTable(TimeTable timeTable, String group);
-    void putDocument(Document document);
-
-    void put(TimeTable timeTable, Document document, String group);
-
+    boolean putTimeTable(TimeTableDto timeTable, String group);
 }
