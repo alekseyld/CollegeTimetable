@@ -15,22 +15,43 @@ import java.util.Set;
 
 public class Settings {
 
+    @NotNull
     private Set<String> favoriteGroups = new HashSet<>();
+
+    @NotNull
     private Map<String, String> abbreviationMap = new HashMap<>();
+
+    @NotNull
     private List<String> neftGroup = new ArrayList<>();
+
+    @NotNull
     private String rootUrl = "";
+
+    @NotNull
     private String notificationGroup = "";
+
     private boolean notifOn;
+
     private boolean alarmMode;
+
     private boolean changeMode;
+
     private boolean darkMode;
 
     private boolean teacherMode;
+
+    @NotNull
     private Set<String> teacherGroups = new HashSet<>();
 
-    public Settings() {}
+    public Settings() {
+    }
 
-    public Settings(Set<String> favoriteGroups, String notificationGroup, boolean notifOn, boolean alarmMode) {
+    public Settings(
+        @NotNull Set<String> favoriteGroups,
+        @NotNull String notificationGroup,
+        boolean notifOn,
+        boolean alarmMode
+    ) {
         this.favoriteGroups = favoriteGroups;
         this.notificationGroup = notificationGroup;
         this.alarmMode = alarmMode;
@@ -38,23 +59,25 @@ public class Settings {
         this.teacherMode = false;
     }
 
+    @NotNull
     public Set<String> getFavoriteGroups() {
         return favoriteGroups;
     }
 
-    public Settings setFavoriteGroups(Set<String> favoriteGroups) {
+    public Settings setFavoriteGroups(@NotNull Set<String> favoriteGroups) {
         this.favoriteGroups = favoriteGroups;
         return this;
     }
 
-    public void addFavoriteGroup(String favoriteGroup) {
+    public void addFavoriteGroup(@NotNull String favoriteGroup) {
         this.favoriteGroups.add(favoriteGroup);
     }
 
-    public void removeFavoriteGroup(String favoriteGroup) {
+    public void removeFavoriteGroup(@NotNull String favoriteGroup) {
         this.favoriteGroups.remove(favoriteGroup);
     }
 
+    @NotNull
     public String getNotificationGroup() {
         return notificationGroup;
     }
@@ -100,46 +123,50 @@ public class Settings {
         return this;
     }
 
+    @NotNull
     public Set<String> getTeacherGroups() {
         return teacherGroups;
     }
 
-    public Settings setTeacherGroups(Set<String> teacherGroups) {
+    public Settings setTeacherGroups(@NotNull Set<String> teacherGroups) {
         this.teacherGroups = teacherGroups;
         return this;
     }
 
-    public void addTeacherGroup(String favoriteGroup) {
+    public void addTeacherGroup(@NotNull String favoriteGroup) {
         this.teacherGroups.add(favoriteGroup);
     }
 
-    public void removeTeacherGroup(String favoriteGroup) {
+    public void removeTeacherGroup(@NotNull String favoriteGroup) {
         this.teacherGroups.remove(favoriteGroup);
     }
 
+    @NotNull
     public Map<String, String> getAbbreviationMap() {
         return abbreviationMap;
     }
 
-    public Settings setAbbreviationMap(Map<String, String> abbreviationMap) {
+    public Settings setAbbreviationMap(@NotNull Map<String, String> abbreviationMap) {
         this.abbreviationMap = abbreviationMap;
         return this;
     }
 
+    @NotNull
     public String getRootUrl() {
         return rootUrl;
     }
 
-    public Settings setRootUrl(String rootUrl) {
+    public Settings setRootUrl(@NotNull String rootUrl) {
         this.rootUrl = rootUrl;
         return this;
     }
 
+    @NotNull
     public List<String> getNeftGroup() {
         return neftGroup;
     }
 
-    public Settings setNeftGroup(List<String> neftGroup) {
+    public Settings setNeftGroup(@NotNull List<String> neftGroup) {
         this.neftGroup = neftGroup;
         return this;
     }
@@ -154,8 +181,6 @@ public class Settings {
     }
 
     public boolean hasExternalSettings() {
-        return !this.getRootUrl().isEmpty()
-                && !abbreviationMap.isEmpty()
-                && !neftGroup.isEmpty();
+        return !(rootUrl.isEmpty() || abbreviationMap.isEmpty() || neftGroup.isEmpty());
     }
 }

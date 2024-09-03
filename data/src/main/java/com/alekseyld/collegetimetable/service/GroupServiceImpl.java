@@ -38,12 +38,12 @@ public class GroupServiceImpl implements GroupService {
         if (group == null || !groupPatternWithoutNum.matcher(group).matches())
             return "";
 
-        if (root.equals("")) return "";
+        if (root.isEmpty()) return "";
 
         String url;
 
-        if (neftGroup == null || neftGroup.size() == 0) {
-            neftGroup = new ArrayList<String>() {{
+        if (neftGroup == null || neftGroup.isEmpty()) {
+            neftGroup = new ArrayList<>() {{
                 add("АПП");
                 add("БНГ");
                 add("В");

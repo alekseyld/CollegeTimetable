@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,15 +18,19 @@ import java.util.Set;
 public class SettingsDto {
 
     @SerializedName("favoriteGroups")
+    @Nullable
     private final Set<String> favoriteGroups;
 
     @SerializedName("abbreviationMap")
+    @Nullable
     private Map<String, String> abbreviationMap;
 
     @SerializedName("neftGroup")
+    @Nullable
     private List<String> neftGroup;
 
     @SerializedName("rootUrl")
+    @Nullable
     private String rootUrl;
 
     @SerializedName("notificationGroup")
@@ -46,6 +53,7 @@ public class SettingsDto {
     private final boolean teacherMode;
     
     @SerializedName("teacherGroups")
+    @Nullable
     private final Set<String> teacherGroups;
 
     public SettingsDto(Settings settings) {
@@ -64,17 +72,17 @@ public class SettingsDto {
 
     public Settings toEntity() {
         return new Settings()
-            .setFavoriteGroups(favoriteGroups)
-            .setAbbreviationMap(abbreviationMap)
-            .setNeftGroup(neftGroup)
-            .setRootUrl(rootUrl)
+            .setFavoriteGroups(favoriteGroups != null ? favoriteGroups : new HashSet<>())
+            .setAbbreviationMap(abbreviationMap != null ? abbreviationMap : new HashMap<>())
+            .setNeftGroup(neftGroup != null ? neftGroup : new ArrayList<>())
+            .setRootUrl(rootUrl != null ? rootUrl : "")
             .setNotificationGroup(notificationGroup != null ? notificationGroup : "")
             .setNotifOn(notifOn)
             .setAlarmMode(alarmMode)
             .setChangeMode(changeMode)
             .setDarkMode(darkMode)
             .setTeacherMode(teacherMode)
-            .setTeacherGroups(teacherGroups);
+            .setTeacherGroups(teacherGroups != null ? teacherGroups : new HashSet<>());
     }
 
     public boolean getNotifOn() {
@@ -85,18 +93,19 @@ public class SettingsDto {
         return darkMode;
     }
 
-    public void setAbbreviationMap(Map<String, String> abbreviationMap) {
+    public void setAbbreviationMap(@Nullable Map<String, String> abbreviationMap) {
         this.abbreviationMap = abbreviationMap;
     }
 
-    public void setNeftGroup(List<String> neftGroup) {
+    public void setNeftGroup(@Nullable List<String> neftGroup) {
         this.neftGroup = neftGroup;
     }
 
-    public void setRootUrl(String rootUrl) {
+    public void setRootUrl(@Nullable String rootUrl) {
         this.rootUrl = rootUrl;
     }
 
+    @Nullable
     public String getRootUrl() {
         return rootUrl;
     }
