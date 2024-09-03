@@ -13,19 +13,17 @@ import com.alekseyld.collegetimetable.databinding.ListTableLessonBinding;
 
 public class LessonViewHolder extends RecyclerView.ViewHolder {
 
-    private final ListTableLessonBinding binding;
+    public final TextView lessonNumber;
 
-    public TextView lessonNumber;
+    public final TextView lessonTime;
 
-    public TextView lessonTime;
+    public final TextView lessonName;
 
-    public TextView lessonName;
-
-    public TextView lessonTeacher;
+    public final TextView lessonTeacher;
 
     public LessonViewHolder(View v) {
         super(v);
-        binding = ListTableLessonBinding.bind(v);
+        ListTableLessonBinding binding = ListTableLessonBinding.bind(v);
 
         lessonNumber = binding.lessonNumber;
         lessonTime = binding.lessonTime;

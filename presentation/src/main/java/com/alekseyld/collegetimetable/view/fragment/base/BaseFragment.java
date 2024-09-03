@@ -85,16 +85,11 @@ public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fra
         }
 
         builder.setTitle(title)
-                .setMessage(text)
-                .setCancelable(false)
-                .setPositiveButton(positiveText, positiveOperation)
-                .setNegativeButton(negativeText, negativeOperation != null ? negativeOperation : new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
+            .setMessage(text)
+            .setCancelable(false)
+            .setPositiveButton(positiveText, positiveOperation)
+            .setNegativeButton(negativeText, negativeOperation != null ? negativeOperation : (dialog, which) -> dialog.dismiss())
+            .show();
     }
 
     /**
@@ -102,7 +97,7 @@ public abstract class BaseFragment<TPresenter extends BasePresenter> extends Fra
      */
     @SuppressWarnings("unchecked")
     protected <C> C getComponent(Class<C> componentType) {
-        return componentType.cast(((HasComponent<C>) getActivity()).getComponent());
+        return componentType.cast(((HasComponent<C>) requireActivity()).getComponent());
     }
 
     protected void initialize() {

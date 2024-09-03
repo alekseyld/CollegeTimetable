@@ -1,7 +1,5 @@
 package com.alekseyld.collegetimetable.presenter.base;
 
-import com.alekseyld.collegetimetable.view.BaseView;
-
 /**
  * Created by Alekseyld on 02.09.2016.
  */

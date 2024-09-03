@@ -13,7 +13,7 @@ import javax.inject.Inject;
 
 public class AboutPresenter extends BasePresenter<AboutView> {
 
-    SharedPreferences mSharedPreferences;
+    final SharedPreferences mSharedPreferences;
 
     @Inject
     public AboutPresenter(SharedPreferences sharedPreferences) {

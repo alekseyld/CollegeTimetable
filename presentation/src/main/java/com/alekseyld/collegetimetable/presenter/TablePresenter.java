@@ -1,7 +1,6 @@
 package com.alekseyld.collegetimetable.presenter;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
@@ -71,7 +70,7 @@ public class TablePresenter extends BasePresenter<TableView> {
         });
     }
 
-    public boolean getChangeMode(){
+    public boolean getChangeMode() {
         return mSettings.getChangeMode();
     }
 
@@ -82,24 +81,15 @@ public class TablePresenter extends BasePresenter<TableView> {
 
     private void processGroupIncorectedMessage(String title) {
         mView.showAlertDialog(title,
-                "Текущая группа: " + mView.getGroup(),
-                "Ок",
-                null,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-//                        String url = "https://vk.com/topic-167263982_39078750";
-//                        Intent intent = new Intent(Intent.ACTION_VIEW);
-//                        intent.setData(Uri.parse(url));
-//                        mView.getBaseActivity().startActivity(intent);
-//                        dialog.dismiss();
-
-                        Bundle b = new Bundle();
-                        b.putString("group", mView.getGroup());
-                        FirebaseAnalytics.getInstance(mView.getContext())
-                                .logEvent("incorrect_group", b);
-                    }
-                }, null);
+            "Текущая группа: " + mView.getGroup(),
+            "Ок",
+            null,
+            (dialog, which) -> {
+                Bundle b = new Bundle();
+                b.putString("group", mView.getGroup());
+                FirebaseAnalytics.getInstance(mView.getContext())
+                    .logEvent("incorrect_group", b);
+            }, null);
     }
 
     public void getTimeTable() {
@@ -162,8 +152,8 @@ public class TablePresenter extends BasePresenter<TableView> {
             public void onCompleted() {
                 mView.hideLoading();
                 if (mView.getTimeTable() == null
-                        || mView.getTimeTable().getDayList() == null
-                        || mView.getTimeTable().getDayList().size() == 0) {
+                    || mView.getTimeTable().getDayList() == null
+                    || mView.getTimeTable().getDayList().isEmpty()) {
                     mView.showMessage();
                 }
             }
@@ -172,7 +162,7 @@ public class TablePresenter extends BasePresenter<TableView> {
 
     private boolean isOnline() {
         ConnectivityManager cm =
-                (ConnectivityManager) mView.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            (ConnectivityManager) mView.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }

@@ -1,5 +1,7 @@
 package com.alekseyld.collegetimetable.entity;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Created by Alekseyld on 16.09.2017.
  */
@@ -10,6 +12,7 @@ public class Lesson {
 
     private String name;
 
+    @Nullable
     private String secondName;
 
     private String teacher;
@@ -67,7 +70,7 @@ public class Lesson {
         return secondName;
     }
 
-    public Lesson setSecondName(String secondName) {
+    public Lesson setSecondName(@Nullable String secondName) {
         this.secondName = secondName;
         return this;
     }

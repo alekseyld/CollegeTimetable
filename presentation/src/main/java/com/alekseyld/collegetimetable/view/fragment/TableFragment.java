@@ -2,7 +2,6 @@ package com.alekseyld.collegetimetable.view.fragment;
 
 import static com.alekseyld.collegetimetable.repository.base.SettingsRepository.GROUP_KEY;
 
-import android.Manifest;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -17,10 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.databinding.FragmentTableBinding;
@@ -44,7 +41,6 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
     private FragmentTableBinding binding;
 
-    private RecyclerView.LayoutManager mLayoutManager;
     private TableAdapter mTableAdapter;
 
     private Menu mMenu;
@@ -54,23 +50,18 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentTableBinding.inflate(inflater, container, false);
 
         if (getActivity() != null)
             getActivity().setTitle(R.string.app_name);
         setHasOptionsMenu(true);
 
-        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshItems();
-            }
-        });
+        binding.swipeRefreshLayout.setOnRefreshListener(this::refreshItems);
 
         binding.recView.setHasFixedSize(true);
 
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         binding.recView.setLayoutManager(mLayoutManager);
 
         mTableAdapter = new TableAdapter(getContext(), mLayoutManager, this);
@@ -86,7 +77,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
     @Override
     public void shareDay(Bitmap image) {
-        if (mPresenter != null) {
+        if (mPresenter != null && getContext() != null) {
             mPresenter.shareDay(image, getContext().getCacheDir());
 
             Bundle b = new Bundle();
@@ -107,7 +98,7 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
             mGroup = s == null || s.isEmpty() ? mPresenter.getGroup() : s;
         }
 
-        if (getActivity() != null && mGroup != null && !mGroup.equals("")) {
+        if (getActivity() != null && !mGroup.isEmpty()) {
             if (DataUtils.fioPattern.matcher(mGroup).find()) {
                 getActivity().setTitle("Преподаватель: " + mGroup);
             } else {
@@ -120,57 +111,14 @@ public class TableFragment extends BaseFragment<TablePresenter> implements Table
 
     @Override
     public void presenterReady() {
-        showPhoneStatePermission();
-
         processArgumentsGroup();
 
         mPresenter.getTableFromOffline();
     }
 
 
-    private void showPhoneStatePermission() {
-//        if (getActivity() == null)
-//            return;
-
-//        int permission = ContextCompat.checkSelfPermission(getActivity(),
-//                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-//        if (permission != PackageManager.PERMISSION_GRANTED) {
-//            makeRequest();
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-//                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                builder.setMessage("Чтобы делиться расписанием необходим доступ к SD карте.")
-//                        .setTitle("Необходимо разрашение");
-//
-//                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        Log.i("12", "Clicked");
-//                        makeRequest();
-//                    }
-//                });
-//
-//                AlertDialog dialog = builder.create();
-//                dialog.show();
-
-//            } else {
-//                makeRequest();
-//            }
-//        }
-
-    }
-
-    protected void makeRequest() {
-        if (getActivity() == null) return;
-
-        ActivityCompat.requestPermissions(getActivity(),
-            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-            255);
-    }
-
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NotNull Menu menu, MenuInflater inflater) {
         mMenu = menu;
         mMenu.clear();
         inflater.inflate(R.menu.menu_table, menu);

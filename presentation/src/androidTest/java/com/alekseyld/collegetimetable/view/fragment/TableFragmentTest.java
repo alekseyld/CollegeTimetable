@@ -1,12 +1,21 @@
 package com.alekseyld.collegetimetable.view.fragment;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.alekseyld.collegetimetable.R.id.lesson_name;
+import static com.alekseyld.collegetimetable.utils.TestUtils.withDayLesson;
+import static junit.framework.Assert.assertEquals;
+
 import android.content.Intent;
+import android.view.View;
+import android.widget.TextView;
+
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
-
-import android.view.View;
-import android.widget.TextView;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.TimeTable;
@@ -25,16 +34,6 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.alekseyld.collegetimetable.R.id.lesson_name;
-import static com.alekseyld.collegetimetable.R.id.recView;
-import static com.alekseyld.collegetimetable.utils.TestUtils.withDayLesson;
-import static junit.framework.Assert.assertTrue;
-
 /**
  * Created by Alekseyld on 16.09.2017.
  */
@@ -43,7 +42,7 @@ import static junit.framework.Assert.assertTrue;
 public class TableFragmentTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(
+    public final ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(
             MainActivity.class);
 
     private static TimeTable timeTableAppAllWeek;
@@ -84,28 +83,24 @@ public class TableFragmentTest {
     private void setTestTimeTable(final TimeTable testTimeTable) {
         activityTestRule.launchActivity(new Intent());
 
-        final RecyclerView recyclerView = (RecyclerView) activityTestRule.getActivity().findViewById(R.id.recView);
-        final TextView message = (TextView) activityTestRule.getActivity().findViewById(R.id.message);
+        final RecyclerView recyclerView = activityTestRule.getActivity().findViewById(R.id.recView);
+        final TextView message = activityTestRule.getActivity().findViewById(R.id.message);
 
-        activityTestRule.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                message.setVisibility(View.GONE);
-                TableView tableView = (TableView)activityTestRule.getActivity().getSupportFragmentManager().getFragments().get(0);
-                tableView.setTimeTable(testTimeTable);
-            }
+        activityTestRule.getActivity().runOnUiThread(() -> {
+            message.setVisibility(View.GONE);
+            TableView tableView = (TableView)activityTestRule.getActivity().getSupportFragmentManager().getFragments().get(0);
+            tableView.setTimeTable(testTimeTable);
         });
 
         TestUtils.sleepEspresso(1, TimeUnit.MICROSECONDS);
-//        TestUtils.sleepEspresso(10, TimeUnit.SECONDS);
     }
 
     @Test
     public void testViewTimetableAPPallWeek() throws Exception {
         setTestTimeTable(timeTableAppAllWeek);
 
-        RecyclerView recyclerView = (RecyclerView) activityTestRule.getActivity().findViewById(recView);
-        assertTrue(recyclerView.getAdapter().getItemCount() == 7);
+        RecyclerView recyclerView = activityTestRule.getActivity().findViewById(R.id.recView);
+        assertEquals(7, recyclerView.getAdapter().getItemCount());
 
         onView(withDayLesson(0)
                 .atTablePosition(R.id.date))
@@ -133,7 +128,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(1));
 
         onView(withDayLesson(1)
@@ -162,7 +157,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(2));
 
         onView(withDayLesson(2)
@@ -191,7 +186,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(3));
 
         onView(withDayLesson(3)
@@ -220,7 +215,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(4));
 
         onView(withDayLesson(4)
@@ -249,7 +244,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(5));
 
         onView(withDayLesson(5)
@@ -278,7 +273,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(6));
 
         onView(withDayLesson(6)
@@ -313,8 +308,8 @@ public class TableFragmentTest {
     public void viewTestTimetableAPPallWeekWithDoubleLessons_1() throws Exception {
         setTestTimeTable(timeTableAppWithDouble1);
 
-        RecyclerView recyclerView = (RecyclerView) activityTestRule.getActivity().findViewById(recView);
-        assertTrue(recyclerView.getAdapter().getItemCount() == 1);
+        RecyclerView recyclerView = activityTestRule.getActivity().findViewById(R.id.recView);
+        assertEquals(1, recyclerView.getAdapter().getItemCount());
 
         onView(withDayLesson(0)
                 .atTablePosition(R.id.date))
@@ -347,8 +342,8 @@ public class TableFragmentTest {
     public void viewTestTimetableAPPallWeekWithDoubleLessons_2() throws Exception {
         setTestTimeTable(timeTableAppWithDouble2);
 
-        RecyclerView recyclerView = (RecyclerView) activityTestRule.getActivity().findViewById(recView);
-        assertTrue(recyclerView.getAdapter().getItemCount() == 2);
+        RecyclerView recyclerView = activityTestRule.getActivity().findViewById(R.id.recView);
+        assertEquals(2, recyclerView.getAdapter().getItemCount());
 
         onView(withDayLesson(0)
                 .atTablePosition(R.id.date))
@@ -376,7 +371,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(1));
 
         onView(withDayLesson(1)
@@ -411,8 +406,8 @@ public class TableFragmentTest {
     public void viewTestTimetableAPPallWeekWithDoubleLessons_3() throws Exception {
         setTestTimeTable(timeTableAppWithDouble3);
 
-        RecyclerView recyclerView = (RecyclerView) activityTestRule.getActivity().findViewById(recView);
-        assertTrue(recyclerView.getAdapter().getItemCount() == 3);
+        RecyclerView recyclerView = activityTestRule.getActivity().findViewById(R.id.recView);
+        assertEquals(3, recyclerView.getAdapter().getItemCount());
 
         onView(withDayLesson(0)
                 .atTablePosition(R.id.date))
@@ -440,7 +435,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(1));
 
         onView(withDayLesson(1)
@@ -469,7 +464,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(2));
 
         onView(withDayLesson(2)
@@ -505,8 +500,8 @@ public class TableFragmentTest {
     public void viewTestTimetableAPPallWeekWithDoubleLessons_4() throws Exception {
         setTestTimeTable(timeTableAppWithDouble4);
 
-        RecyclerView recyclerView = (RecyclerView) activityTestRule.getActivity().findViewById(recView);
-        assertTrue(recyclerView.getAdapter().getItemCount() == 4);
+        RecyclerView recyclerView = activityTestRule.getActivity().findViewById(R.id.recView);
+        assertEquals(4, recyclerView.getAdapter().getItemCount());
 
         onView(withDayLesson(0)
                 .atTablePosition(R.id.date))
@@ -534,7 +529,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(1));
 
         onView(withDayLesson(1)
@@ -563,7 +558,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(2));
 
         onView(withDayLesson(2)
@@ -593,7 +588,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(3));
 
         onView(withDayLesson(3)
@@ -628,8 +623,8 @@ public class TableFragmentTest {
     public void viewTestTimetableAPPallWeekWithDoubleLessons_5() throws Exception {
         setTestTimeTable(timeTableAppWithDouble5);
 
-        RecyclerView recyclerView = (RecyclerView) activityTestRule.getActivity().findViewById(recView);
-        assertTrue(recyclerView.getAdapter().getItemCount() == 5);
+        RecyclerView recyclerView = activityTestRule.getActivity().findViewById(R.id.recView);
+        assertEquals(5, recyclerView.getAdapter().getItemCount());
 
         onView(withDayLesson(0)
                 .atTablePosition(R.id.date))
@@ -657,7 +652,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(1));
 
         onView(withDayLesson(1)
@@ -686,7 +681,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(2));
 
         onView(withDayLesson(2)
@@ -716,7 +711,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(3));
 
         onView(withDayLesson(3)
@@ -745,7 +740,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(4));
 
         onView(withDayLesson(4)
@@ -779,8 +774,8 @@ public class TableFragmentTest {
     public void viewTestTimetableAPPallWeekWithDoubleLessons_6() throws Exception {
         setTestTimeTable(timeTableAppWithDouble6);
 
-        RecyclerView recyclerView = (RecyclerView) activityTestRule.getActivity().findViewById(recView);
-        assertTrue(recyclerView.getAdapter().getItemCount() == 6);
+        RecyclerView recyclerView = activityTestRule.getActivity().findViewById(R.id.recView);
+        assertEquals(6, recyclerView.getAdapter().getItemCount());
 
         onView(withDayLesson(0)
                 .atTablePosition(R.id.date))
@@ -808,7 +803,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(1));
 
         onView(withDayLesson(1)
@@ -837,7 +832,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(2));
 
         onView(withDayLesson(2)
@@ -867,7 +862,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(3));
 
         onView(withDayLesson(3)
@@ -896,7 +891,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(4));
 
         onView(withDayLesson(4)
@@ -925,7 +920,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(5));
 
         onView(withDayLesson(5)
@@ -960,8 +955,8 @@ public class TableFragmentTest {
     public void viewTestTimetableAPPallWeekWithDoubleLessons_7() throws Exception {
         setTestTimeTable(timeTableAppWithDouble7);
 
-        RecyclerView recyclerView = (RecyclerView) activityTestRule.getActivity().findViewById(recView);
-        assertTrue(recyclerView.getAdapter().getItemCount() == 7);
+        RecyclerView recyclerView = activityTestRule.getActivity().findViewById(R.id.recView);
+        assertEquals(7, recyclerView.getAdapter().getItemCount());
 
         onView(withDayLesson(0)
                 .atTablePosition(R.id.date))
@@ -989,7 +984,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(1));
 
         onView(withDayLesson(1)
@@ -1018,7 +1013,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(2));
 
         onView(withDayLesson(2)
@@ -1048,7 +1043,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(3));
 
         onView(withDayLesson(3)
@@ -1077,7 +1072,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(4));
 
         onView(withDayLesson(4)
@@ -1106,7 +1101,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(5));
 
         onView(withDayLesson(5)
@@ -1135,7 +1130,7 @@ public class TableFragmentTest {
                 .atLessonPosition(6, lesson_name))
                 .check(matches(withText("\u00A0")));
 
-        onView(withId(recView))
+        onView(withId(R.id.recView))
                 .perform(scrollToPosition(6));
 
         onView(withDayLesson(6)

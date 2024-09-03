@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -16,8 +15,6 @@ import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.view.TableView;
 import com.alekseyld.collegetimetable.view.adapter.holder.TimeTableHolder;
 
-import java.util.Objects;
-
 /**
  * Created by Alekseyld on 02.09.2016.
  */
@@ -25,10 +22,10 @@ import java.util.Objects;
 public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
 
     private TimeTable mTimeTable;
-    private Context context;
+    private final Context context;
 
-    private TableView mView;
-    private RecyclerView.LayoutManager layoutManager;
+    private final TableView mView;
+    private final RecyclerView.LayoutManager layoutManager;
 
     public TableAdapter(Context context, RecyclerView.LayoutManager layoutManager, TableView view) {
         this.context = context;

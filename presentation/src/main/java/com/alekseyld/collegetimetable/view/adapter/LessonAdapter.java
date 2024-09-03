@@ -22,10 +22,10 @@ import com.alekseyld.collegetimetable.view.adapter.holder.LessonViewHolder;
 
 class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
 
-    private Day lessonDay;
-    private Context context;
+    private final Day lessonDay;
+    private final Context context;
 
-    private boolean isChangeMode;
+    private final boolean isChangeMode;
 
     LessonAdapter(@NonNull Day day, boolean isChangeMode, Context context) {
         this.context = context;

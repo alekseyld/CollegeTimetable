@@ -41,7 +41,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class ServiceModule {
 
-    private Context mService;
+    private final Context mService;
 
     public ServiceModule(Context service){
         mService = service;

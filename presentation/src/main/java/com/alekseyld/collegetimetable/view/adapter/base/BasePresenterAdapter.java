@@ -14,9 +14,9 @@ import java.util.List;
 
 public abstract class BasePresenterAdapter<TItem, TPresenter extends Presenter, TViewHolder extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<TViewHolder>{
 
-    private List<TItem> mItems = new ArrayList<>();
+    private final List<TItem> mItems = new ArrayList<>();
 
-    protected TPresenter mPresenter;
+    protected final TPresenter mPresenter;
 
     public List<TItem> getItems() {
         return mItems;
@@ -66,11 +66,7 @@ public abstract class BasePresenterAdapter<TItem, TPresenter extends Presenter, 
 
     public void notifyItemsChanged() {
         Handler handler = new Handler();
-        final Runnable r = new Runnable() {
-            public void run() {
-                notifyDataSetChanged();
-            }
-        };
+        final Runnable r = this::notifyDataSetChanged;
         handler.post(r);
     }
 

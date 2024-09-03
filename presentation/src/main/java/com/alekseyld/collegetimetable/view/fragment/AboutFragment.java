@@ -11,7 +11,6 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
@@ -41,60 +40,58 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentAboutBinding.inflate(inflater, container, false);
-        getActivity().setTitle(R.string.about);
+
+        if (getActivity() != null)
+            getActivity().setTitle(R.string.about);
 
         String[] about = new String[]{
-                getString(R.string.info_r),
-                "Версия: " + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ") " + " " + BuildConfig.BUILD_TYPE,
-                getString(R.string.info_star),
-                getString(R.string.disclaimer),
-                getString(R.string.github),
-                getString(R.string.group_about)
+            getString(R.string.info_r),
+            "Версия: " + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ") " + " " + BuildConfig.BUILD_TYPE,
+            getString(R.string.info_star),
+            getString(R.string.disclaimer),
+            getString(R.string.github),
+            getString(R.string.group_about)
         };
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_list_item_1, about);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, about);
 
         binding.listView.setAdapter(adapter);
-        binding.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i){
-                    case 0:
-                        openLink("https://vk.com/alekseyld");
-                        break;
-                    case 1:
-                        if (++debug % 3 == 0) debugInfo();
-                        break;
-                    case 2:
-                        Uri uri = Uri.parse("market://details?id=" + getContext().getPackageName());
-                        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                        try {
-                            startActivity(goToMarket);
-                        } catch (ActivityNotFoundException e) {
-                            startActivity(new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse("http://play.google.com/store/apps/details?id=" + getContext().getPackageName())));
-                        }
-                        break;
-                    case 3:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setTitle(getString(R.string.disclaimer))
-                                .setMessage("Все может баговать, не работатать и тд. Если нашли ошибку, сообщите мне о ней.")
-                                .setCancelable(true);
-                        AlertDialog alert = builder.create();
-                        alert.show();
-                        break;
-                    case 4:
-                        openLink("https://github.com/alekseyld/CollegeTimetable");
-                        break;
-                    case 5:
-                        openLink("https://vk.com/utec_time");
-                        break;
-                }
-
+        binding.listView.setOnItemClickListener((adapterView, view, i, l) -> {
+            switch (i) {
+                case 0:
+                    openLink("https://vk.com/alekseyld");
+                    break;
+                case 1:
+                    if (++debug % 3 == 0) debugInfo();
+                    break;
+                case 2:
+                    Uri uri = Uri.parse("market://details?id=" + requireContext().getPackageName());
+                    Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                    goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                    try {
+                        startActivity(goToMarket);
+                    } catch (ActivityNotFoundException e) {
+                        startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("http://play.google.com/store/apps/details?id=" + requireContext().getPackageName())));
+                    }
+                    break;
+                case 3:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                    builder.setTitle(getString(R.string.disclaimer))
+                        .setMessage("Все может баговать, не работатать и тд. Если нашли ошибку, сообщите мне о ней.")
+                        .setCancelable(true);
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                    break;
+                case 4:
+                    openLink("https://github.com/alekseyld/CollegeTimetable");
+                    break;
+                case 5:
+                    openLink("https://vk.com/utec_time");
+                    break;
             }
+
         });
 
         binding.debugInfo.setOnClickListener(v -> onClickDebugInfo());
@@ -142,7 +139,7 @@ public class AboutFragment extends BaseFragment<AboutPresenter> implements About
         getComponent(MainComponent.class).inject(this);
     }
 
-    public static AboutFragment newInstance(){
+    public static AboutFragment newInstance() {
         return new AboutFragment();
     }
 }

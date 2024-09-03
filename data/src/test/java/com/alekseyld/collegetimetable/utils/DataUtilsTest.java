@@ -1,6 +1,7 @@
 package com.alekseyld.collegetimetable.utils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -99,7 +100,7 @@ public class DataUtilsTest {
     private TableService getMockTableService(String group, String url) {
         SettingsRepositoryMock settingsRepositoryMock = new SettingsRepositoryMock();
 
-        Settings settings = settingsRepositoryMock.getSettings();
+        Settings settings = settingsRepositoryMock.getSettings().toEntity();
         settings.setNotificationGroup(group);
         settings.setRootUrl(url);
 
@@ -194,7 +195,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   11.09.2017", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
@@ -230,7 +231,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   11.09.2017", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
@@ -285,7 +286,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   11.09.2017", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
@@ -343,7 +344,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   11.09.2017", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
@@ -412,7 +413,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   11.09.2017", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
@@ -492,7 +493,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   11.09.2017", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
@@ -584,7 +585,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   11.09.2017", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
@@ -613,7 +614,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   11.09.2017", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
@@ -653,7 +654,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   11.09.2017", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
@@ -706,7 +707,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   11.09.2017", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
@@ -779,7 +780,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   11.09.2017", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
@@ -852,7 +853,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   11.09.2017", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
@@ -937,7 +938,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   11.09.2017", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
@@ -1029,7 +1030,7 @@ public class DataUtilsTest {
 
         SettingsRepositoryMock settingsRepositoryMock = new SettingsRepositoryMock();
 
-        Settings settings = settingsRepositoryMock.getSettings();
+        Settings settings = settingsRepositoryMock.getSettings().toEntity();
         settings.addTeacherGroup("3 АПП-1");
         settings.addTeacherGroup("3 АПП-2");
         settings.addTeacherGroup("3 АПП-3");
@@ -1050,7 +1051,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   11.09.2017", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
@@ -1142,7 +1143,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   18.09.2017", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();
@@ -1237,7 +1238,7 @@ public class DataUtilsTest {
 
         List<Day> timeTable = tableWrapper.getDayList();
 
-        assertTrue(timeTable.size() > 0);
+        assertFalse(timeTable.isEmpty());
         assertEquals("П О Н Е Д Е Л Ь Н И К   30.08.2021", tableWrapper.getDayList().get(0).getDate());
 
         List<Lesson> lessons = timeTable.get(0).getDayLessons();

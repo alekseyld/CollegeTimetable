@@ -38,8 +38,8 @@ public class TimetableUpdateWorker extends Worker {
 
     private Settings mSettings;
     private int connectionState;
-    private boolean isFinish = false;
-    private int timing = DEFAULT_TIMING;
+    private final boolean isFinish = false;
+    private final int timing = DEFAULT_TIMING;
 
     public TimetableUpdateWorker(@NonNull Context context, @NonNull WorkerParameters params) {
         super(context, params);

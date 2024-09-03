@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import com.alekseyld.collegetimetable.R;
@@ -34,7 +35,6 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
     private String[] favorite;
 
     private MainNavigationViewItemSelectedListener mOnNavigationItemSelectedListener;
-    private ActionBarDrawerToggle drawerToggle;
 
     private class MainNavigationViewItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
         @Override
@@ -51,32 +51,22 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
 
             menuItem.setChecked(true);
 
-            return onItemSelected(id, false);
+            return onItemSelected(id);
         }
 
-        private boolean onItemSelected(int id, boolean force) {
+        private boolean onItemSelected(int id) {
             hideKeyboard();
 
             if (id == R.id.action_belltable) {
                 replaceFragment(BellTableFragment.newInstance());
-                binding.drawer.closeDrawer(binding.navView);
-                return false;
-            }
-
-            if (id == R.id.action_settings) {
+            } else if (id == R.id.action_settings) {
                 replaceFragment(SettingsFragment.newInstance());
-                binding.drawer.closeDrawer(binding.navView);
-                return false;
-            }
-            if (id == R.id.about) {
+            } else if (id == R.id.about) {
                 replaceFragment(AboutFragment.newInstance());
-                binding.drawer.closeDrawer(binding.navView);
-                return false;
-            }
-
-            if (id < favorite.length) {
+            } else if (id < favorite.length) {
                 replaceFragment(TableFragment.newInstance(favorite[id]));
             }
+
             binding.drawer.closeDrawer(binding.navView);
             return false;
         }
@@ -97,16 +87,15 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
         buildMenu();
 
         setSupportActionBar(binding.toolbarInclude.toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
-        drawerToggle = new ActionBarDrawerToggle(this, binding.drawer, binding.toolbarInclude.toolbar, R.string._0, R.string._1);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, binding.drawer, binding.toolbarInclude.toolbar, R.string._0, R.string._1);
         binding.drawer.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
-
-//        if(!UpdateTimetableService.isRunning){
-//            startService(new Intent(this, UpdateTimetableService.class));
-//        }
 
         addFragment(TableFragment.newInstance(""));
     }
@@ -130,14 +119,10 @@ public class MainActivity extends BaseInjectorActivity<MainComponent> {
         if (preferences.contains(SETTINGS_KEY)) {
             String json = preferences.getString(SETTINGS_KEY, "");
             Settings settings = new Gson().fromJson(json, Settings.class);
-            if (settings.getFavoriteGroups() != null) {
-                favorite = settings.getFavoriteGroups().toArray(new String[0]);
+            favorite = settings.getFavoriteGroups().toArray(new String[0]);
 
-                if (settings.getNotificationGroup() != null) {
-                    TextView group = (TextView) binding.navView.getHeaderView(0).findViewById(R.id.header_my_group);
-                    group.setText(settings.getNotificationGroup());
-                }
-            }
+            TextView group = binding.navView.getHeaderView(0).findViewById(R.id.header_my_group);
+            group.setText(settings.getNotificationGroup());
         }
 
         Menu menu = binding.navView.getMenu();

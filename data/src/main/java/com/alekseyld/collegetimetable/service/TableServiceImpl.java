@@ -185,12 +185,6 @@ public class TableServiceImpl implements TableService {
         }).map(tableWrapper -> {
             mTimetableRepository.putTimeTable(new TimeTableDto(tableWrapper), group);
 
-//            For test updates
-//            Random random = new Random();
-//            int day = random.nextInt(tableWrapper.getDayList().size());
-//            int lesson = random.nextInt(tableWrapper.getDayList().get(day).getDayLessons().size());
-//            tableWrapper.getDayList().get(day).getDayLessons().get(lesson).setName("TEST RANDOM LESSON");
-
             return tableWrapper;
         });
     }

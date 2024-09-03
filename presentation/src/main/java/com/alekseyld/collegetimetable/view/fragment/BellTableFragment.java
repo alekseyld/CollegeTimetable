@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.databinding.FragmentBelltableBinding;
@@ -21,8 +22,6 @@ import com.alekseyld.collegetimetable.view.fragment.base.BaseFragment;
 
 public class BellTableFragment extends BaseFragment<BellTablePresenter> implements BellView {
 
-    private FragmentBelltableBinding binding;
-
     public static BellTableFragment newInstance(){
         return new BellTableFragment();
     }
@@ -30,8 +29,11 @@ public class BellTableFragment extends BaseFragment<BellTablePresenter> implemen
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentBelltableBinding.inflate(inflater, container, false);
-        getActivity().setTitle(R.string.belltable_title);
+        FragmentBelltableBinding binding = FragmentBelltableBinding.inflate(inflater, container, false);
+
+        FragmentActivity activity = getActivity();
+        if (activity != null)
+            activity.setTitle(R.string.belltable_title);
 
         return binding.getRoot();
     }

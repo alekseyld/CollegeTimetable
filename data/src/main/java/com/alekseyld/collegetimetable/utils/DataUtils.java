@@ -24,9 +24,9 @@ import java.util.regex.Pattern;
 
 public class DataUtils {
 
-    public static Pattern groupPatternWithoutNum = Pattern.compile("[0-9]\\s[А-Я]{1,}([-][0-9]){0,}");
-    public static Pattern fioPattern = Pattern.compile("([А-ЯЁа-яё]{1,}[\\s]([А-ЯЁа-яё]{1}[.]){2})");
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+    public static final Pattern groupPatternWithoutNum = Pattern.compile("[0-9]\\s[А-Я]{1,}([-][0-9]){0,}");
+    public static final Pattern fioPattern = Pattern.compile("([А-ЯЁа-яё]{1,}[\\s]([А-ЯЁа-яё]{1}[.]){2})");
+    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
     @Nullable
     public static String switchAbbr(Map<String, String> abbreviationMap, String abbr) {
@@ -44,52 +44,6 @@ public class DataUtils {
         }
 
         return contain ? abbreviationMap.get(abbr) : null;
-//        switch (abbr) {
-//            case "Т":
-//                return "energy/10_1_8.html";
-//            case "Э":
-//                return "energy/10_1_7.html";
-//            case "С":
-//                return "energy/10_1_10.html";
-//            case "Б":
-//                return "energy/10_1_9.html";
-//            case "В":
-//                return "neft/10_1_4.html";
-//            case "Л":
-//                return "energy/10_1_3.html";
-//            case "Р":
-//                return "energy/10_1_4.html";
-//            case "АПП":
-//                return "neft/10_1_1.html";
-//            case "БНГ":
-//                return "neft/10_1_2.html";
-//            case "ТО":
-//                return "neft/10_1_3.html";
-//            case "ПНГ":
-//                return "neft/10_1_5.html";
-//            case "ЭНН":
-//                return "neft/10_1_6.html";
-//            case "ЭННУ":
-//                return "neft/10_1_6.html";
-//            case "ТОВ":
-//                return "neft/10_1_7.html";
-//            case "ИС":
-//                return "energy/10_1_1.html";
-//            case "ГС":
-//                return "energy/10_1_2.html";
-//            case "ГСУ":
-//                return "energy/10_1_2.html";
-//            case "РУ":
-//                return "energy/10_1_4.html";
-//            case "ПГ":
-//                return "energy/10_1_5.html";
-//            case "ТС":
-//                return "energy/10_1_6.html";
-//            case "ТАК":
-//                return "energy/10_1_9.html";
-//            default:
-//                return "";
-//        }
     }
 
     public static TimeTable parseDocument(Document document, String group) {
@@ -320,7 +274,7 @@ public class DataUtils {
             boolean emptyDay = true;
 
             for (Lesson lesson : day.getDayLessons()) {
-                if (!lesson.getDoubleName().equals(""))
+                if (!lesson.getDoubleName().isEmpty())
                     emptyDay = false;
             }
 

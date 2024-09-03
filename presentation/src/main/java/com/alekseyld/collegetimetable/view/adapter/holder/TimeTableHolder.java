@@ -15,17 +15,15 @@ import com.alekseyld.collegetimetable.databinding.ListTableBinding;
 
 public class TimeTableHolder extends RecyclerView.ViewHolder {
 
-    private ListTableBinding binding;
+    public final TextView date;
 
-    public TextView date;
+    public final RecyclerView lessons;
 
-    public RecyclerView lessons;
-
-    public ImageView shareButton;
+    public final ImageView shareButton;
 
     public TimeTableHolder(View v) {
         super(v);
-        binding = ListTableBinding.bind(v);
+        ListTableBinding binding = ListTableBinding.bind(v);
 
         date = binding.date;
         lessons = binding.lessonList;

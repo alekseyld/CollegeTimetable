@@ -15,7 +15,7 @@ import rx.subscriptions.Subscriptions;
 
 public abstract class UseCase<Service> {
 
-    protected Service mService;
+    protected final Service mService;
 
     private final ThreadExecutor threadExecutor;
     private final PostExecutionThread postExecutionThread;

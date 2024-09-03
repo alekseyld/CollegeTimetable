@@ -35,134 +35,82 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
-        getActivity().setTitle(R.string.action_settings);
+        requireActivity().setTitle(R.string.action_settings);
 
-        binding.addFarvorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAddFavoriteDialog();
-            }
-        });
+        binding.addFarvorite.setOnClickListener(view -> showAddFavoriteDialog());
 
-        binding.addTeacherGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAddTeacherDialog();
-            }
-        });
+        binding.addTeacherGroup.setOnClickListener(v -> showAddTeacherDialog());
 
-        binding.addNotif.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAddNotif(
-                    mPresenter.getTeacherMode()
-                );
-            }
-        });
+        binding.addNotif.setOnClickListener(view -> showAddNotif(
+            mPresenter.getTeacherMode()
+        ));
 
-        binding.alarmMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mPresenter.saveAlarmMode(
-                    binding.alarmMode.isChecked()
-                );
-            }
-        });
+        binding.alarmMode.setOnClickListener(view -> mPresenter.saveAlarmMode(
+            binding.alarmMode.isChecked()
+        ));
 
-        binding.notifOn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mPresenter.getNotificationGroup().equals("")) {
-                    showAlertDialog("Сначала необходимо выбрать мою группу!",
-                        "Чтобы включить уведомления, необходимо сначала заполнить поле \"Моя группа\"", "Ок", "", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }, null);
-                    binding.notifOn.setChecked(!binding.notifOn.isChecked());
-                    return;
-                }
-
-                mPresenter.saveNotifOn(
-                    binding.notifOn.isChecked()
-                );
-            }
-        });
-
-        binding.changeMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.saveChangeMode(
-                    binding.changeMode.isChecked()
-                );
-            }
-        });
-
-        binding.teacherMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAlertDialog("Вы точно хотите перейти в режим преподавателя? ",
-                    "Все данные будут утеряны!",
-                    "Да",
-                    "Нет",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mPresenter.saveTeacherMode(binding.teacherMode.isChecked());
-                            binding.addNotifTitle.startAnimation(getTeacherTitleAnimation());
-                        }
-                    }, new DialogInterface.OnClickListener() {
+        binding.notifOn.setOnClickListener(view -> {
+            if (mPresenter.getNotificationGroup().isEmpty()) {
+                showAlertDialog("Сначала необходимо выбрать мою группу!",
+                    "Чтобы включить уведомления, необходимо сначала заполнить поле \"Моя группа\"", "Ок", "", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            binding.teacherMode.setChecked(!binding.teacherMode.isChecked());
                         }
-                    });
+                    }, null);
+                binding.notifOn.setChecked(!binding.notifOn.isChecked());
+                return;
             }
+
+            mPresenter.saveNotifOn(
+                binding.notifOn.isChecked()
+            );
         });
 
-        binding.darkMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                boolean isDarkMode = binding.darkMode.isChecked();
+        binding.changeMode.setOnClickListener(v -> mPresenter.saveChangeMode(
+            binding.changeMode.isChecked()
+        ));
 
-                mPresenter.saveDarkMode(isDarkMode);
+        binding.teacherMode.setOnClickListener(v -> showAlertDialog("Вы точно хотите перейти в режим преподавателя? ",
+            "Все данные будут утеряны!",
+            "Да",
+            "Нет",
+            (dialog, which) -> {
+                mPresenter.saveTeacherMode(binding.teacherMode.isChecked());
+                binding.addNotifTitle.startAnimation(getTeacherTitleAnimation());
+            }, (dialog, which) -> {
+                dialog.dismiss();
+                binding.teacherMode.setChecked(!binding.teacherMode.isChecked());
+            })
+        );
 
-                if (getActivity() != null) getActivity().recreate();
-            }
+        binding.darkMode.setOnClickListener(view -> {
+            boolean isDarkMode = binding.darkMode.isChecked();
+
+            mPresenter.saveDarkMode(isDarkMode);
+
+            if (getActivity() != null) getActivity().recreate();
         });
 
-        binding.updateLinks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAlertDialog("Обновить данные ссылке и группах?",
-                    "Чтобы посмотреть откуда и что будет обновляться, нажмите на \"Источник\" (откроется в браузере)",
-                    "Обновить",
-                    "Источник",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mPresenter.updateLinks();
-                            dialog.dismiss();
-                            Toast.makeText(getContext(), "Идет обновление..", Toast.LENGTH_SHORT).show();
-                        }
-                    }, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            startActivity(
-                                new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse("https://raw.githubusercontent.com/alekseyld/CollegeTimetable/master/docs/pref.html")
-                                )
-                            );
-                            dialog.dismiss();
-                        }
-                    });
-            }
-        });
+        binding.updateLinks.setOnClickListener(view -> showAlertDialog("Обновить данные ссылке и группах?",
+            "Чтобы посмотреть откуда и что будет обновляться, нажмите на \"Источник\" (откроется в браузере)",
+            "Обновить",
+            "Источник",
+            (dialog, which) -> {
+                mPresenter.updateLinks();
+                dialog.dismiss();
+                Toast.makeText(getContext(), "Идет обновление..", Toast.LENGTH_SHORT).show();
+            }, (dialog, which) -> {
+                startActivity(
+                    new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://raw.githubusercontent.com/alekseyld/CollegeTimetable/master/docs/pref.html")
+                    )
+                );
+                dialog.dismiss();
+            }));
 
         TypedValue outValue = new TypedValue();
-        getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
+        requireContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
         binding.addFarvorite.setBackgroundResource(outValue.resourceId);
         binding.addNotif.setBackgroundResource(outValue.resourceId);
 
@@ -235,7 +183,7 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
     private void showAddNotif(boolean teacherMode) {
         GroupInputDialogFragment groupInputDialogFragment = GroupInputDialogFragment.newInstance(false, teacherMode);
         groupInputDialogFragment.setTargetFragment(this, 1);
-        groupInputDialogFragment.show(getFragmentManager(), GroupInputDialogFragment.class.getSimpleName());
+        groupInputDialogFragment.show(requireFragmentManager(), GroupInputDialogFragment.class.getSimpleName());
     }
 
     private void showAddFavoriteDialog() {
@@ -245,7 +193,7 @@ public class SettingsFragment extends BaseFragment<SettingsPresenter> implements
     private void showAddTeacherDialog() {
         Intent intent = new Intent(getActivity(), SettingsFavoriteActivity.class);
         intent.putExtra("teacherMode", true);
-        getActivity().startActivity(intent);
+        requireActivity().startActivity(intent);
     }
 
     @Override
