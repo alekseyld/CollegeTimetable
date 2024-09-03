@@ -44,7 +44,22 @@ public class Day {
 
     public String getDateFirstUpperCase(){
         if(date == null || date.isEmpty()) return "";//или return word;
-        return (date.substring(0, 1).toUpperCase() + date.substring(1).toLowerCase())
-                .replace(" ", "");
+
+        String[] parts = date.split(" ");
+        StringBuilder sb = new StringBuilder();
+        sb.append(parts[0]);
+
+        for (int i = 1; i < parts.length; i++) {
+            String part = parts[i];
+
+            if (part.length() > 1) {
+                sb.append(" ");
+                sb.append(part);
+            } else  {
+                sb.append(part.toLowerCase());
+            }
+        }
+
+        return sb.toString();
     }
 }

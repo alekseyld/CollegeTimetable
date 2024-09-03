@@ -171,7 +171,6 @@ public class TablePresenter extends BasePresenter<TableView> {
         try {
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("image/*");
-//            final Uri imageUri = Uri.fromFile(Utils.getImageFile(dayByBitmap, cacheDir));
             final Uri imageUri = Utils.getImageFileUri(mView.getContext(), dayByBitmap, cacheDir);
             i.putExtra(Intent.EXTRA_STREAM, imageUri);
 

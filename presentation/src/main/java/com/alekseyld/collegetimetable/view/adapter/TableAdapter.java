@@ -3,17 +3,20 @@ package com.alekseyld.collegetimetable.view.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alekseyld.collegetimetable.R;
 import com.alekseyld.collegetimetable.entity.TimeTable;
 import com.alekseyld.collegetimetable.view.TableView;
 import com.alekseyld.collegetimetable.view.adapter.holder.TimeTableHolder;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by Alekseyld on 02.09.2016.
@@ -35,8 +38,9 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
     }
 
     @Override
+    @NotNull
     public TimeTableHolder onCreateViewHolder(ViewGroup parent,
-                                              int viewType) {
+                                                       int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_table, parent, false);
         return new TimeTableHolder(v);
@@ -50,12 +54,9 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
         if (layoutManager != null) {
             holder.shareButton.setVisibility(View.VISIBLE);
 
-            holder.shareButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mView == null) return;
-                    mView.shareDay(getDayByBitmap(holder.getAdapterPosition()));
-                }
+            holder.shareButton.setOnClickListener(v -> {
+                Bitmap bitmap = getDayByBitmap(holder.getAdapterPosition());
+                mView.shareDay(bitmap);
             });
 
             holder.date.setPadding(
@@ -67,15 +68,11 @@ public class TableAdapter extends RecyclerView.Adapter<TimeTableHolder> {
         }
     }
 
+    @Nullable
     private Bitmap getDayByBitmap(int pos) {
-//        View view = layoutManager.findViewByPosition(pos);
-//        view.setDrawingCacheEnabled(true);
-//        view.buildDrawingCache();
-//
-//        return view.getDrawingCache();
-
-
         View view = layoutManager.findViewByPosition(pos);
+        if (view == null) return null;
+
         Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
                 view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
         Canvas bitmapHolder = new Canvas(bitmap);
