@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.alekseyld.collegetimetable.BuildConfig;
 import com.alekseyld.collegetimetable.entity.Settings;
@@ -111,7 +112,7 @@ public class TablePresenter extends BasePresenter<TableView> {
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                e.printStackTrace();
+                Log.e(TablePresenter.class.getSimpleName(), e.getMessage(), e);
 
                 if (e.getMessage().contains("Некорректно введена группа")) {
                     processGroupIncorectedMessage(e.getMessage());

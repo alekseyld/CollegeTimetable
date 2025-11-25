@@ -9,7 +9,7 @@ import com.alekseyld.collegetimetable.entity.Day;
 import com.alekseyld.collegetimetable.entity.Lesson;
 import com.alekseyld.collegetimetable.entity.Settings;
 import com.alekseyld.collegetimetable.entity.TimeTable;
-import com.alekseyld.collegetimetable.exception.UncriticalException;
+import com.alekseyld.collegetimetable.exception.TimeTableRequestException;
 import com.alekseyld.collegetimetable.repository.base.SettingsRepository;
 import com.alekseyld.collegetimetable.repository.base.TableRepository;
 import com.alekseyld.collegetimetable.utils.DataUtils;
@@ -79,7 +79,7 @@ public class TableServiceImpl implements TableService {
             })
             .flatMap(url -> {
                 if (!url.isEmpty() && !hasError) return Observable.just(url);
-                return Observable.error(new UncriticalException("empty"));
+                return Observable.error(new TimeTableRequestException("empty"));
             })
             .onErrorResumeNext(throwable -> updateSettingsOnlineAndGetUrl(group));
     }
@@ -149,13 +149,13 @@ public class TableServiceImpl implements TableService {
                     Log.d(TAG, "", e);
                     document = null;
                 } catch (IllegalArgumentException e1) {
-                    return Observable.error(new UncriticalException("Некорректно введена группа"));
+                    return Observable.error(new TimeTableRequestException("Некорректно введена группа"));
                 }
 
                 return Observable.just(document);
             }).flatMap(document -> {
                 if (document == null || !document.html().contains("<body bgcolor=\"bbbbbb\">")) {
-                    return Observable.error(new UncriticalException("Не удалось подключиться к сайту (0:1)"));
+                    return Observable.error(new TimeTableRequestException("Не удалось подключиться к сайту (0:1)"));
                 }
 
                 return Observable.just(document);
@@ -170,7 +170,7 @@ public class TableServiceImpl implements TableService {
     public Observable<TimeTable> getTimetableFromOnline(boolean online, String group) {
         return connectAndGetData(group).flatMap(document -> {
             if (document == null)
-                return Observable.error(new UncriticalException("Не удалось подключиться к сайту (1)"));
+                return Observable.error(new TimeTableRequestException("Не удалось подключиться к сайту (1)"));
             return Observable.just(document);
         }).map(document -> DataUtils.parseDocument(document, group)).flatMap(tableWrapper -> {
             if (tableWrapper.getDayList() == null || tableWrapper.getDayList().isEmpty()) {
@@ -178,7 +178,7 @@ public class TableServiceImpl implements TableService {
                     hasError = true;
                     return getTimetableFromOnline(online, group);
                 }
-                return Observable.error(new UncriticalException("Ну удалось получить расписание (2)"));
+                return Observable.error(new TimeTableRequestException("Ну удалось получить расписание (2)"));
             }
 
             return Observable.just(tableWrapper);
